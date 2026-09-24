@@ -139,6 +139,35 @@ def mcnemar_table(name_a: str, name_b: str, rows_a, rows_b) -> None:
                  m["a_wrong_b_right"], m["a_right_b_wrong"], ("%.3g" % m["p_value_two_sided_exact"])))
 
 
+def within_run_table(name: str, rows, axis: str, group_fields) -> None:
+    """Paired comparison *inside* one run: same items, same documents, one axis changed.
+
+    `axis` is the field that varies (max_len_effective or needle_position); the groups are the
+    cells that share everything else. Exact McNemar, paired by item id.
+    """
+    groups = {}
+    for r in rows:
+        key = tuple(r[f] for f in group_fields)
+        groups.setdefault(key, {}).setdefault(r[axis], []).append(r)
+    print("\n**%s — paired comparison over %s** (same items and documents, exact McNemar)\n"
+          % (name, axis))
+    print("| group | low | high | low acc | high acc | low wrong / high right | low right / high wrong | p |")
+    print("|---|---|---|---|---|---|---|---|")
+    for key, by_val in sorted(groups.items(), key=lambda kv: tuple(str(x) for x in kv[0])):
+        vals = sorted(by_val)
+        if len(vals) < 2:
+            continue
+        lo, hi = vals[0], vals[-1]
+        ca, cb = metrics.pair_rows(by_val[lo], by_val[hi])
+        if not ca:
+            continue
+        m = metrics.mcnemar_exact(ca, cb)
+        print("| %s | %s | %s | %s | %s | %d | %d | %s |"
+              % ("|".join(str(x) for x in key), lo, hi, fmt(metrics.accuracy(by_val[lo])),
+                 fmt(metrics.accuracy(by_val[hi])), m["a_wrong_b_right"], m["a_right_b_wrong"],
+                 "%.3g" % m["p_value_two_sided_exact"]))
+
+
 def main(argv):
     dirs = [Path(a) for a in argv] or [Path("experiments/baseline-repro")]
     loaded = []
@@ -158,6 +187,8 @@ def main(argv):
             print("repeat check: %s" % json.dumps(summary["repeat_check"]))
         cell_table(name, summary, rows)
         collapse_detail(name, rows)
+        within_run_table(name, rows, "max_len_effective", ("pad_tokens", "needle_position"))
+        within_run_table(name, rows, "needle_position", ("pad_tokens", "max_len_effective"))
         baselines_block(name, summary)
         loaded.append((name, rows))
     for i in range(len(loaded)):

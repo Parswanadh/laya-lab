@@ -1,0 +1,51 @@
+=== position-sweep|balanced-v1|n20|seed20240924 ===
+command: experiments/harness/run.py --preset position-sweep --device cuda --checkpoint models/multilingual
+out: /home/parshu/projects/contri/laya-lab/experiments/position-sweep
+GPU lock refused: {'held': False, 'reason': 'another process holds the lock', 'path': '/home/parshu/projects/contri/laya-lab/.gpu.lock'} -- do non-GPU work and retry (not queueing a second job)
+=== position-sweep|balanced-v1|n20|seed20240924 ===
+command: experiments/harness/run.py --preset position-sweep --device cuda --checkpoint models/multilingual
+out: /home/parshu/projects/contri/laya-lab/experiments/position-sweep
+gpu lock: {'held': True, 'path': '/home/parshu/projects/contri/laya-lab/.gpu.lock', 'pid': 869032}
+preflight: {"mem_available_gib": 6.32, "gpu_free_gib": 6.52, "min_available_gib_required": 2.0, "gpu_min_free_gib_required": 2.0, "allow_low_mem": false, "note": "host RAM at launch 6.32 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"}
+leakage check passed: {"needle_vocab_size": 398, "filler_vocab_size": 178, "content_word_overlap": [], "stem_hits": []}
+items: n=20 label_counts={'billing': 7, 'sales': 6, 'technical': 7} balance_ok=True langs={'ar': 2, 'de': 2, 'en': 2, 'es': 3, 'fr': 3, 'hi': 2, 'ja': 2, 'pt': 2, 'zh': 2}
+backend: laya models/multilingual device=cuda dtype=torch.bfloat16 amp=True params=321908995 load=6.7s
+shipped defaults: max_len=1024 head_max_len=256
+cells: 10 -> pad4000|pos0.00|mldefault|hmldefault, pad4000|pos0.00|ml8192|hmldefault, pad4000|pos0.25|mldefault|hmldefault, pad4000|pos0.25|ml8192|hmldefault, pad4000|pos0.50|mldefault|hmldefault, pad4000|pos0.50|ml8192|hmldefault, pad4000|pos0.75|mldefault|hmldefault, pad4000|pos0.75|ml8192|hmldefault, pad4000|pos1.00|mldefault|hmldefault, pad4000|pos1.00|ml8192|hmldefault
+global warm-up done (3 discarded passes at shipped max_len=1024)
+pad  4000  pos 0.00  max_len default  acc  15/ 20 (0.750)  ci95 [0.55, 0.95]  med 0.034s  tokens 1024  kept 0.243  request_kept 1.00  modal billing (0.55)
+pad  4000  pos 0.00  max_len 8192     acc  16/ 20 (0.800)  ci95 [0.60, 0.95]  med 0.205s  tokens 4069  kept 1.000  request_kept 1.00  modal billing (0.50)
+pad  4000  pos 0.25  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.052s  tokens 1024  kept 0.243  request_kept 0.00  modal technical (1.00)
+pad  4000  pos 0.25  max_len 8192     acc  12/ 20 (0.600)  ci95 [0.40, 0.80]  med 0.212s  tokens 4069  kept 1.000  request_kept 1.00  modal technical (0.60)
+pad  4000  pos 0.50  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.062s  tokens 1024  kept 0.243  request_kept 0.00  modal technical (1.00)
+pad  4000  pos 0.50  max_len 8192     acc  12/ 20 (0.600)  ci95 [0.40, 0.80]  med 0.242s  tokens 4069  kept 1.000  request_kept 1.00  modal technical (0.70)
+pad  4000  pos 0.75  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.049s  tokens 1024  kept 0.243  request_kept 0.00  modal technical (1.00)
+pad  4000  pos 0.75  max_len 8192     acc   9/ 20 (0.450)  ci95 [0.25, 0.65]  med 0.211s  tokens 4069  kept 1.000  request_kept 1.00  modal technical (0.80)
+pad  4000  pos 1.00  max_len default  acc   6/ 20 (0.300)  ci95 [0.10, 0.50]  med 0.127s  tokens 1024  kept 0.243  request_kept 0.00  modal technical (0.95)
+pad  4000  pos 1.00  max_len 8192     acc  11/ 20 (0.550)  ci95 [0.35, 0.75]  med 0.216s  tokens 4068  kept 1.000  request_kept 1.00  modal technical (0.80)
+repeat check: 20/20 identical predictions, max |dp| = 0.000000
+
+--- structural checks (from the published artifacts) ---
+[PASS] cell_keys_match_summary  {"stray": [], "n_cells": 10}
+[PASS] row_count_matches_summary  {"rows": 200, "summary_n": 200}
+[PASS] required_fields_present
+[PASS] probabilities_sum_to_one
+[PASS] prediction_is_an_option
+[PASS] prediction_is_probability_argmax
+[PASS] truncation_matches_documented_rule
+[PASS] input_tokens_within_budget
+[PASS] no_duplicate_cell_item_rows  {"duplicates": 0}
+[PASS] items_paired_across_max_len
+[PASS] document_independent_of_max_len
+[PASS] summary_accuracy_recomputes_from_jsonl
+[PASS] label_balance  {"label_counts": {"billing": 7, "sales": 6, "technical": 7}, "max_label_share": 0.35}
+[PASS] leakage_check_passed
+--- mechanism checks (rebuild from seed) ---
+[PASS] documents_deterministic_for_seed
+[PASS] seed_changes_documents  {"moved": 9, "total": 9}
+[PASS] row_doc_sha256_rebuilds_from_seed  {"checked": 40, "mismatches": []}
+[PASS] small_budget_drops_the_tail_request  {"request_kept_fraction_at_position_1.0": 0.0, "request_kept_fraction_at_position_0.0": 1.0, "max_len": 1024}
+[PASS] large_budget_keeps_the_tail_request  {"request_kept_fraction_at_position_1.0": 1.0, "max_len": 8192, "longest_document_tokens": 4037}
+
+wrote /home/parshu/projects/contri/laya-lab/experiments/position-sweep/predictions.jsonl (200 rows) in 243.4s
+checks: structural=True mechanism=True
