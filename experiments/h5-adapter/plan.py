@@ -203,12 +203,14 @@ def build_eval_plan(seed: int = 20260924) -> Dict[str, Any]:
 
 def build_train_plan(mode: str = "uniform", seed: int = 20260924) -> Dict[str, Any]:
     """``mode="uniform"`` — the arm-2/arm-3 training distribution (uniform over 21 regimes).
-    ``mode="long_boost"`` — arm 4: the four long-distance regimes get ``ARM4_LONG_BOOST`` times
-    the items of every other regime.
+    ``mode="long_boost"`` — arm 4: the *same* items, with the four long-distance regimes
+    oversampled to ``ARM4_LONG_BOOST`` times their uniform weight by adding copies in their own
+    cells (``#b1``, ``#b2``, ...). Reusing the identical items rather than drawing fresh ones is
+    what keeps arm 4 a statement about the data *distribution* and not about different data.
 
     Within a class the needle surface forms are drawn from one shuffled combination pool and dealt
-    out in order, so **every training item is a distinct surface form** across the whole split --
-    not merely inside its own regime.
+    out in order, so **every training item is a distinct surface form** across the whole uniform
+    split -- not merely inside its own regime.
     """
     pool = load_pool("needles-h5-train-v1.json")
     regimes: List[Tuple[int, float]] = []
@@ -220,32 +222,55 @@ def build_train_plan(mode: str = "uniform", seed: int = 20260924) -> Dict[str, A
             regimes.append((pad, position))
     per_class = TRAIN_PER_REGIME // len(pool["labels"])
 
-    # deal a globally distinct run of surface forms per class, one block per regime slot
-    slots: List[Tuple[int, float, int]] = []
-    for pad, position in regimes:
-        repeats = ARM4_LONG_BOOST if (mode == "long_boost" and (pad, position) in ARM4_LONG_REGIMES) else 1
-        for rep in range(repeats):
-            slots.append((pad, position, rep))
     deals: Dict[str, List[Dict[str, Any]]] = {}
     for label in pool["labels"]:
-        combos = _shuffled(pool, label, "train|%s" % mode, seed)
-        need = len(slots) * per_class
+        combos = _shuffled(pool, label, "train", seed)
+        need = len(regimes) * per_class
         if len(combos) < need:
             raise ValueError("train pool %s has %d combos for %s but the plan needs %d"
                              % (pool["pool_id"], len(combos), label, need))
         deals[label] = [{"template": t, "fill": f} for t, f in combos[:need]]
 
     items: List[Dict[str, Any]] = []
-    for si, (pad, position, rep) in enumerate(slots):
+    for si, (pad, position) in enumerate(regimes):
         cell = "T-p%04d-%.2f" % (pad, position)
         drawn = []
         for label in pool["labels"]:
-            block = deals[label][si * per_class:(si + 1) * per_class]
-            for d in block:
+            for d in deals[label][si * per_class:(si + 1) * per_class]:
                 drawn.append(_item(pool, d["template"], d["fill"], pad, position, cell, "train"))
-        random.Random("%d|%s|r%d|interleave" % (seed, cell, rep)).shuffle(drawn)
+        random.Random("%d|%s|interleave" % (seed, cell)).shuffle(drawn)
         items.extend(drawn)
-    return _finalise(items, "train", pool, seed)
+
+    if mode == "long_boost":
+        extra: List[Dict[str, Any]] = []
+        for pad, position in ARM4_LONG_REGIMES:
+            base = [it for it in items
+                    if it["pad"] == pad and it["needle_position"] == position]
+            if not base:
+                raise ValueError("no uniform items in regime (%d, %.2f)" % (pad, position))
+            for k in range(1, ARM4_LONG_BOOST):
+                for it in base:
+                    copy = dict(it)
+                    copy["cell"] = it["cell"] + "#b%d" % k
+                    copy["item_id"] = it["item_id"] + "|b%d" % k
+                    copy["boost_copy"] = k
+                    copy["oversampled_from"] = it["cell"]
+                    extra.append(copy)
+        items = items + extra
+    elif mode != "uniform":
+        raise ValueError("unknown train mode %r" % mode)
+
+    plan = _finalise(items, "train", pool, seed)
+    plan["mode"] = mode
+    plan["arm4_long_boost"] = ARM4_LONG_BOOST if mode == "long_boost" else None
+    plan["oversampled_regimes"] = [list(r) for r in ARM4_LONG_REGIMES] if mode == "long_boost" else []
+    # the effective sampling weight per regime: how many items of each (pad, position) the arm sees
+    weights: Dict[str, int] = {}
+    for it in items:
+        key = "pad=%d|pos=%.2f" % (it["pad"], it["needle_position"])
+        weights[key] = weights.get(key, 0) + 1
+    plan["regime_weights"] = dict(sorted(weights.items()))
+    return plan
 
 
 def _finalise(items: List[Dict[str, Any]], split: str, pool: Dict[str, Any], seed: int) -> Dict[str, Any]:
