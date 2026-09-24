@@ -197,7 +197,7 @@ def main() -> int:
             "n": len(rs), "pad": rs[0]["pad"], "needle_position": rs[0]["needle_position"],
             "label_counts": dict(sorted(lc.items())),
             "majority_class_accuracy": max(lc.values()) / len(rs),
-            "needs": len({it["needle_sha256"] for it in rs}),
+            "n_unique_needles": len({it["needle_sha256"] for it in rs}),
             "n_templates": len({it["template_id"] for it in rs}),
         }
     out["A6_eval_cells"] = per_cell
@@ -209,7 +209,7 @@ def main() -> int:
     out["A6_pooled_label_counts"] = dict(sorted(Counter(it["label"] for it in ev_items).items()))
 
     # ---- A7: within-cell uniqueness -----------------------------------------------------------
-    dup = {c: v["n"] - v["needs"] for c, v in per_cell.items()}
+    dup = {c: v["n"] - v["n_unique_needles"] for c, v in per_cell.items()}
     out["A7_within_cell_duplicate_renders"] = dup
 
     # ---- A8: filler vs needle overlap ---------------------------------------------------------

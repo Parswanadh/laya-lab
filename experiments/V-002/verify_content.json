@@ -67,7 +67,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 57
   },
   "L4000-p000": {
@@ -81,7 +81,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 54
   },
   "L4000-p025": {
@@ -95,7 +95,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 54
   },
   "L4000-p050": {
@@ -109,7 +109,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 54
   },
   "L4000-p075": {
@@ -123,7 +123,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 54
   },
   "L4000-p100": {
@@ -137,7 +137,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 54
   },
   "L7000-p000": {
@@ -151,7 +151,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 54
   },
   "L7000-p100": {
@@ -165,7 +165,7 @@
     "technical": 50
    },
    "majority_class_accuracy": 0.25,
-   "needs": 200,
+   "n_unique_needles": 200,
    "n_templates": 56
   }
  },
