@@ -342,10 +342,11 @@ def main() -> int:
         "per_arm_seed_cell": per_seed,
         "seed_spread": spread,
         "position_only_oracle": oracle,
+        # keyed by arm *and* seed: keying by arm alone would silently keep only the last seed
         "mechanism_controls": {
-            cell: {arm: control_stats([r for r in runs[k] if r["cell"] == cell])
-                   for (arm, _seed), rws in sorted(runs.items())
-                   for k in [(arm, _seed)] if any(r["cell"] == cell for r in rws)}
+            cell: {"%s|seed%d" % (arm, seed): control_stats([r for r in rows if r["cell"] == cell])
+                   for (arm, seed), rows in sorted(runs.items())
+                   if any(r["cell"] == cell for r in rows)}
             for cell in CONTROL_CELLS
         },
         "comparisons": comparisons,
@@ -371,10 +372,10 @@ def main() -> int:
                     "arm4_xattn_long"):
             s = spread.get(arm, {}).get(cell)
             vals.append("%8.3f" % s["accuracy_mean"] if s else "       -")
-        n = next((per_seed[arm]["seed%d" % (train_seeds[0] if train_seeds else 0)][cell]["n"]
-                  for arm in arms
-                  if "seed%d" % (train_seeds[0] if train_seeds else 0) in per_seed.get(arm, {})
-                  and cell in per_seed[arm]["seed%d" % (train_seeds[0] if train_seeds else 0)]), 0)
+        # take n from whichever (arm, seed) first has this cell -- arm1 is keyed "seed-1", so
+        # assuming the training seeds' key silently printed n=0 for every cell
+        n = next((st["n"] for arm in arms for k, st in per_seed.get(arm, {}).items()
+                  if cell in per_seed[arm][k] and (st := per_seed[arm][k][cell])), 0)
         d = verdict.get(cell, {}).get("arm3_minus_arm2_shipped_pp")
         print("%-18s %5d %6.3f | %s | %+7.2f" % (cell, n, orc if orc is not None else float("nan"),
                                                  " ".join(vals), d if d is not None else float("nan")))
