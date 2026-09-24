@@ -55,3 +55,49 @@ repeat check: 20/20 identical predictions, max |dp| = 0.000000
 
 wrote /home/parshu/projects/contri/laya-lab/experiments/baseline-repro/predictions.jsonl (200 rows) in 138.8s
 checks: structural=True mechanism=True
+=== baseline-repro|balanced-v1|n20|seed20240924 ===
+command: experiments/harness/run.py --preset baseline-repro --device cuda --checkpoint models/multilingual
+out: /home/parshu/projects/contri/laya-lab/experiments/baseline-repro
+gpu lock: {'held': True, 'path': '/home/parshu/projects/contri/laya-lab/.gpu.lock', 'pid': 856996}
+preflight: {"mem_available_gib": 6.24, "gpu_free_gib": 6.55, "min_available_gib_required": 2.0, "gpu_min_free_gib_required": 2.0, "allow_low_mem": false, "note": "host RAM at launch 6.24 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"}
+leakage check passed: {"needle_vocab_size": 398, "filler_vocab_size": 178, "content_word_overlap": [], "stem_hits": []}
+items: n=20 label_counts={'billing': 7, 'sales': 6, 'technical': 7} balance_ok=True langs={'ar': 2, 'de': 2, 'en': 2, 'es': 3, 'fr': 3, 'hi': 2, 'ja': 2, 'pt': 2, 'zh': 2}
+backend: laya models/multilingual device=cuda dtype=torch.bfloat16 amp=True params=321908995 load=7.1s
+shipped defaults: max_len=1024 head_max_len=256
+cells: 10 -> pad0|pos1.00|mldefault|hmldefault, pad0|pos1.00|ml8192|hmldefault, pad1000|pos1.00|mldefault|hmldefault, pad1000|pos1.00|ml8192|hmldefault, pad2000|pos1.00|mldefault|hmldefault, pad2000|pos1.00|ml8192|hmldefault, pad4000|pos1.00|mldefault|hmldefault, pad4000|pos1.00|ml8192|hmldefault, pad7000|pos1.00|mldefault|hmldefault, pad7000|pos1.00|ml8192|hmldefault
+global warm-up done (3 discarded passes at shipped max_len=1024)
+pad     0  pos 1.00  max_len default  acc  19/ 20 (0.950)  ci95 [0.85, 1.00]  med 0.036s  tokens 64  kept 1.000  request_kept 1.00  modal billing (0.40)
+pad     0  pos 1.00  max_len 8192     acc  19/ 20 (0.950)  ci95 [0.85, 1.00]  med 0.024s  tokens 64  kept 1.000  request_kept 1.00  modal billing (0.40)
+pad  1000  pos 1.00  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.044s  tokens 1024  kept 0.957  request_kept 0.00  modal technical (1.00)
+pad  1000  pos 1.00  max_len 8192     acc  14/ 20 (0.700)  ci95 [0.50, 0.90]  med 0.049s  tokens 1068  kept 1.000  request_kept 1.00  modal technical (0.50)
+pad  2000  pos 1.00  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.077s  tokens 1024  kept 0.484  request_kept 0.00  modal technical (1.00)
+pad  2000  pos 1.00  max_len 8192     acc  14/ 20 (0.700)  ci95 [0.50, 0.90]  med 0.085s  tokens 2068  kept 1.000  request_kept 1.00  modal technical (0.65)
+pad  4000  pos 1.00  max_len default  acc   6/ 20 (0.300)  ci95 [0.10, 0.50]  med 0.050s  tokens 1024  kept 0.243  request_kept 0.00  modal technical (0.95)
+pad  4000  pos 1.00  max_len 8192     acc  11/ 20 (0.550)  ci95 [0.35, 0.75]  med 0.213s  tokens 4068  kept 1.000  request_kept 1.00  modal technical (0.80)
+pad  7000  pos 1.00  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.056s  tokens 1024  kept 0.139  request_kept 0.00  modal technical (1.00)
+pad  7000  pos 1.00  max_len 8192     acc   8/ 20 (0.400)  ci95 [0.20, 0.60]  med 0.564s  tokens 7068  kept 1.000  request_kept 1.00  modal technical (0.85)
+repeat check: 20/20 identical predictions, max |dp| = 0.000000
+
+--- structural checks (from the published artifacts) ---
+[PASS] cell_keys_match_summary  {"stray": [], "n_cells": 10}
+[PASS] row_count_matches_summary  {"rows": 200, "summary_n": 200}
+[PASS] required_fields_present
+[PASS] probabilities_sum_to_one
+[PASS] prediction_is_an_option
+[PASS] prediction_is_probability_argmax
+[PASS] truncation_matches_documented_rule
+[PASS] input_tokens_within_budget
+[PASS] no_duplicate_cell_item_rows  {"duplicates": 0}
+[PASS] items_paired_across_max_len
+[PASS] document_independent_of_max_len
+[PASS] summary_accuracy_recomputes_from_jsonl
+[PASS] label_balance  {"label_counts": {"billing": 7, "sales": 6, "technical": 7}, "max_label_share": 0.35}
+[PASS] leakage_check_passed
+--- mechanism checks (rebuild from seed) ---
+[PASS] documents_deterministic_for_seed
+[PASS] seed_changes_documents  {"moved": 9, "total": 9}
+[PASS] row_doc_sha256_rebuilds_from_seed  {"checked": 40, "mismatches": []}
+[PASS] large_budget_keeps_the_tail_request  {"request_kept_fraction_at_position_1.0": 1.0, "max_len": 8192, "longest_document_tokens": 7036}
+
+wrote /home/parshu/projects/contri/laya-lab/experiments/baseline-repro/predictions.jsonl (200 rows) in 139.6s
+checks: structural=True mechanism=True

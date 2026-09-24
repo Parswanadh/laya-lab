@@ -1,0 +1,50 @@
+=== baseline-repro-upstream|upstream_multilingual|n20|seed20240924 ===
+command: experiments/harness/run.py --preset baseline-repro-upstream --device cuda --checkpoint models/multilingual
+out: /home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream
+GPU lock refused: {'held': False, 'reason': 'another process holds the lock', 'path': '/home/parshu/projects/contri/laya-lab/.gpu.lock'} -- do non-GPU work and retry (not queueing a second job)
+=== baseline-repro-upstream|upstream_multilingual|n20|seed20240924 ===
+command: experiments/harness/run.py --preset baseline-repro-upstream --device cuda --checkpoint models/multilingual
+out: /home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream
+gpu lock: {'held': True, 'path': '/home/parshu/projects/contri/laya-lab/.gpu.lock', 'pid': 866508}
+preflight: {"mem_available_gib": 6.29, "gpu_free_gib": 6.54, "min_available_gib_required": 2.0, "gpu_min_free_gib_required": 2.0, "allow_low_mem": false, "note": "host RAM at launch 6.29 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"}
+leakage check passed: {"needle_vocab_size": 159, "filler_vocab_size": 178, "content_word_overlap": [], "stem_hits": []}
+items: n=20 label_counts={'billing': 9, 'sales': 4, 'technical': 7} balance_ok=False langs={'ar': 1, 'de': 3, 'en': 6, 'es': 3, 'fr': 2, 'hi': 2, 'ja': 1, 'pt': 2}
+backend: laya models/multilingual device=cuda dtype=torch.bfloat16 amp=True params=321908995 load=6.6s
+shipped defaults: max_len=1024 head_max_len=256
+cells: 10 -> pad0|pos1.00|mldefault|hmldefault, pad0|pos1.00|ml8192|hmldefault, pad1000|pos1.00|mldefault|hmldefault, pad1000|pos1.00|ml8192|hmldefault, pad2000|pos1.00|mldefault|hmldefault, pad2000|pos1.00|ml8192|hmldefault, pad4000|pos1.00|mldefault|hmldefault, pad4000|pos1.00|ml8192|hmldefault, pad7000|pos1.00|mldefault|hmldefault, pad7000|pos1.00|ml8192|hmldefault
+global warm-up done (3 discarded passes at shipped max_len=1024)
+pad     0  pos 1.00  max_len default  acc  19/ 20 (0.950)  ci95 [0.85, 1.00]  med 0.018s  tokens 61  kept 1.000  request_kept 1.00  modal billing (0.50)
+pad     0  pos 1.00  max_len 8192     acc  19/ 20 (0.950)  ci95 [0.85, 1.00]  med 0.018s  tokens 61  kept 1.000  request_kept 1.00  modal billing (0.50)
+pad  1000  pos 1.00  max_len default  acc  13/ 20 (0.650)  ci95 [0.45, 0.85]  med 0.041s  tokens 1024  kept 0.992  request_kept 0.00  modal technical (0.50)
+pad  1000  pos 1.00  max_len 8192     acc  16/ 20 (0.800)  ci95 [0.60, 0.95]  med 0.037s  tokens 1032  kept 1.000  request_kept 1.00  modal billing (0.50)
+pad  2000  pos 1.00  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.041s  tokens 1024  kept 0.490  request_kept 0.00  modal technical (1.00)
+pad  2000  pos 1.00  max_len 8192     acc  17/ 20 (0.850)  ci95 [0.70, 1.00]  med 0.072s  tokens 2040  kept 1.000  request_kept 1.00  modal billing (0.55)
+pad  4000  pos 1.00  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.059s  tokens 1024  kept 0.249  request_kept 0.00  modal technical (1.00)
+pad  4000  pos 1.00  max_len 8192     acc  19/ 20 (0.950)  ci95 [0.85, 1.00]  med 0.254s  tokens 3972  kept 1.000  request_kept 1.00  modal billing (0.50)
+pad  7000  pos 1.00  max_len default  acc   7/ 20 (0.350)  ci95 [0.15, 0.55]  med 0.096s  tokens 1024  kept 0.142  request_kept 0.00  modal technical (1.00)
+pad  7000  pos 1.00  max_len 8192     acc   8/ 20 (0.400)  ci95 [0.20, 0.60]  med 0.560s  tokens 6912  kept 1.000  request_kept 1.00  modal technical (0.80)
+repeat check: 20/20 identical predictions, max |dp| = 0.000000
+
+--- structural checks (from the published artifacts) ---
+[PASS] cell_keys_match_summary  {"stray": [], "n_cells": 10}
+[PASS] row_count_matches_summary  {"rows": 200, "summary_n": 200}
+[PASS] required_fields_present
+[PASS] probabilities_sum_to_one
+[PASS] prediction_is_an_option
+[PASS] prediction_is_probability_argmax
+[PASS] truncation_matches_documented_rule
+[PASS] input_tokens_within_budget
+[PASS] no_duplicate_cell_item_rows  {"duplicates": 0}
+[PASS] items_paired_across_max_len
+[PASS] document_independent_of_max_len
+[PASS] summary_accuracy_recomputes_from_jsonl
+[FAIL] label_balance  {"label_counts": {"billing": 9, "sales": 4, "technical": 7}, "max_label_share": 0.45}
+[PASS] leakage_check_passed
+--- mechanism checks (rebuild from seed) ---
+[PASS] documents_deterministic_for_seed
+[FAIL] seed_changes_documents  {"moved": 0, "total": 9}
+[PASS] row_doc_sha256_rebuilds_from_seed  {"checked": 40, "mismatches": []}
+[PASS] large_budget_keeps_the_tail_request  {"request_kept_fraction_at_position_1.0": 1.0, "max_len": 8192, "longest_document_tokens": 6876}
+
+wrote /home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream/predictions.jsonl (200 rows) in 36.8s
+checks: structural=False mechanism=False
