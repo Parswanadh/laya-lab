@@ -237,17 +237,21 @@ def main() -> int:
         check_true("stats/summary records the metrics module hash it was computed with",
                    len(summ["metrics_module_sha256"]) == 64)
 
-        # ---- 8. learnability lives in its own artifact
+        # ---- 8. learnability lives in its own artifact, outside the GPU lock
         # "Can this loop learn at all" is a question about the training loop, and answering it needs
-        # a sweep rather than an assertion, so it is `check_learnability.py` + `learnability.json`,
-        # also run as a stage of run_all.py. Keeping it here made this file take 20+ minutes on a
-        # contended CPU, which is too slow for something meant to be re-run on every edit. What this
-        # file checks instead is that the artifact and its stage still exist, so deleting the real
-        # check cannot go unnoticed.
+        # a sweep rather than an assertion, so it is `check_learnability.py` + `learnability.json`.
+        # Keeping the sweep here made this file take 20+ minutes on a contended CPU, and keeping it
+        # as a default stage of run_all.py made the GPU lock get held for CPU-bound training while
+        # nothing used the GPU. Both are asserted below so neither can creep back in.
         import run_all as _run_all
-        check_true("learn/learnability has its own artifact and is a pipeline stage",
-                   os.path.exists(os.path.join(HERE, "check_learnability.py"))
-                   and "learnability" in _run_all.ALL_STAGES)
+        check_true("learn/learnability has its own artifact",
+                   os.path.exists(os.path.join(HERE, "check_learnability.py")))
+        check_true("learn/learnability is NOT a GPU-locked default stage (it is CPU-bound)",
+                   "learnability" not in _run_all.ALL_STAGES,
+                   "an in-lock CPU stage spends the lock's window using no GPU")
+        check_true("learn/learnability is still reachable as a stage",
+                   'stage == "learnability"' in open(os.path.join(HERE, "run_all.py"),
+                                                     encoding="utf-8").read())
 
         print("\n%d passed, %d failed" % (len(PASS), len(FAIL)))
         for f in FAIL:
