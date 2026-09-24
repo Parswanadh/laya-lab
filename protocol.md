@@ -100,7 +100,39 @@ in exactly those words.
 3. position-only oracle
 4. upstream head-truncation at the checkpoint default `max_len`
 5. upstream head-truncation at `max_len=8192`
-6. `predict_long` (upstream PR #363) where available, at its default window and at `window=128`
+6. **random-chunk baseline** — sample the *same token budget* as arm 4's state budget uniformly
+   at random from the document, then score. Repeat ≥5 draws and report the mean and spread.
+7. **TF-IDF / lexical chunk baseline** — select the highest-scoring chunk by a lexical
+   query-document score against the question and option text, then score.
+8. `predict_long` (upstream PR #363) where available, at its default window and at `window=128`
+
+### Amendment A1 — why baselines 6 and 7 were added (2026-09-24, after R-001)
+
+The original protocol specified only first-`k` truncation (arm 4). R-001 found that this control
+**overstates every long-context effect by roughly 3×**, with the same pattern in two independent
+third-party evaluations:
+
+| source | first-`k` | **random-`k`** | long-context model |
+|---|---|---|---|
+| ECtHR (Dai et al., arXiv 2204.06683, Table 3) | 73.5 | **79.0** | 81.0 (Longformer@4096) |
+| Inverted EURLEX (Park et al., arXiv 2203.11258, Table 2) | 70.53 | **71.47** | 56.47 (Longformer@4096) |
+
+On ECtHR the long-context gain is **+7.5 over first-`k` but only +2.0 over random-`k`**. On
+Inverted EURLEX — the construction closest to our own failure mode — **random-`k` beat both the
+first-`k` baseline and the sparse long-context encoder.**
+
+The mechanism: first-`k` truncation is a *particularly bad* control when the evidence is late, so
+comparing against it alone inflates any method that simply looks at more of the document. A
+random-`k` baseline holds the token budget fixed and removes that inflation.
+
+**Consequence for reading our own results.** Any arm whose advantage disappears against the
+random-chunk baseline has demonstrated *coverage*, not *mechanism*. Both numbers must be reported
+side by side, and the distinction stated explicitly in every finding. This does not invalidate
+first-`k` as a baseline — it is the shipped behaviour and must stay — but it can no longer be the
+only truncation control.
+
+Amendments are additive and versioned: arms already run under the original protocol keep their
+numbers and are labelled `protocol-v1`. Arms run from this point report `protocol-v1+A1`.
 
 ## 8. Determinism and hygiene
 
