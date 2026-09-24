@@ -17,7 +17,7 @@
   "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
  },
  "git": {
-  "laya_lab_sha": "4af088a51dfb5b60bbdc8c5835cbd00085dc5b22",
+  "laya_lab_sha": "7fdb82c7ac72d36e3125ddd235f91ab58c9578c6",
   "laya_lab_branch": "main",
   "laya_lab_dirty": true,
   "fork_submodule": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5 fork (v0.3.20-68-g9fbb1eb)",
@@ -109,9 +109,9 @@
  },
  "harness": {
   "files": {
-   "analyse.py": "52c86bf8fbbe4ed28ab09d4ae4275ad63ce553491a11c98be4c3d0cb888d75aa",
+   "analyse.py": "8712e36b6c4bf0d09a129e97d9c4db138851581b7a0f0fd0549f60ba7c4ef723",
    "make_manifest.py": "e5f99593ea26c6727aa8a6151e7abe447c3b5d2fa6228d5e74a8bddc97e21058",
-   "run.py": "158501b5c91a65c60b5def1f3ca0a6d3d53b5d7ff22c51edbad36ae8f4feb0b6"
+   "run.py": "3db4dd497bd18ada850d8626f4723daf6b4fde68e5c45076f463edd77e9e3c70"
   },
   "doc_construction_primary": "experiments/orch-diagnostic/run.py::place imported as a module and called with frac=1.0 (P1 probe C rule); the imported REQUESTS/FILLER/QUESTIONS objects are asserted equal to the harness pool's",
   "doc_construction_control": "upstream_rule: FILLER*round(pad/per_rep) + '\\n\\nActual request: ' (fork/research/scripts/bench_long_context.py)",
@@ -127,7 +127,7 @@
   },
   "balanced-v1": {
    "path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/needles-balanced-v1.json",
-   "sha256": "fc8b706155c4f67eb6ec2e8d8e96c9a08747f6ebce7891991775d08339b4a86c",
+   "sha256": "bcb80ac1f4a38b3f8ce5224fc950b6014ed1d8391a311470f898f7496b34c7aa",
    "pool_id": "balanced-v1",
    "kind": "balanced"
   },
@@ -138,12 +138,1452 @@
    "kind": "filler"
   }
  },
- "arms": {},
+ "arms": {
+  "allglobal|p1_exact|upstream_multilingual": {
+   "arm_spec": {
+    "window": null,
+    "all_global": true,
+    "expect": {
+     "sliding": 0,
+     "global": 22,
+     "half": null
+    }
+   },
+   "dtype": "float32",
+   "n": 5,
+   "seed": 20260924,
+   "limit": 8192,
+   "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+   "config_before": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "config_after_patch": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 1,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 0
+   },
+   "summary": "experiments/h2h3-knobs/raw/pilot-upstream_multilingual__allglobal__p1_exact.summary.json"
+  },
+  "baseline|p1_exact|upstream_multilingual": {
+   "arm_spec": {
+    "window": null,
+    "all_global": false,
+    "expect": {
+     "sliding": 14,
+     "global": 8,
+     "half": 64
+    }
+   },
+   "dtype": "float32",
+   "n": 20,
+   "seed": 20260924,
+   "limit": 8192,
+   "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+   "config_before": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "config_after_patch": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "summary": "experiments/h2h3-knobs/raw/stage1-upstream_multilingual__baseline__p1_exact.summary.json"
+  },
+  "w1024|p1_exact|upstream_multilingual": {
+   "arm_spec": {
+    "window": 1024,
+    "all_global": false,
+    "expect": {
+     "sliding": 14,
+     "global": 8,
+     "half": 512
+    }
+   },
+   "dtype": "float32",
+   "n": 5,
+   "seed": 20260924,
+   "limit": 8192,
+   "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+   "config_before": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "config_after_patch": {
+    "config_local_attention": 1024,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      512,
+      512
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "summary": "experiments/h2h3-knobs/raw/pilot-upstream_multilingual__w1024__p1_exact.summary.json"
+  },
+  "baseline|upstream_rule|upstream_multilingual": {
+   "arm_spec": {
+    "window": null,
+    "all_global": false,
+    "expect": {
+     "sliding": 14,
+     "global": 8,
+     "half": 64
+    }
+   },
+   "dtype": "float32",
+   "n": 20,
+   "seed": 20260924,
+   "limit": 8192,
+   "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+   "config_before": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "config_after_patch": {
+    "config_local_attention": 128,
+    "config_global_attn_every_n_layers": 3,
+    "num_hidden_layers": 22,
+    "max_position_embeddings": 8192,
+    "attn_impl": "sdpa",
+    "layer_attn_local_attention": [
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      64,
+      64
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "has_attention_type_attr": false,
+    "has_self_attn_attr": false,
+    "layer_attention_type": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "all_layers_same_rope_inv_freq": true,
+    "n_sliding_at_load": 14
+   },
+   "summary": "experiments/h2h3-knobs/raw/stage1-upstream_multilingual__baseline__upstream_rule.summary.json"
+  }
+ },
  "commands": {
   "stage1": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage1'",
   "stage2": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage2'",
   "stage3": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage3'",
   "stage4": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage4'"
  },
- "cells": []
+ "cells": [
+  {
+   "arm": "allglobal",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 5,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 7000,
+   "accuracy": 0.4,
+   "correct": 2,
+   "majority_class_accuracy": 0.4,
+   "median_latency_s": 1.9077,
+   "p95_latency_s": 1.9416,
+   "peak_vram_alloc_mib": 1978.4,
+   "peak_vram_reserved_mib": 2064.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 22
+    },
+    "sliding_half_windows_arg": [],
+    "last_query_row": "7065",
+    "last_row_max_dist_histogram": {
+     "7065": 22
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 5,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 7000,
+   "accuracy": 0.8,
+   "correct": 4,
+   "majority_class_accuracy": 0.4,
+   "median_latency_s": 1.8526,
+   "p95_latency_s": 2.0996,
+   "peak_vram_alloc_mib": 1978.4,
+   "peak_vram_reserved_mib": 2064.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "7065",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "7065": 8
+    }
+   }
+  },
+  {
+   "arm": "w1024",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 5,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 7000,
+   "accuracy": 0.2,
+   "correct": 1,
+   "majority_class_accuracy": 0.4,
+   "median_latency_s": 1.8722,
+   "p95_latency_s": 1.8962,
+   "peak_vram_alloc_mib": 1978.4,
+   "peak_vram_reserved_mib": 2064.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     512
+    ],
+    "last_query_row": "7065",
+    "last_row_max_dist_histogram": {
+     "512": 14,
+     "7065": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 0,
+   "accuracy": 0.95,
+   "correct": 19,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 0.0224,
+   "p95_latency_s": 0.0276,
+   "peak_vram_alloc_mib": 1239.6,
+   "peak_vram_reserved_mib": 1246.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "68",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "68": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 1000,
+   "accuracy": 0.9,
+   "correct": 18,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 0.0934,
+   "p95_latency_s": 0.1094,
+   "peak_vram_alloc_mib": 1277.5,
+   "peak_vram_reserved_mib": 1286.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "1068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "1068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 2000,
+   "accuracy": 0.8,
+   "correct": 16,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 0.2275,
+   "p95_latency_s": 0.2517,
+   "peak_vram_alloc_mib": 1336.2,
+   "peak_vram_reserved_mib": 1366.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "2068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "2068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 4000,
+   "accuracy": 0.6,
+   "correct": 12,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 0.7152,
+   "p95_latency_s": 0.7684,
+   "peak_vram_alloc_mib": 1524.9,
+   "peak_vram_reserved_mib": 1568.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "4068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "4068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 7000,
+   "accuracy": 0.45,
+   "correct": 9,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 1.8452,
+   "p95_latency_s": 2.2707,
+   "peak_vram_alloc_mib": 1979.7,
+   "peak_vram_reserved_mib": 2068.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "7068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "7068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "upstream_rule",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 0,
+   "accuracy": 0.95,
+   "correct": 19,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 0.0223,
+   "p95_latency_s": 0.0342,
+   "peak_vram_alloc_mib": 1239.6,
+   "peak_vram_reserved_mib": 2068.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "68",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "68": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "upstream_rule",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 4000,
+   "accuracy": 0.85,
+   "correct": 17,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 0.6845,
+   "p95_latency_s": 0.7098,
+   "peak_vram_alloc_mib": 1514.8,
+   "peak_vram_reserved_mib": 2068.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "3981",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "3981": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "upstream_rule",
+   "pool": "upstream_multilingual",
+   "n": 20,
+   "seed": 20260924,
+   "dtype": "float32",
+   "limit": 8192,
+   "pad": 7000,
+   "accuracy": 0.5,
+   "correct": 10,
+   "majority_class_accuracy": 0.45,
+   "median_latency_s": 1.849,
+   "p95_latency_s": 1.9341,
+   "peak_vram_alloc_mib": 1952.7,
+   "peak_vram_reserved_mib": 2068.0,
+   "truncated_items": 0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "6921",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "6921": 8
+    }
+   }
+  }
+ ]
 }

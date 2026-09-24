@@ -1,0 +1,216 @@
+{
+ "tag": "stage1-upstream_multilingual",
+ "pool": "upstream_multilingual",
+ "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+ "n": 20,
+ "seed": 20260924,
+ "items_sha256": "806543fe27ac7713c191c4b52f86b6bae54cc475c487560e4f9d8f8b9c890afe",
+ "harness_pools_py_sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86",
+ "label_counts": {
+  "billing": 9,
+  "sales": 4,
+  "technical": 7
+ },
+ "items": [
+  {
+   "item_id": "upstream|00|en",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "upstream|00",
+   "slots": {},
+   "text": "I was charged twice for invoice 4411, please refund the duplicate payment.",
+   "split": "eval",
+   "item_index": 0
+  },
+  {
+   "item_id": "upstream|01|en",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "upstream|01",
+   "slots": {},
+   "text": "The dashboard crashes with an error every time I open the reports page.",
+   "split": "eval",
+   "item_index": 1
+  },
+  {
+   "item_id": "upstream|06|es",
+   "label": "billing",
+   "lang": "es",
+   "template_id": "upstream|06",
+   "slots": {},
+   "text": "Me cobraron dos veces la factura de marzo, devuélvanme el cargo duplicado.",
+   "split": "eval",
+   "item_index": 2
+  },
+  {
+   "item_id": "upstream|19|ar",
+   "label": "billing",
+   "lang": "ar",
+   "template_id": "upstream|19",
+   "slots": {},
+   "text": "تم خصم المبلغ مرتين من بطاقتي، أرجو استرداد المبلغ المكرر.",
+   "split": "eval",
+   "item_index": 3
+  },
+  {
+   "item_id": "upstream|12|fr",
+   "label": "technical",
+   "lang": "fr",
+   "template_id": "upstream|12",
+   "slots": {},
+   "text": "L'application plante dès que j'ouvre la page des paramètres.",
+   "split": "eval",
+   "item_index": 4
+  },
+  {
+   "item_id": "upstream|04|en",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "upstream|04",
+   "slots": {},
+   "text": "Our API returns 500 errors since this morning and the service is down.",
+   "split": "eval",
+   "item_index": 5
+  },
+  {
+   "item_id": "upstream|18|ja",
+   "label": "billing",
+   "lang": "ja",
+   "template_id": "upstream|18",
+   "slots": {},
+   "text": "請求書が二重に請求されました。重複分を返金してください。",
+   "split": "eval",
+   "item_index": 6
+  },
+  {
+   "item_id": "upstream|08|es",
+   "label": "sales",
+   "lang": "es",
+   "template_id": "upstream|08",
+   "slots": {},
+   "text": "Quisiera una cotización para un contrato anual de 50 licencias.",
+   "split": "eval",
+   "item_index": 7
+  },
+  {
+   "item_id": "upstream|17|hi",
+   "label": "technical",
+   "lang": "hi",
+   "template_id": "upstream|17",
+   "slots": {},
+   "text": "ऐप हर बार सेटिंग्स खोलते ही बंद हो जाता है।",
+   "split": "eval",
+   "item_index": 8
+  },
+  {
+   "item_id": "upstream|10|pt",
+   "label": "technical",
+   "lang": "pt",
+   "template_id": "upstream|10",
+   "slots": {},
+   "text": "O sistema cai toda vez que tento gerar o relatório mensal.",
+   "split": "eval",
+   "item_index": 9
+  },
+  {
+   "item_id": "upstream|11|fr",
+   "label": "billing",
+   "lang": "fr",
+   "template_id": "upstream|11",
+   "slots": {},
+   "text": "J'ai été facturé deux fois ce mois-ci, merci de rembourser le doublon.",
+   "split": "eval",
+   "item_index": 10
+  },
+  {
+   "item_id": "upstream|14|de",
+   "label": "technical",
+   "lang": "de",
+   "template_id": "upstream|14",
+   "slots": {},
+   "text": "Die Anwendung stürzt jedes Mal ab, wenn ich die Einstellungen öffne.",
+   "split": "eval",
+   "item_index": 11
+  },
+  {
+   "item_id": "upstream|02|en",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "upstream|02",
+   "slots": {},
+   "text": "What would an enterprise contract for 200 seats cost per year?",
+   "split": "eval",
+   "item_index": 12
+  },
+  {
+   "item_id": "upstream|07|es",
+   "label": "technical",
+   "lang": "es",
+   "template_id": "upstream|07",
+   "slots": {},
+   "text": "La aplicación se cierra cada vez que abro la configuración.",
+   "split": "eval",
+   "item_index": 13
+  },
+  {
+   "item_id": "upstream|13|de",
+   "label": "billing",
+   "lang": "de",
+   "template_id": "upstream|13",
+   "slots": {},
+   "text": "Ich wurde zweimal belastet, bitte erstatten Sie die doppelte Zahlung.",
+   "split": "eval",
+   "item_index": 14
+  },
+  {
+   "item_id": "upstream|09|pt",
+   "label": "billing",
+   "lang": "pt",
+   "template_id": "upstream|09",
+   "slots": {},
+   "text": "Fui cobrado duas vezes na fatura de março, quero o reembolso da cobrança duplicada.",
+   "split": "eval",
+   "item_index": 15
+  },
+  {
+   "item_id": "upstream|16|hi",
+   "label": "billing",
+   "lang": "hi",
+   "template_id": "upstream|16",
+   "slots": {},
+   "text": "मुझसे मार्च में दो बार शुल्क लिया गया, कृपया डुप्लिकेट राशि वापस करें।",
+   "split": "eval",
+   "item_index": 16
+  },
+  {
+   "item_id": "upstream|05|en",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "upstream|05",
+   "slots": {},
+   "text": "Can you send me pricing for upgrading our plan to the business tier?",
+   "split": "eval",
+   "item_index": 17
+  },
+  {
+   "item_id": "upstream|03|en",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "upstream|03",
+   "slots": {},
+   "text": "Please refund my subscription payment from last month, it was billed by mistake.",
+   "split": "eval",
+   "item_index": 18
+  },
+  {
+   "item_id": "upstream|15|de",
+   "label": "sales",
+   "lang": "de",
+   "template_id": "upstream|15",
+   "slots": {},
+   "text": "Was kostet ein Jahresvertrag für 100 Nutzer?",
+   "split": "eval",
+   "item_index": 19
+  }
+ ]
+}

@@ -410,15 +410,32 @@ def main():
     p1 = load_p1_module()
 
     if pool_name == "upstream_multilingual":
-        assert sorted((i["text"], i["label"]) for i in items) == \
-               sorted((t, g) for t, g in p1.REQUESTS), "pool items differ from P1 REQUESTS"
+        # upstream pool items are requests[:n]; compare like for like against P1's own list
+        a_set = sorted((i["text"], i["label"]) for i in items)
+        b_set = sorted((t, g) for t, g in p1.REQUESTS[:len(items)])
+        if a_set != b_set:
+            for x, y in zip(a_set, b_set):
+                if x != y:
+                    print("POOL/P1 DIFF\n  pool: %r\n  p1  : %r" % (x, y))
+            raise AssertionError("pool items differ from P1 REQUESTS (harness/pools.py sha=%s)"
+                                 % _sha256_file(os.path.join(LAB, "experiments", "harness", "pools.py")))
         assert questions == p1.QUESTIONS, "question dict differs from P1 QUESTIONS"
     filler_unit = pool.get("filler_unit") or p1.FILLER
 
-    major = max(built["label_counts"].values()) / len(items)
+    # Freeze the exact item set this run scores, so the raw artifacts stay self-contained even if
+    # experiments/harness/pools.py is edited afterwards (it is another agent's file).
+    items_dir = os.path.join(HERE, "items")
+    os.makedirs(items_dir, exist_ok=True)
     items_sha = hashlib.sha256(json.dumps(
         [(i["item_id"], i["text"], i["label"]) for i in items], ensure_ascii=False).encode()).hexdigest()
-    print("items_sha256=%s" % items_sha, flush=True)
+    with open(os.path.join(items_dir, "%s.json" % tag), "w", encoding="utf-8") as fh:
+        json.dump({"tag": tag, "pool": pool["pool_id"], "pool_sha256": pool["_sha256"],
+                   "n": len(items), "seed": seed, "items_sha256": items_sha,
+                   "harness_pools_py_sha256": _sha256_file(os.path.join(LAB, "experiments", "harness", "pools.py")),
+                   "label_counts": built["label_counts"], "items": items}, fh, indent=1,
+                  ensure_ascii=False)
+    print("items_sha256=%s (frozen in items/%s.json)" % (items_sha, tag), flush=True)
+    major = max(built["label_counts"].values()) / len(items)
     print("tag=%s pool=%s n=%d seed=%d dtype=%s limit=%d" % (tag, pool["pool_id"], len(items),
                                                              seed, dt_name, a.limit), flush=True)
     print("labels=%s majority=%.4f balance_ok=%s" % (built["label_counts"], major,

@@ -226,6 +226,47 @@ def main():
     bad = [t for t in out["truncation"] if t["truncated_items"]]
     print("\ntruncation control: %d cells, %d with truncated items" % (len(out["truncation"]), len(bad)))
 
+    # ---- P1 reproduction: per-item, not just aggregate ----
+    p1_path = os.path.join(os.path.dirname(HERE), "orch-diagnostic", "results.json")
+    rep = {"artifact": os.path.relpath(p1_path, os.path.dirname(HERE)), "pads": {}}
+    if os.path.exists(p1_path):
+        with open(p1_path, encoding="utf-8") as fh:
+            p1 = json.load(fh)
+        p1_rows = p1.get("probes", {}).get("C_length", {})
+        base_tags = [t for t in order if sums.get(t, {}).get("arm") == "baseline"
+                     and sums.get(t, {}).get("construction") == "p1_exact"
+                     and sums.get(t, {}).get("n") == 20]
+        if base_tags:
+            bt = base_tags[0]
+            idx = {}
+            for r in rows[bt]:
+                # item_id "upstream|NN|lang" -> NN is the index into P1's own REQUESTS order
+                nn = int(r["item_id"].split("|")[1])
+                idx[(r["pad"], nn)] = r
+            for pad_s, cell in p1_rows.items():
+                pad = int(pad_s)
+                mine = idx
+                agree = tot = 0
+                max_dp = 0.0
+                for nn, item in enumerate(cell.get("per_item", [])):
+                    r = mine.get((pad, nn))
+                    if r is None:
+                        continue
+                    tot += 1
+                    agree += int(r["pred"] == item["pred"])
+                    if r["gold"] == item["gold"]:
+                        max_dp = max(max_dp, abs(r["p_gold"] - float(item["p_gold"])))
+                rep["pads"][pad_s] = {"n": tot, "prediction_agreement": agree,
+                                      "p1_accuracy": cell["accuracy"],
+                                      "max_abs_delta_p_gold_same_gold": round(max_dp, 6)}
+            rep["baseline_tag"] = bt
+            out["p1_reproduction"] = rep
+            print("\nP1 reproduction (per item, baseline %s vs probes.C_length):" % bt)
+            for pad_s, v in rep["pads"].items():
+                print("  pad=%-5s n=%d identical_predictions=%d/%d max|dp_gold|=%.5f (P1 acc %.3f)"
+                      % (pad_s, v["n"], v["prediction_agreement"], v["n"],
+                         v["max_abs_delta_p_gold_same_gold"], v["p1_accuracy"]))
+
     with open(os.path.join(HERE, "analysis.json"), "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=1, ensure_ascii=False)
     print("wrote analysis.json (%d cells)" % len(out["cells"]))

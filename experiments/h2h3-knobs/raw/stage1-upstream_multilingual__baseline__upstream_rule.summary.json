@@ -1,0 +1,409 @@
+{
+ "tag": "stage1-upstream_multilingual",
+ "arm": "baseline",
+ "construction": "upstream_rule",
+ "pool": "upstream_multilingual",
+ "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+ "n": 20,
+ "seed": 20260924,
+ "dtype": "float32",
+ "items_sha256": "806543fe27ac7713c191c4b52f86b6bae54cc475c487560e4f9d8f8b9c890afe",
+ "doc_sha256_per_pad": {
+  "0": "34482345ef55fe3dcae15c9656ada9fb12b5d71c3d00a2f922a418eeae561018",
+  "1000": "66e553b4092c8d924ad68cd814590242b49836e3aca1f78c0a10e90a8958901d",
+  "2000": "139120058843f76d5935e700b310fcadf99bd5d8a2a7f21d0a66d8bc0e92db6a",
+  "4000": "c36bf57e306de70a6a3d30b3555fc3aa5ac744d0b50bf7d62193df8773c3ce7f",
+  "7000": "d904f6fc693a1e1e95df5437680003516512db0ca0169bbbd52484589de3817e"
+ },
+ "harness_pools_py_sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86",
+ "harness_run_py_sha256": "3db4dd497bd18ada850d8626f4723daf6b4fde68e5c45076f463edd77e9e3c70",
+ "limit": 8192,
+ "device": "cuda",
+ "agent_dtype": "torch.float32",
+ "agent_amp_enabled": true,
+ "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "arm_spec": {
+  "window": null,
+  "all_global": false,
+  "expect": {
+   "sliding": 14,
+   "global": 8,
+   "half": 64
+  }
+ },
+ "cells": [
+  {
+   "arm": "baseline",
+   "construction": "upstream_rule",
+   "pad": 0,
+   "limit": 8192,
+   "n": 20,
+   "correct": 19,
+   "accuracy": 0.95,
+   "mean_p_gold": 0.92321,
+   "median_latency_s": 0.0223,
+   "median_latency_s_all_items": 0.0223,
+   "p95_latency_s": 0.0342,
+   "max_latency_s": 0.0348,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 76,
+   "state_tokens_median": 15,
+   "peak_vram_alloc_mib": 1239.6,
+   "peak_vram_reserved_mib": 2068.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "68",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "68": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "upstream_rule",
+   "pad": 4000,
+   "limit": 8192,
+   "n": 20,
+   "correct": 17,
+   "accuracy": 0.85,
+   "mean_p_gold": 0.60838,
+   "median_latency_s": 0.6845,
+   "median_latency_s_all_items": 0.6849,
+   "p95_latency_s": 0.7098,
+   "max_latency_s": 0.8134,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 3989,
+   "state_tokens_median": 3926,
+   "peak_vram_alloc_mib": 1514.8,
+   "peak_vram_reserved_mib": 2068.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "3981",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "3981": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "upstream_rule",
+   "pad": 7000,
+   "limit": 8192,
+   "n": 20,
+   "correct": 10,
+   "accuracy": 0.5,
+   "mean_p_gold": 0.3744,
+   "median_latency_s": 1.849,
+   "median_latency_s_all_items": 1.85,
+   "p95_latency_s": 1.9341,
+   "max_latency_s": 1.9488,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 6929,
+   "state_tokens_median": 6866,
+   "peak_vram_alloc_mib": 1952.7,
+   "peak_vram_reserved_mib": 2068.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "6921",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "6921": 8
+    }
+   }
+  }
+ ],
+ "config_before": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ },
+ "config_after_patch": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ },
+ "label_counts": {
+  "billing": 9,
+  "sales": 4,
+  "technical": 7
+ },
+ "majority_class_accuracy": 0.45,
+ "balance_ok": false,
+ "head_len": 45,
+ "warmup_first_item_excluded": true,
+ "started_utc": "2026-09-24T17:35:44Z",
+ "argv": [
+  "experiments/h2h3-knobs/run.py",
+  "--stage",
+  "stage1"
+ ]
+}

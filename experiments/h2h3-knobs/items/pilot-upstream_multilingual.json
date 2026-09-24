@@ -1,0 +1,66 @@
+{
+ "tag": "pilot-upstream_multilingual",
+ "pool": "upstream_multilingual",
+ "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+ "n": 5,
+ "seed": 20260924,
+ "items_sha256": "d0b48b53b439244f49f0fc1d67f2a58e77242eadb8f5742d468b86df73d986ed",
+ "harness_pools_py_sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86",
+ "label_counts": {
+  "billing": 2,
+  "sales": 1,
+  "technical": 2
+ },
+ "items": [
+  {
+   "item_id": "upstream|02|en",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "upstream|02",
+   "slots": {},
+   "text": "What would an enterprise contract for 200 seats cost per year?",
+   "split": "eval",
+   "item_index": 0
+  },
+  {
+   "item_id": "upstream|01|en",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "upstream|01",
+   "slots": {},
+   "text": "The dashboard crashes with an error every time I open the reports page.",
+   "split": "eval",
+   "item_index": 1
+  },
+  {
+   "item_id": "upstream|04|en",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "upstream|04",
+   "slots": {},
+   "text": "Our API returns 500 errors since this morning and the service is down.",
+   "split": "eval",
+   "item_index": 2
+  },
+  {
+   "item_id": "upstream|00|en",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "upstream|00",
+   "slots": {},
+   "text": "I was charged twice for invoice 4411, please refund the duplicate payment.",
+   "split": "eval",
+   "item_index": 3
+  },
+  {
+   "item_id": "upstream|03|en",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "upstream|03",
+   "slots": {},
+   "text": "Please refund my subscription payment from last month, it was billed by mistake.",
+   "split": "eval",
+   "item_index": 4
+  }
+ ]
+}

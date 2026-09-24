@@ -1,0 +1,333 @@
+{
+ "tag": "pilot-upstream_multilingual",
+ "arm": "baseline",
+ "construction": "p1_exact",
+ "pool": "upstream_multilingual",
+ "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+ "n": 5,
+ "seed": 20260924,
+ "dtype": "float32",
+ "items_sha256": "d0b48b53b439244f49f0fc1d67f2a58e77242eadb8f5742d468b86df73d986ed",
+ "doc_sha256_per_pad": {
+  "7000": "5a1f6192dfc42dbf62739eb5495565bfd1d00aa2a62305935fafac306a3af347"
+ },
+ "harness_pools_py_sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86",
+ "harness_run_py_sha256": "3db4dd497bd18ada850d8626f4723daf6b4fde68e5c45076f463edd77e9e3c70",
+ "limit": 8192,
+ "device": "cuda",
+ "agent_dtype": "torch.float32",
+ "agent_amp_enabled": true,
+ "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "arm_spec": {
+  "window": null,
+  "all_global": false,
+  "expect": {
+   "sliding": 14,
+   "global": 8,
+   "half": 64
+  }
+ },
+ "cells": [
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pad": 7000,
+   "limit": 8192,
+   "n": 5,
+   "correct": 4,
+   "accuracy": 0.8,
+   "mean_p_gold": 0.52004,
+   "median_latency_s": 1.8526,
+   "median_latency_s_all_items": 1.8636,
+   "p95_latency_s": 2.0996,
+   "max_latency_s": 2.1412,
+   "latency_n": 4,
+   "truncated_items": 0,
+   "input_tokens_max": 7069,
+   "state_tokens_median": 7015,
+   "peak_vram_alloc_mib": 1978.4,
+   "peak_vram_reserved_mib": 2064.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "7065",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "7065": 8
+    }
+   }
+  }
+ ],
+ "config_before": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ },
+ "config_after_patch": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ },
+ "label_counts": {
+  "billing": 2,
+  "sales": 1,
+  "technical": 2
+ },
+ "majority_class_accuracy": 0.4,
+ "balance_ok": true,
+ "head_len": 45,
+ "warmup_first_item_excluded": true,
+ "started_utc": "2026-09-24T17:36:07Z",
+ "argv": [
+  "experiments/h2h3-knobs/run.py",
+  "--stage",
+  "pilot"
+ ]
+}

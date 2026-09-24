@@ -1,0 +1,481 @@
+{
+ "tag": "stage1-upstream_multilingual",
+ "arm": "baseline",
+ "construction": "p1_exact",
+ "pool": "upstream_multilingual",
+ "pool_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+ "n": 20,
+ "seed": 20260924,
+ "dtype": "float32",
+ "items_sha256": "806543fe27ac7713c191c4b52f86b6bae54cc475c487560e4f9d8f8b9c890afe",
+ "doc_sha256_per_pad": {
+  "0": "34482345ef55fe3dcae15c9656ada9fb12b5d71c3d00a2f922a418eeae561018",
+  "1000": "66e553b4092c8d924ad68cd814590242b49836e3aca1f78c0a10e90a8958901d",
+  "2000": "139120058843f76d5935e700b310fcadf99bd5d8a2a7f21d0a66d8bc0e92db6a",
+  "4000": "c36bf57e306de70a6a3d30b3555fc3aa5ac744d0b50bf7d62193df8773c3ce7f",
+  "7000": "d904f6fc693a1e1e95df5437680003516512db0ca0169bbbd52484589de3817e"
+ },
+ "harness_pools_py_sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86",
+ "harness_run_py_sha256": "7d5bc91226c217dfc5965fdf699dff370ded84a911052f6d80ea14a632711e9c",
+ "limit": 8192,
+ "device": "cuda",
+ "agent_dtype": "torch.float32",
+ "agent_amp_enabled": true,
+ "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "arm_spec": {
+  "window": null,
+  "all_global": false,
+  "expect": {
+   "sliding": 14,
+   "global": 8,
+   "half": 64
+  }
+ },
+ "cells": [
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pad": 0,
+   "limit": 8192,
+   "n": 20,
+   "correct": 19,
+   "accuracy": 0.95,
+   "mean_p_gold": 0.92216,
+   "median_latency_s": 0.0224,
+   "median_latency_s_all_items": 0.0225,
+   "p95_latency_s": 0.0276,
+   "max_latency_s": 0.032,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 76,
+   "state_tokens_median": 15,
+   "peak_vram_alloc_mib": 1239.6,
+   "peak_vram_reserved_mib": 1246.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "68",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "68": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pad": 1000,
+   "limit": 8192,
+   "n": 20,
+   "correct": 18,
+   "accuracy": 0.9,
+   "mean_p_gold": 0.72962,
+   "median_latency_s": 0.0934,
+   "median_latency_s_all_items": 0.0956,
+   "p95_latency_s": 0.1094,
+   "max_latency_s": 0.113,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 1076,
+   "state_tokens_median": 1015,
+   "peak_vram_alloc_mib": 1277.5,
+   "peak_vram_reserved_mib": 1286.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "1068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "1068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pad": 2000,
+   "limit": 8192,
+   "n": 20,
+   "correct": 16,
+   "accuracy": 0.8,
+   "mean_p_gold": 0.558725,
+   "median_latency_s": 0.2275,
+   "median_latency_s_all_items": 0.2286,
+   "p95_latency_s": 0.2517,
+   "max_latency_s": 0.2554,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 2076,
+   "state_tokens_median": 2015,
+   "peak_vram_alloc_mib": 1336.2,
+   "peak_vram_reserved_mib": 1366.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "2068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "2068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pad": 4000,
+   "limit": 8192,
+   "n": 20,
+   "correct": 12,
+   "accuracy": 0.6,
+   "mean_p_gold": 0.4591,
+   "median_latency_s": 0.7152,
+   "median_latency_s_all_items": 0.718,
+   "p95_latency_s": 0.7684,
+   "max_latency_s": 0.8337,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 4076,
+   "state_tokens_median": 4015,
+   "peak_vram_alloc_mib": 1524.9,
+   "peak_vram_reserved_mib": 1568.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "4068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "4068": 8
+    }
+   }
+  },
+  {
+   "arm": "baseline",
+   "construction": "p1_exact",
+   "pad": 7000,
+   "limit": 8192,
+   "n": 20,
+   "correct": 9,
+   "accuracy": 0.45,
+   "mean_p_gold": 0.41639,
+   "median_latency_s": 1.8452,
+   "median_latency_s_all_items": 1.8569,
+   "p95_latency_s": 2.2707,
+   "max_latency_s": 2.2724,
+   "latency_n": 19,
+   "truncated_items": 0,
+   "input_tokens_max": 7076,
+   "state_tokens_median": 7015,
+   "peak_vram_alloc_mib": 1979.7,
+   "peak_vram_reserved_mib": 2068.0,
+   "liveness": {
+    "forwards_recorded": 22,
+    "layers_total": 22,
+    "by_branch": {
+     "global": 8,
+     "sliding": 14
+    },
+    "sliding_half_windows_arg": [
+     64
+    ],
+    "last_query_row": "7068",
+    "last_row_max_dist_histogram": {
+     "64": 14,
+     "7068": 8
+    }
+   }
+  }
+ ],
+ "config_before": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ },
+ "config_after_patch": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ },
+ "label_counts": {
+  "billing": 9,
+  "sales": 4,
+  "technical": 7
+ },
+ "majority_class_accuracy": 0.45,
+ "balance_ok": false,
+ "head_len": 45,
+ "warmup_first_item_excluded": true,
+ "started_utc": "2026-09-24T17:34:53Z",
+ "argv": [
+  "experiments/h2h3-knobs/run.py",
+  "--stage",
+  "stage1"
+ ]
+}
