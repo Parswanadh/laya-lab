@@ -374,8 +374,12 @@ def main() -> int:
             vals.append("%8.3f" % s["accuracy_mean"] if s else "       -")
         # take n from whichever (arm, seed) first has this cell -- arm1 is keyed "seed-1", so
         # assuming the training seeds' key silently printed n=0 for every cell
-        n = next((st["n"] for arm in arms for k, st in per_seed.get(arm, {}).items()
-                  if cell in per_seed[arm][k] and (st := per_seed[arm][k][cell])), 0)
+        n = 0
+        for arm in arms:
+            hit = next((sd[cell]["n"] for sd in per_seed.get(arm, {}).values() if cell in sd), None)
+            if hit is not None:
+                n = hit
+                break
         d = verdict.get(cell, {}).get("arm3_minus_arm2_shipped_pp")
         print("%-18s %5d %6.3f | %s | %+7.2f" % (cell, n, orc if orc is not None else float("nan"),
                                                  " ".join(vals), d if d is not None else float("nan")))

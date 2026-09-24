@@ -1,0 +1,1191 @@
+{
+ "artifact": "experiments/h5-adapter/summary.json",
+ "reproduce": "env/venv/bin/python experiments/h5-adapter/stats.py",
+ "prediction_files": [
+  "arm1_frozen.jsonl",
+  "arm2_shipped_init-seed0.jsonl"
+ ],
+ "metrics_module_sha256": "6cd2014aa9c4b3232a571b41d0a69bc132af0ed3954dfb9ddfb977d52b4b4748",
+ "metrics_module_path": "experiments/harness/metrics.py",
+ "arms": [
+  "arm1_frozen",
+  "arm2_shipped_init"
+ ],
+ "seeds": [
+  0
+ ],
+ "cells": [
+  "L0",
+  "L4000-p000",
+  "L4000-p025",
+  "L4000-p050",
+  "L4000-p075",
+  "L4000-p100",
+  "L4000-p100-ablated",
+  "L4000-p100-perm",
+  "L4000-p100-swapped",
+  "L7000-p000",
+  "L7000-p100"
+ ],
+ "per_arm_seed_cell": {
+  "arm1_frozen": {
+   "seed-1": {
+    "L0": {
+     "n": 200,
+     "correct": 128,
+     "accuracy": 0.64,
+     "macro_f1": 0.5728721424774056,
+     "accuracy_ci95_low": 0.575,
+     "accuracy_ci95_high": 0.705,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.47,
+     "ece_raw": 0.20621744751930238,
+     "fitted_temperature": 2.3,
+     "nll_at_fitted": 0.8311788749039266,
+     "nll_at_raw": 1.0624560925837496
+    },
+    "L4000-p000": {
+     "n": 200,
+     "correct": 116,
+     "accuracy": 0.58,
+     "macro_f1": 0.4993238109180138,
+     "accuracy_ci95_low": 0.51,
+     "accuracy_ci95_high": 0.65,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.52,
+     "ece_raw": 0.24667091354727746,
+     "fitted_temperature": 2.2,
+     "nll_at_fitted": 0.9673326519901143,
+     "nll_at_raw": 1.1649589044746715
+    },
+    "L4000-p025": {
+     "n": 200,
+     "correct": 59,
+     "accuracy": 0.295,
+     "macro_f1": 0.1844380999668984,
+     "accuracy_ci95_low": 0.235,
+     "accuracy_ci95_high": 0.36,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.95,
+     "ece_raw": 0.460437483638525,
+     "fitted_temperature": 3.6000000000000005,
+     "nll_at_fitted": 1.3067805777606427,
+     "nll_at_raw": 1.7313982533001693
+    },
+    "L4000-p050": {
+     "n": 200,
+     "correct": 67,
+     "accuracy": 0.335,
+     "macro_f1": 0.2461512445887446,
+     "accuracy_ci95_low": 0.27,
+     "accuracy_ci95_high": 0.4,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.905,
+     "ece_raw": 0.40254754245281227,
+     "fitted_temperature": 3.1000000000000005,
+     "nll_at_fitted": 1.2882391333558143,
+     "nll_at_raw": 1.6303791410598654
+    },
+    "L4000-p075": {
+     "n": 200,
+     "correct": 56,
+     "accuracy": 0.28,
+     "macro_f1": 0.1573274371476986,
+     "accuracy_ci95_low": 0.22,
+     "accuracy_ci95_high": 0.345,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.965,
+     "ece_raw": 0.4852898797392845,
+     "fitted_temperature": 4.5,
+     "nll_at_fitted": 1.334378895658483,
+     "nll_at_raw": 1.8605044731553806
+    },
+    "L4000-p100": {
+     "n": 200,
+     "correct": 83,
+     "accuracy": 0.415,
+     "macro_f1": 0.34968044203396736,
+     "accuracy_ci95_low": 0.345,
+     "accuracy_ci95_high": 0.485,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.81,
+     "ece_raw": 0.3284386493265629,
+     "fitted_temperature": 2.7,
+     "nll_at_fitted": 1.2140939916127247,
+     "nll_at_raw": 1.520966135740473
+    },
+    "L4000-p100-ablated": {
+     "n": 200,
+     "correct": 50,
+     "accuracy": 0.25,
+     "macro_f1": 0.1,
+     "accuracy_ci95_low": 0.19,
+     "accuracy_ci95_high": 0.31,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 1.0,
+     "ece_raw": 0.5781419995427132,
+     "fitted_temperature": 5.0,
+     "nll_at_fitted": 1.432771466034431,
+     "nll_at_raw": 2.550888844203705
+    },
+    "L4000-p100-perm": {
+     "n": 200,
+     "correct": 93,
+     "accuracy": 0.465,
+     "macro_f1": 0.4327262150429712,
+     "accuracy_ci95_low": 0.395,
+     "accuracy_ci95_high": 0.535,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.745,
+     "ece_raw": 0.2629000106453896,
+     "fitted_temperature": 2.4000000000000004,
+     "nll_at_fitted": 1.196164206905776,
+     "nll_at_raw": 1.431481970670773
+    },
+    "L4000-p100-swapped": {
+     "n": 200,
+     "correct": 50,
+     "accuracy": 0.25,
+     "macro_f1": 0.10204081632653061,
+     "accuracy_ci95_low": 0.19,
+     "accuracy_ci95_high": 0.31,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.975,
+     "ece_raw": 0.5138374188542367,
+     "fitted_temperature": 5.0,
+     "nll_at_fitted": 1.472890777854031,
+     "nll_at_raw": 2.6197024715750192
+    },
+    "L7000-p000": {
+     "n": 200,
+     "correct": 119,
+     "accuracy": 0.595,
+     "macro_f1": 0.5090057001821707,
+     "accuracy_ci95_low": 0.525,
+     "accuracy_ci95_high": 0.665,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.465,
+     "ece_raw": 0.22153800502419468,
+     "fitted_temperature": 2.25,
+     "nll_at_fitted": 0.968568970152117,
+     "nll_at_raw": 1.1990643712418572
+    },
+    "L7000-p100": {
+     "n": 200,
+     "correct": 73,
+     "accuracy": 0.365,
+     "macro_f1": 0.29439441585668,
+     "accuracy_ci95_low": 0.3,
+     "accuracy_ci95_high": 0.435,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.81,
+     "ece_raw": 0.3818199455738067,
+     "fitted_temperature": 2.85,
+     "nll_at_fitted": 1.2682082026451074,
+     "nll_at_raw": 1.5737624437730195
+    }
+   }
+  },
+  "arm2_shipped_init": {
+   "seed0": {
+    "L0": {
+     "n": 200,
+     "correct": 124,
+     "accuracy": 0.62,
+     "macro_f1": 0.559311820612884,
+     "accuracy_ci95_low": 0.55,
+     "accuracy_ci95_high": 0.69,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.4,
+     "ece_raw": 0.11572850912809372,
+     "fitted_temperature": 1.0,
+     "nll_at_fitted": 0.8717836107339653,
+     "nll_at_raw": 0.8717835807341504
+    },
+    "L4000-p000": {
+     "n": 200,
+     "correct": 118,
+     "accuracy": 0.59,
+     "macro_f1": 0.5035714285714286,
+     "accuracy_ci95_low": 0.52,
+     "accuracy_ci95_high": 0.66,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.45,
+     "ece_raw": 0.1504652689397335,
+     "fitted_temperature": 1.1,
+     "nll_at_fitted": 1.0335582668445324,
+     "nll_at_raw": 1.0366755284977827
+    },
+    "L4000-p025": {
+     "n": 200,
+     "correct": 86,
+     "accuracy": 0.43,
+     "macro_f1": 0.3849419810296452,
+     "accuracy_ci95_low": 0.36,
+     "accuracy_ci95_high": 0.5,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.69,
+     "ece_raw": 0.10741147428750988,
+     "fitted_temperature": 0.325,
+     "nll_at_fitted": 1.171321605904323,
+     "nll_at_raw": 1.2509930980724635
+    },
+    "L4000-p050": {
+     "n": 200,
+     "correct": 100,
+     "accuracy": 0.5,
+     "macro_f1": 0.43961686283929857,
+     "accuracy_ci95_low": 0.43,
+     "accuracy_ci95_high": 0.57,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.655,
+     "ece_raw": 0.21415292456746096,
+     "fitted_temperature": 0.8,
+     "nll_at_fitted": 1.293719284475194,
+     "nll_at_raw": 1.2970389490500047
+    },
+    "L4000-p075": {
+     "n": 200,
+     "correct": 85,
+     "accuracy": 0.425,
+     "macro_f1": 0.3536010485471402,
+     "accuracy_ci95_low": 0.36,
+     "accuracy_ci95_high": 0.495,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.73,
+     "ece_raw": 0.15966882124543189,
+     "fitted_temperature": 0.8500000000000001,
+     "nll_at_fitted": 1.3210174744386969,
+     "nll_at_raw": 1.322405273222689
+    },
+    "L4000-p100": {
+     "n": 200,
+     "correct": 99,
+     "accuracy": 0.495,
+     "macro_f1": 0.43005165290235603,
+     "accuracy_ci95_low": 0.425,
+     "accuracy_ci95_high": 0.565,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.615,
+     "ece_raw": 0.26033390328288075,
+     "fitted_temperature": 1.3,
+     "nll_at_fitted": 1.2819491798433473,
+     "nll_at_raw": 1.2904488298166168
+    },
+    "L4000-p100-ablated": {
+     "n": 200,
+     "correct": 53,
+     "accuracy": 0.265,
+     "macro_f1": 0.1376802275738446,
+     "accuracy_ci95_low": 0.205,
+     "accuracy_ci95_high": 0.33,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.925,
+     "ece_raw": 0.07401009768247606,
+     "fitted_temperature": 5.0,
+     "nll_at_fitted": 1.3853560866248427,
+     "nll_at_raw": 1.4083063162109963
+    },
+    "L4000-p100-perm": {
+     "n": 200,
+     "correct": 111,
+     "accuracy": 0.555,
+     "macro_f1": 0.5179168860191571,
+     "accuracy_ci95_low": 0.485,
+     "accuracy_ci95_high": 0.625,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.535,
+     "ece_raw": 0.2658711794018745,
+     "fitted_temperature": 1.05,
+     "nll_at_fitted": 1.256918530379192,
+     "nll_at_raw": 1.257377978483595
+    },
+    "L4000-p100-swapped": {
+     "n": 200,
+     "correct": 50,
+     "accuracy": 0.25,
+     "macro_f1": 0.14548030725153807,
+     "accuracy_ci95_low": 0.19,
+     "accuracy_ci95_high": 0.31,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.705,
+     "ece_raw": 0.17179727360606192,
+     "fitted_temperature": 5.0,
+     "nll_at_fitted": 1.4030663153913856,
+     "nll_at_raw": 1.5512922295401634
+    },
+    "L7000-p000": {
+     "n": 200,
+     "correct": 117,
+     "accuracy": 0.585,
+     "macro_f1": 0.4928910247672175,
+     "accuracy_ci95_low": 0.515,
+     "accuracy_ci95_high": 0.655,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.405,
+     "ece_raw": 0.14123319953680039,
+     "fitted_temperature": 1.05,
+     "nll_at_fitted": 1.0183009867527315,
+     "nll_at_raw": 1.0192236547543658
+    },
+    "L7000-p100": {
+     "n": 200,
+     "correct": 91,
+     "accuracy": 0.455,
+     "macro_f1": 0.4067344477228198,
+     "accuracy_ci95_low": 0.385,
+     "accuracy_ci95_high": 0.525,
+     "ci_method": "percentile bootstrap over items, n_boot=10000, seed=12345",
+     "majority_class_accuracy": 0.25,
+     "random": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     },
+     "modal_prediction": "technical",
+     "modal_share": 0.59,
+     "ece_raw": 0.11328873202204703,
+     "fitted_temperature": 0.55,
+     "nll_at_fitted": 1.2102423920888297,
+     "nll_at_raw": 1.236386156383717
+    }
+   }
+  }
+ },
+ "seed_spread": {
+  "arm1_frozen": {
+   "L0": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.64,
+    "accuracy_min": 0.64,
+    "accuracy_max": 0.64,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.64
+    ]
+   },
+   "L4000-p000": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.58,
+    "accuracy_min": 0.58,
+    "accuracy_max": 0.58,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.58
+    ]
+   },
+   "L4000-p025": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.295,
+    "accuracy_min": 0.295,
+    "accuracy_max": 0.295,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.295
+    ]
+   },
+   "L4000-p050": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.335,
+    "accuracy_min": 0.335,
+    "accuracy_max": 0.335,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.335
+    ]
+   },
+   "L4000-p075": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.28,
+    "accuracy_min": 0.28,
+    "accuracy_max": 0.28,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.28
+    ]
+   },
+   "L4000-p100": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.415,
+    "accuracy_min": 0.415,
+    "accuracy_max": 0.415,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.415
+    ]
+   },
+   "L4000-p100-ablated": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.25,
+    "accuracy_min": 0.25,
+    "accuracy_max": 0.25,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.25
+    ]
+   },
+   "L4000-p100-perm": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.465,
+    "accuracy_min": 0.465,
+    "accuracy_max": 0.465,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.465
+    ]
+   },
+   "L4000-p100-swapped": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.25,
+    "accuracy_min": 0.25,
+    "accuracy_max": 0.25,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.25
+    ]
+   },
+   "L7000-p000": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.595,
+    "accuracy_min": 0.595,
+    "accuracy_max": 0.595,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.595
+    ]
+   },
+   "L7000-p100": {
+    "seeds": [
+     "seed-1"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.365,
+    "accuracy_min": 0.365,
+    "accuracy_max": 0.365,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.365
+    ]
+   }
+  },
+  "arm2_shipped_init": {
+   "L0": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.62,
+    "accuracy_min": 0.62,
+    "accuracy_max": 0.62,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.62
+    ]
+   },
+   "L4000-p000": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.59,
+    "accuracy_min": 0.59,
+    "accuracy_max": 0.59,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.59
+    ]
+   },
+   "L4000-p025": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.43,
+    "accuracy_min": 0.43,
+    "accuracy_max": 0.43,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.43
+    ]
+   },
+   "L4000-p050": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.5,
+    "accuracy_min": 0.5,
+    "accuracy_max": 0.5,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.5
+    ]
+   },
+   "L4000-p075": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.425,
+    "accuracy_min": 0.425,
+    "accuracy_max": 0.425,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.425
+    ]
+   },
+   "L4000-p100": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.495,
+    "accuracy_min": 0.495,
+    "accuracy_max": 0.495,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.495
+    ]
+   },
+   "L4000-p100-ablated": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.265,
+    "accuracy_min": 0.265,
+    "accuracy_max": 0.265,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.265
+    ]
+   },
+   "L4000-p100-perm": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.555,
+    "accuracy_min": 0.555,
+    "accuracy_max": 0.555,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.555
+    ]
+   },
+   "L4000-p100-swapped": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.25,
+    "accuracy_min": 0.25,
+    "accuracy_max": 0.25,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.25
+    ]
+   },
+   "L7000-p000": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.585,
+    "accuracy_min": 0.585,
+    "accuracy_max": 0.585,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.585
+    ]
+   },
+   "L7000-p100": {
+    "seeds": [
+     "seed0"
+    ],
+    "n_seeds": 1,
+    "accuracy_mean": 0.455,
+    "accuracy_min": 0.455,
+    "accuracy_max": 0.455,
+    "seed_spread_pp": 0.0,
+    "accuracy_per_seed": [
+     0.455
+    ]
+   }
+  }
+ },
+ "position_only_oracle": {
+  "L0": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "0|1.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p000": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|0.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p025": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|0.25": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p050": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|0.5": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p075": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|0.75": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p100": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|1.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p100-ablated": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|1.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "sales": 50,
+      "billing": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p100-perm": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|1.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L4000-p100-swapped": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "4000|1.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "other": 50,
+      "sales": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L7000-p000": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "7000|0.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  },
+  "L7000-p100": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "n": 200,
+   "oracle_accuracy": 0.25,
+   "per_group": {
+    "7000|1.0": {
+     "n": 200,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.25,
+     "label_distribution": {
+      "billing": 50,
+      "sales": 50,
+      "other": 50,
+      "technical": 50
+     }
+    }
+   }
+  }
+ },
+ "mechanism_controls": {
+  "L4000-p100-ablated": {
+   "arm1_frozen|seed-1": {
+    "n": 200,
+    "accuracy": 0.25,
+    "predicted_distribution": {
+     "technical": 200
+    },
+    "modal_prediction": "technical",
+    "random": 0.25
+   },
+   "arm2_shipped_init|seed0": {
+    "n": 200,
+    "accuracy": 0.265,
+    "predicted_distribution": {
+     "billing": 2,
+     "other": 13,
+     "technical": 185
+    },
+    "modal_prediction": "technical",
+    "random": 0.25
+   }
+  },
+  "L4000-p100-swapped": {
+   "arm1_frozen|seed-1": {
+    "n": 200,
+    "accuracy": 0.25,
+    "follows_needle_n": 200,
+    "follows_needle_accuracy": 0.275,
+    "predicted_distribution": {
+     "billing": 4,
+     "other": 1,
+     "technical": 195
+    },
+    "modal_prediction": "technical",
+    "random": 0.25
+   },
+   "arm2_shipped_init|seed0": {
+    "n": 200,
+    "accuracy": 0.25,
+    "follows_needle_n": 200,
+    "follows_needle_accuracy": 0.415,
+    "predicted_distribution": {
+     "billing": 41,
+     "other": 9,
+     "sales": 9,
+     "technical": 141
+    },
+    "modal_prediction": "technical",
+    "random": 0.25
+   }
+  },
+  "L4000-p100-perm": {
+   "arm1_frozen|seed-1": {
+    "n": 200,
+    "accuracy": 0.465,
+    "predicted_distribution": {
+     "billing": 27,
+     "other": 8,
+     "sales": 16,
+     "technical": 149
+    },
+    "modal_prediction": "technical",
+    "random": 0.25
+   },
+   "arm2_shipped_init|seed0": {
+    "n": 200,
+    "accuracy": 0.555,
+    "predicted_distribution": {
+     "billing": 53,
+     "other": 14,
+     "sales": 26,
+     "technical": 107
+    },
+    "modal_prediction": "technical",
+    "random": 0.25
+   }
+  }
+ },
+ "comparisons": [],
+ "seed_sign_agreement": {},
+ "holm_family_size": 0,
+ "verdict": {
+  "L4000-p100": {
+   "cell": "L4000-p100",
+   "position_only_oracle": 0.25,
+   "arm1_frozen": 0.415,
+   "arm2_shipped_init": 0.495,
+   "arm2_random_init": null,
+   "arm3_xattn": null,
+   "arm4_xattn_long": null
+  },
+  "L7000-p100": {
+   "cell": "L7000-p100",
+   "position_only_oracle": 0.25,
+   "arm1_frozen": 0.365,
+   "arm2_shipped_init": 0.455,
+   "arm2_random_init": null,
+   "arm3_xattn": null,
+   "arm4_xattn_long": null
+  },
+  "L4000-p000": {
+   "cell": "L4000-p000",
+   "position_only_oracle": 0.25,
+   "arm1_frozen": 0.58,
+   "arm2_shipped_init": 0.59,
+   "arm2_random_init": null,
+   "arm3_xattn": null,
+   "arm4_xattn_long": null
+  },
+  "L0": {
+   "cell": "L0",
+   "position_only_oracle": 0.25,
+   "arm1_frozen": 0.64,
+   "arm2_shipped_init": 0.62,
+   "arm2_random_init": null,
+   "arm3_xattn": null,
+   "arm4_xattn_long": null
+  }
+ }
+}
