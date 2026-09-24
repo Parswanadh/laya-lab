@@ -12,6 +12,7 @@ oriented — read this, then your role charter, then the one or two artifacts yo
 
 | path | what |
 |---|---|
+| **`HANDOFF.md`** | **complete state: what was proved, what was refuted, what is in flight, open defects. Read after BASELINE.md.** |
 | **`BASELINE.md`** | **the frozen reference: every number we measure against, with n, CIs and reproduce commands. Read this to know what "the baseline" means.** |
 | `plan.md` | the master plan: problem, hypotheses H1–H5, phases, gates, budget |
 | `progress.md` | **append-only** state log, newest at the bottom. Read the last entry, not the whole file |
