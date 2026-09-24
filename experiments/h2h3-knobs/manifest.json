@@ -17,7 +17,7 @@
   "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
  },
  "git": {
-  "laya_lab_sha": "c4558ef18e739b7b60eac9674432aee599f5f95e",
+  "laya_lab_sha": "28cc7215039988b4d9501beb95b674531828bea3",
   "laya_lab_branch": "main",
   "laya_lab_dirty": true,
   "fork_submodule": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5 fork (v0.3.20-68-g9fbb1eb)",

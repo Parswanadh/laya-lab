@@ -1,0 +1,50 @@
+{
+ "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "torch": "2.9.1+cu128",
+ "L": 7068,
+ "heads": 12,
+ "head_dim": 64,
+ "dtype": "float32",
+ "iters": 5,
+ "note": "one SDPA call per timing; the full model runs 22 such calls per forward",
+ "cases": {
+  "no_mask": {
+   "median_s": 0.03042,
+   "min_s": 0.02975,
+   "samples": [
+    0.03042,
+    0.03275,
+    0.02975,
+    0.03018,
+    0.03231
+   ],
+   "ratio_vs_no_mask": 1.0
+  },
+  "dense_global_mask_all_zeros": {
+   "median_s": 0.03768,
+   "min_s": 0.03504,
+   "samples": [
+    0.03671,
+    0.03504,
+    0.0381,
+    0.03858,
+    0.03768
+   ],
+   "ratio_vs_no_mask": 1.239
+  },
+  "dense_sliding_mask_half_64": {
+   "median_s": 0.03595,
+   "min_s": 0.0348,
+   "samples": [
+    0.0348,
+    0.03595,
+    0.03496,
+    0.03962,
+    0.04132
+   ],
+   "ratio_vs_no_mask": 1.182
+  }
+ },
+ "sliding_over_global": 0.954,
+ "peak_vram_reserved_mib": 1022.0
+}

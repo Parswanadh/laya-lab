@@ -1,0 +1,1683 @@
+{
+ "pad": 7000,
+ "text_tokens": 7018,
+ "arms": {
+  "baseline": {
+   "L": 7069,
+   "layers": 22,
+   "n_sliding": 14,
+   "n_global": 8,
+   "mask_shape_histogram": {
+    "(1, 1, 7069, 7069)": 22
+   },
+   "dense_mask_bytes_per_forward_sum_over_layers": 4397426968,
+   "dense_attention_score_bytes_if_materialised_per_layer": 2398596528,
+   "modelled_dense_attention_flops_per_forward": 3377223911424,
+   "per_layer": [
+    {
+     "layer_id": 0,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 1,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 2,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 3,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 4,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 5,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 6,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 7,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 8,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 9,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 10,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 11,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 12,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 13,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 14,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 15,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 16,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 17,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 18,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 19,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 20,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      64,
+      64
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 64,
+     "last_row_allowed_keys": 65
+    },
+    {
+     "layer_id": 21,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    }
+   ]
+  },
+  "w64": {
+   "L": 7069,
+   "layers": 22,
+   "n_sliding": 14,
+   "n_global": 8,
+   "mask_shape_histogram": {
+    "(1, 1, 7069, 7069)": 22
+   },
+   "dense_mask_bytes_per_forward_sum_over_layers": 4397426968,
+   "dense_attention_score_bytes_if_materialised_per_layer": 2398596528,
+   "modelled_dense_attention_flops_per_forward": 3377223911424,
+   "per_layer": [
+    {
+     "layer_id": 0,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 1,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 2,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 3,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 4,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 5,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 6,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 7,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 8,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 9,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 10,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 11,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 12,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 13,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 14,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 15,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 16,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 17,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 18,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 19,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 20,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      32,
+      32
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 32,
+     "last_row_allowed_keys": 33
+    },
+    {
+     "layer_id": 21,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    }
+   ]
+  },
+  "w512": {
+   "L": 7069,
+   "layers": 22,
+   "n_sliding": 14,
+   "n_global": 8,
+   "mask_shape_histogram": {
+    "(1, 1, 7069, 7069)": 22
+   },
+   "dense_mask_bytes_per_forward_sum_over_layers": 4397426968,
+   "dense_attention_score_bytes_if_materialised_per_layer": 2398596528,
+   "modelled_dense_attention_flops_per_forward": 3377223911424,
+   "per_layer": [
+    {
+     "layer_id": 0,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 1,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 2,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 3,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 4,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 5,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 6,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 7,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 8,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 9,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 10,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 11,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 12,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 13,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 14,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 15,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 16,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 17,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 18,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 19,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 20,
+     "branch": "sliding",
+     "attn_local_attention_arg": [
+      256,
+      256
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 256,
+     "last_row_allowed_keys": 257
+    },
+    {
+     "layer_id": 21,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    }
+   ]
+  },
+  "allglobal": {
+   "L": 7069,
+   "layers": 22,
+   "n_sliding": 0,
+   "n_global": 22,
+   "mask_shape_histogram": {
+    "(1, 1, 7069, 7069)": 22
+   },
+   "dense_mask_bytes_per_forward_sum_over_layers": 4397426968,
+   "dense_attention_score_bytes_if_materialised_per_layer": 2398596528,
+   "modelled_dense_attention_flops_per_forward": 3377223911424,
+   "per_layer": [
+    {
+     "layer_id": 0,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 1,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 2,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 3,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 4,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 5,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 6,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 7,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 8,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 9,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 10,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 11,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 12,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 13,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 14,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 15,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 16,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 17,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 18,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 19,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 20,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    },
+    {
+     "layer_id": 21,
+     "branch": "global",
+     "attn_local_attention_arg": [
+      -1,
+      -1
+     ],
+     "mask_shape": [
+      1,
+      1,
+      7069,
+      7069
+     ],
+     "mask_is_4d_float": true,
+     "last_row_max_dist": 7068,
+     "last_row_allowed_keys": 7069
+    }
+   ]
+  }
+ },
+ "config_at_load": {
+  "config_local_attention": 128,
+  "config_global_attn_every_n_layers": 3,
+  "num_hidden_layers": 22,
+  "max_position_embeddings": 8192,
+  "attn_impl": "sdpa",
+  "layer_attn_local_attention": [
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    64,
+    64
+   ],
+   [
+    -1,
+    -1
+   ]
+  ],
+  "has_attention_type_attr": false,
+  "has_self_attn_attr": false,
+  "layer_attention_type": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "all_layers_same_rope_inv_freq": true,
+  "n_sliding_at_load": 14
+ }
+}
