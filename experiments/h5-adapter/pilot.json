@@ -1,0 +1,74 @@
+{
+ "artifact": "experiments/h5-adapter/pilot.json",
+ "reproduce": "env/venv/bin/python experiments/h5-adapter/pilot.py",
+ "cell": "L4000-p100",
+ "pad": 4000,
+ "needle_position": 1.0,
+ "coarse_warning": "n=50 and one cell; 95% CI half-width ~0.069. This is a pipeline check, not a result.",
+ "device": "cuda",
+ "environment": {
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "torch": "2.9.1+cu128",
+  "transformers": "4.57.6",
+  "cuda_available": true,
+  "device": "cuda",
+  "USE_TF": "0",
+  "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+  "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "gpu_total_memory_gb": 8.16,
+  "cuda_version": "12.8"
+ },
+ "input_tokens_median": 4067,
+ "input_tokens_max": 4074,
+ "encoder_throughput": {
+  "batch1": {
+   "n_batches": 3,
+   "ms_per_item": 246.47935099710594,
+   "tokens_per_second": 16500.368016823257
+  },
+  "batch2": {
+   "n_batches": 3,
+   "ms_per_item": 203.5531274996174,
+   "tokens_per_second": 19980.04181983224
+  },
+  "batch4": {
+   "n_batches": 2,
+   "ms_per_item": 169.1768507503184,
+   "tokens_per_second": 24039.93207086192
+  }
+ },
+ "peak_vram_gb_at_batch4": 2.55879424,
+ "arm1_coarse": {
+  "n": 200,
+  "accuracy": 0.415,
+  "label_counts": {
+   "billing": 50,
+   "technical": 50,
+   "sales": 50,
+   "other": 50
+  },
+  "majority_class_accuracy": 0.25,
+  "random": 0.25,
+  "position_only_oracle": 0.25,
+  "predicted_distribution": {
+   "billing": 28,
+   "technical": 162,
+   "sales": 7,
+   "other": 3
+  },
+  "published_p1b_reference_needle_at_end": 0.3,
+  "seconds": 38.3,
+  "latency_scope": "full model, encoder and head, single process"
+ },
+ "projection": {
+  "measured_tokens_per_second": 19980.04181983224,
+  "note": "modelled from the measured throughput above; every number here is an estimate",
+  "eval_encoder_tokens": 9398000,
+  "train_encoder_tokens": 3450720,
+  "eval_cache_minutes": 7.839489764123451,
+  "train_cache_minutes": 2.8784724535918356,
+  "arm1_end_to_end_minutes": 7.839489764123451,
+  "median_l4000_tokens": 4067.0
+ }
+}

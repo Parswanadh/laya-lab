@@ -1,0 +1,474 @@
+{
+ "run_id": "h5-adapter",
+ "issue": "Parswanadh/laya-lab#6",
+ "hypothesis": "H5 -- the aggregation path, not the encoder, is where the headroom is",
+ "artifact_dir": "experiments/h5-adapter",
+ "exact_command": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'env/venv/bin/python experiments/h5-adapter/run_all.py'",
+ "protocol": "protocol.md (FROZEN)",
+ "task": "synthetic needle-in-haystack decision; every claim is labelled synthetic",
+ "environment": {
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "torch": "2.9.1+cu128",
+  "transformers": "4.57.6"
+ },
+ "git": {
+  "lab_head": "061d463432efe832b173a2f3cd69c3f1519333a4",
+  "lab_status_porcelain": "M experiments/h5-adapter/pilot.py\n M findings/E-003.md\n?? experiments/h5-adapter/manifest.json\n?? experiments/h5-adapter/pilot.json",
+  "fork_worktree_head": "c8d0d2877a633d97573926e5286c62ab91e4cbb2",
+  "fork_branch": "exp/h5-adapter",
+  "fork_status_porcelain": "M laya/common.py\n M tests/test_cross_attention_head.py"
+ },
+ "pool_hashes": {
+  "experiments/h5-adapter/pools/needles-h5-eval-v1.json": "1ab55323ebdbf4370e547d38d44a63435bb4f477606ae1be4f79fdaf125a104d",
+  "experiments/h5-adapter/pools/needles-h5-train-v1.json": "e88a68874a1153b2c627bd06470bf38b80b1eed4017b0dd57eac0f1c44edc733",
+  "experiments/h5-adapter/pools/filler-h5-v1.json": "37b89cc551e2a67925ff518a2319a79d3e52676f7e0257bba1d1c4f68d80eef1"
+ },
+ "plan": {
+  "path": "experiments/h5-adapter/plan.json",
+  "plan_seed": 20260924,
+  "eval_n": 1600,
+  "train_n": 1008,
+  "train_long_boost_n": 1584,
+  "eval_cells": {
+   "L0": {
+    "n": 200,
+    "pad": 0,
+    "needle_position": 1.0,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 57,
+    "duplicate_needles": 0
+   },
+   "L4000-p000": {
+    "n": 200,
+    "pad": 4000,
+    "needle_position": 0.0,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 54,
+    "duplicate_needles": 0
+   },
+   "L4000-p025": {
+    "n": 200,
+    "pad": 4000,
+    "needle_position": 0.25,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 54,
+    "duplicate_needles": 0
+   },
+   "L4000-p050": {
+    "n": 200,
+    "pad": 4000,
+    "needle_position": 0.5,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 54,
+    "duplicate_needles": 0
+   },
+   "L4000-p075": {
+    "n": 200,
+    "pad": 4000,
+    "needle_position": 0.75,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 54,
+    "duplicate_needles": 0
+   },
+   "L4000-p100": {
+    "n": 200,
+    "pad": 4000,
+    "needle_position": 1.0,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 54,
+    "duplicate_needles": 0
+   },
+   "L7000-p000": {
+    "n": 200,
+    "pad": 7000,
+    "needle_position": 0.0,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 54,
+    "duplicate_needles": 0
+   },
+   "L7000-p100": {
+    "n": 200,
+    "pad": 7000,
+    "needle_position": 1.0,
+    "label_counts": {
+     "billing": 50,
+     "other": 50,
+     "sales": 50,
+     "technical": 50
+    },
+    "n_templates": 56,
+    "duplicate_needles": 0
+   }
+  },
+  "position_only_oracle_eval": {
+   "n": 1600,
+   "oracle_accuracy": 0.25,
+   "per_cell": {
+    "L0": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L4000-p000": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L4000-p025": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L4000-p050": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L4000-p075": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L4000-p100": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L7000-p000": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "L7000-p100": {
+     "n": 200,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    }
+   }
+  },
+  "position_only_oracle_train": {
+   "n": 1008,
+   "oracle_accuracy": 0.25,
+   "per_cell": {
+    "T-p0000-1.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p1000-0.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p1000-0.25": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p1000-0.50": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p1000-0.75": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p1000-1.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p2000-0.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p2000-0.25": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p2000-0.50": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p2000-0.75": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p2000-1.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p4000-0.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p4000-0.25": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p4000-0.50": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p4000-0.75": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p4000-1.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p7000-0.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p7000-0.25": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p7000-0.50": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p7000-0.75": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    },
+    "T-p7000-1.00": {
+     "n": 48,
+     "oracle_accuracy": 0.25,
+     "oracle_label": "billing"
+    }
+   }
+  },
+  "train_length_distribution": {
+   "pad=0|pos=1.00": 48,
+   "pad=1000|pos=0.00": 48,
+   "pad=1000|pos=0.25": 48,
+   "pad=1000|pos=0.50": 48,
+   "pad=1000|pos=0.75": 48,
+   "pad=1000|pos=1.00": 48,
+   "pad=2000|pos=0.00": 48,
+   "pad=2000|pos=0.25": 48,
+   "pad=2000|pos=0.50": 48,
+   "pad=2000|pos=0.75": 48,
+   "pad=2000|pos=1.00": 48,
+   "pad=4000|pos=0.00": 48,
+   "pad=4000|pos=0.25": 48,
+   "pad=4000|pos=0.50": 48,
+   "pad=4000|pos=0.75": 48,
+   "pad=4000|pos=1.00": 48,
+   "pad=7000|pos=0.00": 48,
+   "pad=7000|pos=0.25": 48,
+   "pad=7000|pos=0.50": 48,
+   "pad=7000|pos=0.75": 48,
+   "pad=7000|pos=1.00": 48
+  },
+  "train_long_boost_distribution": {
+   "pad=0|pos=1.00": 48,
+   "pad=1000|pos=0.00": 48,
+   "pad=1000|pos=0.25": 48,
+   "pad=1000|pos=0.50": 48,
+   "pad=1000|pos=0.75": 48,
+   "pad=1000|pos=1.00": 48,
+   "pad=2000|pos=0.00": 48,
+   "pad=2000|pos=0.25": 48,
+   "pad=2000|pos=0.50": 48,
+   "pad=2000|pos=0.75": 48,
+   "pad=2000|pos=1.00": 48,
+   "pad=4000|pos=0.00": 48,
+   "pad=4000|pos=0.25": 48,
+   "pad=4000|pos=0.50": 48,
+   "pad=4000|pos=0.75": 192,
+   "pad=4000|pos=1.00": 192,
+   "pad=7000|pos=0.00": 48,
+   "pad=7000|pos=0.25": 48,
+   "pad=7000|pos=0.50": 48,
+   "pad=7000|pos=0.75": 192,
+   "pad=7000|pos=1.00": 192
+  },
+  "train_long_boost_regimes": [
+   [
+    4000,
+    1.0
+   ],
+   [
+    4000,
+    0.75
+   ],
+   [
+    7000,
+    1.0
+   ],
+   [
+    7000,
+    0.75
+   ]
+  ],
+  "eval_needle_reuse": {
+   "n_items": 1600,
+   "n_unique_needles": 800,
+   "n_needles_in_multiple_cells": 200,
+   "max_cells_per_needle": 5,
+   "example": [
+    [
+     "00caa19b23fadf771d586b122ed4df280fc51a856d3fe80b5252a313511813e3",
+     [
+      "L4000-p000",
+      "L4000-p025",
+      "L4000-p050",
+      "L4000-p075",
+      "L4000-p100"
+     ]
+    ]
+   ]
+  },
+  "train_needle_reuse": {
+   "n_items": 1008,
+   "n_unique_needles": 1008,
+   "n_needles_in_multiple_cells": 0,
+   "max_cells_per_needle": 1,
+   "example": []
+  },
+  "train_cell_row_counts": {
+   "T-p0000-1.00": 48,
+   "T-p1000-0.00": 48,
+   "T-p1000-0.25": 48,
+   "T-p1000-0.50": 48,
+   "T-p1000-0.75": 48,
+   "T-p1000-1.00": 48,
+   "T-p2000-0.00": 48,
+   "T-p2000-0.25": 48,
+   "T-p2000-0.50": 48,
+   "T-p2000-0.75": 48,
+   "T-p2000-1.00": 48,
+   "T-p4000-0.00": 48,
+   "T-p4000-0.25": 48,
+   "T-p4000-0.50": 48,
+   "T-p4000-0.75": 48,
+   "T-p4000-1.00": 48,
+   "T-p7000-0.00": 48,
+   "T-p7000-0.25": 48,
+   "T-p7000-0.50": 48,
+   "T-p7000-0.75": 48,
+   "T-p7000-1.00": 48
+  }
+ },
+ "leakage": {
+  "artifact": "experiments/h5-adapter/leakage_report.json",
+  "reproduce": "env/venv/bin/python experiments/h5-adapter/leakage_check.py",
+  "gating_checks_passed": true,
+  "failed": [],
+  "longest_shared_word_ngram": 4,
+  "max_rendered_token_jaccard": 0.2667
+ },
+ "arms": {
+  "arm1_frozen": {
+   "kind": null,
+   "init": "shipped",
+   "train_mode": null,
+   "desc": "shipped head + scorer, frozen; no training"
+  },
+  "arm2_shipped_init": {
+   "kind": "self_attention",
+   "init": "shipped",
+   "train_mode": "uniform",
+   "desc": "same head architecture as shipped, initialised from the checkpoint, fine-tuned"
+  },
+  "arm2_random_init": {
+   "kind": "self_attention",
+   "init": "random",
+   "train_mode": "uniform",
+   "desc": "same head architecture as shipped, random init, trained on identical data"
+  },
+  "arm3_xattn": {
+   "kind": "cross_attention",
+   "init": "random",
+   "train_mode": "uniform",
+   "nhead": 4,
+   "desc": "cross-attention aggregation over all state tokens, parameter-matched to arm 2"
+  },
+  "arm4_xattn_long": {
+   "kind": "cross_attention",
+   "init": "random",
+   "train_mode": "long_boost",
+   "nhead": 4,
+   "desc": "arm 3 plus long-distance oversampling"
+  }
+ },
+ "parameter_matching_analytic": {
+  "d_model": 768,
+  "head_layers": 2,
+  "self_attention_head_nhead": 12,
+  "cross_attention_head_nhead": 4,
+  "self_attention_head_parameters": 14175744,
+  "cross_attention_head_parameters": 14175744,
+  "type_emb_plus_scorer_parameters": 595201,
+  "arm2_self_attention_trainable": 14770945,
+  "arm3_cross_attention_trainable": 14770945,
+  "equal": true,
+  "why": "nn.MultiheadAttention costs 4*d^2 whether or not query and key/value are the same tensor, and head count sets per-head width rather than parameter count"
+ },
+ "device": {
+  "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "total_memory_gb": 8.16,
+  "cuda": "12.8"
+ },
+ "stages_completed": [
+  "manifest",
+  "pilot"
+ ],
+ "run_started": "2026-09-25T00:04:34"
+}

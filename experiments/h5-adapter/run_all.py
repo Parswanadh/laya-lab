@@ -35,8 +35,12 @@ MANIFEST = os.path.join(HERE, "manifest.json")
 # Ordered most-valuable-first: if the GPU lock is lost or the window closes, whatever ran is the
 # part of the experiment that mattered most. `latency` is last because the accuracy result does not
 # depend on it, and `arm2_step0` (the cache-fidelity bridge) is cheap and sits beside `arm1`.
-ALL_STAGES = ("manifest", "pilot", "learnability", "cache_eval", "arm1", "cache_train", "train",
+ALL_STAGES = ("manifest", "pilot", "cache_eval", "arm1", "cache_train", "train",
               "eval", "arm2_step0", "stats", "latency")
+# `learnability` is deliberately NOT in that tuple. It is CPU-bound, and running it inside the GPU
+# lock spends the lock's window on CPU training while nothing uses the GPU -- which is exactly what
+# it did on the first attempt. It is still selectable (`--only learnability`) and still the artifact
+# the finding cites; it just belongs outside the lock. A selftest check asserts it stays out.
 
 
 def log(msg: str) -> None:
