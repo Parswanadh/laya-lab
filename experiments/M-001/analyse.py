@@ -622,6 +622,39 @@ for m in [1, 10, 25, 50]:
     zm = zq(1 - 0.05/(2*m))
     print(f"   m={m:>3}: z={zm:.4f}, inflation factor vs m=1 = {(zm/z)**2:.3f}")
 
+# ================================================================ 5b GRID COST
+hr("5b. GRID COST (MODELLED from the fitted lat(n), no GPU run)")
+print("Forward passes needed = cells x items.  Cost per item is the fitted lat(n) with the")
+print("n-weighted average over the cell's sequence length; reported for one arm.")
+def lat_fit(n):
+    return 0.010 + 5.575e-07 * n ** 1.800
+GRID_A = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000]      # upstream-compatible pad sweep
+GRID_B = [512, 1024, 2048, 4096, 6144, 8192]                # sequence-length sweep
+print(f"\nStage A (reproduce upstream): {len(GRID_A)} pad values, needle in the padded request")
+for n_items in [200, 400]:
+    tot_s = sum(n_items * lat_fit(min(8192, p + 61)) for p in GRID_A)
+    print(f"   {len(GRID_A)} cells x n={n_items}: {len(GRID_A)*n_items:>6} forwards, "
+          f"MODELLED {tot_s/60:>6.1f} min/arm, {2*tot_s/60:>6.1f} min for 2 arms")
+print(f"\nStage B (receptive-field sweep): {len(GRID_B)} lengths x 5 needle positions "
+      f"= {len(GRID_B)*5} cells")
+for n_items in [200, 400]:
+    tot_s = sum(5 * n_items * lat_fit(n) for n in GRID_B)
+    print(f"   {len(GRID_B)*5} cells x n={n_items}: {len(GRID_B)*5*n_items:>6} forwards, "
+          f"MODELLED {tot_s/60:>6.1f} min/arm, {2*tot_s/60:>6.1f} min for 2 arms")
+print(f"\nFull 2-stage, n=400, 4 arms (baseline + H1 + H2 + H3): "
+      f"MODELLED {(sum(400*lat_fit(min(8192,p+61)) for p in GRID_A) + sum(5*400*lat_fit(n) for n in GRID_B))*4/3600:.1f} h")
+print("NOTE: the ship path takes max_len=1024 by default, so every Stage-A cell with")
+print("pad>~950 is truncated to 1024 tokens and costs the n=1024 latency, NOT lat(pad).")
+print("The per-cell cost of the limit=1024 arm is therefore flat while the limit=8192 arm")
+print("grows; that asymmetry is exactly the cost the plan wants to remove.")
+
+# preview of the recommended design
+print("\nRECOMMENDED design (see findings/M-001.md section 5):")
+print("  Stage A: 8 pad values x n=400 x 2 arms (limit=1024 vs limit=8192) = 6400 forwards")
+print(f"  Stage B: 6 lengths x 5 positions x n=400 x 2 arms = 24000 forwards")
+print(f"  total MODELLED wall time on MPS at the upstream fitted rate: "
+      f"{(sum(400*lat_fit(min(8192,p+61)) for p in GRID_A)*2 + sum(5*400*lat_fit(n) for n in GRID_B)*2)/3600:.1f} h")
+
 # binomial resolution floor
 print("\nresolution floor: with n items and a 4-option task, accuracy is a multiple of 1/n.")
 for n in [20, 200, 400, 600]:
@@ -629,40 +662,38 @@ for n in [20, 200, 400, 600]:
           f"majority-class baseline of 0.35 is {(0.35*n):.0f}/{n}")
 
 # ================================================================ 6 LAYOUT PROBE
-hr("6. HEAD-BLOCK WIDTH PROBE (fork source, CPU tokenizer only)")
+hr("6. HEAD-BLOCK WIDTH PROBE (fork source, shipped tokenizer, CPU only)")
 print("Builds the real sequence with the shipped tokenizer and the real upstream question,")
 print("so the marker positions and the state start are COMPUTED, not assumed.")
+print("NOTE: render_options reads q['crit'] (not 'criteria'), and the artifact JSON uses")
+print("'criteria' - the key must be renamed or the options render empty and the head shrinks.")
 try:
     import os as _os
     _os.environ.setdefault("USE_TF", "0")
-    import sys
-    sys.path.insert(0, _os.path.join(LAB, "fork"))
+    import sys as _sys
+    _sys.path.insert(0, _os.path.join(LAB, "fork"))
     from laya.common import build_sequence
     from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(_os.path.join(LAB, "models", "multilingual", "tokenizer"))
+    dept = data["questions"]["department"]
     qs = {
-        "upstream department (4 long options)": {
-            "t": "department",
-            "ins": data["questions"]["department"]["instructions"],
-            "criteria": data["questions"]["department"]["criteria"],
-        },
-        "short 2-option yes/no": {
-            "t": "sentiment",
-            "ins": "Does the statement hold?",
-            "criteria": {"yes": "the statement holds", "no": "the statement does not hold"},
-        },
+        "upstream department (4 choice options)":
+            {"t": "choice", "ins": dept["instructions"], "crit": dept["criteria"]},
+        "2-option yes/no":
+            {"t": "noul", "ins": "Does the statement hold?",
+             "crit": {"false": "the statement does not hold", "true": "the statement holds"}},
     }
-    doc = "The quick brown fox jumps over the lazy dog. " * 900
+    doc = "word " * 5000
     for label, q in qs.items():
         print(f"\n  question: {label}")
         for max_len, head_max_len in [(1024, 256), (8192, 256), (8192, 192), (512, 192)]:
             ids, markers = build_sequence(tok, doc, q, max_len=max_len, head_max_len=head_max_len)
-            n_state = len(ids) - (markers[-1] + 1 + len(tok(" " + list(q["criteria"].values())[0], add_special_tokens=False)["input_ids"]) + 1) if markers else None
-            print(f"    max_len={max_len:>5} head_max_len={head_max_len:>3}: len(ids)={len(ids):>4} "
-                  f"markers={markers} -> last marker m*={max(markers)}, "
-                  f"state block starts at {markers[-1]+1}+len(last option), "
-                  f"HEAD WIDTH for the marker = {max(markers)+1} tokens")
-    print("\n  The marker's position m* is the parameter that matters for reachability, and it")
-    print("  is set by head_max_len and the option rendering; the state block sits AFTER it.")
+            print(f"    max_len={max_len:>5} head_max_len={head_max_len:>3}: len(ids)={len(ids):>5} "
+                  f"markers={markers} -> last marker m*={max(markers)}; "
+                  f"the state block begins at m*+1+len(last option)")
+    print("\n  FINDING: with the shipped question the head is ~40 tokens, not head_max_len=256")
+    print("  - head_max_len is an UPPER BOUND on the head, and the shipped options are short.")
+    print("  m* ~= 39 for the upstream department question; the reachability numbers in")
+    print("  section 1 used m = 300, which is the conservative (further) case.")
 except Exception as exc:  # noqa: BLE001
     print(f"  PROBE FAILED ({type(exc).__name__}: {exc}) - marker positions stay MODELLED")
