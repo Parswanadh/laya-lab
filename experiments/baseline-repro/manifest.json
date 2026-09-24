@@ -1,0 +1,687 @@
+{
+ "schema": "laya-lab.eval-manifest.v1",
+ "run_id": "baseline-repro|balanced-v1|n20|seed20240924",
+ "status": "finished",
+ "started_utc": "2026-09-24T17:37:07Z",
+ "finished_utc": "2026-09-24T17:39:14Z",
+ "wall_seconds": 135.985,
+ "command": "cd /home/parshu/projects/contri/laya-lab && USE_TF=0 CUDA_VISIBLE_DEVICES=0 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True /home/parshu/projects/contri/laya-lab/env/venv/bin/python experiments/harness/run.py --preset baseline-repro --device cuda --checkpoint models/multilingual",
+ "argv": [
+  "experiments/harness/run.py",
+  "--preset",
+  "baseline-repro",
+  "--device",
+  "cuda",
+  "--checkpoint",
+  "models/multilingual"
+ ],
+ "cwd": "/home/parshu/projects/contri/laya-lab",
+ "host": {
+  "versions": {
+   "python": "3.12.3",
+   "python_executable": "/home/parshu/projects/contri/laya-lab/env/venv/bin/python",
+   "torch": "2.9.1+cu128",
+   "transformers": "4.57.6",
+   "numpy": "2.5.3",
+   "safetensors": "0.8.0",
+   "huggingface_hub": "0.36.2",
+   "tokenizers": "0.22.2",
+   "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+   "machine": "x86_64",
+   "processor": "x86_64",
+   "cpu_count": 22,
+   "hostname": "parshu-Alienware-m16-R2",
+   "env_USE_TF": "0",
+   "env_CUDA_VISIBLE_DEVICES": "0",
+   "env_PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+   "env_PYTORCH_ALLOC_CONF": null
+  },
+  "memory_at_launch": {
+   "mem_total_bytes": 16246595584,
+   "mem_available_bytes": 4273983488,
+   "swap_total_bytes": 28663341056,
+   "swap_free_bytes": 17413017600,
+   "mem_available_gib": 3.98
+  },
+  "gpu_at_launch": {
+   "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+   "gpu_mem_free_bytes": 5324734464,
+   "gpu_mem_total_bytes": 8160673792,
+   "gpu_mem_free_gib": 4.96,
+   "gpu_compute_capability": [
+    8,
+    9
+   ],
+   "cuda_version": "12.8",
+   "cudnn_version": 91002
+  }
+ },
+ "gpu_lock": {
+  "held": true,
+  "path": "/home/parshu/projects/contri/laya-lab/.gpu.lock",
+  "pid": 775951
+ },
+ "preflight": {
+  "mem_available_gib": 4.8,
+  "gpu_free_gib": 6.2,
+  "min_available_gib_required": 2.0,
+  "gpu_min_free_gib_required": 2.0,
+  "allow_low_mem": false,
+  "note": "host RAM at launch 4.80 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"
+ },
+ "git": {
+  "lab": {
+   "repo": "/home/parshu/projects/contri/laya-lab",
+   "available": true,
+   "sha": "7fdb82c7ac72d36e3125ddd235f91ab58c9578c6",
+   "branch": "main",
+   "dirty": true,
+   "dirty_file_count": 18,
+   "dirty_files_sample": [
+    "M .gpu.lock",
+    " M experiments/M-001/analyse.out",
+    " M experiments/M-001/analyse.py",
+    " M experiments/V-001/logs/acquire_and_run.out",
+    " M experiments/V-001/measure.py",
+    " M experiments/h2h3-knobs/run.py",
+    "?? experiments/V-001/compare.json",
+    "?? experiments/V-001/fresh/orch-diagnostic-results.json",
+    "?? experiments/V-001/head_probe.json",
+    "?? experiments/V-001/head_probe.py",
+    "?? experiments/V-001/logs/sha256-restored.txt",
+    "?? experiments/V-001/repeat.json",
+    "?? experiments/h2h3-knobs/items/",
+    "?? experiments/h2h3-knobs/liveness.json",
+    "?? experiments/h2h3-knobs/logs/",
+    "?? experiments/h2h3-knobs/raw/",
+    "?? experiments/h2h3-knobs/run_stages.sh",
+    "?? experiments/h5-adapter/"
+   ],
+   "last_commit": "7fdb82c7ac72d36e3125ddd235f91ab58c9578c6 2026-09-24T23:05:26+05:30 exp(harness): mechanism check tolerates a plan whose largest budget is below the document length",
+   "remotes": "origin\thttps://github.com/Parswanadh/laya-lab.git (fetch)\norigin\thttps://github.com/Parswanadh/laya-lab.git (push)"
+  },
+  "fork": {
+   "repo": "/home/parshu/projects/contri/laya-lab/fork",
+   "available": true,
+   "sha": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5",
+   "branch": "main",
+   "dirty": false,
+   "dirty_file_count": 0,
+   "dirty_files_sample": [],
+   "last_commit": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5 2026-09-24T22:01:52+05:30 Merge pull request #383 from keemsisi/sec/redos-identifier",
+   "remotes": "origin\thttps://github.com/Parswanadh/laya.git (fetch)\norigin\thttps://github.com/Parswanadh/laya.git (push)\nupstream\thttps://github.com/NandhaKishorM/laya.git (fetch)\nupstream\thttps://github.com/NandhaKishorM/laya.git (push)"
+  }
+ },
+ "model": {
+  "checkpoint_dir": "models/multilingual",
+  "files": [
+   {
+    "path": "models/multilingual/model.safetensors",
+    "exists": true,
+    "bytes": 643835514,
+    "sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+    "hash_seconds": 0.497
+   },
+   {
+    "path": "models/multilingual/rl_agent_config.json",
+    "exists": true,
+    "bytes": 472,
+    "sha256": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+    "hash_seconds": 0.0
+   },
+   {
+    "path": "models/multilingual/encoder/config.json",
+    "exists": true,
+    "bytes": 1938,
+    "sha256": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+    "hash_seconds": 0.0
+   },
+   {
+    "path": "models/multilingual/tokenizer/tokenizer.json",
+    "exists": true,
+    "bytes": 34363188,
+    "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+    "hash_seconds": 0.027
+   }
+  ],
+  "backend": {
+   "backend": "laya",
+   "checkpoint": "models/multilingual",
+   "laya_version": "0.3.20",
+   "device": "cuda",
+   "dtype": "torch.bfloat16",
+   "amp_enabled": true,
+   "parameters": 321908995,
+   "load_seconds": 6.779,
+   "shipped_max_len": 1024,
+   "shipped_head_max_len": 256,
+   "encoder": "jhu-clsp/mmBERT-base",
+   "head_layers": 2,
+   "amp_dtype_cfg": "bf16",
+   "tokenizer_class": "PreTrainedTokenizerFast",
+   "tokenizer_vocab_size": 256000,
+   "load_path_note": "laya.Agent.__init__ builds the model under transformers' no_init_weights() and fills it from safetensors.load_file, which reads lazily from the file; the public loader exposes no low_cpu_mem_usage flag.",
+   "gpu_mem_free_bytes_after_load": 5327290368,
+   "gpu_mem_total_bytes": 8160673792,
+   "gpu_mem_allocated_bytes_after_load": 1287648768,
+   "gpu_mem_reserved_bytes_after_load": 1302331392
+  }
+ },
+ "pools": {
+  "files": {
+   "needle": {
+    "pool_id": "balanced-v1",
+    "_path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/needles-balanced-v1.json",
+    "_sha256": "bcb80ac1f4a38b3f8ce5224fc950b6014ed1d8391a311470f898f7496b34c7aa",
+    "_bytes": 16492,
+    "kind": "balanced"
+   },
+   "filler": {
+    "pool_id": "filler-v1",
+    "_path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/filler-v1.json",
+    "_sha256": "429b06f81dc2d8e608ba53e4201fef98a86deb93a4d251af8f1ecde3f36cbb9f",
+    "_bytes": 3324,
+    "kind": "filler"
+   }
+  },
+  "leakage_check": {
+   "filler_pool": "filler-v1",
+   "needle_pool": "balanced-v1",
+   "needle_vocab_size": 398,
+   "filler_vocab_size": 178,
+   "word_overlap_all": [
+    "about",
+    "after",
+    "every",
+    "for",
+    "open",
+    "please",
+    "second",
+    "should",
+    "the",
+    "was"
+   ],
+   "content_word_overlap": [],
+   "stem_hits": [],
+   "passed": true
+  },
+  "shipped_questions": {
+   "department": {
+    "type": "choice",
+    "instructions": "Which department should handle this request?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, system errors",
+     "sales": "pricing, new contracts, plan upgrades",
+     "other": "everything else"
+    }
+   }
+  },
+  "internal_question_source": "laya.agent.Agent._to_internal"
+ },
+ "items": {
+  "n": 20,
+  "label_counts": {
+   "billing": 7,
+   "sales": 6,
+   "technical": 7
+  },
+  "lang_counts": {
+   "ar": 2,
+   "de": 2,
+   "en": 2,
+   "es": 3,
+   "fr": 3,
+   "hi": 2,
+   "ja": 2,
+   "pt": 2,
+   "zh": 2
+  },
+  "template_counts": {
+   "billing-ar-2": 1,
+   "billing-en-1": 1,
+   "billing-es-1": 1,
+   "billing-fr-2": 1,
+   "billing-hi-1": 1,
+   "billing-ja-2": 1,
+   "billing-pt-1": 1,
+   "sales-ar-2": 1,
+   "sales-de-2": 1,
+   "sales-es-3": 1,
+   "sales-fr-2": 1,
+   "sales-fr-3": 1,
+   "sales-zh-2": 1,
+   "technical-de-3": 1,
+   "technical-en-2": 1,
+   "technical-es-3": 1,
+   "technical-hi-2": 1,
+   "technical-ja-1": 1,
+   "technical-pt-1": 1,
+   "technical-zh-3": 1
+  },
+  "max_label_share": 0.35,
+  "balance_ok": true,
+  "item_table": [
+   {
+    "item_index": 0,
+    "item_id": "technical|technical-de-3|num6380",
+    "label": "technical",
+    "lang": "de",
+    "template_id": "technical-de-3",
+    "slots": {
+     "num": "6380"
+    },
+    "text": "Uploads zum Portal brechen nach etwa 6380 Sekunden ab."
+   },
+   {
+    "item_index": 1,
+    "item_id": "technical|technical-ja-1|num6380",
+    "label": "technical",
+    "lang": "ja",
+    "template_id": "technical-ja-1",
+    "slots": {
+     "num": "6380"
+    },
+    "text": "レポート 6380 を開くたびにアプリが落ちます。"
+   },
+   {
+    "item_index": 2,
+    "item_id": "technical|technical-zh-3|num2746",
+    "label": "technical",
+    "lang": "zh",
+    "template_id": "technical-zh-3",
+    "slots": {
+     "num": "2746"
+    },
+    "text": "上传到门户大约 2746 秒后就会超时。"
+   },
+   {
+    "item_index": 3,
+    "item_id": "technical|technical-pt-1|num1209",
+    "label": "technical",
+    "lang": "pt",
+    "template_id": "technical-pt-1",
+    "slots": {
+     "num": "1209"
+    },
+    "text": "O sistema cai toda vez que tento abrir o relatório 1209."
+   },
+   {
+    "item_index": 4,
+    "item_id": "sales|sales-de-2|num8154",
+    "label": "sales",
+    "lang": "de",
+    "template_id": "sales-de-2",
+    "slots": {
+     "num": "8154"
+    },
+    "text": "Bitte senden Sie mir die Preise für ein Upgrade auf 8154 Lizenzen."
+   },
+   {
+    "item_index": 5,
+    "item_id": "billing|billing-en-1|num1927",
+    "label": "billing",
+    "lang": "en",
+    "template_id": "billing-en-1",
+    "slots": {
+     "num": "1927"
+    },
+    "text": "I was charged twice for invoice 1927, please refund the duplicate payment."
+   },
+   {
+    "item_index": 6,
+    "item_id": "billing|billing-ar-2|num6380",
+    "label": "billing",
+    "lang": "ar",
+    "template_id": "billing-ar-2",
+    "slots": {
+     "num": "6380"
+    },
+    "text": "إيصال الطلب 6380 يحتوي على سطر مكرر، أرجو إعادة المبلغ."
+   },
+   {
+    "item_index": 7,
+    "item_id": "billing|billing-es-1|num8824",
+    "label": "billing",
+    "lang": "es",
+    "template_id": "billing-es-1",
+    "slots": {
+     "num": "8824"
+    },
+    "text": "Me cobraron dos veces la factura 8824, devuélvanme el cargo duplicado."
+   },
+   {
+    "item_index": 8,
+    "item_id": "technical|technical-en-2|num4411",
+    "label": "technical",
+    "lang": "en",
+    "template_id": "technical-en-2",
+    "slots": {
+     "num": "4411"
+    },
+    "text": "Our API returns 500 errors for request 4411 since this morning."
+   },
+   {
+    "item_index": 9,
+    "item_id": "sales|sales-fr-3|num7043",
+    "label": "sales",
+    "lang": "fr",
+    "template_id": "sales-fr-3",
+    "slots": {
+     "num": "7043"
+    },
+    "text": "Je souhaite un devis pour un accord annuel de 7043 postes."
+   },
+   {
+    "item_index": 10,
+    "item_id": "technical|technical-es-3|num8154",
+    "label": "technical",
+    "lang": "es",
+    "template_id": "technical-es-3",
+    "slots": {
+     "num": "8154"
+    },
+    "text": "Las subidas al portal fallan después de unos 8154 segundos."
+   },
+   {
+    "item_index": 11,
+    "item_id": "sales|sales-fr-2|num3097",
+    "label": "sales",
+    "lang": "fr",
+    "template_id": "sales-fr-2",
+    "slots": {
+     "num": "3097"
+    },
+    "text": "Pouvez-vous m'envoyer le tarif pour passer au forfait de 3097 utilisateurs ?"
+   },
+   {
+    "item_index": 12,
+    "item_id": "sales|sales-zh-2|num7043",
+    "label": "sales",
+    "lang": "zh",
+    "template_id": "sales-zh-2",
+    "slots": {
+     "num": "7043"
+    },
+    "text": "请发给我升级到 7043 个用户的报价。"
+   },
+   {
+    "item_index": 13,
+    "item_id": "billing|billing-ja-2|num4411",
+    "label": "billing",
+    "lang": "ja",
+    "template_id": "billing-ja-2",
+    "slots": {
+     "num": "4411"
+    },
+    "text": "注文 4411 の領収書に重複した行があります。返金をお願いします。"
+   },
+   {
+    "item_index": 14,
+    "item_id": "billing|billing-hi-1|num7043",
+    "label": "billing",
+    "lang": "hi",
+    "template_id": "billing-hi-1",
+    "slots": {
+     "num": "7043"
+    },
+    "text": "मुझसे बिल 7043 के लिए दो बार शुल्क लिया गया, कृपया डुप्लिकेट भुगतान वापस करें।"
+   },
+   {
+    "item_index": 15,
+    "item_id": "sales|sales-ar-2|num1927",
+    "label": "sales",
+    "lang": "ar",
+    "template_id": "sales-ar-2",
+    "slots": {
+     "num": "1927"
+    },
+    "text": "أرجو إرسال الأسعار للترقية إلى 1927 مستخدمًا."
+   },
+   {
+    "item_index": 16,
+    "item_id": "technical|technical-hi-2|num2746",
+    "label": "technical",
+    "lang": "hi",
+    "template_id": "technical-hi-2",
+    "slots": {
+     "num": "2746"
+    },
+    "text": "आज सुबह से हमारा API अनुरोध 2746 के लिए 500 त्रुटि दे रहा है।"
+   },
+   {
+    "item_index": 17,
+    "item_id": "billing|billing-fr-2|num6380",
+    "label": "billing",
+    "lang": "fr",
+    "template_id": "billing-fr-2",
+    "slots": {
+     "num": "6380"
+    },
+    "text": "Le reçu de la commande 6380 contient une ligne en double, je demande le remboursement."
+   },
+   {
+    "item_index": 18,
+    "item_id": "sales|sales-es-3|num7782",
+    "label": "sales",
+    "lang": "es",
+    "template_id": "sales-es-3",
+    "slots": {
+     "num": "7782"
+    },
+    "text": "Necesito precios para un acuerdo anual de 7782 puestos."
+   },
+   {
+    "item_index": 19,
+    "item_id": "billing|billing-pt-1|num1927",
+    "label": "billing",
+    "lang": "pt",
+    "template_id": "billing-pt-1",
+    "slots": {
+     "num": "1927"
+    },
+    "text": "Fui cobrado duas vezes na fatura 1927, quero o reembolso da cobrança duplicada."
+   }
+  ]
+ },
+ "protocol": {
+  "protocol_md": "protocol.md (frozen, 2026-09-24)",
+  "task": "synthetic needle-in-haystack decision; NOT evidence about real long documents (protocol section 10)",
+  "label_balanced": true,
+  "label_counts": {
+   "billing": 7,
+   "sales": 6,
+   "technical": 7
+  },
+  "n_per_cell": 20,
+  "protocol_n_requirement": "protocol section 3 requires n>=200 for a number quoted as a result; this run is n=20 and every table must carry that n",
+  "L_axis": [
+   0,
+   1000,
+   2000,
+   4000,
+   7000
+  ],
+  "L_cells_skipped": "L=8192/16000/32000 from protocol section 2 are not run: the baseline question is the shipped 1024 limit versus 8192, and the encoder's max_position_embeddings is 8192 so longer L is an arm-side question, not a baseline one",
+  "position_axis": [
+   1.0
+  ],
+  "max_len_axis": [
+   "default",
+   "8192"
+  ],
+  "head_max_len_axis": [
+   "default"
+  ],
+  "languages": "all pool languages",
+  "warmup": "3 discarded forward passes after load, then one discarded pass per cell before the first timed item (protocol section 8 asks for >=3 before any timing)",
+  "gpu_lock": {
+   "held": true,
+   "path": "/home/parshu/projects/contri/laya-lab/.gpu.lock",
+   "pid": 775951
+  },
+  "gpu_lock_held_for_timings": true,
+  "torch_deterministic_algorithms": false,
+  "torch_deterministic_note": "not enabled; instead the sweep re-runs the first cell and records repeat_prediction_agreement, which is the property that matters here",
+  "raw_per_item_predictions": "predictions.jsonl (one row per cell per item)",
+  "baselines_reported": [
+   "random_over_options",
+   "random_over_gold_labels",
+   "majority_class",
+   "position_only_oracle"
+  ],
+  "baselines_unavailable": {
+   "predict_long_PR_363": "not present in fork @ 9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5",
+   "library_versions_and_git": "host.versions + git block"
+  }
+ },
+ "cells": [
+  {
+   "cell_key": "pad0|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 0,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": true,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad0|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 0,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": true,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad1000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 1000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad1000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 1000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad2000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 2000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad2000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 2000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad4000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 4000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad4000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 4000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad7000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 7000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  },
+  {
+   "cell_key": "pad7000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 7000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256
+  }
+ ],
+ "artifacts": {
+  "predictions_jsonl": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/predictions.jsonl",
+  "summary_json": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/summary.json",
+  "run_log": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/run.log",
+  "manifest_json": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/manifest.json"
+ },
+ "dry_run": false,
+ "harness_files": {
+  "run.py": {
+   "sha256": "aed050c63e7457a6e87501d75994f6e198cf0d98120fbcee0c55321f889f2f3b"
+  },
+  "runner.py": {
+   "sha256": "3ae0170ca6e62620915d8b22ab67a8b920be9b7f5f673cc6cdde73276122a941"
+  },
+  "builder.py": {
+   "sha256": "4813e364d83eecd077804385f00551b23cf37c04c4ac526c84489f7ac6aa519f"
+  },
+  "pools.py": {
+   "sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86"
+  },
+  "metrics.py": {
+   "sha256": "6cd2014aa9c4b3232a571b41d0a69bc132af0ed3954dfb9ddfb977d52b4b4748"
+  },
+  "backends.py": {
+   "sha256": "93ee994b26595f41219bcf4cf87bbed3060a505164b02ed191d538a7958b7cfb"
+  },
+  "checks.py": {
+   "sha256": "d232fffbdd60436c9d21557d03eb915f0f1660d80d0dd1dbef25c88631b73b32"
+  },
+  "manifest.py": {
+   "sha256": "2864cd61c5be8ea310ec4fc5aea5a20d0ff7055b092f1b58eb9bc0969db21310"
+  },
+  "presets.json": {
+   "sha256": "5ae6102b492e8a01dd363c1d1f938b3fe93928786f01e4d58a1764bdf6e442a5"
+  }
+ },
+ "rows_written": 200
+}
