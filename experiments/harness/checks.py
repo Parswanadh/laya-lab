@@ -214,8 +214,16 @@ def mechanism_checks(builder, items: Sequence[Dict[str, Any]], cells: Sequence[D
                              "request_kept_fraction_at_position_0.0": head,
                              "max_len": small}))
         if large_tail is not None:
-            out.append(_res("large_budget_keeps_the_tail_request", large_tail == 1.0,
-                            {"request_kept_fraction_at_position_1.0": large_tail, "max_len": big}))
+            longest = max(int(r["state_tokens_full"]) for r in rows)
+            if big > longest:
+                out.append(_res("large_budget_keeps_the_tail_request", large_tail == 1.0,
+                                {"request_kept_fraction_at_position_1.0": large_tail, "max_len": big,
+                                 "longest_document_tokens": longest}))
+            else:
+                out.append(_res("large_budget_keeps_the_tail_request", True,
+                                {"skipped": ("largest budget %d is smaller than the longest document "
+                                             "%d in this plan, so full retention is not expected"
+                                             % (big, longest))}))
     return out
 
 
