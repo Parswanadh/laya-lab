@@ -573,3 +573,42 @@ silently becomes "is the probe big enough?". The stage exited 1 with
 then the inner weights train.
 
 **Next:** re-run with the liveness criterion fixed (logits differ ⇒ live), then train.
+
+---
+
+## 2026-09-25 · arm3r training complete; seed decision made
+
+**arm3r_residual, 40 epochs** (16160 steps, 3968 s, 96 s/epoch): train loss 1.4396 → 1.1588,
+train acc 0.3373 → 0.4722. Branch is **live and trained**: contribution grows 0.10 → 0.51 logits,
+‖W_out‖ 7 → 142, step-0 `out_proj` gradient 6.24 with all inner tensors exactly 0.0.
+
+**In-training probe** at the primary cell (L7000-p100, n=200, held-out, scored from cache every 8
+epochs): 0.405 / 0.385 / 0.490 / 0.500 / **0.490** — **flat at 0.49–0.50 since epoch 23**.
+References: arm2 (12 ep) 0.455, arm1 0.365, oracle 0.2500.
+
+⚠ **That is a probe, not a result** — a single-cell batched forward that cannot be verified from
+per-item JSONL. It establishes only that the arm is live and not collapsed.
+
+**Convergence, stated honestly** (H5b's own framing, which is correct): the **task metric at the
+primary cell has plateaued**; the **train loss has not fully plateaued** (still falling ~0.006/epoch
+as the cosine rate anneals to 5e-12). Reported as "the task metric has plateaued", not as "converged".
+
+### Seed decision (L-053) — conditional, because power is the binding constraint
+M-001 (L-022) established that a **+0.05** effect is **unpowered at n=400**, and the run is **n=200**.
+So arm3r's apparent **+3.5pp over arm2 is inside what n=200 can resolve**, and *more seeds cannot fix
+that* — seeds reduce between-run variance, they do not add items.
+
+| seed-0 gap (arm3r − arm2long) | action |
+|---|---|
+| **< 0.02** | **no extra seeds.** Report the null as underpowered; spend the compute on **items** — primary cell to **n=600, paired** |
+| 0.02 – 0.05 | arm3r × 2 extra seeds; arm2long single-seed bar declared a limitation |
+| ≥ 0.05 | both arms × 2 extra seeds |
+
+**Why items beat seeds when the gap is small:** McNemar power scales with **discordant pairs**, which
+scale with n. Two extra seeds give three estimates of the *same* 200 items; +400 items double the
+discordant pairs on the comparison that matters. **Why the bar must not be single-seed:** arm2long is
+the target every other arm is measured against — a lucky or unlucky draw there misleads *every*
+comparison, and no amount of arm3r seeds repairs it.
+
+**Stage-major driver** trains both arms before evaluating either — ~60 min of extra latency for the
+primary verdict, nothing lost. Recorded as a driver limitation; not refactored mid-flight.
