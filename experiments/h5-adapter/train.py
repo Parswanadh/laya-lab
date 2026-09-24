@@ -68,12 +68,51 @@ def batches_by_length(items: List[Dict[str, Any]], token_budget: int, max_batch:
     return groups
 
 
+def probe_cell_accuracy(model, store: "FEAT.FeatureStore", conditions: List[Dict[str, Any]],
+                        device, cell: str, token_budget: int = 16384,
+                        max_batch: int = 8) -> Optional[Dict[str, Any]]:
+    """Accuracy on one evaluation cell, from the cache, with the head in eval mode.
+
+    Training loss on a cosine schedule always flattens as the rate goes to zero, so it cannot by
+    itself answer "did this converge?". This probes held-out **accuracy** at the cell the comparison
+    is about, at a few points in the schedule. It is a probe, not a selection rule: the schedule and
+    the stopping point are fixed in advance for both arms (`findings/E-004.md` §4), and nothing here
+    feeds back into training.
+    """
+    want = [c for c in conditions if c["cell"] == cell]
+    by_id = {it["item_id"]: i for i, it in enumerate(store.items)}
+    keep = [c for c in want if c["item_id"] in by_id]
+    if not keep:
+        return None
+    idx = [by_id[c["item_id"]] for c in keep]
+    lengths = [store.items[i]["length"] for i in idx]
+    was_training = model.training
+    model.eval()
+    correct = 0
+    with torch.inference_mode():
+        for group in FEAT._token_budget_batches(lengths, token_budget, max_batch):
+            real = [idx[i] for i in group]
+            b = FEAT.collate(store, real, device)
+            with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
+                                enabled=device.type == "cuda"):
+                logits, _act = model(None, b["attention_mask"], b["marker_pos"], b["marker_mask"],
+                                     b["qtype"], state_start=b["state_start"], encoder_hidden=b["h"])
+            logits = logits.float()
+            for j, gi in enumerate(group):
+                slot = int(torch.argmax(logits[j][b["marker_mask"][j]]).item())
+                correct += int(slot == FEAT.target_index(keep[gi], C.LABELS))
+    if was_training:
+        model.train()
+    return {"cell": cell, "n": len(keep), "accuracy": correct / len(keep)}
+
+
 def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_decay: float = 0.01,
               token_budget: int = 12288, max_batch: int = 8, warmup_frac: float = 0.05,
               device_name: str = "cuda", limit_train: Optional[int] = None,
               log_every: int = 50, shipped_override=None,
               train_items_override: Optional[List[Dict[str, Any]]] = None,
-              lr_cross: Optional[float] = None, probe_every_epoch: bool = True) -> Dict[str, Any]:
+              lr_cross: Optional[float] = None, probe_every_epoch: bool = True,
+              eval_probe_cell: Optional[str] = None, eval_probe_every: int = 8) -> Dict[str, Any]:
     """``shipped_override`` and ``train_items_override`` let the offline selftest drive this loop
     with a tiny encoder and a stratified item subset, so the loop under test is this loop and not a
     copy of it. A subset whose positions are not its store row indices is the point: the arms train
@@ -179,6 +218,18 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
                 model.cross.branch.layers[0].cross_attn.in_proj_weight.detach().float().norm()),
         }
 
+    # the held-out accuracy probe (see probe_cell_accuracy): loaded once, only if asked for
+    probe_store = None
+    probe_conditions: List[Dict[str, Any]] = []
+    if eval_probe_cell:
+        try:
+            probe_store = FEAT.FeatureStore(os.path.join(C.CACHE_DIR, "eval"))
+            probe_conditions = FEAT.build_eval_conditions(
+                plan, pool=C.load_needle_pool("needles-h5-eval-v1.json"))
+        except Exception as e:  # never let the probe take the run down with it
+            print("  [%s s%d] eval probe unavailable: %s" % (arm, seed, e), flush=True)
+            probe_store, probe_conditions = None, []
+
     history: List[Dict[str, Any]] = []
     verified_batches = 0
     step = 0
@@ -259,11 +310,22 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
         norms = branch_norms()
         if norms is not None:
             row.update(norms)
+        if probe_store is not None and probe_conditions and (
+                (epoch + 1) % max(1, eval_probe_every) == 0 or epoch == epochs - 1):
+            try:
+                row["eval_probe"] = probe_cell_accuracy(model, probe_store, probe_conditions,
+                                                        device, eval_probe_cell)
+            except Exception as e:
+                row["eval_probe_error"] = str(e)
         history.append(row)
         extra_note = ""
         if row.get("branch_logit_contribution_max") is not None:
             extra_note = "  branch|dlogit|=%.4g  ||W||=%.3g" % (
                 row["branch_logit_contribution_max"], row["out_proj_weight_fro"])
+        if row.get("eval_probe"):
+            extra_note += "  eval[%s]=%.3f (n=%d)" % (row["eval_probe"]["cell"],
+                                                      row["eval_probe"]["accuracy"],
+                                                      row["eval_probe"]["n"])
         print("  [%s s%d] epoch %d  train_loss=%.4f train_acc=%.4f  (%.0fs)%s"
               % (arm, seed, epoch, row["train_loss"], row["train_accuracy"], row["seconds"],
                  extra_note), flush=True)
@@ -278,6 +340,7 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
     result = {
         "arm": arm, "seed": seed, "epochs": epochs, "lr": lr, "lr_cross": lr_cross,
         "weight_decay": weight_decay,
+        "eval_probe_cell": eval_probe_cell, "eval_probe_every": eval_probe_every,
         "token_budget": token_budget, "max_batch": max_batch, "warmup_steps": warmup,
         "steps": step, "steps_per_epoch": steps_per_epoch,
         "n_train_items": len(idx), "train_mode": spec["train_mode"],
@@ -314,12 +377,17 @@ def main() -> int:
     ap.add_argument("--token-budget", type=int, default=12288)
     ap.add_argument("--max-batch", type=int, default=8)
     ap.add_argument("--device", default="cuda")
+    ap.add_argument("--eval-probe-cell", default=None,
+                    help="held-out cell to score every --eval-probe-every epochs (probe only; the "
+                         "schedule and stopping point are fixed in advance for every arm)")
+    ap.add_argument("--eval-probe-every", type=int, default=8)
     ap.add_argument("--limit-train", type=int, default=None,
                     help="smoke test only: train on the first N items")
     a = ap.parse_args()
     train_arm(a.arm, a.seed, epochs=a.epochs, lr=a.lr, token_budget=a.token_budget,
               max_batch=a.max_batch, device_name=a.device, limit_train=a.limit_train,
-              lr_cross=a.lr_cross)
+              lr_cross=a.lr_cross, eval_probe_cell=a.eval_probe_cell,
+              eval_probe_every=a.eval_probe_every)
     return 0
 
 

@@ -57,6 +57,10 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=5e-4)
     ap.add_argument("--lr-cross", type=float, default=None)
     ap.add_argument("--keep-heads", action="store_true")
+    ap.add_argument("--eval-probe-cell", default="L7000-p100",
+                    help="held-out cell scored every --eval-probe-every epochs inside training "
+                         "(probe only; it never feeds back into the run)")
+    ap.add_argument("--eval-probe-every", type=int, default=8)
     ap.add_argument("--skip-ablation", action="store_true",
                     help="do not run the zeroed-branch control for arm3r_residual")
     ap.add_argument("--skip-eval-if-predictions-exist", action="store_true", default=True)
@@ -73,6 +77,9 @@ def main() -> int:
             for seed in seeds:
                 cmd = [PY, "experiments/h5-adapter/train.py", "--arm", arm, "--seed", str(seed),
                        "--epochs", str(a.epochs), "--lr", str(a.lr)]
+                if a.eval_probe_cell:
+                    cmd += ["--eval-probe-cell", a.eval_probe_cell,
+                            "--eval-probe-every", str(a.eval_probe_every)]
                 if a.lr_cross is not None:
                     cmd += ["--lr-cross", str(a.lr_cross)]
                 rc = run(cmd)

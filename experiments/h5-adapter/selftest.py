@@ -221,6 +221,17 @@ def main() -> int:
             tj3r = json.load(fh)
         check("train/arm3r's separate branch rate is recorded",
               tj3r["lr_cross"], 5e-3)
+        # the held-out accuracy probe must work off the same redirected cache, and must not be able
+        # to kill a run if it fails (it is wrapped, and records eval_probe_error instead)
+        res_probe = T.train_arm("arm2_shipped_init", seed=0, epochs=2, token_budget=4096, max_batch=4,
+                                device_name="cpu", log_every=0, train_items_override=mini_train,
+                                shipped_override=shipped, eval_probe_cell="L7000-p100",
+                                eval_probe_every=1)
+        pr = [h.get("eval_probe") for h in res_probe["history"]]
+        check_true("train/eval probe scores a held-out cell every epoch",
+                   all(p and 0.0 <= p["accuracy"] <= 1.0 and p["n"] > 0 for p in pr), str(pr))
+        check_true("train/eval probe records its cell name",
+                   all(p["cell"] == "L7000-p100" for p in pr), str(pr))
 
         # ---- 6. evaluate arm 2 at step 0 and the trained arm 3, from the cache
         import eval as E
