@@ -36,8 +36,8 @@ def main() -> int:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     plan = C.load_plan()
     agent = C.load_agent(str(device))
-    builder = C.make_builder(agent.tok, C.load_filler(), pool)
     pool = C.load_needle_pool("needles-h5-eval-v1.json")
+    builder = C.make_builder(agent.tok, C.load_filler(), pool)
     conditions = [c for c in FEAT.build_eval_conditions(plan, pool=pool)
                   if c["cell"] == "L4000-p100"]
     docs = [builder.build(c, option_order=c.get("option_order")) for c in conditions]
