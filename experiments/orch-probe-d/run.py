@@ -121,22 +121,35 @@ def build_items(n_per_class, pad):
     for ci, lab in enumerate(LABELS):
         for j in range(n_per_class):
             txt = NEEDLES[lab][j % len(NEEDLES[lab])].format(n=1000 + ci * 100 + j)
-            items.append({"text": txt, "label": lab})
+            items.append({"text": txt, "label": lab, "group": "%s:%d" % (lab, j % len(NEEDLES[lab]))})
     return items
 
 
-def ridge_probe(X, y, n_classes=4, lam=1.0, folds=5, seed=0):
-    """Closed-form linear probe: ridge on one-hot targets, k-fold CV accuracy."""
+def ridge_probe(X, y, groups=None, n_classes=4, lam=1.0, folds=5, seed=0):
+    """Closed-form linear probe: ridge on one-hot targets, k-fold CV accuracy.
+
+    `groups` enables GROUPED folds: every item sharing a group (a needle template) lands
+    entirely in train or entirely in test. Without this the probe can memorise a template's
+    surface form and report a meaningless 1.000.
+    """
     rng = np.random.default_rng(seed)
     n = len(X)
+    if groups is not None:
+        ug = np.unique(groups)
+        perm = rng.permutation(len(ug))
+        assign = {g: perm[i] % folds for i, g in enumerate(ug)}
+        fold_of = np.array([assign[g] for g in groups])
+    else:
+        order = rng.permutation(n)
+        fold_of = np.empty(n, dtype=int)
+        fold_of[order] = np.arange(n) % folds
     Y = np.zeros((n, n_classes), dtype=np.float64)
     for i, c in enumerate(y):
         Y[i, c] = 1.0
-    idx = rng.permutation(n)
     correct = 0
     for f in range(folds):
-        te = idx[f::folds]
-        tr = np.setdiff1d(idx, te)
+        te = np.where(fold_of == f)[0]
+        tr = np.where(fold_of != f)[0]
         Xtr, Ytr = X[tr], Y[tr]
         mu = Xtr.mean(0, keepdims=True)
         sd = Xtr.std(0, keepdims=True) + 1e-6
@@ -180,8 +193,9 @@ def main():
     results = {}
     for pos_frac, tag in ((1.0, "needle_at_end"), (0.0, "needle_at_start")):
         items = build_items(n_per_class=50, pad=pad)
-        feats = {"marker": [], "cls": [], "state_mean": [], "state_max": []}
-        ys, head_pred, ntok = [], [], []
+        garr = np.array([it["group"] for it in items])
+        feats = {"marker": [], "cls": [], "state_mean": [], "state_max": [], "random_pos": []}
+        ys, head_pred, ntok, groups = [], [], [], []
         for it in items:
             state = {"text": filler_text + " " + it["text"] if pos_frac == 1.0
                      else it["text"] + " " + filler_text}
@@ -199,7 +213,13 @@ def main():
             st = h[start:L - 1] if L - 1 > start else h[start:]
             feats["state_mean"].append(st.mean(0).float().cpu().numpy())
             feats["state_max"].append(st.max(0).values.float().cpu().numpy())
+            # CONTROL: pool the same number of positions drawn at random. If this also scores
+            # high, the probe is reading a global topic signal, not the marker representation.
+            npos = max(1, mpos.numel())
+            rp = torch.randint(start, max(start + 1, L - 1), (npos,), device=h.device)
+            feats["random_pos"].append(h[rp].mean(0).float().cpu().numpy())
             ys.append(LABELS.index(it["label"]))
+            groups.append(it["group"])
             head_pred.append(r["answers"]["department"]["choice"])
             cap.clear()
 
@@ -209,12 +229,14 @@ def main():
                "head_accuracy": round(head_acc, 4), "majority": 0.25, "random": 0.25}
         for k, v in feats.items():
             X = np.stack(v).astype(np.float64)
-            row["probe_" + k] = round(ridge_probe(X, y), 4)
+            row["probe_" + k] = round(ridge_probe(X, y), 4)                      # random folds
+            row["probeG_" + k] = round(ridge_probe(X, y, groups=garr), 4)        # grouped folds
         results[tag] = row
         print("\n[%s]  n=%d  median tokens=%d" % (tag, row["n"], row["probe_tokens_median"]))
         print("   shipped head accuracy : %.3f" % row["head_accuracy"])
-        for k in ("marker", "cls", "state_mean", "state_max"):
-            print("   linear probe %-11s: %.3f" % (k, row["probe_" + k]))
+        print("   %-12s %8s %8s" % ("probe", "randomCV", "GROUPEDcv"))
+        for k in ("marker", "cls", "state_mean", "state_max", "random_pos"):
+            print("   %-12s %8.3f %8.3f" % (k, row["probe_" + k], row["probeG_" + k]))
 
     d = os.path.join(LAB, "experiments", "orch-probe-d")
     os.makedirs(d, exist_ok=True)

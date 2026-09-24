@@ -1,0 +1,1 @@
+2026-09-24T17:27:30Z pid=736995 experiments/harness/run.py --preset baseline-repro --device cuda --checkpoint models/multilingual

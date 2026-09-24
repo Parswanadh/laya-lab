@@ -1,0 +1,22 @@
+Running as unit: run-r255bb7cd651d4500a36f6aba5a2a2b74.scope; invocation ID: 73cde5cccd6342e195434c17669e8396
+== attempt 1 at 22:53:46 ==
+attempt 1 refused at 22:53:46 — another agent holds the GPU; waiting 60s
+== attempt 2 at 22:54:46 ==
+attempt 2 refused at 22:54:46 — another agent holds the GPU; waiting 60s
+== attempt 3 at 22:55:46 ==
+attempt 3 refused at 22:55:46 — another agent holds the GPU; waiting 60s
+== attempt 4 at 22:56:46 ==
+attempt 4 refused at 22:56:46 — another agent holds the GPU; waiting 60s
+== attempt 5 at 22:57:46 ==
+== free -h at start ==
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       9.0Gi       2.3Gi       182Mi       5.0Gi       6.1Gi
+Swap:           26Gi       9.6Gi        17Gi
+== frozen inputs ==
+062fd79badf8e44f028cb9d4508666ae18ee381ad1c779eb7c484462e5484e6e  experiments/orch-baseline/run.py
+7ade587e1e6338d3011cbc6737ada16c5519f64f76f1eb9d19dad475f7cebf18  experiments/orch-diagnostic/run.py
+cp: warning: behavior of -n is non-portable and may change in future; use --update=none instead
+cp: warning: behavior of -n is non-portable and may change in future; use --update=none instead
+b5768830d543ab01b0ef20c67c6075a8f17b01fa4c361209654a959e8b234499  experiments/orch-baseline/results.json
+680970a28a61ebb523c6806ee4934bd65b2ea255ecf178acebed64150fed9ca8  experiments/orch-diagnostic/results.json
+== 1/3 orch-baseline (fresh process) ==

@@ -366,29 +366,44 @@ for n in [20, 100, 200, 300, 400, 600, 1000]:
     c = (ph + z*z/(2*n)) / den
     hw_w = z*math.sqrt(ph*(1-ph)/n + z*z/(4*n*n)) / den
     print(f"{n:>6} {h:>21.4f} {('[' + format(c-hw_w, '.4f') + ', ' + format(c+hw_w, '.4f') + ']'):>26}")
-print("\nexact 95% interval at x = n/2 (binomial tails, p <= 0.5):")
+print("\nexact 95% Clopper-Pearson interval at x = n/2 (binomial tails, computed in log space):")
+def binom_log_pmf(k, n, p):
+    if p <= 0.0:
+        return 0.0 if k == 0 else -math.inf
+    if p >= 1.0:
+        return 0.0 if k == n else -math.inf
+    return (math.lgamma(n + 1) - math.lgamma(k + 1) - math.lgamma(n - k + 1)
+            + k * math.log(p) + (n - k) * math.log1p(-p))
 def binom_cdf(k, n, p):
-    s = 0.0
-    for i in range(0, k + 1):
-        s += math.comb(n, i) * p**i * (1 - p)**(n - i)
-    return s
-def exact_at_half(n, alpha=0.05):
-    """At phat = 1/2 the Clopper-Pearson bounds are the p solving
-    P(X >= n/2 | p) = alpha/2 (lower) and P(X <= n/2 | p) = alpha/2 (upper)."""
-    x = n // 2
-    a, b = 0.0, 0.5
-    for _ in range(200):
-        m = (a + b) / 2
-        if 1 - binom_cdf(x - 1, n, m) >= alpha / 2: a = m
-        else: b = m
-    lo = (a + b) / 2
-    a, b = 0.5, 1.0
-    for _ in range(200):
-        m = (a + b) / 2
-        if binom_cdf(x, n, m) >= alpha / 2: a = m
-        else: b = m
-    hi = (a + b) / 2
+    return sum(math.exp(binom_log_pmf(i, n, p)) for i in range(0, k + 1))
+def cp_interval(n, x, alpha=0.05):
+    """Exact Clopper-Pearson two-sided interval for x successes in n trials.
+    P(X >= x | p) increases as p falls, so to find the LARGEST p with
+    P(X >= x | p) >= alpha/2 we bisect on that predicate.  Symmetrically
+    P(X <= x | p) increases with p."""
+    lo, hi = 0.0, 1.0
+    if x > 0:
+        a, b = 1.0, 0.0                   # a: predicate true, b: predicate false; move a down
+        for _ in range(200):
+            m = (a + b) / 2
+            if 1 - binom_cdf(x - 1, n, m) >= alpha / 2: a = m
+            else: b = m
+        lo = a
+    if x < n:
+        a, b = 0.0, 1.0
+        for _ in range(200):
+            m = (a + b) / 2
+            if binom_cdf(x, n, m) >= alpha / 2: a = m
+            else: b = m
+        hi = a
     return lo, hi
+# self-check against a known value: 7/20, Clopper-Pearson 95% = [0.1539, 0.5922]
+_c = cp_interval(20, 7)
+assert abs(_c[0] - 0.1539) < 5e-4 and abs(_c[1] - 0.5922) < 5e-4, _c
+print(f"  [self-check] cp_interval(20, 7) = [{_c[0]:.4f}, {_c[1]:.4f}] "
+      f"(published 0.1539, 0.5922) OK")
+def exact_at_half(n, alpha=0.05):
+    return cp_interval(n, n // 2, alpha)
 for n in [20, 200, 300, 400, 600]:
     lo, hi = exact_at_half(n)
     print(f"   n={n:>4}, x={n//2:>4}, phat=0.5: exact 95% [{lo:.4f}, {hi:.4f}]  "
@@ -400,52 +415,189 @@ print("\nSanity check of the power arithmetic: 'n>=200 gives +-0.066 at 95% for 
 print("(plan.md section 6) is the SINGLE-PROPORTION Wald half-width. It is NOT the")
 print("resolution of an ARM-vs-ARM comparison; for that the paired (McNemar) design applies.")
 
-print("\nEXACT McNemar power, no normal approximation.  n = items, delta = accuracy gap")
-print("between two arms, psi = P(A right, B wrong)/P(B right, A wrong) given A is better.")
-print("Under H1 exactly delta*n items are discordant: psi*delta*n/(psi+1) favour A and")
-print("delta*n/(psi+1) favour B.  Conditional on m discordant items the exact two-sided")
-print("sign test rejects when X ~ Bin(m, 1/2) lands in the observed tail; power is the")
-print("mixture of that rejection probability over m ~ Bin(n, delta).")
+print("\nMcNemar power.  Two formulations are reported because they disagree, and the")
+print("disagreement is itself the finding:")
+print("  (a) EXACT conditional sign test: condition on the observed number of discordant")
+print("      pairs m and ask whether X ~ Bin(m, 1/2).  This is what 'exact McNemar' means,")
+print("      and it is CONSERVATIVE - for every m below the point where 2*P(X<=k) <= 0.05")
+print("      has a solution the conditional rejection probability is 0, so power stays at")
+print("      alpha however large delta is.  With delta=0.05 you need m ~ 85 discordant")
+print("      pairs for the test to bite at all (see the self-checks below).")
+print("  (b) UNCONDITIONAL normal approximation on the discordant counts: the standard")
+print("      design-stage formula, which is what a sample-size argument must use.")
 def binom_pmf_list(m, p):
-    return [math.comb(m, k) * p**k * (1 - p)**(m - k) for k in range(m + 1)]
+    """All m+1 binomial probabilities for p <= 0.5, built by the ratio recurrence:
+    pmf(0) = (1-p)^m in log space, then pmf(k+1) = pmf(k) * (m-k)/(k+1) * p/(1-p)."""
+    if p <= 0.0:
+        out = [0.0] * (m + 1); out[0] = 1.0
+        return out
+    log_first = m * math.log1p(-p)
+    ratio = p / (1.0 - p)
+    out = [0.0] * (m + 1)
+    cur = log_first
+    out[0] = math.exp(cur)
+    for k in range(0, m):
+        cur += math.log(m - k) - math.log(k + 1) + math.log(ratio)
+        out[k + 1] = math.exp(cur) if cur > -700 else 0.0
+    return out
+_SIGN_CACHE = {}
 def sign_reject_prob(m, alpha=0.05):
-    """P(reject | m discordant pairs), exact two-sided sign test."""
+    """(a) P(reject | m discordant pairs): exact two-sided sign test, critical region
+    {k : 2*P(X <= k) <= alpha} union its mirror.  Cached by m."""
+    if m in _SIGN_CACHE:
+        return _SIGN_CACHE[m]
     if m == 0:
+        _SIGN_CACHE[m] = 0.0
         return 0.0
     pmf = binom_pmf_list(m, 0.5)
+    cum = 0.0
+    kcrit = -1
+    for k in range(0, m // 2 + 1):
+        cum += pmf[k]
+        if 2.0 * cum <= alpha:
+            kcrit = k
+        else:
+            break
+    val = 0.0 if kcrit < 0 else 2.0 * sum(pmf[0:kcrit + 1])
+    _SIGN_CACHE[m] = val
+    return val
+def Phi(x):
+    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
+def mcnemar_power_conditional(n, delta):
+    """(a) exact-conditional power.  Under H1 the discordant count is m ~ Bin(n, delta)
+    (the boundary case where the baseline never wins a discordant item); conditional on m
+    the exact sign test's rejection probability is sign_reject_prob(m)."""
+    pmf_n = binom_pmf_list(n, min(max(delta, 0.0), 1.0))
+    return sum(pmf_n[m] * sign_reject_prob(m) for m in range(1, n + 1))
+def zq(target):
+    lo, hi = 0.0, 12.0
+    for _ in range(300):
+        mid = (lo + hi) / 2
+        if Phi(mid) < target: lo = mid
+        else: hi = mid
+    return (lo + hi) / 2
+def mcnemar_power_normal(n, delta, q, alpha=0.05):
+    """(b') unconditional normal-approximation power for the PAIRED design, from first
+    principles.  X ~ Bin(n, p12) counts items the new arm wins, Y ~ Bin(n, p21) counts
+    items the baseline wins, X and Y independent, p12 = (q+delta)/2, p21 = (q-delta)/2.
+    Under H0 (p12 = p21 = q/2) the McNemar statistic (X-Y)/sqrt(X+Y) has SD
+    0.5*sqrt(n*q); under H1, E[X-Y] = n*delta and Var(X-Y) = n*q - n*delta^2.
+    q - the ANTI-correlation between the two arms - is the parameter that controls power;
+    delta alone does not."""
+    if delta <= 0 or q <= abs(delta):
+        return 0.0
+    zcrit = zq(1 - alpha / 2)
+    lam = n * delta
+    sd = math.sqrt(max(n * q - n * delta * delta, 1e-12))
+    crit = zcrit * 0.5 * math.sqrt(n * q)
+    return (1 - Phi((crit - lam) / sd) + Phi((-crit - lam) / sd))
+def rejection_threshold_exact(n, q, alpha=0.05):
+    """Smallest |X-Y| at which the exact McNemar test rejects, under H0 p12=p21=q/2.
+    The distribution of X-Y is the self-convolution of the pmf with its reverse; the
+    rejection region is its UPPER tail, accumulated from the largest difference down."""
+    p = q / 2.0
+    pmf = binom_pmf_list(n, p)
+    conv = [0.0] * (2 * n + 1)              # conv[d + n] = P(X - Y = d)
+    for k, pk in enumerate(pmf):
+        if pk == 0.0:
+            continue
+        for l, pl in enumerate(pmf):
+            conv[k - l + n] += pk * pl
     tot = 0.0
-    # find the smallest tail mass that can be rejected
-    for k in range(m + 1):
-        # two-sided p-value of observing k (or its mirror m-k)
-        kk = min(k, m - k)
-        pv = sum(pmf[j] for j in range(0, kk + 1)) + sum(pmf[j] for j in range(m - kk, m + 1))
-        if pv > alpha:
-            break
-        tot += pmf[k]
-    return tot
-# precompute conditional rejection probabilities for every m up to max_n
-MAXN = 1200
-SIGN = [sign_reject_prob(m) for m in range(MAXN + 1)]
-def mcnemar_power(n, delta):
-    """Exact power of the two-sided McNemar sign test at alpha=0.05."""
-    pmf = binom_pmf_list(n, min(delta, 0.999999))
-    return sum(pmf[m] * SIGN[m] for m in range(0, n + 1)), delta
-print(f"{'n':>6} {'delta=0.03':>11} {'delta=0.05':>11} {'delta=0.10':>11} {'q=delta':>9}")
-for n in [100, 200, 300, 400, 600, 1000]:
-    row = [f"{mcnemar_power(n, d)[0]:>11.3f}" for d in (0.03, 0.05, 0.10)]
-    print(f"{n:>6} " + " ".join(row) + f" {mcnemar_power(n, 0.05)[1]:>9.3f}")
-print("psi only changes the marginal split, not q, so the exact sign test's power does not")
-print("depend on psi in this formulation; psi matters only for the direction of the effect.")
-
-print("\nsmallest n with exact McNemar power >= 0.80:")
-for delta in [0.03, 0.05, 0.08, 0.10, 0.15, 0.20]:
-    n = 20
-    while n < 2000:
-        pw = mcnemar_power(n, delta)[0]
-        if pw >= 0.80:
-            break
-        n += 10
-    print(f"   delta = {delta:.2f} -> n = {n}  (power {mcnemar_power(n, delta)[0]:.3f})")
+    for d in range(0, n + 1):               # upper tail, one side only
+        pr = conv[d + n]
+        if tot + pr > alpha / 2.0:
+            return d
+        tot += pr
+    return n + 1
+# self-check: at q=0.1, n=200 the threshold should sit near the normal value
+for _n, _q in [(200, 0.10), (200, 0.20), (400, 0.10)]:
+    _d = rejection_threshold_exact(_n, _q)
+    _nn = math.sqrt(2 * _n * (_q / 2) * (1 - _q / 2))
+    print(f"  [self-check] n={_n} q={_q:.2f}: exact |X-Y| threshold = {_d} "
+          f"(normal approx z*SD = {1.959964*_nn:.1f}, SD = {_nn:.2f})")
+def mcnemar_power_exact_uncond(n, delta, q):
+    """(b) EXACT unconditional power: sum over (X, Y) of the exact McNemar rejection
+    region {|X-Y| >= d*}.  O(n) per call via prefix sums of the binomial pmfs.
+    This is the design-grade number; the conditional test in (a) is not."""
+    if delta <= 0 or q <= abs(delta):
+        return 0.0
+    p12, p21 = (q + delta) / 2.0, (q - delta) / 2.0
+    dstar = rejection_threshold_exact(n, q)
+    fx = binom_pmf_list(n, p12)
+    fy = binom_pmf_list(n, p21)
+    # prefix / suffix sums of fx
+    pref = [0.0] * (n + 1)
+    acc = 0.0
+    for i in range(0, n + 1):
+        acc += fx[i]
+        pref[i] = acc
+    suf = [0.0] * (n + 2)
+    acc = 0.0
+    for i in range(n, -1, -1):
+        acc += fx[i]
+        suf[i] = acc
+    pw = 0.0
+    for y in range(0, n + 1):
+        p = fy[y]
+        if p == 0.0:
+            continue
+        lo = y - dstar                     # X <= y - d*
+        if lo >= 0:
+            pw += p * pref[lo]
+        hi = y + dstar                     # X >= y + d*
+        if hi <= n:
+            pw += p * suf[hi]
+    return min(pw, 1.0)
+for _m in [100, 200, 600]:
+    _pmf = binom_pmf_list(_m, 0.5)
+    _c = 0.0
+    _k = -1
+    for k in range(0, _m // 2 + 1):
+        _c += _pmf[k]
+        if 2.0 * _c <= 0.05: _k = k
+        else: break
+    print(f"  [self-check] m={_m}: exact sign test rejects for X <= {_k} or X >= {_m-_k}; "
+          f"P(reject|H0) = {2.0*sum(_pmf[0:_k+1]):.4f}")
+print("\n(a) EXACT-conditional McNemar power (conservative; conditions on m = X+Y):")
+print(f"{'n':>6} {'delta=0.03':>11} {'delta=0.05':>11} {'delta=0.10':>11}")
+for n in [100, 200, 400, 800, 2000]:
+    print(f"{n:>6} " + " ".join(f"{mcnemar_power_conditional(n, d):>11.3f}"
+                                 for d in (0.03, 0.05, 0.10)))
+print("\n(b) EXACT unconditional McNemar power (design-grade), by discordance rate q:")
+for q in [0.10, 0.20]:
+    print(f"  q = {q:.2f}:")
+    print(f"{'n':>6} {'delta=0.03':>11} {'delta=0.05':>11} {'delta=0.10':>11}")
+    for n in [100, 200, 400, 800, 2000]:
+        row = []
+        for d in (0.03, 0.05, 0.10):
+            row.append(f"{mcnemar_power_exact_uncond(n, d, q):>11.3f}" if d < q else f"{'--':>11}")
+        print(f"{n:>6} " + " ".join(row))
+print("\nnormal approximation (b') vs exact unconditional (b), same parameters:")
+print(f"{'n':>6} {'q':>6} {'delta':>6} {'normal approx':>14} {'exact uncond':>13}")
+for n, q, d in [(200, 0.10, 0.05), (400, 0.10, 0.05), (800, 0.10, 0.05),
+                (200, 0.20, 0.10), (400, 0.20, 0.10), (800, 0.20, 0.10)]:
+    print(f"{n:>6} {q:>6.2f} {d:>6.2f} {mcnemar_power_normal(n, d, q):>14.3f} "
+          f"{mcnemar_power_exact_uncond(n, d, q):>13.3f}")
+print("\npower at the protocol's candidate sample sizes (EXACT unconditional):")
+print(f"{'q':>5} {'delta':>6} " + " ".join(f"{'n=' + str(n):>9}" for n in [100, 200, 300, 400, 600, 800]))
+for q in [0.10, 0.20, 0.30]:
+    for delta in [0.03, 0.05, 0.10]:
+        if delta >= q:
+            continue
+        row = " ".join(f"{mcnemar_power_exact_uncond(n, delta, q):>9.3f}"
+                       for n in [100, 200, 300, 400, 600, 800])
+        print(f"{q:>5.2f} {delta:>6.2f} " + row)
+print("\nsmallest n (multiple of 20) with EXACT unconditional power >= 0.80:")
+for q in [0.10, 0.20, 0.30]:
+    for delta in [0.03, 0.05, 0.10]:
+        if delta >= q:
+            continue
+        n = 20
+        while n < 4000 and mcnemar_power_exact_uncond(n, delta, q) < 0.80:
+            n += 20
+        print(f"   q={q:.2f}, delta={delta:.2f} -> n = {n:>4} "
+              f"(power {mcnemar_power_exact_uncond(n, delta, q):.3f})")
 
 print("\nUPSTREAM'S OWN n=20 CELL, tested against the chance rate (4 options -> 0.25):")
 for x, lab in [(7, "pad>=2000, limit=1024 (acc 0.35)"),
@@ -454,26 +606,6 @@ for x, lab in [(7, "pad>=2000, limit=1024 (acc 0.35)"),
     print(f"   {lab}: exact one-sided binomial p vs 0.25 = {pv:.5f}")
 print("   the 0.35 cell is NOT distinguishable from the 0.25 chance rate at n=20, so")
 print("   upstream's claim that 0.35 IS the majority prior is itself underpowered.")
-# exact Clopper-Pearson for an arbitrary x (not just n/2)
-def cp_interval(n, x, alpha=0.05):
-    lo, hi = 0.0, 1.0
-    if x > 0:
-        a, b = 0.0, 1.0
-        for _ in range(200):
-            m = (a + b) / 2
-            if 1 - binom_cdf(x - 1, n, m) >= alpha / 2: a = m
-            else: b = m
-        lo = (a + b) / 2
-    if x < n:
-        a, b = 0.0, 1.0
-        for _ in range(200):
-            m = (a + b) / 2
-            if binom_cdf(x, n, m) <= alpha / 2: a = m
-            else: b = m
-        hi = (a + b) / 2
-    else:
-        hi = 1.0
-    return lo, hi
 for x, n, lab in [(7, 20, "upstream 0.35 cell"), (17, 20, "upstream 0.85 cell"),
                   (19, 20, "upstream 0.95 cell")]:
     lo, hi = cp_interval(n, x)
@@ -485,14 +617,7 @@ for m in [10, 25, 50]:
     print(f"   m={m:>3} comparisons: P(>=1 false positive | all null) = {1-(1-0.05)**m:.3f}; "
           f"Bonferroni alpha = {0.05/m:.5f}")
 print("\nBonferroni-corrected alpha needs a larger raw p; per-cell n to keep the SAME MDE")
-print("under alpha=0.05/m is roughly n * (z_(1-a/2m)/z_(1-a/2))^2:")
-def zq(q):
-    lo, hi = 0.0, 12.0
-    for _ in range(300):
-        mid = (lo+hi)/2
-        if 0.5*(1+math.erf(mid/math.sqrt(2))) < q: lo = mid
-        else: hi = mid
-    return (lo+hi)/2
+print("under alpha=0.05/m scales as n * (z_(1-a/2m)/z_(1-a/2))^2 (zq defined above):")
 for m in [1, 10, 25, 50]:
     zm = zq(1 - 0.05/(2*m))
     print(f"   m={m:>3}: z={zm:.4f}, inflation factor vs m=1 = {(zm/z)**2:.3f}")

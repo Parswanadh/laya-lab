@@ -247,6 +247,23 @@ def main():
             by_hash.setdefault(h, []).append("limit=%d pad=%d" % (c["limit"], c["pad"]))
     out["identical_state_groups"] = {h: v for h, v in by_hash.items() if len(v) > 1}
 
+    # 5b. proof that the limit=1024 padded inputs contain no request: the retained 978 state
+    # tokens are byte-identical to the tokenization of a bare, request-free 978-token filler
+    # prefix. Same tokens in => the model literally never saw a request in those cells.
+    # Control: the same filler document with the request left off entirely. If the retained
+    # 978 tokens of the padded cell equal this, the request is provably not in the model input.
+    for c in out["baseline_cells"]:
+        if c["limit"] != 1024 or c["pad"] == 0:
+            continue
+        b = (fid * (c["pad"] // max(1, len(fid)) + 1))[:c["pad"]]
+        ids_only = tok(tok.decode(b), add_special_tokens=False)["input_ids"][:room[1024]]
+        h_only = hashlib.sha256(json.dumps(ids_only).encode()).hexdigest()[:16]
+        c["filler_only_state_hash"] = h_only
+        c["request_absent_from_model_input"] = h_only in c["state_hashes"]
+    out["limit1024_padded_state_is_bare_filler"] = {
+        "limit=%d pad=%d" % (c["limit"], c["pad"]): c.get("request_absent_from_model_input")
+        for c in out["baseline_cells"] if c["limit"] == 1024 and c["pad"] > 0}
+
     d = os.path.join(LAB, "experiments", "V-001")
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, "measure.json"), "w") as fh:
@@ -265,6 +282,8 @@ def main():
     print("filler: single sentence of %d tokens repeated; labels in filler text: %s"
           % (out["filler_redundancy"]["base_sentence_tokens"],
              out["filler_redundancy"]["labels_present_in_filler_text"] or "none"))
+    print("limit=1024 padded inputs are the identical filler document minus the request: %s"
+          % out["limit1024_padded_state_is_bare_filler"])
     print("cells whose retained state is byte-identical to another cell:")
     for h, cells in out["identical_state_groups"].items():
         print("  %s  <- %s" % (h, cells))

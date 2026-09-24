@@ -1,0 +1,42 @@
+{
+ "pad": 4000,
+ "model": "multilingual",
+ "dtype": "fp32",
+ "probe": "ridge one-hot, 5-fold CV, lam=1.0",
+ "results": {
+  "needle_at_end": {
+   "n": 200,
+   "probe_tokens_median": 4066,
+   "head_accuracy": 0.3,
+   "majority": 0.25,
+   "random": 0.25,
+   "probe_marker": 1.0,
+   "probeG_marker": 0.82,
+   "probe_cls": 1.0,
+   "probeG_cls": 0.885,
+   "probe_state_mean": 1.0,
+   "probeG_state_mean": 0.895,
+   "probe_state_max": 1.0,
+   "probeG_state_max": 0.895,
+   "probe_random_pos": 0.55,
+   "probeG_random_pos": 0.44
+  },
+  "needle_at_start": {
+   "n": 200,
+   "probe_tokens_median": 4067,
+   "head_accuracy": 0.585,
+   "majority": 0.25,
+   "random": 0.25,
+   "probe_marker": 1.0,
+   "probeG_marker": 0.845,
+   "probe_cls": 1.0,
+   "probeG_cls": 0.905,
+   "probe_state_mean": 1.0,
+   "probeG_state_mean": 0.895,
+   "probe_state_max": 1.0,
+   "probeG_state_max": 0.975,
+   "probe_random_pos": 0.545,
+   "probeG_random_pos": 0.475
+  }
+ }
+}
