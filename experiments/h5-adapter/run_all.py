@@ -32,8 +32,8 @@ LAB = os.path.dirname(os.path.dirname(HERE))
 LOG = os.path.join(HERE, "run.log")
 MANIFEST = os.path.join(HERE, "manifest.json")
 
-ALL_STAGES = ("manifest", "cache_eval", "cache_train", "arm1", "arm2_step0", "train", "eval",
-              "latency", "stats")
+ALL_STAGES = ("manifest", "pilot", "cache_eval", "cache_train", "arm1", "arm2_step0", "train",
+              "eval", "latency", "stats")
 
 
 def log(msg: str) -> None:
@@ -159,6 +159,8 @@ def main() -> int:
         log("--- stage %s" % stage)
         if stage == "manifest":
             write_manifest()
+        elif stage == "pilot":
+            run([py, "experiments/h5-adapter/pilot.py"])
         elif stage == "cache_eval":
             run([py, "experiments/h5-adapter/build_cache.py", "--split", "eval"])
         elif stage == "cache_train":
@@ -186,8 +188,7 @@ def main() -> int:
             import arms as A
             for arm in A.TRAINED_ARMS:
                 for seed in seeds:
-                    run([py, "experiments/h5-adapter/eval.py", "--arm", arm, "--seed", str(seed),
-                         "--latency"])
+                    run([py, "experiments/h5-adapter/eval.py", "--arm", arm, "--seed", str(seed)])
         elif stage == "latency":
             run([py, "experiments/h5-adapter/latency.py", "--gpu-lock-held",
                  "--seeds", a.latency_seeds])
@@ -210,7 +211,8 @@ def main() -> int:
                 "trainable_parameters": v["parameter_accounting"]["trainable_parameters"],
                 "head_state_dict_path": v["head_state_dict_path"]}
             for k, v in training_summary.items()}
-    for name, key in (("latency.json", "latency"), ("summary.json", "stats")):
+    for name, key in (("pilot.json", "pilot"), ("latency.json", "latency"),
+                      ("summary.json", "stats")):
         p = os.path.join(HERE, name)
         if os.path.exists(p):
             with open(p, encoding="utf-8") as fh:

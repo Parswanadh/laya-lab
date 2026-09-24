@@ -35,10 +35,10 @@ import metrics as M  # noqa: E402
 PRED_DIR = os.path.join(HERE, "predictions")
 BOOT = 10000
 
-# The comparison family for Holm-Bonferroni: candidate vs each baseline, across every cell.
-CANDIDATE = "arm3_xattn"
-BASELINES = ("arm1_frozen", "arm2_shipped_init", "arm2_random_init", "arm4_xattn_long")
-# arm4 is a candidate variant, not a baseline; kept separate so the family is honest
+# The comparison family for Holm-Bonferroni. Baselines only -- arm4 is a *candidate variant* of
+# arm3, not a control, so putting it in the baseline list would both duplicate the arm3/arm4
+# comparison and inflate the family the correction is applied over.
+BASELINES = ("arm1_frozen", "arm2_shipped_init", "arm2_random_init")
 CANDIDATE_FAMILY = ("arm3_xattn", "arm4_xattn_long")
 PRIMARY_CELL = "L4000-p100"
 
@@ -219,14 +219,10 @@ def main() -> int:
         oracle[cell] = M.position_only_oracle(uniq, group_fields=("pad", "needle_position"))
 
     # ---- paired tests, per seed and pooled -------------------------------------------------
-    def mean_rows(arm: str) -> List[Dict[str, Any]]:
-        """Pooled over seeds for the same items? No -- kept per seed. This returns seed 0 only."""
-        return runs[(arm, train_seeds[0])] if train_seeds else runs[(arm, -1)]
-
     comparisons: List[Dict[str, Any]] = []
     pvals: List[Tuple[str, float]] = []
     for cand in CANDIDATE_FAMILY:
-        for base in ("arm1_frozen",) + tuple(b for b in BASELINES if b != cand):
+        for base in BASELINES:
             if (cand, train_seeds[0] if train_seeds else -1) not in runs:
                 continue
             for cell in cells:
@@ -251,6 +247,27 @@ def main() -> int:
         rec["survives_holm_0.05"] = adj[label] < 0.05
         rec["sign"] = "candidate_better" if rec["effect_size_pp"] > 0 else (
             "baseline_better" if rec["effect_size_pp"] < 0 else "tie")
+
+    # ---- seed sign agreement: a gain inside the seed spread is not a gain -----------------
+    sign_summary: Dict[str, Any] = {}
+    for cand in CANDIDATE_FAMILY:
+        for base in BASELINES:
+            for cell in cells:
+                recs = [c for c in comparisons
+                        if c["candidate"] == cand and c["baseline"] == base and c["cell"] == cell]
+                if not recs:
+                    continue
+                better = sum(1 for c in recs if c["effect_size_pp"] > 0)
+                sig = sum(1 for c in recs if c["p_holm"] < 0.05 and c["effect_size_pp"] > 0)
+                key = "%s_vs_%s|%s" % (cand, base, cell)
+                sign_summary[key] = {
+                    "n_seeds": len(recs),
+                    "seeds_candidate_better": better,
+                    "seeds_candidate_worse": sum(1 for c in recs if c["effect_size_pp"] < 0),
+                    "seeds_surviving_holm_0.05_in_candidate_favour": sig,
+                    "min_effect_pp": min(c["effect_size_pp"] for c in recs),
+                    "max_effect_pp": max(c["effect_size_pp"] for c in recs),
+                }
 
     # ---- headline verdict ----------------------------------------------------------------
     def spread_of(arm: str, cell: str) -> Optional[Dict[str, Any]]:
@@ -299,6 +316,7 @@ def main() -> int:
         "seed_spread": spread,
         "position_only_oracle": oracle,
         "comparisons": comparisons,
+        "seed_sign_agreement": sign_summary,
         "holm_family_size": len(pvals),
         "verdict": verdict,
     }
