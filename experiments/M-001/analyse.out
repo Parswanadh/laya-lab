@@ -170,17 +170,25 @@ d=768  F=1152  22 layers = 8 full + 14 sliding (w=64)  head_layers=2
    8192       1.1646e+12           35.466            72.8%          17.7%
 
 MODELLED  FLOPs(8192)/FLOPs(1024) = 35.466x
+MODELLED  FLOPs(5946)/FLOPs(1024) = 19.496x
 MODELLED  FLOPs(7000)/FLOPs(1024) = 26.403x
-theoretical closed form: ratio = (a + (2*L_FULL*n0 + (2W+1)*L_LOCAL)*n) / (a + b*n0)
-  where a = 22*d^2 + 8*d*F = 20,054,016,  b = 2*L_FULL*D = 12,288
-  -> the n^2 terms are 2*L_FULL*n0 = 16384 vs 0.5*(n+n0)*... - the ratio is
-     (18190*8192 + 20054016) / (18190*1024 + 20054016)
-     = 4.371   (matches the FLOP table)
+closed form: ratio = (b*n8 + c_head*n8^2) / (b*n0 + c_head*n0^2),
+  b = 2*8*768 + 2*14*129*768 + 17*768^2 + 4*768*1152 = 16,352,256
+  c_head = 2*head_layers*d = 3,072  (the DECISION HEAD's own 2 self-attention
+  layers are quadratic in n too - the head is forward()ed over the whole sequence)
+  = (16352256*8192 + 3072*8192^2) / (16352256*1024 + 3072*1024^2) = 17.035
 
-BOUND: FLOPs(8192)/FLOPs(1024) <= 4.37x for ANY L_full >= 0 in this family.
-  the n^2 term of a full layer at n=1024 costs 2*n0*d = 1,572,864 FLOPs against the
-  n-independent term 20,054,016 per layer, so at n=1024 the work is mostly linear and the
-  ratio behaves like a linear-function ratio, asymptoting to 8192/1024 = 8x from below.
+BOUND: modelled ratio = 35.466x. In the family lat-proportional-to-FLOPs with
+  a fixed linear coefficient b = 16,352,256 and a variable quadratic coefficient c >= 0,
+  the ratio (b*8192 + c*8192^2)/(b*1024 + c*1024^2) increases monotonically in c and
+  tends to (8192/1024)^2 = 64.0x from below. So the SUPREMUM is exactly 64x and the
+  headline 219x is UNREACHABLE for any number of global layers, hidden size, or head
+  width - 219 > 64. The only way to see 219x is if the measured cost is not FLOPs-
+  proportional, which the section-4 comparison tests.
+    c =        3,072  -> ratio  17.035x
+    c =       30,720  -> ratio  44.846x
+    c =      307,200  -> ratio  61.233x
+    c =    1,000,000  -> ratio  63.120x
 
 ==============================================================================
 4. MEASURED UPSTREAM DATA + NORMALISED COMPARISON
@@ -211,18 +219,31 @@ checkpoint=convaiinnovations/laya (multilingual/)
   limit=8192, pad=0    : 61 tok, 0.016 s
   limit=8192, pad=6000 : 5946 tok, 3.505 s
   MEASURED raw ratio   = 219.06x  for a 97.48x input growth
-  MODELLED ratio for the same two input lengths = 607.471x   -> observed/predicted = 0.361
+  MODELLED ratio for the same two input lengths = 607.471x  -> measured/modelled = 0.361 (model OVER-predicts by 2.77x)
+  The FLOP model has NO constant term, so it cannot describe the 61-token endpoint:
+    modelled latency growth n=61 -> n=5946 (pure FLOPs) = 97.5x,
+    measured growth at the same two points           = 219.1x,
+    so the model OVER-predicts by 2.77x (anything < 1 means measured < modelled).
+    n=61 -> n=1032: modelled 31.5x vs measured 13.2x - the model OVER-predicts the small-n end by 2.39x.
+    Conversely at n=5946 -> 6912 the model UNDER-predicts by 0.97x. No single FLOPs-only model
+    fits both ends: it needs a constant term at small n and a super-quadratic term at large n.
 
 -- matched-input pairs: SAME input length, different max_len --
- tok(1024)  lat(1024)  tok(8192)  lat(8192)  meas ratio  modelled  meas/mod  per-token norm
-        61      0.017         61      0.016       0.941     1.000     0.941           0.941
-      1024      0.224       1032      0.211       0.942     1.012     0.931           0.935
-      1024      0.198       2040      0.503       2.540     2.962     0.858           1.275
-      1024      0.208       3006      0.895       4.303     5.722     0.752           1.466
-      1024      0.216       3972      1.707       7.903     9.356     0.845           2.037
-      1024      0.262       4938      2.586       9.870    13.863     0.712           2.047
-      1024      0.253       5946      3.505      13.854    19.496     0.711           2.386
-      1024      0.264       6912      4.503      17.057    25.786     0.661           2.527
+(this is the only comparison that isolates the max_len knob from the input-growth
+ confound; the pad=1000 pair has 1024 vs 1032 tokens, i.e. within 0.8%)
+ n(1024)  lat(1024)  n(8192)  lat(8192)  meas ratio  modelled  meas/mod  per-token norm
+      61      0.017       61      0.016       0.941     1.000     0.941           0.941
+    1024      0.224     1032      0.211       0.942     1.012     0.931           0.935
+    1024      0.198     2040      0.503       2.540     2.962     0.858           1.275
+    1024      0.208     3006      0.895       4.303     5.722     0.752           1.466
+    1024      0.216     3972      1.707       7.903     9.356     0.845           2.037
+    1024      0.262     4938      2.586       9.870    13.863     0.712           2.047
+    1024      0.253     5946      3.505      13.854    19.496     0.711           2.386
+    1024      0.264     6912      4.503      17.057    25.786     0.661           2.527
+  'meas ratio' is contaminated when n(1024) != n(8192): at pad=4000 the 1024-limit
+  run is truncated to 1024 tokens and the 8192-limit run sees 3972, so the 7.9x is
+  mostly input growth. 'per-token norm' removes it and is the honest comparison.
+  log-log slope of per-token-normalised measured ratio vs n = 0.587 +- over 6 points (a pure n^1 FLOP model would give 0.0 here)
 
 -- per-token cost (s/token), limit=8192, from the median latencies --
       n    s/token   x vs n=61   n x vs 61
@@ -236,12 +257,15 @@ checkpoint=convaiinnovations/laya (multilingual/)
    6912    0.00065        2.48      113.31
 
 -- scaling from n=1024 to each larger n, limit=8192 (measured) --
-  1024 ->  2040: measured   2.384x  (2.384 = (n/1024)^1.260)
-  1024 ->  3006: measured   4.242x  (4.242 = (n/1024)^1.342)
-  1024 ->  3972: measured   8.090x  (8.090 = (n/1024)^1.542)
-  1024 ->  4938: measured  12.256x  (12.256 = (n/1024)^1.593)
-  1024 ->  5946: measured  16.611x  (16.611 = (n/1024)^1.598)
-  1024 ->  6912: measured  21.341x  (21.341 = (n/1024)^1.603)
+       n  measured ratio  implied exponent  modelled ratio  meas/modelled
+    2040           2.384             1.260           2.962          0.805
+    3006           4.242             1.342           5.722          0.741
+    3972           8.090             1.542           9.356          0.865
+    4938          12.256             1.593          13.863          0.884
+    5946          16.611             1.598          19.496          0.852
+    6912          21.341             1.603          25.786          0.828
+  the measured exponent settles near 1.6; the FLOP model's local exponent is higher
+  because the quadratic term only takes over above ~2000 tokens.
 
 -- fitted lat(n) = F + a*n^p on the 8 limit=8192 medians (own model, [MODELLED]) --
    F = 0.010 s   a = 5.575e-07   p = 1.800   RMSE = 0.0641 s
@@ -253,8 +277,10 @@ checkpoint=convaiinnovations/laya (multilingual/)
    n= 4938 measured  2.586  fitted  2.491  resid  +0.095 s ( +3.7%)
    n= 5946 measured  3.505  fitted  3.476  resid  +0.029 s ( +0.8%)
    n= 6912 measured  4.503  fitted  4.555  resid  -0.052 s ( -1.2%)
-   kuhn: F is the fitted dispatch/overhead floor; the encoder FLOP model has no F
-   note: 0.016 s at n=61 vs 0.011 s fitted -> the floor alone is 1x the smallest measured latency
+   F is the fitted constant: dispatch, python, tokenisation, the fixed 3-token
+   prompt scaffold and the decision head's own cost floor. The pure FLOP model has
+   no such term, which is why it cannot fit n=61. F alone is 0.62x the
+   smallest measured latency (0.010 s vs 0.016 s).
    p fixed at 2: a = 9.787e-08, RMSE = 0.1176 s
 
 ==============================================================================
@@ -272,46 +298,33 @@ Wald half-width at p=0.5:  h = z*sqrt(0.25/n)
    600                0.0400           [0.4601, 0.5399]
   1000                0.0310           [0.4691, 0.5309]
 
-exact (Clopper-Pearson) 95% two-sided interval at x = n/2, from the binomial CDF:
-   n=  20 x=  10: [1.0000, 0.0000]  half-width -0.5000
-   n= 200 x= 100: [1.0000, 0.0000]  half-width -0.5000
-   n= 400 x= 200: [1.0000, 0.0000]  half-width -0.5000
+exact 95% interval at x = n/2 (binomial tails, p <= 0.5):
+   n=  20, x=  10, phat=0.5: exact 95% [0.0000, 0.7280]  half-width 0.3640
+   n= 200, x= 100, phat=0.5: exact 95% [0.0000, 0.5713]  half-width 0.2857
+   n= 300, x= 150, phat=0.5: exact 95% [0.0000, 0.5580]  half-width 0.2790
+   n= 400, x= 200, phat=0.5: exact 95% [0.0000, 0.5501]  half-width 0.2750
+   n= 600, x= 300, phat=0.5: exact 95% [0.0000, 0.5408]  half-width 0.2704
+   this is the WORST CASE for a single proportion (p=0.5 maximises p(1-p)); at
+   phat=0.35 or 0.9 the interval is narrower.
 
-minimum detectable difference between two INDEPENDENT proportions (80% power,
-two-sided alpha=0.05), p1=0.50, normal approximation:
-   n= 100: MDE = 0.1935 (19.3 accuracy points)
-   n= 200: MDE = 0.1385 (13.8 accuracy points)
-   n= 400: MDE = 0.0985 (9.8 accuracy points)
-   n= 600: MDE = 0.0810 (8.1 accuracy points)
-   n=1000: MDE = 0.0625 (6.2 accuracy points)
+Sanity check of the power arithmetic: 'n>=200 gives +-0.066 at 95% for p~0.5'
+(plan.md section 6) is the SINGLE-PROPORTION Wald half-width. It is NOT the
+resolution of an ARM-vs-ARM comparison; for that the paired (McNemar) design applies.
 
-paired design (McNemar, 80% power, alpha=0.05 two-sided). Item-level discordance
-rate d = P(one arm right, other wrong). n = (z_a*sqrt(d) + z_b*sqrt(d - delta^2))^2/delta^2
-   discordance d=0.06: delta=0.03->n=  521   delta=0.05->n=  186   delta=0.10->n=   45
-   discordance d=0.10: delta=0.03->n=  870   delta=0.05->n=  312   delta=0.10->n=   77
-   discordance d=0.15: delta=0.03->n= 1306   delta=0.05->n=  469   delta=0.10->n=  116
-   discordance d=0.20: delta=0.03->n= 1742   delta=0.05->n=  626   delta=0.10->n=  155
-
-family-wise error: 25 cells x 2 arms, independent two-proportion tests at alpha=0.05
-   m= 10 comparisons: P(>=1 false positive | all null) = 0.401; Bonferroni alpha = 0.00500
-   m= 25 comparisons: P(>=1 false positive | all null) = 0.723; Bonferroni alpha = 0.00200
-   m= 50 comparisons: P(>=1 false positive | all null) = 0.923; Bonferroni alpha = 0.00100
-
-Bonferroni-corrected alpha needs a larger raw p; per-cell n to keep the SAME MDE
-under alpha=0.05/m is roughly n * (z_(1-a/2m)/z_(1-a/2))^2:
-   m=  1: z=1.9600, inflation factor vs m=1 = 1.000
-   m= 10: z=2.8070, inflation factor vs m=1 = 2.051
-   m= 25: z=3.0902, inflation factor vs m=1 = 2.486
-   m= 50: z=3.2905, inflation factor vs m=1 = 2.819
-
-resolution floor: with n items and a 4-option task, accuracy is a multiple of 1/n.
-   n=  20: one item = 0.0500 accuracy; floor resolution with a majority-class baseline of 0.35 is 7/20
-   n= 200: one item = 0.0050 accuracy; floor resolution with a majority-class baseline of 0.35 is 70/200
-   n= 400: one item = 0.0025 accuracy; floor resolution with a majority-class baseline of 0.35 is 140/400
-   n= 600: one item = 0.0017 accuracy; floor resolution with a majority-class baseline of 0.35 is 210/600
-
-==============================================================================
-6. HEAD-BLOCK WIDTH PROBE (fork source, CPU tokenizer only)
-==============================================================================
-  max_len= 1024 head_max_len=256: len(ids)=1024, markers at [12, 22], state starts at 23 (first SEP after last marker + option tokens)
-  max_len= 8192 head_max_len=256: len(ids)=4033, markers at [12, 22], state starts at 23 (first SEP after last marker + option tokens)
+EXACT McNemar power, no normal approximation.  n = items, delta = accuracy gap
+between two arms, psi = P(A right, B wrong)/P(B right, A wrong) given A is better.
+Under H1 exactly delta*n items are discordant: psi*delta*n/(psi+1) favour A and
+delta*n/(psi+1) favour B.  Conditional on m discordant items the exact two-sided
+sign test rejects when X ~ Bin(m, 1/2) lands in the observed tail; power is the
+mixture of that rejection probability over m ~ Bin(n, delta).
+Traceback (most recent call last):
+  File "/home/parshu/projects/contri/laya-lab/experiments/M-001/analyse.py", line 428, in <module>
+    SIGN = [sign_reject_prob(m) for m in range(MAXN + 1)]
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/parshu/projects/contri/laya-lab/experiments/M-001/analyse.py", line 415, in sign_reject_prob
+    pmf = binom_pmf_list(m, 0.5)
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/parshu/projects/contri/laya-lab/experiments/M-001/analyse.py", line 410, in binom_pmf_list
+    return [math.comb(m, k) * p**k * (1 - p)**(m - k) for k in range(m + 1)]
+            ~~~~~~~~~~~~~~~~^~~~~~
+OverflowError: int too large to convert to float

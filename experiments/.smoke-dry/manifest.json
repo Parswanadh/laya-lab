@@ -1,0 +1,427 @@
+{
+ "schema": "laya-lab.eval-manifest.v1",
+ "run_id": "baseline-repro|balanced-v1|n6|seed20240924",
+ "status": "finished",
+ "started_utc": "2026-09-24T17:11:14Z",
+ "finished_utc": "2026-09-24T17:11:52Z",
+ "wall_seconds": 41.703,
+ "command": "cd /home/parshu/projects/contri/laya-lab && USE_TF=0 /home/parshu/projects/contri/laya-lab/env/venv/bin/python experiments/harness/run.py --dry-run --preset baseline-repro --n 6 --out experiments/.smoke-dry",
+ "argv": [
+  "experiments/harness/run.py",
+  "--dry-run",
+  "--preset",
+  "baseline-repro",
+  "--n",
+  "6",
+  "--out",
+  "experiments/.smoke-dry"
+ ],
+ "cwd": "/home/parshu/projects/contri/laya-lab",
+ "host": {
+  "versions": {
+   "python": "3.12.3",
+   "python_executable": "/home/parshu/projects/contri/laya-lab/env/venv/bin/python",
+   "torch": "2.9.1+cu128",
+   "transformers": "4.57.6",
+   "numpy": "2.5.3",
+   "safetensors": "0.8.0",
+   "huggingface_hub": "0.36.2",
+   "tokenizers": "0.22.2",
+   "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+   "machine": "x86_64",
+   "processor": "x86_64",
+   "cpu_count": 22,
+   "hostname": "parshu-Alienware-m16-R2",
+   "env_USE_TF": "0",
+   "env_CUDA_VISIBLE_DEVICES": null,
+   "env_PYTORCH_CUDA_ALLOC_CONF": null,
+   "env_PYTORCH_ALLOC_CONF": null
+  },
+  "memory_at_launch": {
+   "mem_total_bytes": 16246595584,
+   "mem_available_bytes": 4284887040,
+   "swap_total_bytes": 28663341056,
+   "swap_free_bytes": 20266835968,
+   "mem_available_gib": 3.99
+  },
+  "gpu_at_launch": {
+   "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+   "gpu_mem_free_bytes": 4904976384,
+   "gpu_mem_total_bytes": 8160673792,
+   "gpu_mem_free_gib": 4.57,
+   "gpu_compute_capability": [
+    8,
+    9
+   ],
+   "cuda_version": "12.8",
+   "cudnn_version": 91002
+  }
+ },
+ "gpu_lock": {
+  "held": false,
+  "reason": "cpu/dry-run"
+ },
+ "preflight": {
+  "mem_available_gib": 3.66,
+  "gpu_free_gib": 4.57,
+  "min_available_gib_required": 2.0,
+  "gpu_min_free_gib_required": 2.0,
+  "allow_low_mem": false
+ },
+ "git": {
+  "lab": {
+   "repo": "/home/parshu/projects/contri/laya-lab",
+   "available": true,
+   "sha": "113474cbb7ecc43a6b615ac4a26cb25da3fff91c",
+   "branch": "main",
+   "dirty": true,
+   "dirty_file_count": 13,
+   "dirty_files_sample": [
+    "M experiments/M-001/analyse.out",
+    " M experiments/M-001/analyse.py",
+    " M experiments/harness/pools.py",
+    " M experiments/harness/pools/filler-v1.json",
+    " M findings/R-001.md",
+    "?? .gpu.lock",
+    "?? experiments/V-001/",
+    "?? experiments/h2h3-knobs/",
+    "?? experiments/harness/checks.py",
+    "?? experiments/harness/presets.json",
+    "?? experiments/harness/run.py",
+    "?? experiments/harness/runner.py",
+    "?? experiments/orch-probe-d/"
+   ],
+   "last_commit": "113474cbb7ecc43a6b615ac4a26cb25da3fff91c 2026-09-24T22:39:58+05:30 research: R-001 — no long-document classification eval exists in the ModernBERT or mmBERT papers",
+   "remotes": "origin\thttps://github.com/Parswanadh/laya-lab.git (fetch)\norigin\thttps://github.com/Parswanadh/laya-lab.git (push)"
+  },
+  "fork": {
+   "repo": "/home/parshu/projects/contri/laya-lab/fork",
+   "available": true,
+   "sha": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5",
+   "branch": "main",
+   "dirty": false,
+   "dirty_file_count": 0,
+   "dirty_files_sample": [],
+   "last_commit": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5 2026-09-24T22:01:52+05:30 Merge pull request #383 from keemsisi/sec/redos-identifier",
+   "remotes": "origin\thttps://github.com/Parswanadh/laya.git (fetch)\norigin\thttps://github.com/Parswanadh/laya.git (push)\nupstream\thttps://github.com/NandhaKishorM/laya.git (fetch)\nupstream\thttps://github.com/NandhaKishorM/laya.git (push)"
+  }
+ },
+ "model": {
+  "checkpoint_dir": "/home/parshu/projects/contri/laya-lab/models/multilingual",
+  "files": [],
+  "backend": {
+   "backend": "stub",
+   "note": "stub path: whitespace tokenizer + a 2-layer random BERT of the same shape family as the real encoder; exercises builder, Agent.predict, collate, truncation and the JSONL writer, but its predictions are random",
+   "seed": 20240924,
+   "parameters": 435427,
+   "shipped_max_len": 64,
+   "shipped_head_max_len": 24,
+   "tokenizer_class": "StubTokenizer",
+   "tokenizer_vocab_size": 4096,
+   "device": "cpu"
+  }
+ },
+ "pools": {
+  "files": {
+   "needle": {
+    "pool_id": "balanced-v1",
+    "_path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/needles-balanced-v1.json",
+    "_sha256": "fc8b706155c4f67eb6ec2e8d8e96c9a08747f6ebce7891991775d08339b4a86c",
+    "_bytes": 12457,
+    "kind": "balanced"
+   },
+   "filler": {
+    "pool_id": "filler-v1",
+    "_path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/filler-v1.json",
+    "_sha256": "429b06f81dc2d8e608ba53e4201fef98a86deb93a4d251af8f1ecde3f36cbb9f",
+    "_bytes": 3324,
+    "kind": "filler"
+   }
+  },
+  "leakage_check": {
+   "filler_pool": "filler-v1",
+   "needle_pool": "balanced-v1",
+   "needle_vocab_size": 380,
+   "filler_vocab_size": 178,
+   "word_overlap_all": [
+    "about",
+    "after",
+    "every",
+    "for",
+    "open",
+    "please",
+    "second",
+    "should",
+    "the",
+    "was"
+   ],
+   "content_word_overlap": [],
+   "stem_hits": [],
+   "passed": true
+  },
+  "shipped_questions": {
+   "department": {
+    "type": "choice",
+    "instructions": "Which department should handle this request?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, system errors",
+     "sales": "pricing, new contracts, plan upgrades",
+     "other": "everything else"
+    }
+   }
+  },
+  "internal_question_source": "laya.agent.Agent._to_internal"
+ },
+ "items": {
+  "n": 6,
+  "label_counts": {
+   "billing": 2,
+   "sales": 2,
+   "technical": 2
+  },
+  "lang_counts": {
+   "en": 1,
+   "es": 1,
+   "fr": 1,
+   "hi": 2,
+   "pt": 1
+  },
+  "template_counts": {
+   "billing-es-1": 1,
+   "billing-hi-1": 1,
+   "sales-en-2": 1,
+   "sales-fr-3": 1,
+   "technical-hi-2": 1,
+   "technical-pt-1": 1
+  },
+  "max_label_share": 0.3333333333333333,
+  "balance_ok": true,
+  "item_table": [
+   {
+    "item_index": 0,
+    "item_id": "sales|sales-en-2|num2615",
+    "label": "sales",
+    "lang": "en",
+    "template_id": "sales-en-2",
+    "slots": {
+     "num": "2615"
+    },
+    "text": "Can you send pricing for upgrading our plan to 2615 licenses?"
+   },
+   {
+    "item_index": 1,
+    "item_id": "billing|billing-es-1|num8824",
+    "label": "billing",
+    "lang": "es",
+    "template_id": "billing-es-1",
+    "slots": {
+     "num": "8824"
+    },
+    "text": "Me cobraron dos veces la factura 8824, devuélvanme el cargo duplicado."
+   },
+   {
+    "item_index": 2,
+    "item_id": "billing|billing-hi-1|num7043",
+    "label": "billing",
+    "lang": "hi",
+    "template_id": "billing-hi-1",
+    "slots": {
+     "num": "7043"
+    },
+    "text": "मुझसे बिल 7043 के लिए दो बार शुल्क लिया गया, कृपया डुप्लिकेट भुगतान वापस करें।"
+   },
+   {
+    "item_index": 3,
+    "item_id": "technical|technical-hi-2|num2746",
+    "label": "technical",
+    "lang": "hi",
+    "template_id": "technical-hi-2",
+    "slots": {
+     "num": "2746"
+    },
+    "text": "आज सुबह से हमारा API अनुरोध 2746 के लिए 500 त्रुटि दे रहा है।"
+   },
+   {
+    "item_index": 4,
+    "item_id": "sales|sales-fr-3|num7043",
+    "label": "sales",
+    "lang": "fr",
+    "template_id": "sales-fr-3",
+    "slots": {
+     "num": "7043"
+    },
+    "text": "Je souhaite un devis pour un accord annuel de 7043 postes."
+   },
+   {
+    "item_index": 5,
+    "item_id": "technical|technical-pt-1|num1209",
+    "label": "technical",
+    "lang": "pt",
+    "template_id": "technical-pt-1",
+    "slots": {
+     "num": "1209"
+    },
+    "text": "O sistema cai toda vez que tento abrir o relatório 1209."
+   }
+  ]
+ },
+ "protocol": {
+  "task": "needle-in-haystack decision: one support request placed at a given fraction through a document of unrelated filler, answered with the shipped department question",
+  "filler_mode": "balanced",
+  "needle_prefix_mode": "upstream_auto",
+  "warmup": "one untimed call on the first item of every cell, plus one global call",
+  "per_item_call": "one Agent.predict(state, questions, max_len=..., head_max_len=...) per item, matching fork/research/scripts/bench_long_context.py; latency therefore includes tokenization/truncation plus one forward",
+  "paired_design": "every cell runs the same item ids; the document for an item depends only on (seed, pool, item, pad, position), never on max_len, so cells at different max_len are paired per item for McNemar",
+  "determinism": "items, documents and labels are functions of (pool, n, seed, pad, position); latency is not deterministic"
+ },
+ "cells": [
+  {
+   "cell_key": "pad0|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 0,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": true,
+   "max_len_requested": "default",
+   "max_len_effective": 64,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad0|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 0,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": true,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad1000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 1000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 64,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad1000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 1000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad2000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 2000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 64,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad2000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 2000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad4000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 4000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 64,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad4000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 4000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad7000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 7000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 64,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  },
+  {
+   "cell_key": "pad7000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 7000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 24
+  }
+ ],
+ "artifacts": {
+  "predictions_jsonl": "/home/parshu/projects/contri/laya-lab/experiments/.smoke-dry/predictions.jsonl",
+  "summary_json": "/home/parshu/projects/contri/laya-lab/experiments/.smoke-dry/summary.json",
+  "run_log": "/home/parshu/projects/contri/laya-lab/experiments/.smoke-dry/run.log",
+  "manifest_json": "/home/parshu/projects/contri/laya-lab/experiments/.smoke-dry/manifest.json"
+ },
+ "dry_run": true,
+ "harness_files": {
+  "run.py": {
+   "sha256": "95c97062b1597e7a1b96635e6529a599bd216b93ce6c92d4a58703279272ed5e"
+  },
+  "runner.py": {
+   "sha256": "b43b8ade9788f6224516eb249aebc523997474a957e08af983f398898df76ef6"
+  },
+  "builder.py": {
+   "sha256": "4813e364d83eecd077804385f00551b23cf37c04c4ac526c84489f7ac6aa519f"
+  },
+  "pools.py": {
+   "sha256": "48f7a2b17fb43f4ecfff75000b21c2aaad1e60d965f5cf79a13e8e4ac80b63bc"
+  },
+  "metrics.py": {
+   "sha256": "6bfbe2abb7ffb7688d156beea0ebb27504b3f3cd3afb994a7cf84f5b9443339f"
+  },
+  "backends.py": {
+   "sha256": "93ee994b26595f41219bcf4cf87bbed3060a505164b02ed191d538a7958b7cfb"
+  },
+  "checks.py": {
+   "sha256": "9de583b44db05f634d46b8b40cc24ca695026b15bf1552f3be4c54e61bd88cf8"
+  },
+  "manifest.py": {
+   "sha256": "2864cd61c5be8ea310ec4fc5aea5a20d0ff7055b092f1b58eb9bc0969db21310"
+  },
+  "presets.json": {
+   "sha256": "ab7f738cd5552ee71f84b1b443917548b4ea455baf6b4053ba59094b113f2636"
+  }
+ },
+ "rows_written": 60
+}

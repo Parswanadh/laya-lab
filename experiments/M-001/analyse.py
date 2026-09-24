@@ -203,20 +203,22 @@ print(f"MODELLED  FLOPs(5946)/FLOPs(1024) = {flops(5946)[0]/T0:.3f}x")
 print(f"MODELLED  FLOPs(7000)/FLOPs(1024) = {flops(7000)[0]/T0:.3f}x")
 print(f"closed form: ratio = (b*n8 + c_head*n8^2) / (b*n0 + c_head*n0^2),")
 print(f"  b = 2*{L_FULL}*{D} + 2*{L_LOCAL}*{2*W+1}*{D} + 17*{D}^2 + 4*{D}*{F} = {b_c:,}")
-print(f"  c_head = 2*head_layers*d = {c_head:,}")
+print(f"  c_head = 2*head_layers*d = {c_head:,}  (the DECISION HEAD's own 2 self-attention")
+print(f"  layers are quadratic in n too - the head is forward()ed over the whole sequence)")
 num = b_c * 8192 + c_head * 8192**2
 den = b_c * 1024 + c_head * 1024**2
 print(f"  = ({b_c}*8192 + {c_head}*8192^2) / ({b_c}*1024 + {c_head}*1024^2) = {num/den:.3f}")
-print(f"  asymptote as n -> inf at fixed n0 = 1024: the n^2 terms dominate the numerator,")
-print(f"  so ratio/n = {T8/T0/8:.3f}  and ratio grows like n^2/(b*n0).")
 
-cap = T8 / T0
-print(f"\nBOUND: with L_full = {L_FULL} the FLOPs ratio is {cap:.2f}x. For the ratio to")
-print(f"  reach the headline 219x the model would need L_full*n0 >> n0 + ... ; solving")
-print(f"  (b'*8192 + c*8192^2)/(b'*1024 + c*1024^2) = 219 with b' scaled by x gives x = "
-      f"{(lambda: ( (219*(c_head*1024**2) - c_head*8192**2) / (b_c*8192 - 219*b_c*1024) )())():.3f}")
-print(f"  i.e. the ratio is bounded by the RATIO OF LINEAR COEFFICIENTS, ~{8192/1024:.0f}x-"
-      f"{cap:.1f}x in this regime, never 219x.")
+print(f"\nBOUND: modelled ratio = {T8/T0:.3f}x. In the family lat-proportional-to-FLOPs with")
+print(f"  a fixed linear coefficient b = {b_c:,} and a variable quadratic coefficient c >= 0,")
+print(f"  the ratio (b*8192 + c*8192^2)/(b*1024 + c*1024^2) increases monotonically in c and")
+print(f"  tends to (8192/1024)^2 = 64.0x from below. So the SUPREMUM is exactly 64x and the")
+print(f"  headline 219x is UNREACHABLE for any number of global layers, hidden size, or head")
+print(f"  width - 219 > 64. The only way to see 219x is if the measured cost is not FLOPs-")
+print(f"  proportional, which the section-4 comparison tests.")
+for ctest in [c_head, 10 * c_head, 100 * c_head, 1e6]:
+    r = (b_c * 8192 + ctest * 8192**2) / (b_c * 1024 + ctest * 1024**2)
+    print(f"    c = {ctest:>12,.0f}  -> ratio {r:>7.3f}x")
 
 # ============================================================= 4 MEASURED DATA
 hr("4. MEASURED UPSTREAM DATA + NORMALISED COMPARISON")
@@ -237,15 +239,27 @@ a = [r for r in rows if r["limit"] == 8192 and r["pad_tokens"] == 6000][0]
 b = [r for r in rows if r["limit"] == 8192 and r["pad_tokens"] == 0][0]
 print(f"  limit=8192, pad=0    : {b['median_input_tokens']} tok, {b['median_latency_s']} s")
 print(f"  limit=8192, pad=6000 : {a['median_input_tokens']} tok, {a['median_latency_s']} s")
-print(f"  MEASURED raw ratio   = {a['median_latency_s']/b['median_latency_s']:.2f}x  "
-      f"for a {a['median_input_tokens']/b['median_input_tokens']:.2f}x input growth")
-mmeas = a['median_latency_s']/b['median_input_tokens'] * b['median_input_tokens'] / b['median_latency_s']
+raw = a['median_latency_s'] / b['median_latency_s']
+grow = a['median_input_tokens'] / b['median_input_tokens']
 pred_norm = flops(a['median_input_tokens'])[0] / flops(b['median_input_tokens'])[0]
-print(f"  MODELLED ratio for the same two input lengths = {pred_norm:.3f}x   "
-      f"-> observed/predicted = {(a['median_latency_s']/b['median_latency_s'])/pred_norm:.3f}")
+print(f"  MEASURED raw ratio   = {raw:.2f}x  for a {grow:.2f}x input growth")
+print(f"  MODELLED ratio for the same two input lengths = {pred_norm:.3f}x  "
+      f"-> measured/modelled = {raw/pred_norm:.3f} (model OVER-predicts by {pred_norm/raw:.2f}x)")
+print("  The FLOP model has NO constant term, so it cannot describe the 61-token endpoint:")
+print(f"    modelled latency growth n=61 -> n=5946 (pure FLOPs) = {grow:.1f}x,")
+print(f"    measured growth at the same two points           = {raw:.1f}x,")
+print(f"    so the model OVER-predicts by {pred_norm/raw:.2f}x (anything < 1 means measured < modelled).")
+print(f"    n=61 -> n=1032: modelled {flops(1032)[0]/flops(61)[0]:.1f}x vs measured "
+      f"{0.211/0.016:.1f}x - the model OVER-predicts the small-n end by "
+      f"{(flops(1032)[0]/flops(61)[0])/(0.211/0.016):.2f}x.")
+print(f"    Conversely at n=5946 -> 6912 the model UNDER-predicts by "
+      f"{(4.503/3.505)/(flops(6912)[0]/flops(5946)[0]):.2f}x. No single FLOPs-only model")
+print("    fits both ends: it needs a constant term at small n and a super-quadratic term at large n.")
 
 print("\n-- matched-input pairs: SAME input length, different max_len --")
-print(f"{'tok(1024)':>10} {'lat(1024)':>10} {'tok(8192)':>10} {'lat(8192)':>10} "
+print("(this is the only comparison that isolates the max_len knob from the input-growth")
+print(" confound; the pad=1000 pair has 1024 vs 1032 tokens, i.e. within 0.8%)")
+print(f"{'n(1024)':>8} {'lat(1024)':>10} {'n(8192)':>8} {'lat(8192)':>10} "
       f"{'meas ratio':>11} {'modelled':>9} {'meas/mod':>9} {'per-token norm':>15}")
 pairs = []
 for pad in [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000]:
@@ -253,12 +267,23 @@ for pad in [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000]:
     r2 = [r for r in rows if r["pad_tokens"] == pad and r["limit"] == 8192][0]
     mr = r2["median_latency_s"] / r1["median_latency_s"]
     pr = flops(r2["median_input_tokens"])[0] / flops(r1["median_input_tokens"])[0]
-    # per-token normalised: scale each latency by n0/n
+    # per-token normalised: scale the 8192-limit latency back to the 1024-limit input size
     nn = (r2["median_latency_s"] * r1["median_input_tokens"] / r2["median_input_tokens"]) / r1["median_latency_s"]
-    pairs.append((r1, r2, mr, pr))
-    print(f"{r1['median_input_tokens']:>10} {r1['median_latency_s']:>10.3f} "
-          f"{r2['median_input_tokens']:>10} {r2['median_latency_s']:>10.3f} "
+    pairs.append((r1, r2, mr, pr, nn))
+    print(f"{r1['median_input_tokens']:>8} {r1['median_latency_s']:>10.3f} "
+          f"{r2['median_input_tokens']:>8} {r2['median_latency_s']:>10.3f} "
           f"{mr:>11.3f} {pr:>9.3f} {mr/pr:>9.3f} {nn:>15.3f}")
+print("  'meas ratio' is contaminated when n(1024) != n(8192): at pad=4000 the 1024-limit")
+print("  run is truncated to 1024 tokens and the 8192-limit run sees 3972, so the 7.9x is")
+print("  mostly input growth. 'per-token norm' removes it and is the honest comparison.")
+xs = [p[1]["median_input_tokens"] for p in pairs[2:]]
+ys = [p[4] for p in pairs[2:]]
+n_pts = len(xs)
+mx, my = sum(math.log(x) for x in xs) / n_pts, sum(math.log(y) for y in ys) / n_pts
+slope = sum((math.log(x) - mx) * (math.log(y) - my) for x, y in zip(xs, ys)) / \
+        sum((math.log(x) - mx) ** 2 for x in xs)
+print(f"  log-log slope of per-token-normalised measured ratio vs n = {slope:.3f} +- "
+      f"over {n_pts} points (a pure n^1 FLOP model would give 0.0 here)")
 
 print("\n-- per-token cost (s/token), limit=8192, from the median latencies --")
 print(f"{'n':>7} {'s/token':>10} {'x vs n=61':>11} {'n x vs 61':>11}")
@@ -272,12 +297,17 @@ for r in rows:
 
 print("\n-- scaling from n=1024 to each larger n, limit=8192 (measured) --")
 r1024 = [r for r in rows if r["limit"] == 8192 and r["pad_tokens"] == 1000][0]
+print(f"{'n':>8} {'measured ratio':>15} {'implied exponent':>17} {'modelled ratio':>15} "
+      f"{'meas/modelled':>14}")
 for r in rows:
     if r["limit"] == 8192 and r["median_input_tokens"] > 1100:
         n = r["median_input_tokens"]
         ratio = r["median_latency_s"] / r1024["median_latency_s"]
-        print(f"  1024 -> {n:>5}: measured {ratio:>7.3f}x  ({ratio:.3f} = "
-              f"(n/1024)^{math.log(ratio)/math.log(n/1024):.3f})")
+        expo = math.log(ratio) / math.log(n / 1024)
+        mod = flops(n)[0] / flops(1024)[0]
+        print(f"{n:>8} {ratio:>15.3f} {expo:>17.3f} {mod:>15.3f} {ratio/mod:>14.3f}")
+print("  the measured exponent settles near 1.6; the FLOP model's local exponent is higher")
+print("  because the quadratic term only takes over above ~2000 tokens.")
 
 # --- empirical fit of lat(n) = F + a*n^p  (own model, validated against these 8 points)
 pts = [(r["median_input_tokens"], r["median_latency_s"]) for r in rows if r["limit"] == 8192]
@@ -300,9 +330,10 @@ print(f"   F = {F:.3f} s   a = {a:.3e}   p = {p:.3f}   RMSE = {math.sqrt(e/len(p
 for n, lat in pts:
     print(f"   n={n:>5} measured {lat:>6.3f}  fitted {F + a*n**p:>6.3f}  "
           f"resid {lat-(F+a*n**p):>+7.3f} s ({(lat-(F+a*n**p))/lat:>+6.1%})")
-print("   kuhn: F is the fitted dispatch/overhead floor; the encoder FLOP model has no F")
-print(f"   note: 0.016 s at n=61 vs {F + a*61**p:.3f} s fitted -> the floor alone is "
-      f"{F/0.016:.0f}x the smallest measured latency")
+print("   F is the fitted constant: dispatch, python, tokenisation, the fixed 3-token")
+print("   prompt scaffold and the decision head's own cost floor. The pure FLOP model has")
+print(f"   no such term, which is why it cannot fit n=61. F alone is {F/0.016:.2f}x the")
+print(f"   smallest measured latency ({F:.3f} s vs 0.016 s).")
 
 # fit with p forced to 2 (FLOP-quadratic) for comparison
 num = den = 0.0
@@ -335,56 +366,119 @@ for n in [20, 100, 200, 300, 400, 600, 1000]:
     c = (ph + z*z/(2*n)) / den
     hw_w = z*math.sqrt(ph*(1-ph)/n + z*z/(4*n*n)) / den
     print(f"{n:>6} {h:>21.4f} {('[' + format(c-hw_w, '.4f') + ', ' + format(c+hw_w, '.4f') + ']'):>26}")
-print("\nexact (Clopper-Pearson) 95% two-sided interval at x = n/2, from the binomial CDF:")
+print("\nexact 95% interval at x = n/2 (binomial tails, p <= 0.5):")
 def binom_cdf(k, n, p):
     s = 0.0
     for i in range(0, k + 1):
         s += math.comb(n, i) * p**i * (1 - p)**(n - i)
     return s
-def cp(n, x, alpha=0.05):
-    # lower: solve P(X >= x | p) = alpha/2 ; upper: P(X <= x | p) = alpha/2
+def exact_at_half(n, alpha=0.05):
+    """At phat = 1/2 the Clopper-Pearson bounds are the p solving
+    P(X >= n/2 | p) = alpha/2 (lower) and P(X <= n/2 | p) = alpha/2 (upper)."""
+    x = n // 2
+    a, b = 0.0, 0.5
+    for _ in range(200):
+        m = (a + b) / 2
+        if 1 - binom_cdf(x - 1, n, m) >= alpha / 2: a = m
+        else: b = m
+    lo = (a + b) / 2
+    a, b = 0.5, 1.0
+    for _ in range(200):
+        m = (a + b) / 2
+        if binom_cdf(x, n, m) >= alpha / 2: a = m
+        else: b = m
+    hi = (a + b) / 2
+    return lo, hi
+for n in [20, 200, 300, 400, 600]:
+    lo, hi = exact_at_half(n)
+    print(f"   n={n:>4}, x={n//2:>4}, phat=0.5: exact 95% [{lo:.4f}, {hi:.4f}]  "
+          f"half-width {(hi-lo)/2:.4f}")
+print("   this is the WORST CASE for a single proportion (p=0.5 maximises p(1-p)); at")
+print("   phat=0.35 or 0.9 the interval is narrower.")
+
+print("\nSanity check of the power arithmetic: 'n>=200 gives +-0.066 at 95% for p~0.5'")
+print("(plan.md section 6) is the SINGLE-PROPORTION Wald half-width. It is NOT the")
+print("resolution of an ARM-vs-ARM comparison; for that the paired (McNemar) design applies.")
+
+print("\nEXACT McNemar power, no normal approximation.  n = items, delta = accuracy gap")
+print("between two arms, psi = P(A right, B wrong)/P(B right, A wrong) given A is better.")
+print("Under H1 exactly delta*n items are discordant: psi*delta*n/(psi+1) favour A and")
+print("delta*n/(psi+1) favour B.  Conditional on m discordant items the exact two-sided")
+print("sign test rejects when X ~ Bin(m, 1/2) lands in the observed tail; power is the")
+print("mixture of that rejection probability over m ~ Bin(n, delta).")
+def binom_pmf_list(m, p):
+    return [math.comb(m, k) * p**k * (1 - p)**(m - k) for k in range(m + 1)]
+def sign_reject_prob(m, alpha=0.05):
+    """P(reject | m discordant pairs), exact two-sided sign test."""
+    if m == 0:
+        return 0.0
+    pmf = binom_pmf_list(m, 0.5)
+    tot = 0.0
+    # find the smallest tail mass that can be rejected
+    for k in range(m + 1):
+        # two-sided p-value of observing k (or its mirror m-k)
+        kk = min(k, m - k)
+        pv = sum(pmf[j] for j in range(0, kk + 1)) + sum(pmf[j] for j in range(m - kk, m + 1))
+        if pv > alpha:
+            break
+        tot += pmf[k]
+    return tot
+# precompute conditional rejection probabilities for every m up to max_n
+MAXN = 1200
+SIGN = [sign_reject_prob(m) for m in range(MAXN + 1)]
+def mcnemar_power(n, delta):
+    """Exact power of the two-sided McNemar sign test at alpha=0.05."""
+    pmf = binom_pmf_list(n, min(delta, 0.999999))
+    return sum(pmf[m] * SIGN[m] for m in range(0, n + 1)), delta
+print(f"{'n':>6} {'delta=0.03':>11} {'delta=0.05':>11} {'delta=0.10':>11} {'q=delta':>9}")
+for n in [100, 200, 300, 400, 600, 1000]:
+    row = [f"{mcnemar_power(n, d)[0]:>11.3f}" for d in (0.03, 0.05, 0.10)]
+    print(f"{n:>6} " + " ".join(row) + f" {mcnemar_power(n, 0.05)[1]:>9.3f}")
+print("psi only changes the marginal split, not q, so the exact sign test's power does not")
+print("depend on psi in this formulation; psi matters only for the direction of the effect.")
+
+print("\nsmallest n with exact McNemar power >= 0.80:")
+for delta in [0.03, 0.05, 0.08, 0.10, 0.15, 0.20]:
+    n = 20
+    while n < 2000:
+        pw = mcnemar_power(n, delta)[0]
+        if pw >= 0.80:
+            break
+        n += 10
+    print(f"   delta = {delta:.2f} -> n = {n}  (power {mcnemar_power(n, delta)[0]:.3f})")
+
+print("\nUPSTREAM'S OWN n=20 CELL, tested against the chance rate (4 options -> 0.25):")
+for x, lab in [(7, "pad>=2000, limit=1024 (acc 0.35)"),
+               (17, "pad=2000, limit=8192 (acc 0.85)")]:
+    pv = sum(math.comb(20, i) * 0.25**i * 0.75**(20 - i) for i in range(x, 21))
+    print(f"   {lab}: exact one-sided binomial p vs 0.25 = {pv:.5f}")
+print("   the 0.35 cell is NOT distinguishable from the 0.25 chance rate at n=20, so")
+print("   upstream's claim that 0.35 IS the majority prior is itself underpowered.")
+# exact Clopper-Pearson for an arbitrary x (not just n/2)
+def cp_interval(n, x, alpha=0.05):
     lo, hi = 0.0, 1.0
     if x > 0:
         a, b = 0.0, 1.0
         for _ in range(200):
             m = (a + b) / 2
-            if 1 - binom_cdf(x - 1, n, m) > alpha/2: a = m
+            if 1 - binom_cdf(x - 1, n, m) >= alpha / 2: a = m
             else: b = m
         lo = (a + b) / 2
-    a, b = 0.0, 1.0
-    for _ in range(200):
-        m = (a + b) / 2
-        if binom_cdf(x, n, m) > alpha/2: b = m
-        else: a = m
-    hi = (a + b) / 2
+    if x < n:
+        a, b = 0.0, 1.0
+        for _ in range(200):
+            m = (a + b) / 2
+            if binom_cdf(x, n, m) <= alpha / 2: a = m
+            else: b = m
+        hi = (a + b) / 2
+    else:
+        hi = 1.0
     return lo, hi
-for n in [20, 200, 400]:
-    x = n // 2
-    lo, hi = cp(n, x)
-    print(f"   n={n:>4} x={x:>4}: [{lo:.4f}, {hi:.4f}]  half-width {(hi-lo)/2:.4f}")
-
-print("\nminimum detectable difference between two INDEPENDENT proportions (80% power,")
-print("two-sided alpha=0.05), p1=0.50, normal approximation:")
-z_a, z_b = 1.959964, 0.841621
-for n in [100, 200, 400, 600, 1000]:
-    p1 = 0.50
-    p2 = p1 + 0.001
-    while p2 < 0.99:
-        pbar = (p1 + p2) / 2
-        need = (z_a * math.sqrt(2 * pbar * (1 - pbar)) + z_b * math.sqrt(p1*(1-p1) + p2*(1-p2)))**2 / (p2 - p1)**2
-        if need <= n:
-            break
-        p2 += 0.0005
-    print(f"   n={n:>4}: MDE = {p2-p1:.4f} ({100*(p2-p1):.1f} accuracy points)")
-
-print("\npaired design (McNemar, 80% power, alpha=0.05 two-sided). Item-level discordance")
-print("rate d = P(one arm right, other wrong). n = (z_a*sqrt(d) + z_b*sqrt(d - delta^2))^2/delta^2")
-for d in [0.06, 0.10, 0.15, 0.20]:
-    row = []
-    for delta in [0.03, 0.05, 0.10]:
-        n_need = (z_a*math.sqrt(d) + z_b*math.sqrt(max(d - delta*delta, 1e-9)))**2 / delta**2
-        row.append(f"delta={delta:.2f}->n={math.ceil(n_need):>5}")
-    print(f"   discordance d={d:.2f}: " + "   ".join(row))
+for x, n, lab in [(7, 20, "upstream 0.35 cell"), (17, 20, "upstream 0.85 cell"),
+                  (19, 20, "upstream 0.95 cell")]:
+    lo, hi = cp_interval(n, x)
+    print(f"   {lab}: exact Clopper-Pearson 95% = [{lo:.3f}, {hi:.3f}] "
+          f"(width {hi-lo:.3f}, +-{(hi-lo)/2:.3f})")
 
 print("\nfamily-wise error: 25 cells x 2 arms, independent two-proportion tests at alpha=0.05")
 for m in [10, 25, 50]:
@@ -411,23 +505,39 @@ for n in [20, 200, 400, 600]:
 
 # ================================================================ 6 LAYOUT PROBE
 hr("6. HEAD-BLOCK WIDTH PROBE (fork source, CPU tokenizer only)")
+print("Builds the real sequence with the shipped tokenizer and the real upstream question,")
+print("so the marker positions and the state start are COMPUTED, not assumed.")
 try:
     import os as _os
     _os.environ.setdefault("USE_TF", "0")
     import sys
     sys.path.insert(0, _os.path.join(LAB, "fork"))
-    import laya
     from laya.common import build_sequence
     from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(_os.path.join(LAB, "models", "multilingual", "tokenizer"))
-    q = {"t": "department",
-         "ins": data["questions"]["department"]["instructions"],
-         "criteria": data["questions"]["department"]["criteria"]}
-    for max_len, head_max_len in [(1024, 256), (8192, 256)]:
-        ids, markers = build_sequence(tok, "The quick brown fox. " * 800, q,
-                                      max_len=max_len, head_max_len=head_max_len)
-        print(f"  max_len={max_len:>5} head_max_len={head_max_len}: len(ids)={len(ids)}, "
-              f"markers at {markers}, state starts at {markers[-1] + 1} "
-              f"(first SEP after last marker + option tokens)")
+    qs = {
+        "upstream department (4 long options)": {
+            "t": "department",
+            "ins": data["questions"]["department"]["instructions"],
+            "criteria": data["questions"]["department"]["criteria"],
+        },
+        "short 2-option yes/no": {
+            "t": "sentiment",
+            "ins": "Does the statement hold?",
+            "criteria": {"yes": "the statement holds", "no": "the statement does not hold"},
+        },
+    }
+    doc = "The quick brown fox jumps over the lazy dog. " * 900
+    for label, q in qs.items():
+        print(f"\n  question: {label}")
+        for max_len, head_max_len in [(1024, 256), (8192, 256), (8192, 192), (512, 192)]:
+            ids, markers = build_sequence(tok, doc, q, max_len=max_len, head_max_len=head_max_len)
+            n_state = len(ids) - (markers[-1] + 1 + len(tok(" " + list(q["criteria"].values())[0], add_special_tokens=False)["input_ids"]) + 1) if markers else None
+            print(f"    max_len={max_len:>5} head_max_len={head_max_len:>3}: len(ids)={len(ids):>4} "
+                  f"markers={markers} -> last marker m*={max(markers)}, "
+                  f"state block starts at {markers[-1]+1}+len(last option), "
+                  f"HEAD WIDTH for the marker = {max(markers)+1} tokens")
+    print("\n  The marker's position m* is the parameter that matters for reachability, and it")
+    print("  is set by head_max_len and the option rendering; the state block sits AFTER it.")
 except Exception as exc:  # noqa: BLE001
     print(f"  PROBE FAILED ({type(exc).__name__}: {exc}) - marker positions stay MODELLED")

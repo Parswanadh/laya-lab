@@ -10,7 +10,7 @@
     "result_sha256": "09c6fced8e9800ff6c76bd021318a0417fcee43506c45e3d46850989a8380368",
     "what_is_copied": "REQUESTS (20 request/gold pairs), QUESTIONS (the question definition) and FILLER (the single repeated filler sentence), verbatim. Composition rule `FILLER * round(pad / tokens(FILLER)) + ('\\n\\nActual request: ' if reps else '') + request` is reproduced by pad_mode=repeat_unit.",
     "annotated_by_transcriber": "the `lang` field per request; upstream did not label languages per row, only in a comment (English, Spanish, Portuguese, French, German, Hindi, Japanese, Arabic). Treat lang as annotation, not upstream metadata.",
-    "known_imbalance": "upstream's gold labels are 11 billing / 6 technical / 3 sales, so a constant 'technical' answer scores 0.30 and a constant 'billing' answer scores 0.55 on this pool. This pool therefore CANNOT distinguish 'the model collapsed to a constant' from 'the model is at chance'. The balanced-v1 pool exists for that reason."
+    "known_imbalance": "upstream's gold labels are 9 billing / 7 technical / 4 sales (counted from the transcribed REQUESTS; verified against the source with ast.literal_eval, see pools.verify_upstream_transcription). A constant 'technical' answer therefore scores exactly 7/20 = 0.35 -- which is the collapsed accuracy upstream measured at max_len=1024 for pad>=2000 -- and a constant 'billing' answer scores 0.45. This pool therefore CANNOT distinguish 'the model collapsed to a constant' from 'the model is at chance', and 0.35 must not be read as a chance rate. The balanced-v1 pool exists for that reason."
   },
   "labels": ["billing", "technical", "sales"],
   "question": {

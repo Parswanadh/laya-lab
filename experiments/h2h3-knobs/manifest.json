@@ -1,0 +1,149 @@
+{
+ "run_id": "h2h3-knobs",
+ "issue": "Parswanadh/laya-lab#4",
+ "owner": "engineer",
+ "finding": "findings/E-002.md",
+ "purpose": "training-free architectural knobs on the loaded encoder: P-a sliding-window width (config.local_attention) and P-b all-layers-global; no training, no fine-tuning, nothing under fork/laya/ modified",
+ "env": {
+  "python": "3.12.3",
+  "torch": "2.9.1+cu128",
+  "transformers": "4.57.6",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "nvidia_driver": "595.84",
+  "host": "parshu-Alienware-m16-R2",
+  "cpu_count": 22,
+  "USE_TF": "0",
+  "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
+ },
+ "git": {
+  "laya_lab_sha": "4af088a51dfb5b60bbdc8c5835cbd00085dc5b22",
+  "laya_lab_branch": "main",
+  "laya_lab_dirty": true,
+  "fork_submodule": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5 fork (v0.3.20-68-g9fbb1eb)",
+  "laya_version": "v0.3.20-68-g9fbb1eb"
+ },
+ "model": {
+  "path": "models/multilingual",
+  "encoder_config_sha256": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+  "rl_agent_config_sha256": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+  "encoder_config": {
+   "architectures": [
+    "ModernBertForMaskedLM"
+   ],
+   "attention_bias": false,
+   "attention_dropout": 0.0,
+   "bos_token_id": 2,
+   "classifier_activation": "gelu",
+   "classifier_bias": false,
+   "classifier_dropout": 0.0,
+   "classifier_pooling": "mean",
+   "cls_token_id": 1,
+   "decoder_bias": true,
+   "deterministic_flash_attn": false,
+   "dtype": "float32",
+   "embedding_dropout": 0.0,
+   "eos_token_id": 1,
+   "global_attn_every_n_layers": 3,
+   "gradient_checkpointing": false,
+   "hidden_activation": "gelu",
+   "hidden_size": 768,
+   "initializer_cutoff_factor": 2.0,
+   "initializer_range": 0.02,
+   "intermediate_size": 1152,
+   "layer_norm_eps": 1e-05,
+   "layer_types": [
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention",
+    "sliding_attention",
+    "sliding_attention",
+    "full_attention"
+   ],
+   "local_attention": 128,
+   "mask_token_id": 4,
+   "max_position_embeddings": 8192,
+   "mlp_bias": false,
+   "mlp_dropout": 0.0,
+   "model_type": "modernbert",
+   "norm_bias": false,
+   "norm_eps": 1e-05,
+   "num_attention_heads": 12,
+   "num_hidden_layers": 22,
+   "pad_token_id": 0,
+   "position_embedding_type": "sans_pos",
+   "repad_logits_with_grad": false,
+   "rope_parameters": {
+    "full_attention": {
+     "rope_theta": 160000,
+     "rope_type": "default"
+    },
+    "sliding_attention": {
+     "rope_theta": 160000,
+     "rope_type": "default"
+    }
+   },
+   "sep_token_id": 1,
+   "sparse_pred_ignore_index": -100,
+   "sparse_prediction": false,
+   "tie_word_embeddings": true,
+   "transformers_version": "5.0.0",
+   "vocab_size": 256000
+  }
+ },
+ "harness": {
+  "files": {
+   "analyse.py": "52c86bf8fbbe4ed28ab09d4ae4275ad63ce553491a11c98be4c3d0cb888d75aa",
+   "make_manifest.py": "e5f99593ea26c6727aa8a6151e7abe447c3b5d2fa6228d5e74a8bddc97e21058",
+   "run.py": "158501b5c91a65c60b5def1f3ca0a6d3d53b5d7ff22c51edbad36ae8f4feb0b6"
+  },
+  "doc_construction_primary": "experiments/orch-diagnostic/run.py::place imported as a module and called with frac=1.0 (P1 probe C rule); the imported REQUESTS/FILLER/QUESTIONS objects are asserted equal to the harness pool's",
+  "doc_construction_control": "upstream_rule: FILLER*round(pad/per_rep) + '\\n\\nActual request: ' (fork/research/scripts/bench_long_context.py)",
+  "liveness_probe": "transformers.models.modernbert.modeling_modernbert.MODERNBERT_ATTENTION_FUNCTION['sdpa'] wrapped; per layer it records the mask handed to F.scaled_dot_product_attention and decodes the max attended distance for the last query row; an arm whose observed mask does not match its spec raises and is not scored",
+  "stats": "paired McNemar exact (binomial) + paired percentile bootstrap CI of the accuracy delta, 10000 resamples, seed 20260924, in analyse.py"
+ },
+ "pools": {
+  "upstream_multilingual": {
+   "path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/upstream-multilingual.json",
+   "sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+   "pool_id": "upstream_multilingual",
+   "kind": "upstream"
+  },
+  "balanced-v1": {
+   "path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/needles-balanced-v1.json",
+   "sha256": "fc8b706155c4f67eb6ec2e8d8e96c9a08747f6ebce7891991775d08339b4a86c",
+   "pool_id": "balanced-v1",
+   "kind": "balanced"
+  },
+  "filler-v1": {
+   "path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/filler-v1.json",
+   "sha256": "429b06f81dc2d8e608ba53e4201fef98a86deb93a4d251af8f1ecde3f36cbb9f",
+   "pool_id": "filler-v1",
+   "kind": "filler"
+  }
+ },
+ "arms": {},
+ "commands": {
+  "stage1": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage1'",
+  "stage2": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage2'",
+  "stage3": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage3'",
+  "stage4": "flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c 'systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/h2h3-knobs/run.py --stage stage4'"
+ },
+ "cells": []
+}

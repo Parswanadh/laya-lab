@@ -212,6 +212,13 @@ def build_items(pool: Dict[str, Any], n: int, seed: int) -> Dict[str, Any]:
 
 
 def _balanced_items(pool: Dict[str, Any], n: int, seed: int) -> List[Dict[str, Any]]:
+    """Label-balanced and language-balanced item draw.
+
+    The draw walks a seeded order of (label, language) pairs and takes one item from each pair per
+    pass, stopping when a label hits its quota. Every label therefore ends within one item of every
+    other, and every language gets a turn before any pair is drawn twice, so at n=20 all eight
+    languages are covered 2-3 times each rather than by luck.
+    """
     labels = list(pool["labels"])
     if n < len(labels):
         raise ValueError("n=%d is smaller than the %d labels" % (n, len(labels)))
@@ -220,57 +227,54 @@ def _balanced_items(pool: Dict[str, Any], n: int, seed: int) -> List[Dict[str, A
         counts[lb] += 1
 
     slots = pool["slots"]
-    by_label: Dict[str, List[Dict[str, Any]]] = {lb: [] for lb in labels}
+    by_pair: Dict[Any, List[Dict[str, Any]]] = {}
     for tpl in pool["templates"]:
-        by_label[tpl["label"]].append(tpl)
+        by_pair.setdefault((tpl["label"], tpl["lang"]), []).append(tpl)
 
+    queues: Dict[Any, List[Dict[str, Any]]] = {}
+    for (label, lang), tpls in by_pair.items():
+        combos = []
+        for tpl in tpls:
+            for fill in _slot_combos(tpl, slots):
+                combos.append({"template": tpl, "fill": fill})
+        random.Random("%d|%s|%s" % (seed, label, lang)).shuffle(combos)
+        queues[(label, lang)] = combos
+
+    order = sorted(queues)
+    random.Random("%d|pairs" % seed).shuffle(order)
+
+    got = {lb: 0 for lb in labels}
+    cursor = {k: 0 for k in order}
     items: List[Dict[str, Any]] = []
-    for label in labels:
-        templates = by_label[label]
-        per_lang: Dict[str, List[Dict[str, Any]]] = {}
-        for tpl in templates:
-            per_lang.setdefault(tpl["lang"], []).append(tpl)
-        # one seeded queue of (template, fill) combos per language, then round-robin the
-        # languages so no language is starved at small n and none dominates at large n
-        queues: Dict[str, List[Dict[str, Any]]] = {}
-        for lang, tpls in per_lang.items():
-            combos = []
-            for tpl in tpls:
-                for fill in _slot_combos(tpl, slots):
-                    combos.append({"template": tpl, "fill": fill})
-            random.Random("%d|%s|%s" % (seed, label, lang)).shuffle(combos)
-            queues[lang] = combos
-        lang_order = sorted(queues)
-        random.Random("%d|%s|langs" % (seed, label)).shuffle(lang_order)
-        cursor = {lang: 0 for lang in lang_order}
-        quota = counts[label]
-        got = 0
-        while got < quota:
-            progressed = False
-            for lang in lang_order:
-                if got >= quota:
-                    break
-                q = queues[lang]
-                if cursor[lang] >= len(q):
-                    continue
-                combo = q[cursor[lang]]
-                cursor[lang] += 1
-                tpl, fill = combo["template"], combo["fill"]
-                text = render_template(tpl["text"], fill)
-                items.append({
-                    "item_id": "%s|%s|%s" % (label, tpl["id"], "-".join("%s%s" % (k, fill[k]) for k in sorted(fill))),
-                    "label": label,
-                    "lang": lang,
-                    "template_id": tpl["id"],
-                    "slots": fill,
-                    "text": text,
-                    "split": "eval",
-                })
-                got += 1
-                progressed = True
-            if not progressed:
-                raise ValueError("pool %s cannot supply %d items for label %s"
-                                 % (pool["pool_id"], quota, label))
+    total = sum(counts.values())
+    while len(items) < total:
+        progressed = False
+        for key in order:
+            if len(items) >= total:
+                break
+            label, lang = key
+            if got[label] >= counts[label]:
+                continue
+            q = queues[key]
+            if cursor[key] >= len(q):
+                continue
+            combo = q[cursor[key]]
+            cursor[key] += 1
+            tpl, fill = combo["template"], combo["fill"]
+            text = render_template(tpl["text"], fill)
+            items.append({
+                "item_id": "%s|%s|%s" % (label, tpl["id"], "-".join("%s%s" % (k, fill[k]) for k in sorted(fill))),
+                "label": label,
+                "lang": lang,
+                "template_id": tpl["id"],
+                "slots": fill,
+                "text": text,
+                "split": "eval",
+            })
+            got[label] += 1
+            progressed = True
+        if not progressed:
+            raise ValueError("pool %s cannot supply %s items" % (pool["pool_id"], counts))
     return items
 
 
@@ -293,6 +297,39 @@ def _upstream_items(pool: Dict[str, Any], n: int) -> List[Dict[str, Any]]:
             "split": "eval",
         })
     return items
+
+
+def verify_upstream_transcription(pool: Dict[str, Any], upstream_script: Path) -> Dict[str, Any]:
+    """Re-read the upstream script and compare its REQUESTS/FILLER/QUESTIONS to the pool file.
+
+    Parsed with ``ast.literal_eval`` rather than imported, so the check does not need torch, laya or
+    the checkpoint. This is what makes the upstream arm's claim ("byte-identical items") checkable
+    from the manifest without trusting the transcriber.
+    """
+    import ast
+
+    out: Dict[str, Any] = {"script": str(upstream_script), "script_sha256": None, "match": None}
+    if not upstream_script.exists():
+        out["error"] = "upstream script not found"
+        return out
+    out["script_sha256"] = sha256_file(upstream_script)
+    tree = ast.parse(upstream_script.read_text(encoding="utf-8"))
+    vals: Dict[str, Any] = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id in ("REQUESTS", "FILLER", "QUESTIONS"):
+                vals[node.targets[0].id] = ast.literal_eval(node.value)
+    if set(vals) != {"REQUESTS", "FILLER", "QUESTIONS"}:
+        out["error"] = "could not parse REQUESTS/FILLER/QUESTIONS from the script"
+        return out
+    mine = [(r["text"], r["label"]) for r in pool["requests"]]
+    out["requests_match"] = mine == vals["REQUESTS"]
+    out["filler_unit_match"] = pool["filler_unit"] == vals["FILLER"]
+    out["question_match"] = pool["question"] == vals["QUESTIONS"]
+    out["n_requests"] = len(mine)
+    out["label_counts"] = {lb: sum(1 for _, x in mine if x == lb) for lb in sorted({x for _, x in mine})}
+    out["match"] = bool(out["requests_match"] and out["filler_unit_match"] and out["question_match"])
+    return out
 
 
 def internal_question(pool: Dict[str, Any]) -> Dict[str, Any]:
