@@ -115,3 +115,17 @@ runtime can deadlock on this box.
 
 See the **last entry** of `progress.md`. Phase 0 (baseline reproduction) is in flight;
 no candidate work starts until the baseline reproduces here.
+
+## GPU is a single-writer resource — take the lock
+
+More than one agent running a GPU job at once will silently corrupt timing measurements and
+can OOM an 8 GB card. Before any CUDA job:
+
+```bash
+flock -n /home/parshu/projects/contri/laya-lab/.gpu.lock -c '<your command>' \
+  || echo "GPU busy — another agent holds the lock; wait, do not queue a second job"
+```
+
+Use `flock -n` (non-blocking) so you *know* you were refused rather than silently stalling. If
+refused, do non-GPU work and retry later; do not launch anyway. Record in your finding whether
+the numbers came from a locked run (clean) or an unlocked one (timings may be contended).

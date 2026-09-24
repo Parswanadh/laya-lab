@@ -1,0 +1,270 @@
+
+==============================================================================
+1. REACHABILITY (exact simulation of the programmed mask)
+==============================================================================
+per-hop reach model, marker at 300, n = 8192 (bound 7891):
+layer  type                half-width  closed form R_k   clipped  check   
+    0  full_attention              64               64        64  OK      
+    1  sliding_attention          128                           
+    2  sliding_attention          192                           
+    3  full_attention            7891              960       960  MISMATCH
+    4  sliding_attention         7891                           
+    5  sliding_attention         7891                           
+    6  full_attention            7891             1984      1984  MISMATCH
+    7  sliding_attention         7891                           
+    8  sliding_attention         7891                           
+    9  full_attention            7891             4032      4032  MISMATCH
+   10  sliding_attention         7891                           
+   11  sliding_attention         7891                           
+   12  full_attention            7891             8128      7891  OK      
+   13  sliding_attention         7891                           
+   14  sliding_attention         7891                           
+   15  full_attention            7891            16320      7891  OK      
+   16  sliding_attention         7891                           
+   17  sliding_attention         7891                           
+   18  full_attention            7891            32704      7891  OK      
+   19  sliding_attention         7891                           
+   20  sliding_attention         7891                           
+   21  full_attention            7891            65472      7891  OK      
+
+closed form for the global layers: R_k = half-width reachable at layer 3k
+ k  layer  R_k (tokens)  clipped to n=8192   reachable frac of doc
+ 0      0            64                 64                  0.81%
+ 1      3           960                960                 12.17%
+ 2      6          1984               1984                 25.14%
+ 3      9          4032               4032                 51.10%
+ 4     12          8128               7891                100.00%
+ 5     15         16320               7891                100.00%
+ 6     18         32704               7891                100.00%
+ 7     21         65472               7891                100.00%
+
+minimum layer index L*(d):
+     d =  L*(d)  type at L*            closed form  global hops used k  global hops REMAINING
+       1      0  full_attention                  0                   0                      8
+      64      0  full_attention                  0                   0                      8
+      65      3  full_attention                  0                   1                      7
+     320      3  full_attention                  0                   1                      7
+     321      3  full_attention                  0                   1                      7
+     448      3  full_attention                  0                   1                      7
+     449      3  full_attention                  3                   1                      7
+     960      3  full_attention                  3                   1                      7
+     961      6  full_attention                  6                   2                      6
+    1984      6  full_attention                  6                   2                      6
+    1985      9  full_attention                  9                   3                      5
+    4032      9  full_attention                  9                   3                      5
+    4033     12  full_attention                 12                   4                      4
+    7000     12  full_attention                 12                   4                      4
+    8128     12  full_attention                 12                   4                      4
+    8129     15  full_attention                 15                   5                      3
+    8191     15  full_attention                 15                   5                      3
+closed form: L*(d) = 0 for d <= w;  L*(d) = 3*ceil(log2((d/w + 1)/8)) for d > w
+
+==============================================================================
+2. MIXING CAPACITY (cross-document edges, head block = 0..H-1, state = H..n-1)
+==============================================================================
+
+n = 1024, head block H = 256  (state block = 768 tokens)
+  total cross-document (marker-region -> state) edges : 1,601,984
+  from the 8 global layers  : 1,572,864 (98.2%)
+  from the 14 sliding layers: 29,120 (1.8%)
+  per-layer fraction of the state reachable from ONE marker (last marker at H-1):
+    layer  0 full_attention     100.0000% of state (   64 tokens)
+    layer  1 sliding_attention   8.3333% of state (   64 tokens)
+    layer  2 sliding_attention   8.3333% of state (   64 tokens)
+    layer  3 full_attention     100.0000% of state (   64 tokens)
+    layer  4 sliding_attention   8.3333% of state (   64 tokens)
+    layer  5 sliding_attention   8.3333% of state (   64 tokens)
+    layer  6 full_attention     100.0000% of state (   64 tokens)
+    layer  7 sliding_attention   8.3333% of state (   64 tokens)
+    layer  8 sliding_attention   8.3333% of state (   64 tokens)
+    layer  9 full_attention     100.0000% of state (   64 tokens)
+    layer 10 sliding_attention   8.3333% of state (   64 tokens)
+    layer 11 sliding_attention   8.3333% of state (   64 tokens)
+    layer 12 full_attention     100.0000% of state (   64 tokens)
+    layer 13 sliding_attention   8.3333% of state (   64 tokens)
+    layer 14 sliding_attention   8.3333% of state (   64 tokens)
+    layer 15 full_attention     100.0000% of state (   64 tokens)
+    layer 16 sliding_attention   8.3333% of state (   64 tokens)
+    layer 17 sliding_attention   8.3333% of state (   64 tokens)
+    layer 18 full_attention     100.0000% of state (   64 tokens)
+    layer 19 sliding_attention   8.3333% of state (   64 tokens)
+    layer 20 sliding_attention   8.3333% of state (   64 tokens)
+    layer 21 full_attention     100.0000% of state (   64 tokens)
+
+n = 8192, head block H = 384  (state block = 7808 tokens)
+  total cross-document (marker-region -> state) edges : 24,015,296
+  from the 8 global layers  : 23,986,176 (99.9%)
+  from the 14 sliding layers: 29,120 (0.1%)
+  per-layer fraction of the state reachable from ONE marker (last marker at H-1):
+    layer  0 full_attention     100.0000% of state (   64 tokens)
+    layer  1 sliding_attention   0.8197% of state (   64 tokens)
+    layer  2 sliding_attention   0.8197% of state (   64 tokens)
+    layer  3 full_attention     100.0000% of state (   64 tokens)
+    layer  4 sliding_attention   0.8197% of state (   64 tokens)
+    layer  5 sliding_attention   0.8197% of state (   64 tokens)
+    layer  6 full_attention     100.0000% of state (   64 tokens)
+    layer  7 sliding_attention   0.8197% of state (   64 tokens)
+    layer  8 sliding_attention   0.8197% of state (   64 tokens)
+    layer  9 full_attention     100.0000% of state (   64 tokens)
+    layer 10 sliding_attention   0.8197% of state (   64 tokens)
+    layer 11 sliding_attention   0.8197% of state (   64 tokens)
+    layer 12 full_attention     100.0000% of state (   64 tokens)
+    layer 13 sliding_attention   0.8197% of state (   64 tokens)
+    layer 14 sliding_attention   0.8197% of state (   64 tokens)
+    layer 15 full_attention     100.0000% of state (   64 tokens)
+    layer 16 sliding_attention   0.8197% of state (   64 tokens)
+    layer 17 sliding_attention   0.8197% of state (   64 tokens)
+    layer 18 full_attention     100.0000% of state (   64 tokens)
+    layer 19 sliding_attention   0.8197% of state (   64 tokens)
+    layer 20 sliding_attention   0.8197% of state (   64 tokens)
+    layer 21 full_attention     100.0000% of state (   64 tokens)
+
+-- global-layer budget: hops needed to reach distance d vs hops left to MIX with --
+  d (tokens from marker)  k = global hops used  8 - k left to mix
+                      64                     0                  8
+                     321                     1                  7
+                     960                     1                  7
+                    1984                     2                  6
+                    4032                     3                  5
+                    7000                     4                  4
+                    8128                     4                  4
+                    8191                     5                  3
+
+==============================================================================
+2b. HEAD BLOCK WIDTH (computed with laya.build_sequence, fork source, CPU only)
+==============================================================================
+
+==============================================================================
+3. COST MODEL
+==============================================================================
+d=768  F=1152  22 layers = 8 full + 14 sliding (w=64)  head_layers=2
+
+      n      total FLOPs  ratio vs n=1024  encoder q share   head q share
+     61       1.0539e+09            0.032            20.4%           1.1%
+    512       1.2393e+10            0.377            37.5%           6.5%
+   1024       3.2838e+10            1.000            47.9%           9.8%
+   2048       9.7889e+10            2.981            58.5%          13.2%
+   3006       1.8791e+11            5.722            63.5%          14.8%
+   3972       3.0723e+11            9.356            66.7%          15.8%
+   4938       4.5522e+11           13.863            68.8%          16.5%
+   5946       6.4021e+11           19.496            70.4%          17.0%
+   6912       8.4678e+11           25.786            71.6%          17.3%
+   8192       1.1646e+12           35.466            72.8%          17.7%
+
+MODELLED  FLOPs(8192)/FLOPs(1024) = 35.466x
+MODELLED  FLOPs(7000)/FLOPs(1024) = 26.403x
+theoretical closed form: ratio = (a + (2*L_FULL*n0 + (2W+1)*L_LOCAL)*n) / (a + b*n0)
+  where a = 22*d^2 + 8*d*F = 20,054,016,  b = 2*L_FULL*D = 12,288
+  -> the n^2 terms are 2*L_FULL*n0 = 16384 vs 0.5*(n+n0)*... - the ratio is
+     (18190*8192 + 20054016) / (18190*1024 + 20054016)
+     = 4.371   (matches the FLOP table)
+
+BOUND: FLOPs(8192)/FLOPs(1024) <= 4.37x for ANY L_full >= 0 in this family.
+  the n^2 term of a full layer at n=1024 costs 2*n0*d = 1,572,864 FLOPs against the
+  n-independent term 20,054,016 per layer, so at n=1024 the work is mostly linear and the
+  ratio behaves like a linear-function ratio, asymptoting to 8192/1024 = 8x from below.
+
+==============================================================================
+4. MEASURED UPSTREAM DATA + NORMALISED COMPARISON
+==============================================================================
+artifact : fork/research/results/long_context_multilingual.json
+device=mps platform=macOS-26.5.2-arm64-arm-64bit torch=2.14.0 transformers=5.17.0 laya=0.3.18
+checkpoint=convaiinnovations/laya (multilingual/)
+
+   pad  limit    n   acc  median lat s  median tok
+     0   1024   20  0.95         0.017          61
+     0   8192   20  0.95         0.016          61
+  1000   1024   20  0.65         0.224        1024
+  1000   8192   20  0.80         0.211        1032
+  2000   1024   20  0.35         0.198        1024
+  2000   8192   20  0.85         0.503        2040
+  3000   1024   20  0.35         0.208        1024
+  3000   8192   20  0.85         0.895        3006
+  4000   1024   20  0.35         0.216        1024
+  4000   8192   20  0.90         1.707        3972
+  5000   1024   20  0.35         0.262        1024
+  5000   8192   20  0.55         2.586        4938
+  6000   1024   20  0.35         0.253        1024
+  6000   8192   20  0.85         3.505        5946
+  7000   1024   20  0.35         0.264        1024
+  7000   8192   20  0.40         4.503        6912
+
+-- the headline number the task quotes --
+  limit=8192, pad=0    : 61 tok, 0.016 s
+  limit=8192, pad=6000 : 5946 tok, 3.505 s
+  MEASURED raw ratio   = 219.06x  for a 97.48x input growth
+  MODELLED ratio for the same two input lengths = 607.471x   -> observed/predicted = 0.361
+
+-- matched-input pairs: SAME input length, different max_len --
+ tok(1024)  lat(1024)  tok(8192)  lat(8192)  meas ratio  modelled  meas/mod  per-token norm
+        61      0.017         61      0.016       0.941     1.000     0.941           0.941
+      1024      0.224       1032      0.211       0.942     1.012     0.931           0.935
+      1024      0.198       2040      0.503       2.540     2.962     0.858           1.275
+      1024      0.208       3006      0.895       4.303     5.722     0.752           1.466
+      1024      0.216       3972      1.707       7.903     9.356     0.845           2.037
+      1024      0.262       4938      2.586       9.870    13.863     0.712           2.047
+      1024      0.253       5946      3.505      13.854    19.496     0.711           2.386
+      1024      0.264       6912      4.503      17.057    25.786     0.661           2.527
+
+-- per-token cost (s/token), limit=8192, from the median latencies --
+      n    s/token   x vs n=61   n x vs 61
+     61    0.00026        1.00        1.00
+   1032    0.00020        0.78       16.92
+   2040    0.00025        0.94       33.44
+   3006    0.00030        1.14       49.28
+   3972    0.00043        1.64       65.11
+   4938    0.00052        2.00       80.95
+   5946    0.00059        2.25       97.48
+   6912    0.00065        2.48      113.31
+
+-- scaling from n=1024 to each larger n, limit=8192 (measured) --
+  1024 ->  2040: measured   2.384x  (2.384 = (n/1024)^1.260)
+  1024 ->  3006: measured   4.242x  (4.242 = (n/1024)^1.342)
+  1024 ->  3972: measured   8.090x  (8.090 = (n/1024)^1.542)
+  1024 ->  4938: measured  12.256x  (12.256 = (n/1024)^1.593)
+  1024 ->  5946: measured  16.611x  (16.611 = (n/1024)^1.598)
+  1024 ->  6912: measured  21.341x  (21.341 = (n/1024)^1.603)
+
+-- fitted lat(n) = F + a*n^p on the 8 limit=8192 medians (own model, [MODELLED]) --
+   F = 0.010 s   a = 5.575e-07   p = 1.800   RMSE = 0.0641 s
+   n=   61 measured  0.016  fitted  0.011  resid  +0.005 s (+31.8%)
+   n= 1032 measured  0.211  fitted  0.158  resid  +0.053 s (+25.0%)
+   n= 2040 measured  0.503  fitted  0.515  resid  -0.012 s ( -2.5%)
+   n= 3006 measured  0.895  fitted  1.025  resid  -0.130 s (-14.6%)
+   n= 3972 measured  1.707  fitted  1.687  resid  +0.020 s ( +1.2%)
+   n= 4938 measured  2.586  fitted  2.491  resid  +0.095 s ( +3.7%)
+   n= 5946 measured  3.505  fitted  3.476  resid  +0.029 s ( +0.8%)
+   n= 6912 measured  4.503  fitted  4.555  resid  -0.052 s ( -1.2%)
+   kuhn: F is the fitted dispatch/overhead floor; the encoder FLOP model has no F
+   note: 0.016 s at n=61 vs 0.011 s fitted -> the floor alone is 1x the smallest measured latency
+   p fixed at 2: a = 9.787e-08, RMSE = 0.1176 s
+
+==============================================================================
+5. POWER / SAMPLE SIZE
+==============================================================================
+z_(1-alpha/2) for 95% = 1.95996
+
+Wald half-width at p=0.5:  h = z*sqrt(0.25/n)
+     n   half-width at p=0.5    Wilson [lo,hi] at x=n/2
+    20                0.2191           [0.2993, 0.7007]
+   100                0.0980           [0.4038, 0.5962]
+   200                0.0693           [0.4314, 0.5686]
+   300                0.0566           [0.4438, 0.5562]
+   400                0.0490           [0.4512, 0.5488]
+   600                0.0400           [0.4601, 0.5399]
+  1000                0.0310           [0.4691, 0.5309]
+
+exact (Clopper-Pearson) 95% two-sided interval at x = n/2, from the binomial CDF:
+   n=  20 x=  10: [1.0000, 0.0000]  half-width -0.5000
+   n= 200 x= 100: [1.0000, 0.0000]  half-width -0.5000
+   n= 400 x= 200: [1.0000, 0.0000]  half-width -0.5000
+
+minimum detectable difference between two INDEPENDENT proportions (80% power,
+two-sided alpha=0.05), p1=0.50, normal approximation:
+   n= 100: MDE = 0.1935 (19.3 accuracy points)
+   n= 200: MDE = 0.1385 (13.8 accuracy points)
+   n= 400: MDE = 0.0985 (9.8 accuracy points)
+   n= 600: MDE = 0.0810 (8.1 accuracy points)
+   n=1000: MDE = 0.0625 (6.2 accuracy points)
+
+paired design (McNemar, 80% power, alpha=0.05 two-sided). Item-level discordance

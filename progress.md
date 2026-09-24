@@ -113,3 +113,42 @@ majority-class reference. Phase 1 diagnosis is unblocked and running.
 
 **Next.** probe A/B/C results → P1 mechanism write-up. Wave-1 agents (research #3, math #2,
 harness #1) in flight.
+
+---
+
+## 2026-09-24 · P1 — mechanism identified (candidate)
+
+**Artifact.** `experiments/orch-diagnostic/results.json` · **Write-up.** `findings/P1-mechanism.md`
+**Status.** `candidate` — needs independent verification before it is quoted anywhere.
+
+Three probes, n=20/cell, fp32/bf16/fp16 compared, majority-class baseline **0.450**:
+
+- **A — precision REFUTED.** bf16 = fp16 = fp32 = **0.600** at pad=4000/limit=8192. Identical to
+  three decimals. The loss is representational, not numerical. (fp32 also costs 3.3× latency for
+  no gain.)
+- **B — position at fixed 4000-token length:** 0.90 (start) → 0.50 / 0.50 / 0.50 (0.25–0.75) →
+  0.60 (end). Nothing is truncated at limit=8192, so this is **not a budget effect**.
+- **C — length at fixed needle fraction 1.0:** 0.95 → 0.90 → 0.80 → 0.60 → **0.450 at pad=7000**.
+
+**Two controls isolate the variable.** (1) Same length, different position → 0.90 vs 0.60, so
+length alone is not it. (2) Same absolute position (~1000) scores **0.90** in a 1018-token doc
+but **0.50** in a 4018-token doc, so position alone is not it either.
+
+**Mechanism (candidate).** Attention dilution over the full key set, compounded by a shortage of
+long-range mixing paths: 14/22 layers are sliding-attention with a **±64** half-window and cannot
+move information more than 64 positions per hop; only the **8 global layers** create direct
+long-range edges. The markers have no privileged, non-diluting path to distant positions.
+At pad=7000 the score is **exactly the majority class** — the same terminal collapse as the 0.35
+floor, reached by a different route.
+
+**Predictions registered (falsifiable):** P-a wider sliding window recovers some loss (pure config,
+no training); P-b all-global recovers more at quadratic cost; P-c a cross-attention head recovers
+most at sub-quadratic cost. P-a/P-b run next — they need **no training** and are the cheapest
+possible test of the entire thesis.
+
+**Caveats recorded in the write-up:** n=20 (±0.22 per cell); upstream's item set has **zero**
+`other` examples and 45% `billing`, so "collapsed to prior" is supported but not proven; synthetic
+needle-in-haystack is a mechanism probe, not evidence about real documents.
+
+**Infra.** Added a `flock` GPU single-writer convention to `AGENTS.md` — concurrent CUDA jobs
+would corrupt timings and can OOM an 8 GB card.

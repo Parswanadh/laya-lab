@@ -1,0 +1,53 @@
+{
+  "pool_id": "upstream_multilingual",
+  "kind": "upstream",
+  "provenance": {
+    "authored_by": "upstream authors (NandhaKishorM/laya); transcribed verbatim by the engineer agent, laya-lab",
+    "source_path": "fork/research/scripts/bench_long_context.py",
+    "source_sha256": "1867b70d672f2af871989c2ea4c1e4d1beb967518679c002a9fb4b063688a79f",
+    "source_git": "fork @ 9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5",
+    "result_path": "fork/research/results/long_context_multilingual.json",
+    "result_sha256": "09c6fced8e9800ff6c76bd021318a0417fcee43506c45e3d46850989a8380368",
+    "what_is_copied": "REQUESTS (20 request/gold pairs), QUESTIONS (the question definition) and FILLER (the single repeated filler sentence), verbatim. Composition rule `FILLER * round(pad / tokens(FILLER)) + ('\\n\\nActual request: ' if reps else '') + request` is reproduced by pad_mode=repeat_unit.",
+    "annotated_by_transcriber": "the `lang` field per request; upstream did not label languages per row, only in a comment (English, Spanish, Portuguese, French, German, Hindi, Japanese, Arabic). Treat lang as annotation, not upstream metadata.",
+    "known_imbalance": "upstream's gold labels are 11 billing / 6 technical / 3 sales, so a constant 'technical' answer scores 0.30 and a constant 'billing' answer scores 0.55 on this pool. This pool therefore CANNOT distinguish 'the model collapsed to a constant' from 'the model is at chance'. The balanced-v1 pool exists for that reason."
+  },
+  "labels": ["billing", "technical", "sales"],
+  "question": {
+    "department": {
+      "type": "choice",
+      "instructions": "Which department should handle this request?",
+      "criteria": {
+        "billing": "invoices, payments, refunds",
+        "technical": "bugs, outages, system errors",
+        "sales": "pricing, new contracts, plan upgrades",
+        "other": "everything else"
+      }
+    }
+  },
+  "filler_unit": "Thanks for the update on the quarterly planning meeting. We reviewed the roadmap slides, discussed hiring for the design team, agreed on the offsite venue, and noted that the parking garage will be closed next week. ",
+  "needle_prefix_mode": "upstream_auto",
+  "compose_style": "concat",
+  "requests": [
+    {"lang": "en", "text": "I was charged twice for invoice 4411, please refund the duplicate payment.", "label": "billing"},
+    {"lang": "en", "text": "The dashboard crashes with an error every time I open the reports page.", "label": "technical"},
+    {"lang": "en", "text": "What would an enterprise contract for 200 seats cost per year?", "label": "sales"},
+    {"lang": "en", "text": "Please refund my subscription payment from last month, it was billed by mistake.", "label": "billing"},
+    {"lang": "en", "text": "Our API returns 500 errors since this morning and the service is down.", "label": "technical"},
+    {"lang": "en", "text": "Can you send me pricing for upgrading our plan to the business tier?", "label": "sales"},
+    {"lang": "es", "text": "Me cobraron dos veces la factura de marzo, devuélvanme el cargo duplicado.", "label": "billing"},
+    {"lang": "es", "text": "La aplicación se cierra cada vez que abro la configuración.", "label": "technical"},
+    {"lang": "es", "text": "Quisiera una cotización para un contrato anual de 50 licencias.", "label": "sales"},
+    {"lang": "pt", "text": "Fui cobrado duas vezes na fatura de março, quero o reembolso da cobrança duplicada.", "label": "billing"},
+    {"lang": "pt", "text": "O sistema cai toda vez que tento gerar o relatório mensal.", "label": "technical"},
+    {"lang": "fr", "text": "J'ai été facturé deux fois ce mois-ci, merci de rembourser le doublon.", "label": "billing"},
+    {"lang": "fr", "text": "L'application plante dès que j'ouvre la page des paramètres.", "label": "technical"},
+    {"lang": "de", "text": "Ich wurde zweimal belastet, bitte erstatten Sie die doppelte Zahlung.", "label": "billing"},
+    {"lang": "de", "text": "Die Anwendung stürzt jedes Mal ab, wenn ich die Einstellungen öffne.", "label": "technical"},
+    {"lang": "de", "text": "Was kostet ein Jahresvertrag für 100 Nutzer?", "label": "sales"},
+    {"lang": "hi", "text": "मुझसे मार्च में दो बार शुल्क लिया गया, कृपया डुप्लिकेट राशि वापस करें।", "label": "billing"},
+    {"lang": "hi", "text": "ऐप हर बार सेटिंग्स खोलते ही बंद हो जाता है।", "label": "technical"},
+    {"lang": "ja", "text": "請求書が二重に請求されました。重複分を返金してください。", "label": "billing"},
+    {"lang": "ar", "text": "تم خصم المبلغ مرتين من بطاقتي، أرجو استرداد المبلغ المكرر.", "label": "billing"}
+  ]
+}

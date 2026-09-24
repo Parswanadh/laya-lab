@@ -1,0 +1,49 @@
+{
+  "pool_id": "filler-v1",
+  "kind": "filler",
+  "provenance": {
+    "authored_by": "engineer agent, laya-lab, 2026",
+    "basis": "same flavour as the single repeated filler sentence in fork/research/scripts/bench_long_context.py (FILLER), but expanded to 30 distinct sentences so repeated filler is not a single memorisable string",
+    "upstream_sha256": "computed at manifest time from fork/research/scripts/bench_long_context.py",
+    "note": "Deliberately contains no digits and no support-domain vocabulary, so (a) filler cannot answer the question and (b) every digit in a document comes from the needle. This is stricter than upstream's filler, which also had no digits."
+  },
+  "forbidden_stems": [
+    "bill", "invoic", "paym", "refund", "charg", "crash", "bug", "error",
+    "outage", "system", "sale", "pric", "contract", "plan", "upgrad", "licen",
+    "seat", "subscri", "depart", "request", "ticket", "technic", "dashboard",
+    "api", "server", "support", "account", "order", "receipt", "cancel",
+    "downtime", "portal", "report", "customer", "money", "card", "billing"
+  ],
+  "sentences": [
+    "Thanks for the notes from Tuesday's facilities walkthrough.",
+    "The east wing meeting room was rebooked for the afternoon.",
+    "Catering confirmed the vegetarian option for Thursday's lunch.",
+    "The parking garage on the lower level will be closed for resurfacing.",
+    "Please remember to badge in at the north entrance after six.",
+    "The shuttle to the satellite office leaves at ten past eight.",
+    "We reviewed the roadmap slides and moved two topics to next quarter.",
+    "Hiring for the design team continues; three interviews are scheduled.",
+    "The offsite venue deposit was approved by the operations group.",
+    "Laptop refresh shipments arrive on the second Wednesday of the month.",
+    "The fire drill will run for about twenty minutes after the all-hands.",
+    "Desk bookings for the quiet floor open every Monday at noon.",
+    "The guest wifi password rotates at the start of each month.",
+    "Someone left a jacket in the small conference room on Friday.",
+    "The quarterly town hall recording is available on the shared drive.",
+    "Please water the plants near the west windows while I am away.",
+    "The elevator inspection is scheduled for the last week of the month.",
+    "We should restock whiteboard markers before the workshop.",
+    "The cafeteria will close early on the holiday weekend.",
+    "Notes from the safety briefing are pinned to the break room board.",
+    "The archive boxes were moved to the basement storage area.",
+    "A new coffee machine was installed in the fourth floor pantry.",
+    "The projector in the large room needs a replacement cable.",
+    "Travel forms for the conference should be filed by Friday.",
+    "The team photo will be taken in the courtyard after lunch.",
+    "Recycling bins are now collected on Tuesdays and Fridays.",
+    "The visitor badges are kept in the front desk drawer.",
+    "Please wipe the table in the small room after the session.",
+    "The window cleaners are coming on the first Monday of the month.",
+    "A courier will collect the parcels from the lobby at noon."
+  ]
+}
