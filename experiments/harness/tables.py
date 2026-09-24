@@ -39,7 +39,7 @@ def fmt(x, nd=3):
 
 def cell_table(name: str, summary: dict) -> None:
     print("\n### %s — cells (n per cell in the table)\n" % name)
-    print("| pad | pos | max_len | n | correct | acc | CI95 | macroF1 | maj.cls | rand | modal pred (share) | req kept | med kept tok | p50 s | p95 s | tok/s |")
+    print("| pad | pos | max_len | n | correct | acc | CI95 | macroF1 | maj.cls | rand | modal pred (share) | req kept (med kept/med tot tok) | med state kept/full tok | p50 s | p95 s | tok/s |")
     print("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     for c in summary["cells"]:
         rb = c.get("random_baselines") or {}
@@ -48,8 +48,13 @@ def cell_table(name: str, summary: dict) -> None:
                  fmt(c["accuracy"]), fmt(c["accuracy_ci95_low"]), fmt(c["accuracy_ci95_high"]),
                  fmt(c.get("macro_f1")), fmt(c["majority_class_accuracy"]),
                  fmt(rb.get("random_over_options")), c["modal_prediction"],
-                 fmt(c["modal_prediction_share"], 2), fmt(c["request_kept_fraction"], 2),
-                 c["median_state_tokens_kept"], fmt(c["median_latency_s"]),
+                 fmt(c["modal_prediction_share"], 2),
+                 "%s (%s/%s of %s)"
+                 % (fmt(c["request_kept_fraction"], 2),
+                    c.get("median_request_tokens_kept"), c.get("median_request_tokens"),
+                    c.get("median_needle_tokens_kept")),
+                 "%s / %s" % (c["median_state_tokens_kept"], c["median_state_tokens_full"]),
+                 fmt(c["median_latency_s"]),
                  fmt(c.get("p95_latency_s")), fmt(c.get("tokens_per_second"), 1)))
 
 

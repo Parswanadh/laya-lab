@@ -504,12 +504,12 @@ def rejection_threshold_exact(n, q, alpha=0.05):
         for l, pl in enumerate(pmf):
             conv[k - l + n] += pk * pl
     tot = 0.0
-    for d in range(0, n + 1):               # upper tail, one side only
-        pr = conv[d + n]
-        if tot + pr > alpha / 2.0:
-            return d
+    for d in range(n, -1, -1):              # UPPER tail: accumulate from the largest
+        pr = conv[d + n]                    # difference downwards until the one-sided
+        if tot + pr > alpha / 2.0:          # tail mass first exceeds alpha/2
+            return d + 1
         tot += pr
-    return n + 1
+    return 0
 # self-check: at q=0.1, n=200 the threshold should sit near the normal value
 for _n, _q in [(200, 0.10), (200, 0.20), (400, 0.10)]:
     _d = rejection_threshold_exact(_n, _q)

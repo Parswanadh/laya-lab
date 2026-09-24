@@ -322,9 +322,9 @@ disagreement is itself the finding:
       pairs for the test to bite at all (see the self-checks below).
   (b) UNCONDITIONAL normal approximation on the discordant counts: the standard
       design-stage formula, which is what a sample-size argument must use.
-  [self-check] n=200 q=0.10: exact |X-Y| threshold = 0 (normal approx z*SD = 8.5, SD = 4.36)
-  [self-check] n=200 q=0.20: exact |X-Y| threshold = 0 (normal approx z*SD = 11.8, SD = 6.00)
-  [self-check] n=400 q=0.10: exact |X-Y| threshold = 0 (normal approx z*SD = 12.1, SD = 6.16)
+  [self-check] n=200 q=0.10: exact |X-Y| threshold = 10 (normal approx z*SD = 8.5, SD = 4.36)
+  [self-check] n=200 q=0.20: exact |X-Y| threshold = 13 (normal approx z*SD = 11.8, SD = 6.00)
+  [self-check] n=400 q=0.10: exact |X-Y| threshold = 13 (normal approx z*SD = 12.1, SD = 6.16)
   [self-check] m=100: exact sign test rejects for X <= 39 or X >= 61; P(reject|H0) = 0.0352
   [self-check] m=200: exact sign test rejects for X <= 85 or X >= 115; P(reject|H0) = 0.0400
   [self-check] m=600: exact sign test rejects for X <= 275 or X >= 325; P(reject|H0) = 0.0454
@@ -340,48 +340,48 @@ disagreement is itself the finding:
 (b) EXACT unconditional McNemar power (design-grade), by discordance rate q:
   q = 0.10:
      n  delta=0.03  delta=0.05  delta=0.10
-   100       1.000       1.000          --
-   200       1.000       1.000          --
-   400       1.000       1.000          --
-   800       1.000       1.000          --
-  2000       1.000       1.000          --
+   100       0.127       0.305          --
+   200       0.208       0.540          --
+   400       0.465       0.891          --
+   800       0.772       0.996          --
+  2000       0.991       1.000          --
   q = 0.20:
      n  delta=0.03  delta=0.05  delta=0.10
-   100       1.000       1.000       1.000
-   200       1.000       1.000       1.000
-   400       1.000       1.000       1.000
-   800       1.000       1.000       1.000
-  2000       1.000       1.000       1.000
+   100       0.100       0.203       0.637
+   200       0.140       0.337       0.899
+   400       0.258       0.616       0.997
+   800       0.483       0.903       1.000
+  2000       0.883       1.000       1.000
 
 normal approximation (b') vs exact unconditional (b), same parameters:
      n      q  delta  normal approx  exact uncond
-   200   0.10   0.05          0.899         1.000
-   400   0.10   0.05          0.986         1.000
-   800   0.10   0.05          1.000         1.000
-   200   0.20   0.10          0.987         1.000
-   400   0.20   0.10          1.000         1.000
+   200   0.10   0.05          0.899         0.540
+   400   0.10   0.05          0.986         0.891
+   800   0.10   0.05          1.000         0.996
+   200   0.20   0.10          0.987         0.899
+   400   0.20   0.10          1.000         0.997
    800   0.20   0.10          1.000         1.000
 
 power at the protocol's candidate sample sizes (EXACT unconditional):
     q  delta     n=100     n=200     n=300     n=400     n=600     n=800
- 0.10   0.03     1.000     1.000     1.000     1.000     1.000     1.000
- 0.10   0.05     1.000     1.000     1.000     1.000     1.000     1.000
- 0.20   0.03     1.000     1.000     1.000     1.000     1.000     1.000
- 0.20   0.05     1.000     1.000     1.000     1.000     1.000     1.000
- 0.20   0.10     1.000     1.000     1.000     1.000     1.000     1.000
- 0.30   0.03     1.000     1.000     1.000     1.000     1.000     1.000
- 0.30   0.05     1.000     1.000     1.000     1.000     1.000     1.000
- 0.30   0.10     1.000     1.000     1.000     1.000     1.000     1.000
+ 0.10   0.03     0.127     0.208     0.386     0.465     0.629     0.772
+ 0.10   0.05     0.305     0.540     0.802     0.891     0.975     0.996
+ 0.20   0.03     0.100     0.140     0.227     0.258     0.404     0.483
+ 0.20   0.05     0.203     0.337     0.526     0.616     0.821     0.903
+ 0.20   0.10     0.637     0.899     0.985     0.997     1.000     1.000
+ 0.30   0.03     0.072     0.119     0.166     0.200     0.300     0.376
+ 0.30   0.05     0.138     0.264     0.387     0.480     0.672     0.790
+ 0.30   0.10     0.459     0.782     0.926     0.975     0.998     1.000
 
 smallest n (multiple of 20) with EXACT unconditional power >= 0.80:
-   q=0.10, delta=0.03 -> n =   20 (power 1.000)
-   q=0.10, delta=0.05 -> n =   20 (power 1.000)
-   q=0.20, delta=0.03 -> n =   20 (power 1.000)
-   q=0.20, delta=0.05 -> n =   20 (power 1.000)
-   q=0.20, delta=0.10 -> n =   20 (power 1.000)
-   q=0.30, delta=0.03 -> n =   20 (power 1.000)
-   q=0.30, delta=0.05 -> n =   20 (power 1.000)
-   q=0.30, delta=0.10 -> n =   20 (power 1.000)
+   q=0.10, delta=0.03 -> n =  880 (power 0.807)
+   q=0.10, delta=0.05 -> n =  300 (power 0.802)
+   q=0.20, delta=0.03 -> n = 1600 (power 0.804)
+   q=0.20, delta=0.05 -> n =  600 (power 0.821)
+   q=0.20, delta=0.10 -> n =  160 (power 0.802)
+   q=0.30, delta=0.03 -> n = 2260 (power 0.801)
+   q=0.30, delta=0.05 -> n =  820 (power 0.807)
+   q=0.30, delta=0.10 -> n =  220 (power 0.810)
 
 UPSTREAM'S OWN n=20 CELL, tested against the chance rate (4 options -> 0.25):
    pad>=2000, limit=1024 (acc 0.35): exact one-sided binomial p vs 0.25 = 0.21422

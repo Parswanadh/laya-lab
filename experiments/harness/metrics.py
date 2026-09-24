@@ -199,6 +199,13 @@ def cell_summary(rows: Sequence[Dict[str, Any]], n_boot: int = 10000, seed: int 
         "truncated_fraction": (sum(1 for r in rows if r["truncated"]) / len(rows)) if rows else None,
         "request_kept_fraction": (sum(1 for r in rows if r["request_kept"]) / len(rows)) if rows else None,
         "needle_kept_fraction": (sum(1 for r in rows if r["needle_kept"]) / len(rows)) if rows else None,
+        # how much of the needle itself survived, in tokens: this is what separates "the evidence
+        # is gone" from "most of the evidence is gone", and it is why a padded cell can land
+        # between chance and ceiling
+        "median_request_tokens": int(statistics.median([int(r["request_tokens"]) for r in rows])) if rows else None,
+        "median_request_tokens_kept": int(statistics.median([int(r["request_tokens_kept"]) for r in rows])) if rows else None,
+        "median_needle_tokens_kept": int(statistics.median([int(r["needle_tokens_kept"]) for r in rows])) if rows else None,
+        "totally_truncated_fraction": (sum(1 for r in rows if int(r["request_tokens_kept"]) == 0) / len(rows)) if rows else None,
         "trunc_rule_ok_all": all(r["trunc_rule_ok"] for r in rows) if rows else None,
         "pad_exact_all": all(bool(r.get("pad_exact")) for r in rows) if rows else None,
     }

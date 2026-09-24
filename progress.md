@@ -152,3 +152,61 @@ needle-in-haystack is a mechanism probe, not evidence about real documents.
 
 **Infra.** Added a `flock` GPU single-writer convention to `AGENTS.md` — concurrent CUDA jobs
 would corrupt timings and can OOM an 8 GB card.
+
+---
+
+## 2026-09-24 · P1b — the bottleneck is the aggregation path, not the encoder
+
+**Artifact.** `experiments/orch-probe-d/results.json` · **Write-up.** `findings/P1b-information-location.md`
+**Status.** `candidate` · n=200/condition, 4 balanced classes, 4000-token documents, grouped CV by
+needle template so no test item shares a surface form with a training item.
+
+| feature | needle@END (grouped CV) | needle@START (grouped CV) |
+|---|---|---|
+| `marker` — **exactly what the shipped scorer reads** | **0.820** | **0.845** |
+| `cls` | 0.885 | 0.905 |
+| `state_mean` / `state_max` | 0.895 / 0.895 | 0.895 / 0.975 |
+| `random_pos` *(control)* | 0.440 | 0.475 |
+| **shipped head** | **0.300** | **0.585** |
+| random / majority | 0.250 | 0.250 |
+
+**The encoder is not the bottleneck; the extraction is.** The frozen encoder delivers
+label-recoverable information to the marker positions at 0.820 — a *linear* probe recovers it with
+the needle 4000 tokens away — while the shipped head, a strictly more powerful 2-layer transformer
+plus scorer over those same positions, returns 0.300.
+
+The `random_pos` control (0.44–0.48 vs a 0.25 floor) shows the probes read the features, not a
+spurious whole-sequence signal.
+
+**Consequences.**
+1. Predicts **small gains for encoder attention surgery (H2/H3)** — independently matching R-001's
+   published prior (8× wider window → +0.4 micro-F1) and P1's positional mechanism.
+2. Gives H5 a concrete target: the **aggregation path**, not the encoder. → issue #6.
+
+**Confound registered in the write-up.** A probe fitted on the evaluation distribution is not a
+fair comparison to a frozen head trained on another task, so 0.820 is an **upper bound on a
+retrained aggregation path**, *not* "the head should score 0.82". This is why issue #6 forces a
+**fine-tuned-head control arm**: if fine-tuning alone matches cross-attention, the architecture is
+not the win and that will be reported as the result.
+
+### R-001's framing question (W4) answered — both mechanisms are real, at different budgets
+R-001 asked whether the 1024-token failure is **truncation** or **reachability**, warning that the
+answer decides whether mask-level interventions are relevant at all. Measured:
+
+| budget | behaviour | mechanism |
+|---|---|---|
+| `max_len=1024` | flat **0.35** for every document ≥ 1000 tokens | **truncation** — the state budget is ~764 tokens, the tail (and the needle with it) is gone. **No attention-level intervention can recover this.** |
+| `max_len=8192` | nothing truncated (median 4066 < 8192), yet **0.90 → 0.45** as the needle moves start → end | **reachability** — R-001's items 3/4/7 are on point here. |
+
+These two regimes must never be reported as a single number.
+
+**Research complete.** R-001/R-002/R-003 delivered (1272 + 342 + 1197 lines, 43 URLs verified, every
+arXiv ID API-resolved). Headline: **RoPE scaling is provably the identity at ≤8192** — `seq_len` is
+clamped to `max_position_embeddings` before use, so H4 is eliminated as a hypothesis class without
+spending GPU time. Also: inference-time window widening has been measured and does not help
+(38.2 → 38.0); the supported lever is restoring **global** attention paths; and **our truncation
+control was wrong** — a random-chunk arm is required, because on ECtHR the long-context gain is
++7.5 over first-512 but only **+2.0 over random-512**. That correction is pending in `protocol.md`.
+
+**In flight.** 5 agents at the concurrency cap: math (#2), harness (#1), H2/H3 knobs (#4),
+verifier (#5), and H5 aggregation geometry (#6).
