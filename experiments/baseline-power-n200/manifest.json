@@ -4,10 +4,10 @@
  "seed": 20240924,
  "n_per_cell": 200,
  "languages": null,
- "status": "running",
+ "status": "finished",
  "started_utc": "2026-09-24T18:06:55Z",
- "finished_utc": null,
- "wall_seconds": null,
+ "finished_utc": "2026-09-24T18:31:32Z",
+ "wall_seconds": 1486.073,
  "command": "cd /home/parshu/projects/contri/laya-lab && USE_TF=0 CUDA_VISIBLE_DEVICES=0 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True /home/parshu/projects/contri/laya-lab/env/venv/bin/python experiments/harness/run.py --preset baseline-power --device cuda --checkpoint models/multilingual",
  "argv": [
   "experiments/harness/run.py",
@@ -2717,5 +2717,6 @@
   "presets.json": {
    "sha256": "5ae6102b492e8a01dd363c1d1f938b3fe93928786f01e4d58a1764bdf6e442a5"
   }
- }
+ },
+ "rows_written": 2000
 }

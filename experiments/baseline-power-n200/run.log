@@ -1,0 +1,46 @@
+=== baseline-power|balanced-v1|n200|seed20240924 ===
+command: experiments/harness/run.py --preset baseline-power --device cuda --checkpoint models/multilingual
+out: /home/parshu/projects/contri/laya-lab/experiments/baseline-power-n200
+gpu lock: {'held': True, 'path': '/home/parshu/projects/contri/laya-lab/.gpu.lock', 'pid': 894027}
+preflight: {"mem_available_gib": 6.36, "gpu_free_gib": 6.51, "min_available_gib_required": 2.0, "gpu_min_free_gib_required": 2.0, "allow_low_mem": false, "note": "host RAM at launch 6.36 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"}
+leakage check passed: {"needle_vocab_size": 398, "filler_vocab_size": 178, "content_word_overlap": [], "stem_hits": []}
+items: n=200 label_counts={'billing': 67, 'sales': 66, 'technical': 67} balance_ok=True langs={'ar': 22, 'de': 22, 'en': 22, 'es': 23, 'fr': 23, 'hi': 22, 'ja': 22, 'pt': 22, 'zh': 22}
+backend: laya models/multilingual device=cuda dtype=torch.bfloat16 amp=True params=321908995 load=7.2s
+shipped defaults: max_len=1024 head_max_len=256
+cells: 10 -> pad0|pos1.00|mldefault|hmldefault, pad0|pos1.00|ml8192|hmldefault, pad1000|pos1.00|mldefault|hmldefault, pad1000|pos1.00|ml8192|hmldefault, pad2000|pos1.00|mldefault|hmldefault, pad2000|pos1.00|ml8192|hmldefault, pad4000|pos1.00|mldefault|hmldefault, pad4000|pos1.00|ml8192|hmldefault, pad7000|pos1.00|mldefault|hmldefault, pad7000|pos1.00|ml8192|hmldefault
+global warm-up done (3 discarded passes at shipped max_len=1024)
+pad     0  pos 1.00  max_len default  acc 168/200 (0.840)  ci95 [0.79, 0.89]  med 0.019s  tokens 64  kept 1.000  request_kept 1.00  modal billing (0.43)
+pad     0  pos 1.00  max_len 8192     acc 168/200 (0.840)  ci95 [0.79, 0.89]  med 0.020s  tokens 64  kept 1.000  request_kept 1.00  modal billing (0.43)
+pad  1000  pos 1.00  max_len default  acc  65/200 (0.325)  ci95 [0.26, 0.39]  med 0.037s  tokens 1024  kept 0.957  request_kept 0.00  modal technical (0.99)
+pad  1000  pos 1.00  max_len 8192     acc 141/200 (0.705)  ci95 [0.64, 0.77]  med 0.042s  tokens 1068  kept 1.000  request_kept 1.00  modal technical (0.45)
+pad  2000  pos 1.00  max_len default  acc  67/200 (0.335)  ci95 [0.27, 0.40]  med 0.042s  tokens 1024  kept 0.484  request_kept 0.00  modal technical (0.99)
+pad  2000  pos 1.00  max_len 8192     acc 134/200 (0.670)  ci95 [0.60, 0.73]  med 0.083s  tokens 2068  kept 1.000  request_kept 1.00  modal technical (0.49)
+pad  4000  pos 1.00  max_len default  acc  66/200 (0.330)  ci95 [0.27, 0.40]  med 0.037s  tokens 1024  kept 0.243  request_kept 0.00  modal technical (0.99)
+pad  4000  pos 1.00  max_len 8192     acc  99/200 (0.495)  ci95 [0.42, 0.56]  med 0.268s  tokens 4068  kept 1.000  request_kept 1.00  modal technical (0.76)
+pad  7000  pos 1.00  max_len default  acc  67/200 (0.335)  ci95 [0.27, 0.40]  med 0.173s  tokens 1024  kept 0.139  request_kept 0.00  modal technical (0.98)
+pad  7000  pos 1.00  max_len 8192     acc  84/200 (0.420)  ci95 [0.35, 0.49]  med 0.783s  tokens 7068  kept 1.000  request_kept 1.00  modal technical (0.82)
+repeat check: 20/20 identical predictions, max |dp| = 0.000000
+
+--- structural checks (from the published artifacts) ---
+[PASS] cell_keys_match_summary  {"stray": [], "n_cells": 10}
+[PASS] row_count_matches_summary  {"rows": 2000, "summary_n": 2000}
+[PASS] required_fields_present
+[PASS] probabilities_sum_to_one
+[PASS] prediction_is_an_option
+[PASS] prediction_is_probability_argmax
+[PASS] truncation_matches_documented_rule
+[PASS] input_tokens_within_budget
+[PASS] no_duplicate_cell_item_rows  {"duplicates": 0}
+[PASS] items_paired_across_max_len
+[PASS] document_independent_of_max_len
+[PASS] summary_accuracy_recomputes_from_jsonl
+[PASS] label_balance_or_declared_majority  {"label_counts": {"billing": 67, "sales": 66, "technical": 67}, "max_label_share": 0.335, "balanced": true, "majority_class_reported_in_every_cell": true}
+[PASS] leakage_check_passed
+--- mechanism checks (rebuild from seed) ---
+[PASS] documents_deterministic_for_seed
+[PASS] seed_changes_documents  {"moved": 9, "total": 9}
+[PASS] row_doc_sha256_rebuilds_from_seed  {"checked": 40, "mismatches": []}
+[PASS] large_budget_keeps_the_tail_request  {"request_kept_fraction_at_position_1.0": 1.0, "max_len": 8192, "longest_document_tokens": 7036}
+
+wrote /home/parshu/projects/contri/laya-lab/experiments/baseline-power-n200/predictions.jsonl (2000 rows) in 1491.5s
+checks: structural=True mechanism=True

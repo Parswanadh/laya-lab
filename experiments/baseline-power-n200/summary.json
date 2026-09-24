@@ -340,7 +340,321 @@
    "min_latency_s": 0.065367,
    "max_latency_s": 0.163767,
    "tokens_per_second": 24340.194875668578
+  },
+  {
+   "cell_key": "pad4000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 4000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256,
+   "cell_wall_seconds": 8.799,
+   "n": 200,
+   "correct": 66,
+   "accuracy": 0.33,
+   "macro_f1": 0.1660377358490566,
+   "accuracy_ci95_low": 0.27,
+   "accuracy_ci95_high": 0.395,
+   "accuracy_ci_method": "percentile bootstrap over items, n_boot=10000, seed=20240924",
+   "majority_class_accuracy": 0.335,
+   "random_baselines": {
+    "random_over_options": 0.25,
+    "random_over_gold_labels": 0.3333333333333333
+   },
+   "modal_prediction": "technical",
+   "modal_prediction_share": 0.99,
+   "predicted_distribution": {
+    "other": 2,
+    "technical": 198
+   },
+   "label_distribution": {
+    "billing": 67,
+    "sales": 66,
+    "technical": 67
+   },
+   "median_input_tokens": 1024,
+   "min_input_tokens": 1024,
+   "max_input_tokens": 1024,
+   "median_state_tokens_full": 4022,
+   "median_state_tokens_kept": 978,
+   "truncated_fraction": 1.0,
+   "request_kept_fraction": 0.0,
+   "needle_kept_fraction": 0.0,
+   "median_request_tokens": 18,
+   "median_request_tokens_kept": 0,
+   "median_needle_tokens_kept": 0,
+   "totally_truncated_fraction": 1.0,
+   "trunc_rule_ok_all": true,
+   "pad_exact_all": true,
+   "median_latency_s": 0.036749000000000004,
+   "mean_latency_s": 0.040293985000000004,
+   "p95_latency_s": 0.060758799999999995,
+   "min_latency_s": 0.027578,
+   "max_latency_s": 0.071826,
+   "tokens_per_second": 25413.222345717357
+  },
+  {
+   "cell_key": "pad4000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 4000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256,
+   "cell_wall_seconds": 54.023,
+   "n": 200,
+   "correct": 99,
+   "accuracy": 0.495,
+   "macro_f1": 0.4240854003850946,
+   "accuracy_ci95_low": 0.425,
+   "accuracy_ci95_high": 0.565,
+   "accuracy_ci_method": "percentile bootstrap over items, n_boot=10000, seed=20240924",
+   "majority_class_accuracy": 0.335,
+   "random_baselines": {
+    "random_over_options": 0.25,
+    "random_over_gold_labels": 0.3333333333333333
+   },
+   "modal_prediction": "technical",
+   "modal_prediction_share": 0.755,
+   "predicted_distribution": {
+    "billing": 41,
+    "other": 2,
+    "sales": 6,
+    "technical": 151
+   },
+   "label_distribution": {
+    "billing": 67,
+    "sales": 66,
+    "technical": 67
+   },
+   "median_input_tokens": 4068,
+   "min_input_tokens": 4063,
+   "max_input_tokens": 4082,
+   "median_state_tokens_full": 4022,
+   "median_state_tokens_kept": 4022,
+   "truncated_fraction": 0.0,
+   "request_kept_fraction": 1.0,
+   "needle_kept_fraction": 1.0,
+   "median_request_tokens": 18,
+   "median_request_tokens_kept": 18,
+   "median_needle_tokens_kept": 22,
+   "totally_truncated_fraction": 0.0,
+   "trunc_rule_ok_all": true,
+   "pad_exact_all": true,
+   "median_latency_s": 0.2680265,
+   "mean_latency_s": 0.2643458,
+   "p95_latency_s": 0.33877424999999994,
+   "min_latency_s": 0.180962,
+   "max_latency_s": 0.355777,
+   "tokens_per_second": 15392.811234375578
+  },
+  {
+   "cell_key": "pad7000|pos1.00|mldefault|hmldefault",
+   "pad_tokens": 7000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "default",
+   "max_len_effective": 1024,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256,
+   "cell_wall_seconds": 37.787,
+   "n": 200,
+   "correct": 67,
+   "accuracy": 0.335,
+   "macro_f1": 0.1691919191919192,
+   "accuracy_ci95_low": 0.27,
+   "accuracy_ci95_high": 0.4,
+   "accuracy_ci_method": "percentile bootstrap over items, n_boot=10000, seed=20240924",
+   "majority_class_accuracy": 0.335,
+   "random_baselines": {
+    "random_over_options": 0.25,
+    "random_over_gold_labels": 0.3333333333333333
+   },
+   "modal_prediction": "technical",
+   "modal_prediction_share": 0.985,
+   "predicted_distribution": {
+    "other": 2,
+    "sales": 1,
+    "technical": 197
+   },
+   "label_distribution": {
+    "billing": 67,
+    "sales": 66,
+    "technical": 67
+   },
+   "median_input_tokens": 1024,
+   "min_input_tokens": 1024,
+   "max_input_tokens": 1024,
+   "median_state_tokens_full": 7022,
+   "median_state_tokens_kept": 978,
+   "truncated_fraction": 1.0,
+   "request_kept_fraction": 0.0,
+   "needle_kept_fraction": 0.0,
+   "median_request_tokens": 18,
+   "median_request_tokens_kept": 0,
+   "median_needle_tokens_kept": 0,
+   "totally_truncated_fraction": 1.0,
+   "trunc_rule_ok_all": true,
+   "pad_exact_all": true,
+   "median_latency_s": 0.1732245,
+   "mean_latency_s": 0.18009559,
+   "p95_latency_s": 0.29275734999999997,
+   "min_latency_s": 0.082836,
+   "max_latency_s": 0.337933,
+   "tokens_per_second": 5685.869376368405
+  },
+  {
+   "cell_key": "pad7000|pos1.00|ml8192|hmldefault",
+   "pad_tokens": 7000,
+   "needle_position": 1.0,
+   "position_requested": 1.0,
+   "position_degenerate": false,
+   "max_len_requested": "8192",
+   "max_len_effective": 8192,
+   "head_max_len_requested": "default",
+   "head_max_len_effective": 256,
+   "cell_wall_seconds": 162.536,
+   "n": 200,
+   "correct": 84,
+   "accuracy": 0.42,
+   "macro_f1": 0.33211951447245563,
+   "accuracy_ci95_low": 0.355,
+   "accuracy_ci95_high": 0.49,
+   "accuracy_ci_method": "percentile bootstrap over items, n_boot=10000, seed=20240924",
+   "majority_class_accuracy": 0.335,
+   "random_baselines": {
+    "random_over_options": 0.25,
+    "random_over_gold_labels": 0.3333333333333333
+   },
+   "modal_prediction": "technical",
+   "modal_prediction_share": 0.82,
+   "predicted_distribution": {
+    "billing": 17,
+    "sales": 19,
+    "technical": 164
+   },
+   "label_distribution": {
+    "billing": 67,
+    "sales": 66,
+    "technical": 67
+   },
+   "median_input_tokens": 7068,
+   "min_input_tokens": 7063,
+   "max_input_tokens": 7082,
+   "median_state_tokens_full": 7022,
+   "median_state_tokens_kept": 7022,
+   "truncated_fraction": 0.0,
+   "request_kept_fraction": 1.0,
+   "needle_kept_fraction": 1.0,
+   "median_request_tokens": 18,
+   "median_request_tokens_kept": 18,
+   "median_needle_tokens_kept": 22,
+   "totally_truncated_fraction": 0.0,
+   "trunc_rule_ok_all": true,
+   "pad_exact_all": true,
+   "median_latency_s": 0.7834625,
+   "mean_latency_s": 0.8024180649999999,
+   "p95_latency_s": 1.0454249999999998,
+   "min_latency_s": 0.577178,
+   "max_latency_s": 1.22271,
+   "tokens_per_second": 8809.653356944302
   }
  ],
- "notes": []
+ "notes": [
+  "structural_checks_passed=True",
+  "mechanism_checks_passed=True"
+ ],
+ "baselines": {
+  "random_over_options": 0.25,
+  "random_over_gold_labels": 0.3333333333333333,
+  "majority_class_accuracy_per_cell": {
+   "pad0|pos1.00|mldefault|hmldefault": 0.335,
+   "pad0|pos1.00|ml8192|hmldefault": 0.335,
+   "pad1000|pos1.00|mldefault|hmldefault": 0.335,
+   "pad1000|pos1.00|ml8192|hmldefault": 0.335,
+   "pad2000|pos1.00|mldefault|hmldefault": 0.335,
+   "pad2000|pos1.00|ml8192|hmldefault": 0.335,
+   "pad4000|pos1.00|mldefault|hmldefault": 0.335,
+   "pad4000|pos1.00|ml8192|hmldefault": 0.335,
+   "pad7000|pos1.00|mldefault|hmldefault": 0.335,
+   "pad7000|pos1.00|ml8192|hmldefault": 0.335
+  },
+  "position_only_oracle": {
+   "group_fields": [
+    "pad_tokens",
+    "needle_position"
+   ],
+   "n": 2000,
+   "oracle_accuracy": 0.335,
+   "per_group": {
+    "0|1.0": {
+     "n": 400,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.335,
+     "label_distribution": {
+      "technical": 134,
+      "sales": 132,
+      "billing": 134
+     }
+    },
+    "1000|1.0": {
+     "n": 400,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.335,
+     "label_distribution": {
+      "technical": 134,
+      "sales": 132,
+      "billing": 134
+     }
+    },
+    "2000|1.0": {
+     "n": 400,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.335,
+     "label_distribution": {
+      "technical": 134,
+      "sales": 132,
+      "billing": 134
+     }
+    },
+    "4000|1.0": {
+     "n": 400,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.335,
+     "label_distribution": {
+      "technical": 134,
+      "sales": 132,
+      "billing": 134
+     }
+    },
+    "7000|1.0": {
+     "n": 400,
+     "oracle_label": "technical",
+     "oracle_accuracy": 0.335,
+     "label_distribution": {
+      "technical": 134,
+      "sales": 132,
+      "billing": 134
+     }
+    }
+   }
+  }
+ },
+ "repeat_check": {
+  "cell": "pad0|pos1.00|mldefault|hmldefault",
+  "items": 20,
+  "prediction_agreement": 1.0,
+  "max_abs_probability_delta": 0.0,
+  "note": "same process, same seeds, same inputs, GPU lock held for both passes"
+ },
+ "peak_vram_allocated_bytes": 2224030208,
+ "peak_vram_reserved_bytes": 2273312768,
+ "manifest_status": "finished",
+ "wall_seconds": 1486.073
 }
