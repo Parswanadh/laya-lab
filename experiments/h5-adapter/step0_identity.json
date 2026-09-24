@@ -34,6 +34,16 @@
    "max_abs_logit_delta": 0.0,
    "items_with_different_prediction": 0,
    "predictions_identical": true
+  },
+  {
+   "check": "liveness: a non-zero branch must NOT equal arm2 (L7000-p100)",
+   "n_items": 200,
+   "bitwise_identical_logits": false,
+   "max_abs_logit_delta": 0.03125,
+   "items_with_different_prediction": 0,
+   "predictions_identical": true,
+   "expected": "bitwise_identical_logits == false",
+   "liveness_proved": true
   }
  ],
  "arm3r_parameter_accounting": {
@@ -106,5 +116,47 @@
   "weight_abs_sum": 0.0,
   "bias_abs_sum": 0.0
  },
- "step0_gradient_expectation": "at W = 0 the branch's *inner* weights receive exactly zero gradient (dL/dz = W^T dL/ddelta) and only out_proj moves at step 0; after one step the inner weights train normally"
+ "step0_gradient_expectation": "at W = 0 the branch's *inner* weights receive exactly zero gradient (dL/dz = W^T dL/ddelta) and only out_proj moves at step 0; after one step the inner weights train normally",
+ "liveness_probe_out_proj_scale": 0.001,
+ "reach_probe_out_proj_scale": 0.03,
+ "reach": {
+  "check": "reach: a large non-zero branch (3e-2) on L7000-p100",
+  "n_items": 200,
+  "bitwise_identical_logits": false,
+  "max_abs_logit_delta": 0.03125,
+  "items_with_different_prediction": 0,
+  "predictions_identical": true,
+  "prediction_flips": 0
+ },
+ "trainability": {
+  "out_proj_weight_grad_sum": 50.230445861816406,
+  "out_proj_bias_grad_sum": 0.09656397998332977,
+  "max_inner_grad_sum_at_step0": 0.0,
+  "n_inner_tensors": 24,
+  "note": "inner == 0 at step 0 is the expected consequence of W = 0, not a defect: the branch first learns a linear read-out of its random features through out_proj",
+  "out_proj_takes_gradient": true
+ },
+ "verdict": "VALID -- arm3r is arm2 at step 0 (bitwise, 0/2200 items differ) and the branch moves the logits when non-zero",
+ "all_checks_passed": true,
+ "seconds": 300.4,
+ "environment": {
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "torch": "2.9.1+cu128",
+  "transformers": "4.57.6",
+  "cuda_available": true,
+  "device": "cuda",
+  "USE_TF": "0",
+  "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+  "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "gpu_total_memory_gb": 8.16,
+  "cuda_version": "12.8"
+ },
+ "git": {
+  "lab_head": "e0eb58212ffab5def39a4e0a56271813f84bb153",
+  "lab_status_porcelain": "M experiments/h5-adapter/step0_identity.json",
+  "fork_worktree_head": "99020ba2a11d07ea2bf1dc463e872e7c83efe584",
+  "fork_branch": "exp/h5-adapter",
+  "fork_status_porcelain": ""
+ }
 }

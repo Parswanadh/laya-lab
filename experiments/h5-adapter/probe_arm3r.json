@@ -1,0 +1,102 @@
+{
+ "arm": "arm3r_residual",
+ "seed": 0,
+ "main_lr": 0.0005,
+ "epochs": 3,
+ "n_train_items": 1008,
+ "configs": [
+  {
+   "arm": "arm3r_residual",
+   "lr": 0.0005,
+   "lr_cross": 0.0005,
+   "epochs": 3,
+   "loss_per_epoch": [
+    1.366,
+    1.3266,
+    1.304
+   ],
+   "acc_per_epoch": [
+    0.3313,
+    0.3393,
+    0.3492
+   ],
+   "branch_contribution_per_epoch": [
+    0.05068546533584595,
+    0.0897296667098999,
+    0.08191168308258057
+   ],
+   "out_proj_weight_fro_per_epoch": [
+    5.348208904266357,
+    6.637296676635742,
+    6.647042274475098
+   ],
+   "step0_out_proj_grad_sum": 6.243244647979736,
+   "final_train_loss": 1.3039735368940801,
+   "final_train_accuracy": 0.3492063492063492,
+   "seconds": 288.7,
+   "peak_vram_gb": 2.901333504
+  },
+  {
+   "arm": "arm3r_residual",
+   "lr": 0.0005,
+   "lr_cross": 0.003,
+   "epochs": 3,
+   "loss_per_epoch": [
+    1.3651,
+    1.3172,
+    1.3026
+   ],
+   "acc_per_epoch": [
+    0.3413,
+    0.3433,
+    0.375
+   ],
+   "branch_contribution_per_epoch": [
+    0.01000666618347168,
+    0.20403385162353516,
+    0.19294726848602295
+   ],
+   "out_proj_weight_fro_per_epoch": [
+    25.91274070739746,
+    32.59821319580078,
+    32.54941940307617
+   ],
+   "step0_out_proj_grad_sum": 6.243244647979736,
+   "final_train_loss": 1.3025622715889882,
+   "final_train_accuracy": 0.375,
+   "seconds": 291.9,
+   "peak_vram_gb": 2.901333504
+  },
+  {
+   "arm": "arm3r_residual",
+   "lr": 0.0005,
+   "lr_cross": 0.01,
+   "epochs": 3,
+   "loss_per_epoch": [
+    1.3639,
+    1.3311,
+    1.3248
+   ],
+   "acc_per_epoch": [
+    0.3333,
+    0.3413,
+    0.3304
+   ],
+   "branch_contribution_per_epoch": [
+    0.12871694564819336,
+    0.7114609479904175,
+    0.6573376655578613
+   ],
+   "out_proj_weight_fro_per_epoch": [
+    80.81771087646484,
+    101.71553039550781,
+    102.35397338867188
+   ],
+   "step0_out_proj_grad_sum": 6.243244647979736,
+   "final_train_loss": 1.3247968634028757,
+   "final_train_accuracy": 0.33035714285714285,
+   "seconds": 294.3,
+   "peak_vram_gb": 2.901333504
+  }
+ ]
+}
