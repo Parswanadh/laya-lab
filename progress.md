@@ -362,3 +362,41 @@ recorded as a limitation, not hidden.
 **Disk incident.** The filesystem hit **100 % full** mid-run (1.6 GB free). I freed space without
 touching other projects' data; the H5 agent cleared ~10 GB of re-creatable caches. Training
 survived. Head checkpoints are now gitignored and deleted after eval; raw per-item JSONL is kept.
+
+---
+
+## 2026-09-25 · H5 arm3 — FAILED TO TRAIN. H5 unresolved, not refuted.
+
+**Artifact.** `experiments/h5-adapter/predictions/arm3_xattn-seed0.jsonl` · n=200/cell · oracle 0.2500
+
+| cell | arm1 frozen | **arm2** fine-tuned | arm3 cross-attn | Δ a2→a3 | p |
+|---|---|---|---|---|---|
+| **L0** | 0.640 | **0.620** | **0.225** | **−0.395** | 2.1e-18 |
+| L4000-p000 | 0.580 | 0.590 | 0.270 | −0.320 | 4.6e-16 |
+| L4000-p025 | 0.295 | 0.430 | 0.230 | −0.200 | 8.6e-06 |
+| L4000-p050 | 0.335 | **0.500** | 0.250 | −0.250 | 1.4e-08 |
+| L4000-p100 | 0.415 | 0.495 | 0.255 | −0.240 | 4.5e-09 |
+| **L7000-p100** | 0.365 | **0.455** | **0.240** | **−0.215** | 1.8e-06 |
+
+**Arm 3 scores below chance at L0** — a 64-token sequence with no long-range problem whatsoever.
+A module that fails *there* has not learned the task, so this cannot be read as evidence against
+cross-attention.
+
+**Root cause, from the committed training record.** arm2 trains `head.layers.*.self_attn.*`;
+arm3 trains `head.layers.*.cross_attn.*` — a **randomly initialised** module replacing a
+**pre-trained** one, with the identical recipe (lr 5e-4, 12 epochs, 4848 steps, same warmup).
+Arm 2 starts from the shipped solution; arm 3 starts from noise. **The comparison was unfair by
+construction**, and neither arm was converged (arm2 train loss still falling at epoch 12:
+1.414 → 1.259, train acc 0.383).
+
+**What stands: arm 2 is the strong baseline.** Fine-tuning the shipped head on the task (encoder
+frozen) buys **+9.0pp at the primary cell (p=0.0021)** and **+16.5pp mid-document (p=3.6e-08)**,
+with **no change at the easy cells** — exactly the headroom-only signature the mechanism predicts.
+That is a real, significant, pre-registered intervention.
+
+**Next (the loop).** Re-run arm 3 with an init-fair design:
+1. **Keep the pre-trained self-attention and add cross-attention in parallel**, with the
+   cross-attention `out_proj` **zero-initialised**, so at step 0 arm3 ≡ arm2 *exactly*. Any gain
+   is then attributable to the architecture, not to initialisation.
+2. **Longer schedule / convergence check** — 12 epochs is provably not enough.
+3. Report against **0.455**, with the position-only oracle (0.250) beside it.
