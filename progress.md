@@ -59,3 +59,57 @@ Budget and its consequences are in `plan.md §8`.
 3. **R3 — synthetic-task validity.** Needle-in-haystack is a proxy. It is honest as a
    mechanism probe; it is **not** evidence about real long documents, and will be labelled
    that way everywhere.
+
+---
+
+## 2026-09-24 · P0 GATE — baseline reproduced on this machine
+
+**Command.** `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 env/venv/bin/python experiments/orch-baseline/run.py`
+**Artifact.** `experiments/orch-baseline/results.json` · **Device.** RTX 4070 Laptop, CUDA, shipped bf16 autocast
+**Setup.** Upstream's own 20 requests, same 4-option department question, request placed at the **end** of the filler. n=20/cell, matching upstream.
+
+| pad tokens | limit=1024 | limit=8192 | upstream @8192 |
+|---|---|---|---|
+| 0 | 0.950 | 0.950 | 0.95 |
+| 1000 | **0.350** | 0.900 | 0.80 |
+| 2000 | **0.350** | 0.800 | 0.85 |
+| 4000 | **0.350** | **0.600** | 0.90 |
+| 7000 | **0.350** | **0.450** | 0.85 *(at 6000)* |
+
+Median latency at 8192/pad=7000: **0.608 s** here vs **3.505 s** upstream on MPS (5.8× faster).
+
+### What reproduced
+The **0.35 floor is exact** — flat from pad=1000 to pad=7000 at the shipped `max_len=1024`.
+The evidence is truncated away, so the answer stops depending on the input entirely.
+
+### What did NOT reproduce — and this matters
+At `max_len=8192` our accuracy is **much lower than upstream's**: 0.60 vs 0.90 at pad=4000,
+0.45 vs 0.85 at pad≈6000. The 8192 arm degrades sharply with length here; upstream's does not.
+
+Three candidate causes, not yet separated:
+1. **Precision.** CUDA honours `amp_dtype: "bf16"` from the checkpoint config. Upstream's run
+   was on Apple MPS. bf16 carries 8 mantissa bits; a marker aggregating 8192 keys may be
+   precision-limited. → probes A in `experiments/orch-diagnostic/`.
+2. **Needle distance vs document length.** Our curve moves the needle further away as the
+   document grows, conflating the two. Upstream's does the same, so this cannot explain the
+   gap by itself — but it must be separated before any claim about "long context". → probe B.
+3. **Filler distribution.** Our filler is a single repeated paragraph; upstream's includes
+   more varied content. Low prior, cheap to test.
+
+### ⚠ A caveat that must travel with every number on this 20-item set
+The 20 upstream requests are **label-imbalanced**: `billing` 9, `technical` 7, `sales` 4,
+`other` **0**. The **majority-class baseline is therefore 0.45**, not 0.05.
+
+- `limit=1024` at 0.350 is **below** majority class.
+- `limit=8192` at pad=7000 scores **exactly 0.45** — indistinguishable from always answering
+  `billing`. It may not be reading the document at all at that length.
+
+Upstream's README reports 0.85–0.90 on this suite **without stating the majority baseline**.
+That is not an accusation of error — but it means the headline "8192 works" is weaker than it
+reads, and no cell of ours will be quoted without the majority baseline beside it.
+
+**Gate status: PASSED** — the baseline is measured here, with per-cell numbers and a stated
+majority-class reference. Phase 1 diagnosis is unblocked and running.
+
+**Next.** probe A/B/C results → P1 mechanism write-up. Wave-1 agents (research #3, math #2,
+harness #1) in flight.

@@ -1,0 +1,97 @@
+{
+ "device": "cuda",
+ "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "n_per_cell": 20,
+ "rows": [
+  {
+   "limit": 1024,
+   "pad": 0,
+   "n": 20,
+   "correct": 19,
+   "accuracy": 0.95,
+   "median_latency_s": 0.0217,
+   "probe_tokens": 18
+  },
+  {
+   "limit": 1024,
+   "pad": 1000,
+   "n": 20,
+   "correct": 7,
+   "accuracy": 0.35,
+   "median_latency_s": 0.045,
+   "probe_tokens": 1018
+  },
+  {
+   "limit": 1024,
+   "pad": 2000,
+   "n": 20,
+   "correct": 7,
+   "accuracy": 0.35,
+   "median_latency_s": 0.0469,
+   "probe_tokens": 2018
+  },
+  {
+   "limit": 1024,
+   "pad": 4000,
+   "n": 20,
+   "correct": 7,
+   "accuracy": 0.35,
+   "median_latency_s": 0.0452,
+   "probe_tokens": 4018
+  },
+  {
+   "limit": 1024,
+   "pad": 7000,
+   "n": 20,
+   "correct": 7,
+   "accuracy": 0.35,
+   "median_latency_s": 0.0531,
+   "probe_tokens": 7018
+  },
+  {
+   "limit": 8192,
+   "pad": 0,
+   "n": 20,
+   "correct": 19,
+   "accuracy": 0.95,
+   "median_latency_s": 0.0204,
+   "probe_tokens": 18
+  },
+  {
+   "limit": 8192,
+   "pad": 1000,
+   "n": 20,
+   "correct": 18,
+   "accuracy": 0.9,
+   "median_latency_s": 0.0508,
+   "probe_tokens": 1018
+  },
+  {
+   "limit": 8192,
+   "pad": 2000,
+   "n": 20,
+   "correct": 16,
+   "accuracy": 0.8,
+   "median_latency_s": 0.0904,
+   "probe_tokens": 2018
+  },
+  {
+   "limit": 8192,
+   "pad": 4000,
+   "n": 20,
+   "correct": 12,
+   "accuracy": 0.6,
+   "median_latency_s": 0.2316,
+   "probe_tokens": 4018
+  },
+  {
+   "limit": 8192,
+   "pad": 7000,
+   "n": 20,
+   "correct": 9,
+   "accuracy": 0.45,
+   "median_latency_s": 0.6076,
+   "probe_tokens": 7018
+  }
+ ]
+}

@@ -1,0 +1,993 @@
+SOURCE_URL: https://arxiv.org/html/2405.14591v1
+
+Base of RoPE Bounds Context Length 
+
+ Title: 
+
+ Content selection saved. Describe the issue below:
+
+ Description: 
+
+ arXiv is now an independent nonprofit! 
+ Learn more 
+ × 
+
+ License: CC BY 4.0
+
+arXiv:2405.14591v1 [cs.CL] 23 May 2024
+
+       Base of RoPE Bounds Context Length
+
+ Xin Men * 
+ 
+ Affiliation: Baichuan Inc.
+
+ Mingyu Xu * 
+ 
+ Affiliation: Baichuan Inc.
+
+ Bingning Wang
+ † † thanks: Equal contribution † † thanks: Corresponding author, daniel@baichuan-inc.com 
+    
+ Baichuan Inc
+
+ Qingyu Zhang
+
+ ISCAS
+
+ Hongyu Lin
+
+ ISCAS
+
+ Xianpei Han
+
+ ISCAS
+
+ Weipeng Chen
+
+ Baichuan Inc
+
+ Abstract
+
+ Position embedding is a core component of current Large Language Models (LLMs). Rotary position embedding (RoPE), a technique that encodes the position information with a rotation matrix, has been the de facto choice for position embedding in many LLMs, such as the Llama series. RoPE has been further utilized to extend long context capability, which is roughly based on adjusting the base parameter of RoPE to mitigate out-of-distribution (OOD) problems in position embedding. However, in this paper, we find that LLMs may obtain a superficial long-context ability based on the OOD theory. We revisit the role of RoPE in LLMs and propose a novel property of long-term decay, we derive that the base of RoPE bounds context length : there is an absolute lower bound for the base value to obtain certain context length capability. Our work reveals the relationship between context length and RoPE base both theoretically and empirically, which may shed light on future long context training.
+
+ | 
+
+ Figure 1: Context length and its corresponding lower bound of RoPE’s base value. 
+
+ 1 Introduction
+
+ In the past few years, large language models have demonstrated surprising capabilities and undergone rapid development. By now, LLMs have been widely applied across various domains, including chatbots, intelligent agents, and code assistants ( Achiam et al., 2023 ; Jiang et al., 2023b ) . The Transformer ( Vaswani et al., 2017 ) , based on the attention mechanism, has been the most popular backbone of LLMs due to its good performance and scaling properties ( Tay et al., 2022 ) . One of the key component modules in the Transformer is position embedding, which is introduced to embed positional information that is vital for processing sequential data. Rotary position embedding (RoPE), which encodes relative distance information in the form of absolute position embedding ( Su et al., 2024 ) , has been a popular choice and applied in many LLMs ( Touvron et al., 2023a ; Yang et al., 2023 ; Bai et al., 2023 ) .
+
+ RoPE introduces no training parameters and shows improvement in language modeling and many other tasks ( Su et al., 2024 ; Heo et al., 2024 ) . One reason that RoPE is widely used is its ability for context length extrapolation ( Peng et al., 2023b ; Chen et al., 2023 ) , which extends the context length of a trained LLM without expensive retraining. In practice, many works ( Touvron et al., 2023a ; Liu et al., 2024a ; Young et al., 2024 ) have successfully extended the window length by simply increasing base value, the only one hyper-parameter in RoPE, and fine-tuning on long texts.
+
+ The reasons behind the success of these long context extensions are often explained as avoiding out-of-distribution (OOD) rotation angles ( Liu et al., 2024b ; Han et al., 2023 ) in RoPE, meaning the extended context length (OOD) can be mapped to the in-distribution context length that has been properly trained. Based on the OOD theory, a recent study ( Liu et al., 2024b ) finds that a smaller base can mitigate OOD and is beneficial for the model’s ability to process long contexts, which inspires us to further study the relationship between the base of RoPE and the length of context the model can process.
+
+ In this paper, we find that the model may show superficial long context capability with an inappropriate RoPE base value, in which case the model can only preserve low perplexity but loses the ability to retrieve long context information. We also show that the out-of-distribution (OOD) theory in position embedding, which motivates most length extrapolation works ( Peng et al., 2023b ; Chen et al., 2023 ; Liu et al., 2024b ) , is insufficient to fully reflect the model’s ability to process long contexts. Therefore, we revisit the role of RoPE in LLMs and derive a novel property of long-term decay in RoPE: the ability to attend more attention to similar tokens than random tokens decays as the relative distance increases. While previous long context works often focus on the relative scale of the RoPE base, based on our theory, we derive an absolute lower bound for the base value of RoPE to obtain a certain context length ability, as shown in Figure 1 . To verify our theory, we conducted thorough experiments on various LLMs such as Llama2-7B ( Touvron et al., 2023b ) , Baichuan2-7B ( Yang et al., 2023 ) and a 2-billion model we trained from scratch, demonstrating that this lower bound holds not only in the fine-tuning stage but also in the pre-training stage.
+
+ We summarize the contributions of the paper as follows:
+
+ • 
+ 
+ Theoretical perspective : we derive a novel property of long-term decay in RoPE, indicating the model’s ability to attend more to similar tokens than random tokens, which is a new perspective to study the long context capability of the LLMs.
+
+ • 
+ 
+ Lower Bound of RoPE’s Base : to achieve the expected context length capability, we derive an absolute lower bound for RoPE’s base according to our theory. In short, the base of RoPE bounds context length.
+
+ • 
+ 
+ Superficial Capability : we reveal that if the RoPE’s base is smaller than a lower bound, the model may obtain superficial long context capability, which can preserve low perplexity but lose the ability to retrieve information from long context.
+
+ 2 Background
+
+ In this section, we first introduce the Transformer and RoPE, which are most commonly used in current LLMs. Then we discuss long context methods based on the OOD of rotation angle theory.
+
+ 2.1 Attention and RoPE
+
+ The LLMs in current are primarily based on the Transformer ( Vaswani et al., 2017 ) . The core component of it is the calculation of the attention mechanism. The naive attention can be written as:
+
+ | 
+ A i ​ j \displaystyle A_{ij} | 
+ = q i T ​ k j \displaystyle=q_{i}^{T}k_{j} | 
+ | 
+ (1) | 
+
+ | 
+ ATTN ​ ( X ) \displaystyle\text{ATTN}(X) | 
+ = softmax ​ ( A / d ) ​ v , \displaystyle=\text{softmax}(A/\sqrt{d})\ v, | 
+ | 
+ (2) | 
+
+ where A ∈ R L × L A\in R^{L\times L} q , k , v ∈ R d q,k,v\in R^{d} . Position embedding is introduced to make use of the order of the sequence in attention.
+
+ RoPE ( Su et al., 2024 ) implements relative position embedding through absolute position embedding, which applies rotation matrix into the calculation of the attention score in Eq. 1 , which can be written as:
+
+ | 
+ A i ​ j = ( R i , θ ​ q i ) T ​ ( R j , θ ​ k i ) = q i T ​ R j − i , θ ​ k j = q i T ​ R m , θ ​ k j , \displaystyle A_{ij}=(R_{i,\theta}q_{i})^{T}(R_{j,\theta}k_{i})=q_{i}^{T}R_{j-i,\theta}k_{j}=q_{i}^{T}R_{m,\theta}k_{j}, | 
+ | 
+ (3) | 
+
+ where m = j − i m=j-i is the relative distance of i i and j j , R m , θ R_{m,\theta} is a rotation matrix denoted as:
+
+ | 
+ [ c ​ o ​ s ​ ( m ​ θ 0 ) − s ​ i ​ n ​ ( m ​ θ 0 ) 0 0 ⋯ 0 0 s ​ i ​ n ​ ( m ​ θ 0 ) c ​ o ​ s ​ ( m ​ θ 0 ) 0 0 ⋯ 0 0 0 0 c ​ o ​ s ​ ( m ​ θ 1 ) − s ​ i ​ n ​ ( m ​ θ 1 ) ⋯ 0 0 0 0 s ​ i ​ n ​ ( m ​ θ 1 ) c ​ o ​ s ​ ( m ​ θ 1 ) ⋯ 0 0 ⋮ ⋮ ⋮ ⋮ ⋱ ⋮ ⋮ 0 0 0 0 ⋯ c ​ o ​ s ​ ( m ​ θ d / 2 − 1 ) − s ​ i ​ n ​ ( m ​ θ d / 2 − 1 ) 0 0 0 0 ⋯ s ​ i ​ n ​ ( m ​ θ d / 2 − 1 ) c ​ o ​ s ​ ( m ​ θ d / 2 − 1 ) ] \displaystyle\left[\begin{array}[]{ccccccc}cos(m\theta_{0})&-sin(m\theta_{0})&0&0&\cdots&0&0\\
+sin(m\theta_{0})&cos(m\theta_{0})&0&0&\cdots&0&0\\
+0&0&cos(m\theta_{1})&-sin(m\theta_{1})&\cdots&0&0\\
+0&0&sin(m\theta_{1})&cos(m\theta_{1})&\cdots&0&0\\
+\vdots&\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&0&0&\cdots&cos(m\theta_{d/2-1})&-sin(m\theta_{d/2-1})\\
+0&0&0&0&\cdots&sin(m\theta_{d/2-1})&cos(m\theta_{d/2-1})\end{array}\right] | 
+ | 
+
+ Generally, the selection of rotation angles satisfies θ i = b a s e − 2 i / d \theta_{i}=base^{-2i/d} , the typical base value for current LLMs is 10,000, and the base of RoPE in LLMs is shown in Table 1 .
+
+ Table 1: The setting of RoPE’s base and context length in various LLMs. 
+
+ Model | 
+ Llama-7B 38 | 
+ Llama2-7B 39 | 
+ Llama3-8B | 
+ Mistral-7B-v0.2 18 | 
+ Baichuan2-7B 42 | 
+
+ Base | 
+ 10,000 | 
+ 10,000 | 
+ 500,000 | 
+ 1,000,000 | 
+ 10,000 | 
+
+ Length | 
+ 2,048 | 
+ 4,096 | 
+ 8,192 | 
+ 32,768 | 
+ 4,096 | 
+
+ (a) base=1e4 
+
+ (b) base=500 
+
+ (c) base= b ⋅ s d d − 2 b\cdot s^{\frac{d}{d-2}} 
+
+ Figure 2: An illustration of OOD in RoPE when we extend context length from 4k to 32k, and two solutions to avoid the OOD. We show the last dimension as it is the lowest frequency part of RoPE, which suffers OOD mostly in extrapolation. (a) For a 4k context-length model with base value as 1e4, when we extend the context length to 32k without changing the base value, the context length from 4k to 32k is OOD for RoPE (red area in the figure). (b) OOD can be avoided with a small base value like 500 ( Liu et al., 2024b ) , since the full period has been fitted during fine-tuning stage. (c) We set base as b ⋅ s d d − 2 b\cdot s^{\frac{d}{d-2}} from NTK ( Peng et al., 2023b ) .The blue line denotes the pre-training stage (base=1e4) and the red dashed line denotes the fine-tuning stage (base= b ⋅ s d d − 2 b\cdot s^{\frac{d}{d-2}} ), we can observe that the RoPE’s rotation angle of extended positions is in-distribution. 
+
+ 2.2 OOD theory of relative rotation angle
+
+ Based on RoPE, researchers have proposed various methods to extend the long context ability of LLMs, among which representatives are PI ( Chen et al., 2023 ) and NTK-series (NTK-aware ( bloc97, 2023 ) , YaRN ( Peng et al., 2023b ) , and Dynamical-NTK ( emozilla, 2023 ) ). Those methods depend on the relative scale s = T new / T origin s=T_{\text{new}}/T_{\text{origin}} , where T origin T_{\text{origin}} is the training length of the original pre-trained model and T new T_{\text{new}} is the training length in long-context fine-tuning.
+
+ PI
+
+ PI directly interpolates the position embedding, and the calculation of A i ​ j A_{ij} becomes:
+
+ | 
+ A i ​ j = ( R i / s ​ q i ) T ​ ( R j / s ​ k i ) = q i T ​ R ( j − i ) / s ​ k j = q i T ​ R m / s ​ k j , \displaystyle A_{ij}=(R_{i/s}q_{i})^{T}(R_{j/s}k_{i})=q_{i}^{T}R_{(j-i)/s}k_{j}=q_{i}^{T}R_{m/s}k_{j}, | 
+ | 
+ (11) | 
+
+ In other words, the position embedding of the token at position i i in pre-training becomes i / s i/s in fine-tuning, ensuring the position embedding range of the longer context remains the same as before.
+
+ NTK-series
+
+ The idea is that neural networks are difficult to learn high-frequency features, and direct interpolation can affect the high-frequency parts. Therefore, the NTK-aware method achieves high-frequency extrapolation and low-frequency interpolation by modifying the base value of RoPE. Specifically, it modifies the base b b of the RoPE to:
+
+ | 
+ b new = b ​ s d d − 2 . \displaystyle b_{\text{new}}=b\ s^{\frac{d}{d-2}}. | 
+ | 
+ (12) | 
+
+ The derivation of this expression is derived from T new ​ b new − d − 2 d = T origin ​ b − d − 2 d T_{\text{new}}b_{\text{new}}^{-\frac{d-2}{d}}=T_{\text{origin}}b^{-\frac{d-2}{d}} to ensure that the lowest frequency part being interpolated.
+
+ A recent study ( Liu et al., 2024b ) proposes to set a much smaller base (e.g. 500), in which case θ i = b ​ a ​ s ​ e − 2 ​ i d \theta_{i}=base^{-\frac{2i}{d}} is small enough and typical training length (say 4,096) fully covers the period of cos ⁡ ( t − s ) ​ θ i \cos(t-s)\theta_{i} , so the model can obtain longer context capabilities.
+
+ One perspective to explain current extrapolation methods is the OOD of rotation angle ( Liu et al., 2024b ; Han et al., 2023 ) . If all possible values of cos ⁡ ( t − s ) ​ θ i \cos(t-s)\theta_{i} have been fitted during the pre-training stage, OOD would be avoided when processing longer context. Figure 2 demonstrates how these methods avoid OOD of RoPE.
+
+ 3 Motivation
+
+ (a) Perplexity 
+
+ (b) Long-eval ( Li* et al., 2023 ) 
+
+ (c) Needle in Haystack ( G, 2023 ) 
+
+ Figure 3: The superficial long context capability of avoiding OOD by the smaller base. Following the recent work ( Liu et al., 2024b ) , we fine-tune Llama2-7B with a small base (500) to a context length of 32k. 
+
+ NTK-based methods are widely adopted in long-context extension ( Touvron et al., 2023a ; Liu et al., 2024a ; Young et al., 2024 ) . To obtain better long-context capability, however, practitioners often adopt a much larger base than the original NTK-aware method suggested. This leads to speculation that there is another bound of RoPE’s base determined by context length.
+
+ On the other hand, a recent work ( Liu et al., 2024b ) proposes to set a much smaller base for RoPE to extend the context length. However, we find it may be a superficial long-context capability as shown in Figure 3 . This method can obtain a low perplexity even at 128k context length, which can be explained by the OOD theory as explained above, but the model could not retrieve related information for context length as short as 1k, even much shorter than the model’s pre-trained length. Our findings support previous research ( Hu et al., 2024 ) on the limitations of perplexity in evaluating long-context abilities. To delve deep into this phenomenon, we do the theoretical exploration in the next section.
+
+ 4 Theory Perspective
+
+ For attention mechanism in language modeling, we have the following desiderata:
+
+ Desiderata 1 
+
+ The closer token gets more attention : the current token tends to pay more attention to the token that has a smaller relative distance. 
+
+ Desiderata 2 
+
+ The similar token gets more attention : the token tends to pay more attention to the token whose key value is more similar to the query value of the current token. 
+
+ Then we examine the desiderata when we apply RoPE to the attention mechanism in LLMs.
+
+ 4.1 Long-term Decay of Upper Bound of Attention Score
+
+ For Desiderata 1 , the property of RoPE makes the model attend more to closer tokens. This kind of long-term decay has been thoroughly discussed in previous work ( Su et al., 2024 ; Sun et al., 2022 ) . It comes from the upper bound of attention score calculation, which can be written as:
+
+ | 
+ | A i ​ j | = | q i T ​ R m ​ k j | \displaystyle|A_{ij}|=|q_{i}^{T}R_{m}k_{j}| | 
+ ≤ max l ⁡ ( | h l − h l + 1 | ) ​ ∑ n = 1 d / 2 | S n | \displaystyle\leq\max_{l}(|h_{l}-h_{l+1}|)\sum_{n=1}^{d/2}|S_{n}| | 
+ | 
+
+ | 
+ | 
+ = max l ⁡ ( | h l − h l + 1 | ) ​ ∑ n = 1 d / 2 | ∑ l = 0 n − 1 e ( j − i ) ​ θ l ​ − 1 | , \displaystyle=\max_{l}(|h_{l}-h_{l+1}|)\sum_{n=1}^{d/2}|\sum_{l=0}^{n-1}e^{(j-i)\theta_{l}\sqrt{-1}}|, | 
+ | 
+ (13) | 
+
+ where h l = q i T [ 2 l : l 2 + 1 ] k j [ 2 l : 2 l + 1 ] h_{l}=q_{i}^{T}[2l:l2+1]k_{j}[2l:2l+1] . Equation 13 indicates that the upper bound of the attention score | A i ​ j | |A_{ij}| decays as the relative distance increases. Figure 5 shows the long-term decay curve of this upper bound, which is in accordance with previous findings ( Su et al., 2024 ; Sun et al., 2022 ) .
+
+ 4.2 Long-term Decay of the Ability to Attend More to Similar Tokens than Random Tokens
+
+ In addition to the attention score’s upper bound, we also find there exists another long-term decay property in RoPE: the ability to attend more to similar tokens than random tokens decays as the relative distance increases. We define the ability to attend more to similar tokens than random tokens as:
+
+ | 
+ 𝔼 q , k ∗ ​ [ q T ​ R m , θ ​ k ∗ ] − 𝔼 q , k ​ [ q T ​ R m , θ ​ k ] , \displaystyle\mathbb{E}_{q,k^{*}}\left[q^{T}R_{m,\theta}k^{*}\right]-\mathbb{E}_{q,k}\left[q^{T}R_{m,\theta}k\right], | 
+ | 
+ (14) | 
+
+ where q ∈ R d q\in R^{d} is the query vector for the current token, k ∗ = q + ϵ k^{*}=q+\epsilon is the key value of a similar token, where ϵ \epsilon is a small random variable, k ∈ R d k\in R^{d} is the key vector of a random token, R m , θ R_{m,\theta} is the rotation matrix in RoPE. The first term in Eq. 14 is the attention score of q q and a similar token k ∗ k^{*} , the second term in Eq. 14 is the attention score of q q and random token k k . Then we derive the following theorem:
+
+ Theorem 1 
+
+ Assuming that the components of query q ∈ R d q\in R^{d} and key k ∈ R d k\in R^{d} are independent and identically distributed, their standard deviations are denoted as σ ∈ R \sigma\in R . The key k ∗ = q + ϵ k^{*}=q+\epsilon is a token similar to the query, where ϵ \epsilon is a random variable with a mean of 0. Then we have: 
+
+ | 
+ 1 2 ​ σ 2 ​ ( 𝔼 q , k ∗ ​ [ q T ​ R m , θ ​ k ∗ ] − 𝔼 q , k ​ [ q T ​ R m , θ ​ k ] ) = ∑ i = 0 d / 2 − 1 cos ⁡ ( m ​ θ i ) \displaystyle\frac{1}{2\sigma^{2}}(\mathbb{E}_{q,k^{*}}\left[q^{T}R_{m,\theta}k^{*}\right]-\mathbb{E}_{q,k}\left[q^{T}R_{m,\theta}k\right])=\sum_{i=0}^{d/2-1}\cos(m\theta_{i}) | 
+ | 
+ (15) | 
+
+ Figure 4: The upper bound of attention score with respect to the relative distance. 
+
+ Figure 5: The ability to attend more to similar tokens than random tokens. 
+
+ The proof is shown in Appendix A . We denote ∑ i = 0 d / 2 − 1 cos ⁡ ( m ​ θ i ) \sum_{i=0}^{d/2-1}\cos(m\theta_{i}) as B m , θ B_{m,\theta} , and according to Theorem 1 , B m , θ B_{m,\theta} measures the ability to give more attention to similar tokens than random tokens, which decreases as the relative distance m m increases, as shown in Figure 5 . For a very small base value, we can observe that the B m , θ B_{m,\theta} is even below zero at a certain distance, meaning the random tokens have larger attention scores than the similar tokens, which may be problematic for long context modeling.
+
+ 4.3 Base of RoPE Bounds the Context Length
+
+ To satisfy the Desiderata 2 , we will get 𝔼 q , k ∗ ​ [ q T ​ R m , θ ​ k ∗ ] ≥ 𝔼 q , k ​ [ q T ​ R m , θ ​ k ] \mathbb{E}_{q,k^{*}}\left[q^{T}R_{m,\theta}k^{*}\right]\geq\mathbb{E}_{q,k}\left[q^{T}R_{m,\theta}k\right] . According to Theorem 1 , B m , θ B_{m,\theta} needs to be larger than zero.
+Given the θ \theta in RoPE, the context length L θ L_{\theta} that can be truly obtained satisfies:
+
+ | 
+ L θ = sup { L | B m , θ ≥ 0 , ∀ m ∈ [ 0 , 1 , … , L ] } \displaystyle L_{\theta}=\sup\{L|B_{m,\theta}\geq 0,\forall m\in[0,1,...,L]\} | 
+ | 
+ (16) | 
+
+ In other word, if we follow the setting that θ i = b a s e − 2 i / d \theta_{i}=base^{-2i/d} , in order to get the expected context length L L , there is a lower bound of the base value b ​ a ​ s ​ e L base_{L} :
+
+ | 
+ b a s e L = inf { b a s e | B m , θ ≥ 0 , ∀ m ∈ [ 0 , 1 , … , L ] } \displaystyle base_{L}=\inf\{base|B_{m,\theta}\geq 0,\forall m\in[0,1,...,L]\} | 
+ | 
+ (17) | 
+
+ In summary, the RoPE’s base determines the upper bound of context length the model can truly obtain. Although there exists the absolute lower bound, Eq. 15 and Eq. 17 are hard to get the closed-form solution since B m , θ B_{m,\theta} is a summation of many cosine functions. Therefore, in this paper, we get the numerical solution. Table 2 shows this lower bound for context length ranging from 1,000 to one million. In Figure 1 , we plot the context length and corresponding lower bound, we can observe that as the context length increases, the required base also increases.
+
+ Table 2: Context length and its corresponding lower bound of RoPE’s base. 
+
+ Context Len. | 
+ 1k | 
+ 2k | 
+ 4k | 
+ 8k | 
+ 16k | 
+ 32k | 
+ 64k | 
+ 128k | 
+ 256k | 
+ 512k | 
+ 1M | 
+
+ Lower Bound | 
+ 4.3e3 | 
+ 1.6e4 | 
+ 2.7e4 | 
+ 8.4e4 | 
+ 3.1e5 | 
+ 6.4e5 | 
+ 2.1e6 | 
+ 7.8e6 | 
+ 3.6e7 | 
+ 6.4e7 | 
+ 5.1e8 | 
+
+ Note: this boundary is not very strict because the stacking of layers in LLMs allows the model to extract information beyond the single layers’ range, which may increase the context length in Eq. 16 and decrease the base in Eq. 17 . Notwithstanding, in Section 5 we find that the derived bound approximates the real context length in practice.
+
+ Long-term decay from different perspectives. The long-term decay in section 4.1 and section 4.2 are from different perspectives. The former refers to the long-term decay of the attention score as the relative distance increases. This ensures that current tokens tend to pay more attention to the tokens closer to them. The latter indicates that with the introduction of the rotation matrix in attention, the ability to discriminate the relevant tokens from irrelevant tokens decreases as the relative distance increases. Therefore, a large B m , θ B_{m,\theta} , corresponding to a large base value, is important to keep the model’s discrimination ability in long context modeling.
+
+ 5 Experiment
+
+ In this section, we conduct thorough experiments. The empirical result can be summarized in Table 3 , the details are in the following sections.
+
+ Table 3: In Section 5 , we aim to answer the following questions. 
+
+ Questions | 
+ Answers | 
+
+ Q: Does RoPE’s base bounds the context | 
+
+ length during the fine-tuning stage? | 
+
+ | 
+
+ Yes. When the base is small, it is difficult to get extrapolation | 
+
+ for specific context length. | 
+
+ | 
+
+ Q: Does RoPE’s base bounds the context | 
+
+ length during the pre-training stage? | 
+
+ | 
+
+ Yes. Our proposed lower bound for RoPE’s base also applies | 
+
+ to pre-training. If we train a model from scratch with a small | 
+
+ base but the context length is large (larger than the bounded | 
+
+ length), the resulting model has very limited the context length | 
+
+ capabilities, meaning some of context in pre-training is wasted. | 
+
+ | 
+
+ Q: What happened when base is set | 
+
+ smaller than the lower bound? | 
+
+ | 
+
+ The model will get the superficial long context capability. | 
+
+ The model can keep perplexity low, but can’t retrieve useful | 
+
+ information from long context. | 
+
+ | 
+
+ 5.1 Experiments Setup
+
+ For fine-tuning, we utilized Llama2-7B ( Touvron et al., 2023a ) and Baichuan2-7B ( Yang et al., 2023 ) , both of which are popular open-source models employing RoPE with a base of 1 ​ e ​ 4 1e4 . We utilized a fixed learning rate of 2e-5 and a global batch size of 128 and fine-tuning for 1000 steps. For pre-training, we trained a Llama-like 2B model from scratch for a total of 1 trillion tokens. We set the learning rate to 1e-4 and adopted a cosine decay schedule, with models trained on a total of 1T tokens. The dataset we used is a subset of RedPajama ( Computer, 2023 ) . More details of the experimental setup are provided in Appendix B .
+
+ Our evaluation focused on two aspects: (1) Perplexity : we use PG19 dataset ( Rae et al., 2019 ) which are often used in long context evaluation; (2) Retrieval : in addition to perplexity, we also adopt retrieval since it represents the real long-context understanding ability of LLMs. We choose a) Long-eval benchmark from ( Li* et al., 2023 ) and b) needle in a haystack (NIH) ( G, 2023 ) . The Long-eval benchmark generates numerous random similar sentences and asks the model to answer questions based on a specific sentence within the context, while the NIH requires the model to retrieve information from various positions in the long context.
+
+ 5.2 Base of RoPE bounds context length in fine-tuning stages
+
+ (a) Perplexity 
+
+ (b) Long-eval 32k 
+
+ Figure 6: Fine-tuning Llama2-7B-Base on 32k context length with varying RoPE’s base. Although the perplexity remains low with varying bases, the Long-eval accuracy reveals a discernible bound for the base value, below which the Long-eval accuracy declines significantly. The dotted line denotes the lower bound derived from Eq. 17 . 
+
+ According to Eq. 17 , there is a lower bound of RoPE’s base determined by expected context length. We fine-tune Llama2-7b-Base on 32k context with varying bases. As depicted in Figure 6 , although the difference in perplexity between different bases is negligible, the accuracy of Long-eval varies significantly. In Figure 6b , the dotted line denotes the lower bound derived from Eq. 17 , below which the Long-eval accuracy declines significantly. Additional results are provided in Appendix C . Notably, this empirically observed lower bound closely aligns with our theoretical derivation. On the other hand, we can see that b ​ a ​ s ​ e = 2 ​ e ​ 5 base=2e5 achieves the best perplexity, but the accuracy of Long-eval is very low, which indicates the limitations of perplexity in evaluating long context capabilities.
+
+ 5.3 The Base of RoPE bounds context length in pre-training stages
+
+ Figure 7: The first row: the results of a 2B model training from scratch with base=1e2. The second row: The results of fine-tuning the 2B model with base=1e4. The third row: The results of fine-tuning the 2B model with base=1e6. 
+
+ According to and Theorem 1 and Eq. 17 , this constraints could also apply to pre-training stage. To validate this, we trained a 2B model from scratch with RoPE base=100. The results, depicted in the first row of Figure 7 , indicate that even though the model was trained with a context length of 4,096 tokens, it was capable of retrieving information from only the most recent approximately 500 tokens. This demonstrates that the base parameter bounds the context length during the pre-training stage as well. We define the context length from which the model can effectively retrieve information as the effective context length.
+
+ And according to our theory, the effective context length can be extended as the RoPE’s base increases. To validate this, we further fine-tune this 2B model on 32k context length, with RoPE’s base set to 1e4, as shown in the second row of Figure 7 . While the effective context length increased, it remains significantly below 32k since the effective context length bounded by base=1e4 is much smaller than 32k. Further, when we increase the base to 1e6 and fine-tune the base 2B model on 32K (the third row in Figure 7 ), the model could obtain a larger context length than base=1e4, which is in accodance with our theory.
+
+ To further remove the influence of model size, we also fine-tuned a larger 7B model on a 32k context length with a RoPE base set to 1e4 and observed an effective context length nearly identical to that of the 2B model with the same RoPE base (see Appendix 14 ). This is empirical proof that the effective context length is determined by RoPE’s base.
+
+ 5.4 Interpretation for the superficial long context capability for small base
+
+ Based on our theory and empirical observations, it is easy to explain what happens in Figure 3 .
+
+ Better Extrapolation (Perplexity)? Due to the small base, B m , θ B_{m,\theta} can be smaller than zero as m m increases, which is shown in Figure 5 . The model can’t attend more to similar tokens than random tokens with a large relative distance, so the model tends to focus more on nearby tokens, this will lead to a smaller empirical receptive field, even smaller than the training length. In this case, the model has a strong ability to maintain perplexity stability ( Chi et al., 2023 ) .
+
+ Worse Ability (Long-eval and NIH)! According to our previous analysis, RoPE’s base bounds the context length, and the context length bounded by 500 is much lower than that bound by 10,000. Therefore, when the base is set to 500, the effective context length drops sharply, even after training on 32k context length.
+
+ 5.5 OOD theory is insufficient to reveal long context capability
+
+ Table 4: The comparison of "Method 1" and "Method 2". These methods are designed carefully. They both are no OOD, but they are very different under our theory. 
+
+ Method | 
+ OOD | 
+ Long-eval | 
+ numbers of m m whose B m , θ ≥ 0 B_{m,\theta}\geq 0 | 
+
+ 15k | 
+ 30k | 
+ 15k | 
+ 30k | 
+
+ Method 1 | 
+
+ | 
+ 0.33 | 
+ 0.27 | 
+ 0 | 
+ 0 | 
+
+ Method 2 | 
+
+ | 
+ 0.40 | 
+ 0.00 | 
+ 97 | 
+ 2554 | 
+
+ Section 3 mentions that methods based on the OOD theory of rotation angles may not fully reflect the long context capability. In this section, we conduct further experiments to substantiate and explain this observation. We present two methods to extend the context length of Llama2 from 4k to 32k. Both of them are devoid of OOD angles. These methods are delineated mathematically as follows:
+
+ • 
+ 
+ Method 1: θ i = ( 5 e 6 ) − 2 i / d \theta_{i}=(5e6)^{-2i/d} ,
+
+ • 
+ 
+ Method 2:
+ θ i = { ( 1 e 4 ) − 2 i / 128 / 8 , i ≥ 44 ( 1 e 4 ∗ 8 128 / 88 ) − 2 i / 128 , i < 44 . \theta_{i}=\left\{\begin{aligned} &(1e4)^{-2i/128}/8,&i\geq 44\\
+&(1e4*8^{128/88})^{-2i/128},&i<44.\end{aligned}\right. 
+
+ We can see from Table 4 that these two methods exhibit significantly different long context capabilities. Under the perspective of OOD rotation angle, both methods avoid OOD rotation angle, suggesting effective extrapolation. However, despite being trained on a context length of 32k, "method 2" struggles in completing the retrieval task at a context length of 32k. This phenomenon is beyond the scope which the OOD theory can explain.
+
+ Under our perspective, "method 2" is severely violating B m , θ ≥ 0 B_{m,\theta}\geq 0 when m ∈ [ 15 ​ k , 30 ​ k ] m\in[15k,30k] , thereby impeding its ability to achieve long-context discrimination. We speculate that the model may achieve better extrapolation in the fine-tuning stage if the base is sufficiently large to surpass a lower bound and avoid OOD of rotation angles.
+
+ 6 Related Work
+
+ Position embedding.
+
+ Since its introduction, Transformer ( Vaswani et al., 2017 ) has achieved remarkable results in the field of natural language processing. To make full use of the order of sequence, researchers have introduced position embedding. The earliest position embedding was based on sinusoidal functions ( Vaswani et al., 2017 ) for absolute positions, learnable absolute position embedding ( Devlin et al., 2018 ) and many variants ( Kiyono et al., 2021 ; Li et al., 2019 ) were proposed. Nevertheless, absolute position embedding has difficulties in extending directly to texts longer than the training length. Subsequently, researchers proposed relative position embedding methods ( Shaw et al., 2018 ; Ke et al., 2020 ) . With the development of large language models, rotary position embedding and its variants ( Su et al., 2024 ; Sun et al., 2022 ) has become widely used, such as Llama2 ( Touvron et al., 2023a ) , Baichuan2 ( Yang et al., 2023 ) , Mistral-7B- ( Jiang et al., 2023a ) . A recent study reveals that no position embedding is also potential ( Kazemnejad et al., 2024 ) .
+
+ Long context learning.
+
+ Implementing models with longer or even infinitely long contexts has always been an important goal in the field of natural language processing. Due to the squared complexity of the transformer model over time, a significant portion of the work focuses on improving the model structure ( Gu & Dao, 2023 ; Gu & Dao, 2023 ; Peng et al., 2023a ; Qin et al., 2024 ) . However, most of the work is still based on the transformer architecture. The other part of the work is aimed at reducing the computational complexity of attention itself, such as sparse attention ( Beltagy et al., 2020 ) and group query attention ( Ainslie et al., 2023 ) . In addition, there are also some optimizations in engineering efficiency, such as flash attention ( Dao et al., 2022 ) and ring attention ( Liu et al., 2023 ) . In the model inference stage, to save time and space, there are also some methods for accelerating long context, such as KV cache compression ( Hooper et al., 2024 ) , etc. And the position embedding is important in extrapolation. In the process of fine-tuning, methods such as PI ( Chen et al., 2023 ) , NTK, and YARN ( Peng et al., 2023b ) are used to change the original position embedding information. FoT ( Tworkowski et al., 2024 ) assigns the position information of the tokens outside the local context as the first token in the local context.
+
+ 7 Limitation
+
+ In this work, we investigate the relationship between the base of RoPE and context length. Although we have derived that there exists a lower bound for the base of RoPE determined by context length, the existence of the upper bound for RoPE’s base remains an open question that warrants further exploration. In addition, because of the lack of effective benchmarks for assessing long-context capabilities, the scope of long-context capabilities discussed in this paper may be limited.
+
+ 8 Conclusion
+
+ Our work presents a comprehensive study on the role of RoPE in LLMs for effectively modeling long context. Our main contribution lies in uncovering a novel property of RoPE through theoretical analysis, demonstrating that as the relative distance between tokens increases, the model’s ability to attend more to similar tokens decreases. According to our theory, we derive a lower bound for RoPE’s base in accommodating to expected context lengths. Our experimental results validate that the base of RoPE bounds context length for not only fine-tuning but also the pre-training stage. Our theory offers a new perspective on understanding the functionality of RoPE in long-context modeling. By shedding light on the relationship between context length and position embedding, we hope our work could provide insights for enhancing the long context capability of LLMs.
+
+ References
+
+ Achiam et al. (2023) 
+ 
+Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya,
+Florencia Leoni Aleman, Diogo Almeida, Janko Altenschmidt, Sam Altman,
+Shyamal Anadkat, et al.
+
+ Gpt-4 technical report.
+
+ arXiv preprint arXiv:2303.08774 , 2023.
+
+ Ainslie et al. (2023) 
+ 
+Joshua Ainslie, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico
+Lebron, and Sumit Sanghai.
+
+ Gqa: Training generalized multi-query transformer models from
+multi-head checkpoints.
+
+ In The 2023 Conference on Empirical Methods in Natural Language
+Processing , 2023.
+
+ Bai et al. (2023) 
+ 
+Jinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan,
+Wenbin Ge, Yu Han, Fei Huang, et al.
+
+ Qwen technical report.
+
+ arXiv preprint arXiv:2309.16609 , 2023.
+
+ Beltagy et al. (2020) 
+ 
+Iz Beltagy, Matthew E Peters, and Arman Cohan.
+
+ Longformer: The long-document transformer.
+
+ arXiv preprint arXiv:2004.05150 , 2020.
+
+ bloc97 (2023) 
+ 
+bloc97.
+
+ Ntk-aware scaled rope allows llama models to have extended (8k+)
+context size without any fine-tuning and minimal perplexity degradation.
+
+ https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/ ,
+2023.
+
+ Chen et al. (2023) 
+ 
+Shouyuan Chen, Sherman Wong, Liangjian Chen, and Yuandong Tian.
+
+ Extending context window of large language models via positional
+interpolation.
+
+ arXiv preprint arXiv:2306.15595 , 2023.
+
+ Chi et al. (2023) 
+ 
+Ta-Chung Chi, Ting-Han Fan, Alexander Rudnicky, and Peter Ramadge.
+
+ Dissecting transformer length extrapolation via the lens of receptive
+field analysis.
+
+ In Proceedings of the 61st Annual Meeting of the Association
+for Computational Linguistics (Volume 1: Long Papers) , pp. 13522–13537,
+2023.
+
+ Computer (2023) 
+ 
+Together Computer.
+
+ Redpajama: An open source recipe to reproduce llama training dataset,
+April 2023.
+
+ URL https://github.com/togethercomputer/RedPajama-Data .
+
+ Dao et al. (2022) 
+ 
+Tri Dao, Dan Fu, Stefano Ermon, Atri Rudra, and Christopher Ré.
+
+ Flashattention: Fast and memory-efficient exact attention with
+io-awareness.
+
+ Advances in Neural Information Processing Systems ,
+35:16344–16359, 2022.
+
+ Devlin et al. (2018) 
+ 
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+
+ Bert: Pre-training of deep bidirectional transformers for language
+understanding.
+
+ arXiv preprint arXiv:1810.04805 , 2018.
+
+ emozilla (2023) 
+ 
+emozilla.
+
+ Dynamically scaled rope further increases performance of long
+context llama with zero fine-tuning.
+
+ https://www.reddit.com/r/LocalLLaMA/comments/14mrgpr/dynamically_scaled_rope_further_increases/ ,
+2023.
+
+ G (2023) 
+ 
+Kamradt G.
+
+ Needle in a haystack - pressure testing llms.
+
+ https://github.com/gkamradt/LLMTest_NeedleInAHaystack , 2023.
+
+ Gu & Dao (2023) 
+ 
+Albert Gu and Tri Dao.
+
+ Mamba: Linear-time sequence modeling with selective state spaces.
+
+ arXiv preprint arXiv:2312.00752 , 2023.
+
+ Han et al. (2023) 
+ 
+Chi Han, Qifan Wang, Wenhan Xiong, Yu Chen, Heng Ji, and Sinong Wang.
+
+ Lm-infinite: Simple on-the-fly length generalization for large
+language models.
+
+ arXiv preprint arXiv:2308.16137 , 2023.
+
+ Heo et al. (2024) 
+ 
+Byeongho Heo, Song Park, Dongyoon Han, and Sangdoo Yun.
+
+ Rotary position embedding for vision transformer.
+
+ arXiv preprint arXiv:2403.13298 , 2024.
+
+ Hooper et al. (2024) 
+ 
+Coleman Hooper, Sehoon Kim, Hiva Mohammadzadeh, Michael W Mahoney, Yakun Sophia
+Shao, Kurt Keutzer, and Amir Gholami.
+
+ Kvquant: Towards 10 million context length llm inference with kv
+cache quantization.
+
+ arXiv preprint arXiv:2401.18079 , 2024.
+
+ Hu et al. (2024) 
+ 
+Yutong Hu, Quzhe Huang, Mingxu Tao, Chen Zhang, and Yansong Feng.
+
+ Can perplexity reflect large language model’s ability in long text
+understanding?
+
+ In The Second Tiny Papers Track at ICLR 2024 , 2024.
+
+ Jiang et al. (2023a) 
+ 
+Albert Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford,
+Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel,
+Guillaume Lample, Lucile Saulnier, Lélio Renard Lavaud, Marie-Anne Lachaux,
+Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix,
+and William El Sayed.
+
+ Mistral 7b, 2023a.
+
+ Jiang et al. (2023b) 
+ 
+Nan Jiang, Kevin Liu, Thibaud Lutellier, and Lin Tan.
+
+ Impact of code language models on automated program repair.
+
+ In 2023 IEEE/ACM 45th International Conference on Software
+Engineering (ICSE) , pp. 1430–1442. IEEE, 2023b.
+
+ Kazemnejad et al. (2024) 
+ 
+Amirhossein Kazemnejad, Inkit Padhi, Karthikeyan Natesan Ramamurthy, Payel Das,
+and Siva Reddy.
+
+ The impact of positional encoding on length generalization in
+transformers.
+
+ Advances in Neural Information Processing Systems , 36, 2024.
+
+ Ke et al. (2020) 
+ 
+Guolin Ke, Di He, and Tie-Yan Liu.
+
+ Rethinking positional encoding in language pre-training.
+
+ In International Conference on Learning Representations , 2020.
+
+ Kiyono et al. (2021) 
+ 
+Shun Kiyono, Sosuke Kobayashi, Jun Suzuki, and Kentaro Inui.
+
+ Shape: Shifted absolute position embedding for transformers.
+
+ In Proceedings of the 2021 Conference on Empirical Methods in
+Natural Language Processing , pp. 3309–3321, 2021.
+
+ Li* et al. (2023) 
+ 
+Dacheng Li*, Rulin Shao*, Anze Xie, Ying Sheng, Lianmin Zheng, Joseph E.
+Gonzalez, Ion Stoica, Xuezhe Ma, and Hao Zhang.
+
+ How long can open-source llms truly promise on context length?, June
+2023.
+
+ URL https://lmsys.org/blog/2023-06-29-longchat .
+
+ Li et al. (2019) 
+ 
+Hailiang Li, YC Adele, Yang Liu, Du Tang, Zhibin Lei, and Wenye Li.
+
+ An augmented transformer architecture for natural language generation
+tasks.
+
+ In 2019 International Conference on Data Mining Workshops
+(ICDMW) , pp. 1–7. IEEE, 2019.
+
+ Liu et al. (2023) 
+ 
+Hao Liu, Matei Zaharia, and Pieter Abbeel.
+
+ Ring attention with blockwise transformers for near-infinite context.
+
+ In NeurIPS 2023 Foundation Models for Decision Making
+Workshop , 2023.
+
+ Liu et al. (2024a) 
+ 
+Hao Liu, Wilson Yan, Matei Zaharia, and Pieter Abbeel.
+
+ World model on million-length video and language with ringattention.
+
+ arXiv preprint arXiv:2402.08268 , 2024a.
+
+ Liu et al. (2024b) 
+ 
+Xiaoran Liu, Hang Yan, Chenxin An, Xipeng Qiu, and Dahua Lin.
+
+ Scaling laws of roPE-based extrapolation.
+
+ In The Twelfth International Conference on Learning
+Representations , 2024b.
+
+ URL https://openreview.net/forum?id=JO7k0SJ5V6 .
+
+ Mohtashami & Jaggi (2024) 
+ 
+Amirkeivan Mohtashami and Martin Jaggi.
+
+ Random-access infinite context length for transformers.
+
+ Advances in Neural Information Processing Systems , 36, 2024.
+
+ Peng et al. (2023a) 
+ 
+Bo Peng, Eric Alcaide, Quentin Anthony, Alon Albalak, Samuel Arcadinho, Stella
+Biderman, Huanqi Cao, Xin Cheng, Michael Chung, Leon Derczynski, et al.
+
+ Rwkv: Reinventing rnns for the transformer era.
+
+ In Findings of the Association for Computational Linguistics:
+EMNLP 2023 , pp. 14048–14077, 2023a.
+
+ Peng et al. (2023b) 
+ 
+Bowen Peng, Jeffrey Quesnelle, Honglu Fan, and Enrico Shippole.
+
+ Yarn: Efficient context window extension of large language models.
+
+ In The Twelfth International Conference on Learning
+Representations , 2023b.
+
+ Qin et al. (2024) 
+ 
+Zhen Qin, Songlin Yang, and Yiran Zhong.
+
+ Hierarchically gated recurrent neural network for sequence modeling.
+
+ Advances in Neural Information Processing Systems , 36, 2024.
+
+ Rae et al. (2019) 
+ 
+Jack W Rae, Anna Potapenko, Siddhant M Jayakumar, Chloe Hillier, and Timothy P
+Lillicrap.
+
+ Compressive transformers for long-range sequence modelling.
+
+ In International Conference on Learning Representations , 2019.
+
+ Shaw et al. (2018) 
+ 
+Peter Shaw, Jakob Uszkoreit, and Ashish Vaswani.
+
+ Self-attention with relative position representations.
+
+ In Proceedings of the 2018 Conference of the North American
+Chapter of the Association for Computational Linguistics: Human Language
+Technologies, Volume 2 (Short Papers) , pp. 464–468, 2018.
+
+ Shoeybi et al. (2020) 
+ 
+Mohammad Shoeybi, Mostofa Patwary, Raul Puri, Patrick LeGresley, Jared Casper,
+and Bryan Catanzaro.
+
+ Megatron-lm: Training multi-billion parameter language models using
+model parallelism, 2020.
+
+ Su et al. (2024) 
+ 
+Jianlin Su, Murtadha Ahmed, Yu Lu, Shengfeng Pan, Wen Bo, and Yunfeng Liu.
+
+ Roformer: Enhanced transformer with rotary position embedding.
+
+ Neurocomputing , 568:127063, 2024.
+
+ Sun et al. (2022) 
+ 
+Yutao Sun, Li Dong, Barun Patra, Shuming Ma, Shaohan Huang, Alon Benhaim,
+Vishrav Chaudhary, Xia Song, and Furu Wei.
+
+ A length-extrapolatable transformer.
+
+ arXiv preprint arXiv:2212.10554 , 2022.
+
+ Tay et al. (2022) 
+ 
+Yi Tay, Mostafa Dehghani, Samira Abnar, Hyung Won Chung, William Fedus, Jinfeng
+Rao, Sharan Narang, Vinh Q Tran, Dani Yogatama, and Donald Metzler.
+
+ Scaling laws vs model architectures: How does inductive bias
+influence scaling?
+
+ arXiv preprint arXiv:2207.10551 , 2022.
+
+ Touvron et al. (2023a) 
+ 
+Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne
+Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro,
+Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, and Guillaume
+Lample.
+
+ Llama: Open and efficient foundation language models,
+2023a.
+
+ Touvron et al. (2023b) 
+ 
+Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine
+Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale,
+Dan Bikel, Lukas Blecher, Cristian Canton Ferrer, Moya Chen, Guillem
+Cucurull, David Esiobu, Jude Fernandes, Jeremy Fu, Wenyin Fu, Brian Fuller,
+Cynthia Gao, Vedanuj Goswami, Naman Goyal, Anthony Hartshorn, Saghar
+Hosseini, Rui Hou, Hakan Inan, Marcin Kardas, Viktor Kerkez, Madian Khabsa,
+Isabel Kloumann, Artem Korenev, Punit Singh Koura, Marie-Anne Lachaux,
+Thibaut Lavril, Jenya Lee, Diana Liskovich, Yinghai Lu, Yuning Mao, Xavier
+Martinet, Todor Mihaylov, Pushkar Mishra, Igor Molybog, Yixin Nie, Andrew
+Poulton, Jeremy Reizenstein, Rashi Rungta, Kalyan Saladi, Alan Schelten, Ruan
+Silva, Eric Michael Smith, Ranjan Subramanian, Xiaoqing Ellen Tan, Binh Tang,
+Ross Taylor, Adina Williams, Jian Xiang Kuan, Puxin Xu, Zheng Yan, Iliyan
+Zarov, Yuchen Zhang, Angela Fan, Melanie Kambadur, Sharan Narang, Aurelien
+Rodriguez, Robert Stojnic, Sergey Edunov, and Thomas Scialom.
+
+ Llama 2: Open foundation and fine-tuned chat models,
+2023b.
+
+ Tworkowski et al. (2024) 
+ 
+Szymon Tworkowski, Konrad Staniszewski, Mikołaj Pacek, Yuhuai Wu, Henryk
+Michalewski, and Piotr Miłoś.
+
+ Focused transformer: Contrastive training for context scaling.
+
+ Advances in Neural Information Processing Systems , 36, 2024.
+
+ Vaswani et al. (2017) 
+ 
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin.
+
+ Attention is all you need.
+
+ Advances in neural information processing systems , 30, 2017.
+
+ Yang et al. (2023) 
+ 
+Aiyuan Yang, Bin Xiao, Bingning Wang, Borong Zhang, Ce Bian, Chao Yin, Chenxu
+Lv, Da Pan, Dian Wang, Dong Yan, et al.
+
+ Baichuan 2: Open large-scale language models.
+
+ arXiv preprint arXiv:2309.10305 , 2023.
+
+ Young et al. (2024) 
+ 
+Alex Young, Bei Chen, Chao Li, Chengen Huang, Ge Zhang, Guanwei Zhang, Heng Li,
+Jiangcheng Zhu, Jianqun Chen, Jing Chang, et al.
+
+ Yi: Open foundation models by 01. ai.
+
+ arXiv preprint arXiv:2403.04652 , 2024.
+
+ Appendix A The proof of Theorem 1 .
+
+ Assuming that the components of query q ∈ R d q\in R^{d} and key k ∈ R d k\in R^{d} are independent, their standard deviations are denoted as σ ∈ R d \sigma\in R^{d} and the means are donated as μ ∈ R d \mu\in R^{d} . The key k ∗ k^{*} similar to q q is q + ϵ q+\epsilon , where ϵ \epsilon is a random variable with a mean of 0. Then, we have:
+
+ | 
+ | 
+ 𝔼 q , k ∗ ​ q T ​ R m ​ k ∗ − 𝔼 q , k ​ q T ​ R m ​ k \displaystyle\mathbb{E}_{q,k^{*}}q^{T}R_{m}k^{*}-\mathbb{E}_{q,k}q^{T}R_{m}k | 
+ | 
+
+ | 
+ = \displaystyle= | 
+ 𝔼 q ​ q T ​ R m ​ q + 𝔼 q , ϵ ​ q T ​ R m ​ ϵ − 𝔼 q , k ​ q T ​ R m ​ k \displaystyle\mathbb{E}_{q}q^{T}R_{m}q+\mathbb{E}_{q,\epsilon}q^{T}R_{m}\epsilon-\mathbb{E}_{q,k}q^{T}R_{m}k | 
+ | 
+
+ | 
+ = \displaystyle= | 
+ 𝔼 q ​ ∑ i = 0 d / 2 − 1 ( q 2 ​ i 2 ​ cos ⁡ ( m ​ θ i ) − q 2 ​ i ​ q 2 ​ i + 1 ​ s ​ i ​ n ​ ( m ​ θ i ) + q 2 ​ i + 1 ​ q 2 ​ i ​ s ​ i ​ n ​ ( m ​ θ i ) + q 2 ​ i + 1 2 ​ cos ⁡ ( m ​ θ i ) ) + 𝔼 q ​ q T ​ R m ​ 𝔼 ϵ ​ ϵ \displaystyle\mathbb{E}_{q}\sum_{i=0}^{d/2-1}(q_{2i}^{2}\cos(m\theta_{i})-q_{2i}q_{2i+1}sin(m\theta_{i})+q_{2i+1}q_{2i}sin(m\theta_{i})+q_{2i+1}^{2}\cos(m\theta_{i}))+\mathbb{E}_{q}q^{T}R_{m}\mathbb{E}_{\epsilon}\epsilon | 
+ | 
+
+ | 
+ | 
+ − 𝔼 q , k ∑ i = 0 d / 2 − 1 ( q 2 ​ i k 2 ​ i cos ( m θ i ) − q 2 ​ i k 2 ​ i + 1 s i n ( m θ i ) + q 2 ​ i + 1 k 2 ​ i s i n ( m θ i ) + q 2 ​ i + 1 k 2 ​ i + 1 cos ( m θ i ) ) \displaystyle-\mathbb{E}_{q,k}\sum_{i=0}^{d/2-1}(q_{2i}k_{2i}\cos(m\theta_{i})-q_{2i}k_{2i+1}sin(m\theta_{i})+q_{2i+1}k_{2i}sin(m\theta_{i})+q_{2i+1}k_{2i+1}\cos(m\theta_{i})) | 
+ | 
+
+ | 
+ = \displaystyle= | 
+ OPEN ∑ i = 0 d / 2 − 1 𝔼 ⁡ ( q 2 ​ i 2 ) ​ cos ⁡ ( m ​ θ i ) − μ 2 ​ i ​ μ 2 ​ i + 1 ​ s ​ i ​ n ​ ( m ​ θ i ) + μ 2 ​ i ​ μ 2 ​ i + 1 ​ s ​ i ​ n ​ ( m ​ θ i ) + 𝔼 ⁡ ( q 2 ​ i + 1 2 ) ​ cos ⁡ ( m ​ θ i ) ) + μ ​ R m ​ 0 \displaystyle\sum_{i=0}^{d/2-1}\mathbb{E}(q_{2i}^{2})\cos(m\theta_{i})-\mu_{2i}\mu_{2i+1}sin(m\theta_{i})+\mu_{2i}\mu_{2i+1}sin(m\theta_{i})+\mathbb{E}(q_{2i+1}^{2})\cos(m\theta_{i}))+\mu R_{m}0 | 
+ | 
+
+ | 
+ | 
+ − ∑ i = 0 d / 2 − 1 ( μ 2 ​ i 2 cos ( m θ i ) − μ 2 ​ i μ 2 ​ i + 1 s i n ( m θ i ) + μ i μ 2 ​ i + 1 s i n ( m θ i ) + μ 2 ​ i + 1 2 cos ( m θ i ) ) \displaystyle-\sum_{i=0}^{d/2-1}(\mu_{2i}^{2}\cos(m\theta_{i})-\mu_{2i}\mu_{2i+1}sin(m\theta_{i})+\mu_{i}\mu_{2i+1}sin(m\theta_{i})+\mu_{2i+1}^{2}\cos(m\theta_{i})) | 
+ | 
+
+ | 
+ = \displaystyle= | 
+ ∑ i = 0 d / 2 − 1 ( E ⁡ ( q 2 ​ i 2 + q 2 ​ i + 1 2 ) − μ 2 ​ i 2 − μ 2 ​ i + 1 2 ) ​ cos ⁡ ( m ​ θ i ) \displaystyle\sum_{i=0}^{d/2-1}(E(q_{2i}^{2}+q_{2i+1}^{2})-\mu_{2i}^{2}-\mu_{2i+1}^{2})\cos(m\theta_{i}) | 
+ | 
+
+ | 
+ = \displaystyle= | 
+ ∑ i = 0 d / 2 − 1 ( σ i 2 + σ i + 1 2 ) ​ cos ⁡ ( m ​ θ i ) \displaystyle\sum_{i=0}^{d/2-1}(\sigma_{i}^{2}+\sigma_{i+1}^{2})\cos(m\theta_{i}) | 
+ | 
+ (18) | 
+
+ Then we can get:
+
+ | 
+ ∑ i = 0 d / 2 − 1 ( σ 2 ​ i 2 + σ 2 ​ i + 1 2 ) ​ cos ⁡ ( m ​ θ i ) = 𝔼 q , k ∗ ​ q T ​ R m ​ k ∗ − 𝔼 q , k ​ q T ​ R m ​ k \displaystyle\sum_{i=0}^{d/2-1}(\sigma_{2i}^{2}+\sigma_{2i+1}^{2})\cos(m\theta_{i})=\mathbb{E}_{q,k^{*}}q^{T}R_{m}k^{*}-\mathbb{E}_{q,k}q^{T}R_{m}k | 
+ | 
+ (19) | 
+
+ And when all σ \sigma are equal, we can get:
+
+ | 
+ ∑ i = 0 d / 2 − 1 cos ⁡ ( m ​ θ i ) = 1 2 ​ σ 2 ​ ( 𝔼 q , k ∗ ​ q T ​ R m ​ k ∗ − 𝔼 q , k ​ q T ​ R m ​ k ) \displaystyle\sum_{i=0}^{d/2-1}\cos(m\theta_{i})=\frac{1}{2\sigma^{2}}(\mathbb{E}_{q,k^{*}}q^{T}R_{m}k^{*}-\mathbb{E}_{q,k}q^{T}R_{m}k) | 
+ | 
+ (20) | 
+
+ Appendix B The detail setting of experiment.
+
+ For training, we mainly conducted experiments on Llama2-7B ( Touvron et al., 2023a ) and Baichuan2-7B ( Yang et al., 2023 ) . In addition, we also trained a 2B model from scratch, whose structure is the same with Baichuan2-7B-Base but with a smaller hidden size = 2048.
+Both training and testing are accelerated by FlashAttention-2 ( Dao et al., 2022 ) and Megatron-LM ( Shoeybi et al., 2020 ) . The dataset of both fine-tuning and training from scratch is a subset of RedPajama ( Computer, 2023 ) . The hyper parameters of training are list in Appendix 5 . All experiments are conducted on a cluster of 16 machines with 128 NVIDIA A100 80G.
+
+ Table 5: Training hyper-parameters in our experiments 
+
+ Model | 
+ Training length | 
+ Training tokens | 
+ Batchsize | 
+ Base LR | 
+ LR decay | 
+ Weight decay | 
+
+ Llama2-7B-Base | 
+ 32K | 
+ 4B | 
+ 128 | 
+ 2e5 | 
+ constant | 
+ 0 | 
+
+ Baichuan2-7B-Base | 
+ 32K | 
+ 4B | 
+ 128 | 
+ 2e5 | 
+ constant | 
+ 0 | 
+
+ Our-2B-Base | 
+ 4K | 
+ 1T | 
+ 1024 | 
+ 2e4 | 
+ cosine | 
+ 0.1 | 
+
+ For evaluation, we test the long context capabilities comprehensively, the benchmarks are listed below:
+ perplexity on PG19 ( Rae et al., 2019 ) test split. We evaluate the perplexity of each sample and get the mean value across samples.
+
+ Long-eval ( Li* et al., 2023 ) . This test generates massive random similar sentences and asks the model to answer questions according to a specific sentence in the context. Because the long context consists of many similar patterns, it’s more difficult to get the right answer. We find this test is harder than other long context evaluations such as Perplexity, Passkey Retrieval ( Mohtashami & Jaggi, 2024 ) , Needle in Haystack ( G, 2023 ) . A test sample is list in Figure 8 
+
+ Figure 8: Long-eval sample prompt 
+
+ needle in haystack(NIH) ( G, 2023 ) . NIH tests the long context capability not only under different context lengths but also at different positions where the correct answer is located in the context, which provides a more detailed view of the long context capability.
+
+ Appendix C Baichuan2-7B-Base: Lower bound Base of RoPE
+
+ (a) Perplexity 
+
+ (b) Long-eval 32k 
+
+ Figure 9: Fine-tuning Baichuan2-7B-Base on 32k context length with varying RoPE’s base. Although the perplexity remains low with varying bases, the Long-eval accuracy revels a discernible bound for the base value, below which the Long-eval accuracy declines significantly. the dotted line denotes the lower bound derived from Eq. 17 . 
+
+ Appendix D Long Context Test Results on Various LLMs
+
+ Figure 10: Llama2-7B-Base with base=1e4 fine-tuned on 32k context (original context=4096) 
+
+ Figure 11: Llama2-7B-Base with base=2e5 fine-tuned on 32k context (original context=4096) 
+
+ Figure 12: Baichuan2-7B-Base with base=1e4 fine-tuned on 32k context (original context=4096) 
+
+ Figure 13: Baichuan2-7B-Base with base=2e5 fine-tuned on 32k context (original context=4096) 
+
+ Figure 14: Qwen1.5-7B-Base ( Bai et al., 2023 ) with base=1e4 fine-tuned on 32k context (original context=4096)
