@@ -540,3 +540,36 @@ already dead — permanent lock holders that blocked H5b indefinitely. I confirm
 `/proc/*/cmdline`, killed both, and the lock passed to H5b immediately. **Lesson for the lab: an
 agent that dies while holding the lock strands it. Any launcher must release on exit, and the
 orchestrator should sweep `fuser .gpu.lock` for PIDs whose agent is gone.**
+
+---
+
+## 2026-09-25 · arm3r step-0 gate: identity PASSES, liveness check is over-strict
+
+**Artifact.** `experiments/h5-adapter/step0_identity.json` (2200 items, GPU-locked, fork pinned at
+`99020ba`).
+
+| check | n | result |
+|---|---|---|
+| **arm3r == arm2, shipped init** | 2200 | **bitwise identical**, max abs logit delta **0.0**, 0 prediction diffs ✅ |
+| **arm3r == arm2, arm2's trained head** | 600 | **bitwise identical**, 0 diffs ✅ |
+| liveness: a non-zero branch must ≠ arm2 | 200 | logits **do** differ (`bitwise=False`, max abs delta 0.0312) but **0/200 predictions flipped** → check declared ❌ |
+
+**The first two are the result that matters.** The zero-initialised parallel branch is genuinely
+neutral at step 0 — **bit-for-bit identical to arm2** — so any gain the arm later shows is
+attributable to the architecture rather than to initialisation, schedule or data. That was the
+whole point of the redesign, and it holds.
+
+**The third is a false negative in the check, not a defect in the arm.** The logits *changed*
+(`bitwise_identical_logits: false`, Δ=0.0312) — that **is** proof the branch is wired into the
+output path. The assertion demanded `predictions_identical == false`, which additionally requires
+the perturbation to be large enough to flip an argmax. At scale 0.001 on 200 items it did not.
+**Liveness should be tested on the logits, not on the argmax** — otherwise "is it wired in?"
+silently becomes "is the probe big enough?". The stage exited 1 with
+`verdict: "INVALID -- do not train this arm"` and **did not train**.
+
+**Gradient structure at W=0 is mathematically correct**: only `out_proj` receives gradient at step 0
+(sum 50.23) while all 24 inner tensors are exactly zero — the expected consequence of
+`dL/dz = Wᵀ dL/dδ` with `W = 0`. The branch first learns a linear read-out of its random features,
+then the inner weights train.
+
+**Next:** re-run with the liveness criterion fixed (logits differ ⇒ live), then train.
