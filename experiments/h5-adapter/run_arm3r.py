@@ -64,6 +64,9 @@ def main() -> int:
     ap.add_argument("--skip-ablation", action="store_true",
                     help="do not run the zeroed-branch control for arm3r_residual")
     ap.add_argument("--skip-eval-if-predictions-exist", action="store_true", default=True)
+    ap.add_argument("--skip-train-if-exists", action="store_true",
+                    help="resume: skip an (arm, seed) whose training.json already records the "
+                         "requested epoch count -- for picking a killed block back up")
     a = ap.parse_args()
     stages = [s for s in a.stages.split(",") if s]
     arms = [s for s in a.arms.split(",") if s]
@@ -75,6 +78,14 @@ def main() -> int:
     if "train" in stages:
         for arm in arms:
             for seed in seeds:
+                done = os.path.join(HERE, "runs", arm, "seed%d" % seed, "training.json")
+                if a.skip_train_if_exists and os.path.exists(done):
+                    with open(done, encoding="utf-8") as fh:
+                        prev = json.load(fh)
+                    if prev.get("epochs") == a.epochs:
+                        log("skip train %s seed %d: training.json already has %d epochs"
+                            % (arm, seed, prev["epochs"]))
+                        continue
                 cmd = [PY, "experiments/h5-adapter/train.py", "--arm", arm, "--seed", str(seed),
                        "--epochs", str(a.epochs), "--lr", str(a.lr)]
                 if a.eval_probe_cell:
