@@ -1,6 +1,9 @@
-# Encoder feature cache: large, regenerable from plan.json + the checkpoint.
+# Encoder feature cache: large (19 GB), regenerable from plan.json + the checkpoint.
 cache/
-# Trained head weights are small and ARE committed; optimiser state is not.
+# Trained head weights: 59 MB each, 12 of them, and NOT committed because of the
+# filesystem ceiling. They are regenerable exactly from the recorded (arm, seed, lr,
+# epochs) in runs/<arm>/seed<k>/training.json, which IS committed.
+runs/
 *.optim.pt
 # Scratch logs from iterative runs; run.log / launch.log ARE committed as evidence.
 _*.out
