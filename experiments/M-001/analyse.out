@@ -1,63 +1,68 @@
 
 ==============================================================================
-1. REACHABILITY (exact simulation of the programmed mask)
+1. REACHABILITY (exact ancestral-set simulation of the programmed mask)
 ==============================================================================
-per-hop reach model, marker at 300, n = 8192 (bound 7891):
-layer  type                half-width  closed form R_k   clipped  check   
-    0  full_attention              64               64        64  OK      
-    1  sliding_attention          128                           
-    2  sliding_attention          192                           
-    3  full_attention            7891              960       960  MISMATCH
-    4  sliding_attention         7891                           
-    5  sliding_attention         7891                           
-    6  full_attention            7891             1984      1984  MISMATCH
-    7  sliding_attention         7891                           
-    8  sliding_attention         7891                           
-    9  full_attention            7891             4032      4032  MISMATCH
-   10  sliding_attention         7891                           
-   11  sliding_attention         7891                           
-   12  full_attention            7891             8128      7891  OK      
-   13  sliding_attention         7891                           
-   14  sliding_attention         7891                           
-   15  full_attention            7891            16320      7891  OK      
-   16  sliding_attention         7891                           
-   17  sliding_attention         7891                           
-   18  full_attention            7891            32704      7891  OK      
-   19  sliding_attention         7891                           
-   20  sliding_attention         7891                           
-   21  full_attention            7891            65472      7891  OK      
+marker at 300, n = 8192 (max possible distance 7891)
+layer  type               |S_t| ancestral  half-width  per-hop horizon  closed form R_k check   
+    0  full_attention                8192        7891               64              128 MISMATCH
+    1  sliding_attention             8192        7891              128
+    2  sliding_attention             8192        7891              192
+    3  full_attention                8192        7891              384              960 MISMATCH
+    4  sliding_attention             8192        7891              448
+    5  sliding_attention             8192        7891              512
+    6  full_attention                8192        7891             1024             1984 MISMATCH
+    7  sliding_attention             8192        7891             1088
+    8  sliding_attention             8192        7891             1152
+    9  full_attention                8192        7891             2304             4032 MISMATCH
+   10  sliding_attention             8192        7891             2368
+   11  sliding_attention             8192        7891             2432
+   12  full_attention                8192        7891             4864             8128 MISMATCH
+   13  sliding_attention             8192        7891             4928
+   14  sliding_attention             8192        7891             4992
+   15  full_attention                8192        7891             9984            16320 OK      
+   16  sliding_attention             8192        7891            10048
+   17  sliding_attention             8192        7891            10112
+   18  full_attention                8192        7891            20224            32704 OK      
+   19  sliding_attention             8192        7891            20288
+   20  sliding_attention             8192        7891            20352
+   21  full_attention                8192        7891            40704            65472 OK      
 
-closed form for the global layers: R_k = half-width reachable at layer 3k
- k  layer  R_k (tokens)  clipped to n=8192   reachable frac of doc
- 0      0            64                 64                  0.81%
- 1      3           960                960                 12.17%
- 2      6          1984               1984                 25.14%
- 3      9          4032               4032                 51.10%
- 4     12          8128               7891                100.00%
- 5     15         16320               7891                100.00%
- 6     18         32704               7891                100.00%
- 7     21         65472               7891                100.00%
+RESULT A (exact ancestral set): because LAYER 0 IS GLOBAL, S_0 = [0, n) after a
+single layer. Every token in the sequence, however far, is an ancestor of the
+marker at depth 1. The reachability graph has diameter 1.
 
-minimum layer index L*(d):
-     d =  L*(d)  type at L*            closed form  global hops used k  global hops REMAINING
-       1      0  full_attention                  0                   0                      8
-      64      0  full_attention                  0                   0                      8
-      65      3  full_attention                  0                   1                      7
-     320      3  full_attention                  0                   1                      7
-     321      3  full_attention                  0                   1                      7
-     448      3  full_attention                  0                   1                      7
-     449      3  full_attention                  3                   1                      7
-     960      3  full_attention                  3                   1                      7
-     961      6  full_attention                  6                   2                      6
-    1984      6  full_attention                  6                   2                      6
-    1985      9  full_attention                  9                   3                      5
-    4032      9  full_attention                  9                   3                      5
-    4033     12  full_attention                 12                   4                      4
-    7000     12  full_attention                 12                   4                      4
-    8128     12  full_attention                 12                   4                      4
-    8129     15  full_attention                 15                   5                      3
-    8191     15  full_attention                 15                   5                      3
-closed form: L*(d) = 0 for d <= w;  L*(d) = 3*ceil(log2((d/w + 1)/8)) for d > w
+RESULT B (per-hop horizon requested by the task): if the layer-0 short circuit is
+excluded and only per-hop composition counts, the horizon at the global layers is
+ k  layer  R_k (tokens)  clipped to n=8192   frac of doc
+ 0      0           128                128        1.62%
+ 1      3           960                960       12.17%
+ 2      6          1984               1984       25.14%
+ 3      9          4032               4032       51.10%
+ 4     12          8128               7891      100.00%
+ 5     15         16320               7891      100.00%
+ 6     18         32704               7891      100.00%
+ 7     21         65472               7891      100.00%
+
+minimum layer index L*(d) under the per-hop horizon:
+     d =  L*(d)   closed form  global hops used k  global hops REMAINING (8-k)   entry-dilution 1/(k+1)
+       1      0             0                   0                            8                    1.000
+      64      0             0                   0                            8                    1.000
+      65      0             0                   0                            8                    1.000
+     128      0             0                   0                            8                    1.000
+     129      3             0                   1                            7                    0.500
+     449      3             3                   1                            7                    0.500
+     960      3             3                   1                            7                    0.500
+     961      6             6                   2                            6                    0.333
+    1984      6             6                   2                            6                    0.333
+    1985      9             9                   3                            5                    0.250
+    4032      9             9                   3                            5                    0.250
+    4033     12            12                   4                            4                    0.200
+    7000     12            12                   4                            4                    0.200
+    8128     12            12                   4                            4                    0.200
+    8129     15            15                   5                            3                    0.167
+    8191     15            15                   5                            3                    0.167
+closed form: L*(d) = 0 for d <= 2w;  L*(d) = 3*ceil(log2((d/w + 1)/8)) for d > 2w
+(R_k = (8*2^k - 1)w >= d  <=>  2^k >= (d/w + 1)/8  <=>  k >= log2((d/w+1)/8))
 
 ==============================================================================
 2. MIXING CAPACITY (cross-document edges, head block = 0..H-1, state = H..n-1)
@@ -120,15 +125,28 @@ n = 8192, head block H = 384  (state block = 7808 tokens)
     layer 21 full_attention     100.0000% of state (   64 tokens)
 
 -- global-layer budget: hops needed to reach distance d vs hops left to MIX with --
-  d (tokens from marker)  k = global hops used  8 - k left to mix
-                      64                     0                  8
-                     321                     1                  7
-                     960                     1                  7
-                    1984                     2                  6
-                    4032                     3                  5
-                    7000                     4                  4
-                    8128                     4                  4
-                    8191                     5                  3
+  d (tokens from marker)  k = global hops used  8 - k left to mix  tail frac reached
+                      64                     0                  8             1.62%
+                     321                     1                  7            12.17%
+                     960                     1                  7            12.17%
+                    1984                     2                  6            25.14%
+                    4032                     3                  5            51.10%
+                    7000                     4                  4           100.00%
+                    8128                     4                  4           100.00%
+                    8191                     5                  3           100.00%
+
+-- information available to the marker as a function of document position --
+(under the exact model, every position is reachable at layer 0; what differs is how
+ much of the network remains to process it. Under the per-hop horizon model, a token
+ at distance d is first read at layer L*(d) and then has (21 - L*(d)) layers left.)
+       d   L*(d)   layers remaining after first read  token count at this distance is
+      64       0                                  22           ~320 tokens in [1, 64]
+     320       3                                  19          ~320 tokens in [1, 320]
+     960       3                                  19        ~320 tokens in [640, 960]
+    1984       6                                  16      ~320 tokens in [1664, 1984]
+    4032       9                                  13      ~320 tokens in [3712, 4032]
+    7000      12                                  10      ~320 tokens in [6680, 7000]
+    8191      15                                   7      ~320 tokens in [7871, 8191]
 
 ==============================================================================
 2b. HEAD BLOCK WIDTH (computed with laya.build_sequence, fork source, CPU only)
