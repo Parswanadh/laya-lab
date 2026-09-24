@@ -32,8 +32,11 @@ LAB = os.path.dirname(os.path.dirname(HERE))
 LOG = os.path.join(HERE, "run.log")
 MANIFEST = os.path.join(HERE, "manifest.json")
 
-ALL_STAGES = ("manifest", "pilot", "cache_eval", "cache_train", "arm1", "arm2_step0", "train",
-              "eval", "latency", "stats")
+# Ordered most-valuable-first: if the GPU lock is lost or the window closes, whatever ran is the
+# part of the experiment that mattered most. `latency` is last because the accuracy result does not
+# depend on it, and `arm2_step0` (the cache-fidelity bridge) is cheap and sits beside `arm1`.
+ALL_STAGES = ("manifest", "pilot", "cache_eval", "arm1", "cache_train", "train", "eval",
+              "arm2_step0", "stats", "latency")
 
 
 def log(msg: str) -> None:
