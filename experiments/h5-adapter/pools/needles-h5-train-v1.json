@@ -1,0 +1,1242 @@
+{
+ "pool_id": "needles-h5-train-v1",
+ "kind": "balanced",
+ "split": "train",
+ "labels": [
+  "billing",
+  "technical",
+  "sales",
+  "other"
+ ],
+ "question": {
+  "department": {
+   "type": "choice",
+   "instructions": "Which department should handle this request?",
+   "criteria": {
+    "billing": "invoices, payments, refunds",
+    "technical": "bugs, outages, system errors",
+    "sales": "pricing, new contracts, plan upgrades",
+    "other": "everything else"
+   }
+  }
+ },
+ "slots": {
+  "n": [
+   "7",
+   "10",
+   "13",
+   "16",
+   "19",
+   "22",
+   "25",
+   "28",
+   "31",
+   "34",
+   "37",
+   "40",
+   "43",
+   "46",
+   "49",
+   "52",
+   "55",
+   "58",
+   "61",
+   "64",
+   "67",
+   "70",
+   "73",
+   "76",
+   "79",
+   "82",
+   "85",
+   "88",
+   "91",
+   "94",
+   "97",
+   "100",
+   "103",
+   "106",
+   "109",
+   "112",
+   "115",
+   "118",
+   "121",
+   "124",
+   "127",
+   "130",
+   "133",
+   "136",
+   "139",
+   "142",
+   "145",
+   "148",
+   "151",
+   "154",
+   "157",
+   "160",
+   "163",
+   "166",
+   "169",
+   "172",
+   "175",
+   "178",
+   "181",
+   "184",
+   "187",
+   "190",
+   "193",
+   "196",
+   "199",
+   "202",
+   "205",
+   "208",
+   "211",
+   "214",
+   "217",
+   "220",
+   "223",
+   "226",
+   "229",
+   "232",
+   "235",
+   "238",
+   "241",
+   "244",
+   "247",
+   "250",
+   "253",
+   "256",
+   "259",
+   "262",
+   "265",
+   "268",
+   "271",
+   "274",
+   "277",
+   "280",
+   "283",
+   "286",
+   "289",
+   "292"
+  ],
+  "ref": [
+   "TR-1100",
+   "TR-1107",
+   "TR-1114",
+   "TR-1121",
+   "TR-1128",
+   "TR-1135",
+   "TR-1142",
+   "TR-1149",
+   "TR-1156",
+   "TR-1163",
+   "TR-1170",
+   "TR-1177",
+   "TR-1184",
+   "TR-1191",
+   "TR-1198",
+   "TR-1205",
+   "TR-1212",
+   "TR-1219",
+   "TR-1226",
+   "TR-1233",
+   "TR-1240",
+   "TR-1247",
+   "TR-1254",
+   "TR-1261",
+   "TR-1268",
+   "TR-1275",
+   "TR-1282",
+   "TR-1289",
+   "TR-1296",
+   "TR-1303",
+   "TR-1310",
+   "TR-1317",
+   "TR-1324",
+   "TR-1331",
+   "TR-1338",
+   "TR-1345",
+   "TR-1352",
+   "TR-1359",
+   "TR-1366",
+   "TR-1373",
+   "TR-1380",
+   "TR-1387",
+   "TR-1394",
+   "TR-1401",
+   "TR-1408",
+   "TR-1415",
+   "TR-1422",
+   "TR-1429",
+   "TR-1436",
+   "TR-1443",
+   "TR-1450",
+   "TR-1457",
+   "TR-1464",
+   "TR-1471",
+   "TR-1478",
+   "TR-1485",
+   "TR-1492",
+   "TR-1499",
+   "TR-1506",
+   "TR-1513",
+   "TR-1520",
+   "TR-1527",
+   "TR-1534",
+   "TR-1541",
+   "TR-1548",
+   "TR-1555",
+   "TR-1562",
+   "TR-1569",
+   "TR-1576",
+   "TR-1583",
+   "TR-1590",
+   "TR-1597",
+   "TR-1604",
+   "TR-1611",
+   "TR-1618",
+   "TR-1625",
+   "TR-1632",
+   "TR-1639",
+   "TR-1646",
+   "TR-1653",
+   "TR-1660",
+   "TR-1667",
+   "TR-1674",
+   "TR-1681",
+   "TR-1688",
+   "TR-1695",
+   "TR-1702",
+   "TR-1709",
+   "TR-1716",
+   "TR-1723",
+   "TR-1730",
+   "TR-1737",
+   "TR-1744",
+   "TR-1751",
+   "TR-1758",
+   "TR-1765"
+  ]
+ },
+ "templates": [
+  {
+   "id": "train-billing-00",
+   "label": "billing",
+   "lang": "en",
+   "text": "Statement {ref} lists a settlement that our bank has no record of.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "c1a8c21811e31103b8fd89e2920e81736632cae2ba2b2246b6526b1c18d7a2e3"
+  },
+  {
+   "id": "train-billing-01",
+   "label": "billing",
+   "lang": "en",
+   "text": "The amount taken for subscription {ref} does not match the signed order.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "13c47a5aea525c199b3c037bd307fc388298a5712240f0384db01b1974669063"
+  },
+  {
+   "id": "train-billing-02",
+   "label": "billing",
+   "lang": "en",
+   "text": "We were debited for {n} units but only ever received the first batch.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "5efa6943f7a29b951f33fab1ee0aaa1c61b6f4e7ac4d54911da2bf8fb1814147"
+  },
+  {
+   "id": "train-billing-03",
+   "label": "billing",
+   "lang": "en",
+   "text": "Please trace the transfer of {n} dollars sent on the ninth of March.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "4820429ce2de0bf35de680c2456ae81e5e1ae946cde85aca41256cd8b64486b5"
+  },
+  {
+   "id": "train-billing-04",
+   "label": "billing",
+   "lang": "en",
+   "text": "The discount on contract {ref} disappeared from the latest assessment.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "10033ce8f46c2af22664e8072896cc6e1397ea366800d6fbc49b840497429232"
+  },
+  {
+   "id": "train-billing-05",
+   "label": "billing",
+   "lang": "en",
+   "text": "Nobody can explain the {n} dollar adjustment on the March statement.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "9f2c5f5c8aad824f75fefc44a8ff171b7a85f0c33b454c980c9d722aaf7dd949"
+  },
+  {
+   "id": "train-billing-06",
+   "label": "billing",
+   "lang": "en",
+   "text": "One instalment for {ref} was collected from a dormant facility.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "7a6858093b6c0db052c459f0119265241c092063d01dc65adfc8fda04fa12eec"
+  },
+  {
+   "id": "train-billing-07",
+   "label": "billing",
+   "lang": "en",
+   "text": "The outstanding figure on {ref} was cleared by cheque last autumn.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "c44620afd06c22150708ca11dc43329b9890e1f7de00ddcb1c7b1592a984df20"
+  },
+  {
+   "id": "train-billing-08",
+   "label": "billing",
+   "lang": "en",
+   "text": "Our finance office disputes the surcharge levied against {ref}.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "8bcd279c4236905a1f59c4a22e44315f889dc4d966f79bdbbce5a901d29e193c"
+  },
+  {
+   "id": "train-billing-09",
+   "label": "billing",
+   "lang": "en",
+   "text": "The pro forma for {ref} carries a tax line that should not be there.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "1f9fdc0a933e3b58da5e6167a886518148d511aba6e6584f0a6065f33952bef9"
+  },
+  {
+   "id": "train-billing-10",
+   "label": "billing",
+   "lang": "en",
+   "text": "Two separate collections were taken for the same billing period on {ref}.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "ea8683aacb09b56bcb9fcdb8bf965855869ddc6ebde228717b9e0993e9cb1d74"
+  },
+  {
+   "id": "train-billing-11",
+   "label": "billing",
+   "lang": "en",
+   "text": "Please reapply the {n} dollar voucher that was dropped at checkout.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "1f5a63520bb5c5eea926889307b25fcb6f2c39c98a69e4685c4479cb916cc505"
+  },
+  {
+   "id": "train-billing-12",
+   "label": "billing",
+   "lang": "en",
+   "text": "The direct debit mandate for {ref} was cancelled before the due date.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "180eb0a81465ca2ad5731935a9507b51ac6c49c83d2c8ca1a5278d3e0f609882"
+  },
+  {
+   "id": "train-billing-13",
+   "label": "billing",
+   "lang": "en",
+   "text": "We are owed {n} dollars from the cancelled portion of the order.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "5ba08d84ab1f7bb998620dfad00c214a8bde3c8f959b9d3b678cba4f2e70450a"
+  },
+  {
+   "id": "train-billing-14",
+   "label": "billing",
+   "lang": "en",
+   "text": "The settlement date printed on {ref} is a public holiday.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "0a2ef98e59d0e0ab542a77da200b3be2bdafcfd44b3d9bd144f61d727434dcd2"
+  },
+  {
+   "id": "train-billing-15",
+   "label": "billing",
+   "lang": "en",
+   "text": "An interest line of {n} dollars appeared without any prior warning.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "8729002eea20f2626d34765fbc27898ce92566275819a76b025404b253338af5"
+  },
+  {
+   "id": "train-billing-16",
+   "label": "billing",
+   "lang": "en",
+   "text": "The prorated figure on {ref} looks like it used the wrong start date.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "696486d3109e9a4079ec64716a409bebdf35dea607e057c1f01c63abaf08d122"
+  },
+  {
+   "id": "train-billing-17",
+   "label": "billing",
+   "lang": "en",
+   "text": "Our purchase ledger shows {ref} settled and the portal disagrees.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "a6c52c1dc6541947cd8f1706d03e03a8a4c49ded76cf038b699335504987d76b"
+  },
+  {
+   "id": "train-billing-18",
+   "label": "billing",
+   "lang": "en",
+   "text": "Someone reissued the demand for {ref} after it had been paid.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "622be1cac81acf1a543f07a0d62fdf21c4df093af8eb7166ff99068d5aedb86a"
+  },
+  {
+   "id": "train-billing-19",
+   "label": "billing",
+   "lang": "en",
+   "text": "The refundable deposit of {n} dollars was never returned to us.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "2407ed4ac04d9b860073a8cf55068e8505318a3fb5e2b734dd99a69c7a42b307"
+  },
+  {
+   "id": "train-billing-20",
+   "label": "billing",
+   "lang": "en",
+   "text": "Line item three of {ref} is charged at a rate we never accepted.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "bd088ffe36ab34a77005b5c5e4cdbb0613166e811c893f5d5dae5031b7cbc1e1"
+  },
+  {
+   "id": "train-billing-21",
+   "label": "billing",
+   "lang": "en",
+   "text": "The instalment plan for {ref} was applied to the wrong agreement.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "9a7c11f69383667641c9d2d6974b59ef572f680481a5b8b8b2252aeeaaa81227"
+  },
+  {
+   "id": "train-billing-22",
+   "label": "billing",
+   "lang": "en",
+   "text": "We ask that the {n} dollar balance carried on {ref} be written off.",
+   "slots_used": [
+    "n",
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "f704ac1e408a01bb64ff1fed0784a53c164575a4c015f6df06b8485b152b94a9"
+  },
+  {
+   "id": "train-billing-23",
+   "label": "billing",
+   "lang": "en",
+   "text": "The remittance advice for {ref} was sent to a closed mailbox.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "3d357235c4311e28a65bbf587778d401dff8f4439e41e9510842c2c5f23bc918"
+  },
+  {
+   "id": "train-technical-00",
+   "label": "technical",
+   "lang": "en",
+   "text": "Index rebuilds on shard {ref} abort partway through with no message.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "4f27afecc2c27913f93ba722751659f6c45a8e215177089da2dfbf3068206382"
+  },
+  {
+   "id": "train-technical-01",
+   "label": "technical",
+   "lang": "en",
+   "text": "The edge cache serves stale pages until it is flushed by hand.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "c179a995b940a0aa033abb8cf0bdcdf1d22fa3dca07adb7a671e7f0863d16961"
+  },
+  {
+   "id": "train-technical-02",
+   "label": "technical",
+   "lang": "en",
+   "text": "Requests time out once concurrency passes about {n} workers.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "bb42573ec96487e0bf0d1fbd5751a42a17c802b4d3865321dd08ba8470345794"
+  },
+  {
+   "id": "train-technical-03",
+   "label": "technical",
+   "lang": "en",
+   "text": "Replication lag on {ref} climbs to several minutes under load.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "cf467fbd8aa9b689a2fd331405ca452807ee331a0dbd01f3f9901488f2d6c969"
+  },
+  {
+   "id": "train-technical-04",
+   "label": "technical",
+   "lang": "en",
+   "text": "The parser rejects a payload that validates against the published schema.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "1286c025f88fd109117d7f830f0c7a92e5743b48946de58f9cccf7e1d929f0c5"
+  },
+  {
+   "id": "train-technical-05",
+   "label": "technical",
+   "lang": "en",
+   "text": "Session cookies are dropped when the browser is restarted.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "d0d2fc01bcfafe8cb2132fc001a0ff4c3a080368aff7896691e7d6873df1cab9"
+  },
+  {
+   "id": "train-technical-06",
+   "label": "technical",
+   "lang": "en",
+   "text": "The batch importer for {ref} silently skips malformed rows.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "d5a858b5be5b12fbaff8a6bd77fbd1cb2d5afc0b82d0426916bd2027dd977a59"
+  },
+  {
+   "id": "train-technical-07",
+   "label": "technical",
+   "lang": "en",
+   "text": "Latency on the read replica of {ref} spikes every quarter hour.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "8722cb06676ee5fc5ef0c1071ceb7f6605a9854796338508f24c7bf592512dda"
+  },
+  {
+   "id": "train-technical-08",
+   "label": "technical",
+   "lang": "en",
+   "text": "The queue drains slowly because consumers keep getting restarted.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "8957cbca82f65b532d4e3c5d26bff0dacfd962cbd0abfaf760df46c0b8b663c7"
+  },
+  {
+   "id": "train-technical-09",
+   "label": "technical",
+   "lang": "en",
+   "text": "A race in the migration tool leaves table {ref} half populated.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "f83e30ac4da3532404b8fd4be9fdba7dd974e13d50b43278da4deffee8e2f8b9"
+  },
+  {
+   "id": "train-technical-10",
+   "label": "technical",
+   "lang": "en",
+   "text": "The certificate for {ref} is renewed but clients still reject it.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "82fd02828e988149e94a3bba891447b79c9720da5cb1b27b2904428ffa506d7e"
+  },
+  {
+   "id": "train-technical-11",
+   "label": "technical",
+   "lang": "en",
+   "text": "Trace sampling drops the spans that matter during incidents.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "fce243c39f41793e58e3d603cf36df0c499903905e19d4dcdc870c7fc0cbe750"
+  },
+  {
+   "id": "train-technical-12",
+   "label": "technical",
+   "lang": "en",
+   "text": "The feature flag for {ref} never propagates to the older nodes.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "df5fc2a30ceb1cbb2202265e59a1ce15d37a315b8d4f73d75c8bcb5d9dbe61fd"
+  },
+  {
+   "id": "train-technical-13",
+   "label": "technical",
+   "lang": "en",
+   "text": "Disk usage on the logging volume grows by {n} gigabytes each day.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "5b69ff571c138549445e10eb4b2e29c3b9a6495e7d22b43d5e88b668245fbbe6"
+  },
+  {
+   "id": "train-technical-14",
+   "label": "technical",
+   "lang": "en",
+   "text": "Failover to the standby of {ref} takes far longer than documented.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "05ff8474b6f85d4c3395533177ce44ae371bd43b010e89e0beb914ff9283ad58"
+  },
+  {
+   "id": "train-technical-15",
+   "label": "technical",
+   "lang": "en",
+   "text": "The mobile build crashes on launch for accounts created after {ref}.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "7490f48f1d95fcba0391162e2963c2daeef3d2d83af1d44df494700bdae24882"
+  },
+  {
+   "id": "train-technical-16",
+   "label": "technical",
+   "lang": "en",
+   "text": "Connection pools for {ref} leak until the process exhausts its handles.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "a3451264a7ba3cbed66e54022271b919e8e8bfd053659161506c6a93a4f624ac"
+  },
+  {
+   "id": "train-technical-17",
+   "label": "technical",
+   "lang": "en",
+   "text": "The cron entry for {ref} runs twice whenever the clock shifts.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "f0bcb82c84e94ad1a523c743361053c634aa7556cf04f4748843e488df3b53b1"
+  },
+  {
+   "id": "train-technical-18",
+   "label": "technical",
+   "lang": "en",
+   "text": "Compaction on {ref} never completes and disk pressure keeps rising.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "de64e6197ca28331e8d3376e933ec8f33d8200abbf8ba9b70a7fc8faf4123a5e"
+  },
+  {
+   "id": "train-technical-19",
+   "label": "technical",
+   "lang": "en",
+   "text": "The sandbox for {ref} returns a permissions fault on every call.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "f00d0ecaa7b52433b93631435bb9681d2030bfc559fad0a3bf8b4b6585270691"
+  },
+  {
+   "id": "train-technical-20",
+   "label": "technical",
+   "lang": "en",
+   "text": "Metrics for {ref} stopped reporting after the agent upgrade.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "d0b53d8edd5710b141547f3f7361eece09001e1bb95f9cf0414b0213ab574ba9"
+  },
+  {
+   "id": "train-technical-21",
+   "label": "technical",
+   "lang": "en",
+   "text": "The gateway strips the authentication header on redirected calls.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "0eefe1c76f45ca5b22ec897d2ddf74a3640c97581c033bceffe5eed9400f89b8"
+  },
+  {
+   "id": "train-technical-22",
+   "label": "technical",
+   "lang": "en",
+   "text": "Pages under {ref} render blank when the locale is not English.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "aa30ad7de9e26497f45bee5bf93e49041940087f0e82f0355e0b0de8e626172d"
+  },
+  {
+   "id": "train-technical-23",
+   "label": "technical",
+   "lang": "en",
+   "text": "Our alerting for {ref} fires and then resolves within seconds.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "c4ee59dc1ca6be3e65ee0811b3543b69763de038a5b331c1bb543a944b542939"
+  },
+  {
+   "id": "train-sales-00",
+   "label": "sales",
+   "lang": "en",
+   "text": "We need a costed option for {n} desks under a single agreement.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "e36e9b1647d8ebeb356db09c457dbf05bfb4b8d7cfcd906f5c468b040d0eb0a6"
+  },
+  {
+   "id": "train-sales-01",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please outline what a commitment of {n} units would include.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "daee5c3ee54c03b360c6f31c19815af914876fa527a113e3f20ea038e7e18a43"
+  },
+  {
+   "id": "train-sales-02",
+   "label": "sales",
+   "lang": "en",
+   "text": "Our board wants indicative figures for {n} sites by Friday.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "914226598c4666798f2a74e2475aa78fcfa2ef9eaecb2d450d1d642990dfcdeb"
+  },
+  {
+   "id": "train-sales-03",
+   "label": "sales",
+   "lang": "en",
+   "text": "Would the rate per unit fall if we ordered {n} instead of half that?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "df9c35dfc6385a502363e945359b29b3f9338b8e9c1edd35c3fa0143d83f3557"
+  },
+  {
+   "id": "train-sales-04",
+   "label": "sales",
+   "lang": "en",
+   "text": "Send terms for {n} concurrent sessions on the professional tier.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "7866ff55e2bfe0e00665f9069363ba7eba5f9482c26a773b548c29760e89a47c"
+  },
+  {
+   "id": "train-sales-05",
+   "label": "sales",
+   "lang": "en",
+   "text": "We are shortlisting suppliers for {n} endpoints and need your best offer.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "70297aa88cc56aee34dcecb741e2470422112b1d7eb80143530c1c92e90c8d24"
+  },
+  {
+   "id": "train-sales-06",
+   "label": "sales",
+   "lang": "en",
+   "text": "Could you illustrate the saving at {n} units against list price?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "6cf6c3148198fc85c2ee67b8361b036c12c1f83b2cc305e2cd6bce6e7be6f155"
+  },
+  {
+   "id": "train-sales-07",
+   "label": "sales",
+   "lang": "en",
+   "text": "What would {n} annual subscriptions come to with support included?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "eaf0db9817dad217309d24cf32d3a5674e457666799400bedfc0be6c3455c2e0"
+  },
+  {
+   "id": "train-sales-08",
+   "label": "sales",
+   "lang": "en",
+   "text": "Our renewal for {ref} needs repricing at the current volumes.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "69b611f91bc672c961eaa2ec305648a5cf9371e4102a4a8aac47c92c83a7705f"
+  },
+  {
+   "id": "train-sales-09",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please attach a schedule of charges for {n} devices.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "c2f36ed078685d13521da54bab7124849893b1c0eb3fd89386117dd3d1032372"
+  },
+  {
+   "id": "train-sales-10",
+   "label": "sales",
+   "lang": "en",
+   "text": "Can the agreement for {ref} be extended to cover the new division?",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "30dbe6dff6aa3a622b3432192379507b6dfd1f78227656aef345357e2ab1bcbe"
+  },
+  {
+   "id": "train-sales-11",
+   "label": "sales",
+   "lang": "en",
+   "text": "We would like a comparison of the two tiers at {n} units.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "e8c33ea4a373af1d85aa9f7935f4f72b23f1be7dd6d6c0f1ff258020dc9180e4"
+  },
+  {
+   "id": "train-sales-12",
+   "label": "sales",
+   "lang": "en",
+   "text": "What lead time applies if we confirm {n} units this week?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "7e40e6cff25c840d73c2f49f51423f13c682eb8aaa796a8eec6082f1f4d10aae"
+  },
+  {
+   "id": "train-sales-13",
+   "label": "sales",
+   "lang": "en",
+   "text": "Our director asks whether {n} units qualifies for the partner rate.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "a1f904af1a77c025befcb319319c512ddb261fd72bac36ee3b1ec4045e3fe502"
+  },
+  {
+   "id": "train-sales-14",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please confirm the minimum term for an order of {n} units.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "e3f25398217d28160c161122732dffef27cb00a52646ab7d0abbb8d7f718f240"
+  },
+  {
+   "id": "train-sales-15",
+   "label": "sales",
+   "lang": "en",
+   "text": "Is onboarding included when we take {n} units at once?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "f25e9f5f1853474cf4cc8cf9a4bb035c901c52a5d31f5e6ba2a70d0b24ecb261"
+  },
+  {
+   "id": "train-sales-16",
+   "label": "sales",
+   "lang": "en",
+   "text": "We are renegotiating {ref} and want the current rate card.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "135697bbe97abebdb4493a456a69e9117a009a5ec7b232ee9c50f76fe5b68927"
+  },
+  {
+   "id": "train-sales-17",
+   "label": "sales",
+   "lang": "en",
+   "text": "Could you model the three year outlay for {n} units each year?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "162afa70a85ca8de6a3b9ca92132f9c1008061d90f7cb24a8f06cebe5adaf873"
+  },
+  {
+   "id": "train-sales-18",
+   "label": "sales",
+   "lang": "en",
+   "text": "Our reseller offers {ref}; can you match that structure?",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "065b5612b42a641ff6be46b78818279aa3d9b789cce3523832f8887bd8fdd799"
+  },
+  {
+   "id": "train-sales-19",
+   "label": "sales",
+   "lang": "en",
+   "text": "What support tier is bundled with {n} units?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "7d5194032382648b49206071f43df0b0447028e3be20e8f056d460224cbad28b"
+  },
+  {
+   "id": "train-sales-20",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please state whether {n} units is enough for the partner programme.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "70cb855a9f26e007157889476f519aab91ba4605a965d7bd5d0c4d8364d0ca6e"
+  },
+  {
+   "id": "train-sales-21",
+   "label": "sales",
+   "lang": "en",
+   "text": "We would consider expanding {ref} if the pricing is favourable.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "d4363c91369462fe6d8aa46634e7d5699c2e4e9fe833c025ed15b94aadb848ee"
+  },
+  {
+   "id": "train-sales-22",
+   "label": "sales",
+   "lang": "en",
+   "text": "Send a draft order form for {n} units for our legal review.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "ee2c66f5131d0ceda16c1ea7a2753963ab7c077a5c65c4d7b6ccd43dce15713f"
+  },
+  {
+   "id": "train-sales-23",
+   "label": "sales",
+   "lang": "en",
+   "text": "How does the price per unit move between {n} and triple that?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "c86c3f69a0caa0220026424951ffb55a9eae6ef5e5d7756e208c7a1c08243ac8"
+  },
+  {
+   "id": "train-other-00",
+   "label": "other",
+   "lang": "en",
+   "text": "Whom should I contact about the museum membership renewal?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "24c08b72bd345ba2efc8ca7910fc82f4594efac8a994e62ef767ff05afc5dde4"
+  },
+  {
+   "id": "train-other-01",
+   "label": "other",
+   "lang": "en",
+   "text": "Is the community library open on the bank holiday?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "8cc1cf4c62f03362dcf515eefb29540c342ff78d9916092eb00b282d494bf084"
+  },
+  {
+   "id": "train-other-02",
+   "label": "other",
+   "lang": "en",
+   "text": "Please advise how to appeal a parking notice issued near {ref}.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "817d54b5206593058059f2e53387e4ace1ac134c2e1543f976e175a5cb6e5ae9"
+  },
+  {
+   "id": "train-other-03",
+   "label": "other",
+   "lang": "en",
+   "text": "Our choir needs the rehearsal room key returned by Friday.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "3643f927938c1bd6829ec61c608922487c488c339ead409c30f0cd25205d177f"
+  },
+  {
+   "id": "train-other-04",
+   "label": "other",
+   "lang": "en",
+   "text": "Which form do I submit to change the name on the lease?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "fe624ee1378f1ac248da4b954d6513270840a95e4d64699a6a3735d57eeb52ba"
+  },
+  {
+   "id": "train-other-05",
+   "label": "other",
+   "lang": "en",
+   "text": "The allotment committee meets on the first Wednesday monthly.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "01879f85a96537831a8c5cd84c60a1a36384d4b068e2dd652998f5837a294868"
+  },
+  {
+   "id": "train-other-06",
+   "label": "other",
+   "lang": "en",
+   "text": "Can you forward the minutes from the neighbourhood meeting?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "be9c2989554e1117671e894133931488a38f2715d47881f0352550f2a3f93e86"
+  },
+  {
+   "id": "train-other-07",
+   "label": "other",
+   "lang": "en",
+   "text": "How long does the passport office take to return documents?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "d2900c85eeb08e2d3e638916733e6a063944312114defc342939557f48b13ce3"
+  },
+  {
+   "id": "train-other-08",
+   "label": "other",
+   "lang": "en",
+   "text": "Is there a waiting list for the swimming class on Tuesdays?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "6847a89c220df16ec5344c1aac26ce0670ed1696a762f005910d050456278b2e"
+  },
+  {
+   "id": "train-other-09",
+   "label": "other",
+   "lang": "en",
+   "text": "Please explain how to join the cycle scheme at work.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "1d3ba1e01e2ea652c2687c158f43275a98cec5132469f8930dce0badcb9252e5"
+  },
+  {
+   "id": "train-other-10",
+   "label": "other",
+   "lang": "en",
+   "text": "The village hall booking for {ref} needs to be moved.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "ad81b998c182e2e9061844be900d04a2628acaa0bbf99aeabaf94c9022925ddb"
+  },
+  {
+   "id": "train-other-11",
+   "label": "other",
+   "lang": "en",
+   "text": "Who maintains the footpath behind the old mill?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "c94285098be590fa13bc0ad2fc7adbcebbd063ee7526d7edc8713f9db3273d6c"
+  },
+  {
+   "id": "train-other-12",
+   "label": "other",
+   "lang": "en",
+   "text": "Can the recycling centre accept paint tins this month?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "ad1357b4d1eedc9c0d41dc437f47d6edb5b8056288c11a20629aa1ab91db6046"
+  },
+  {
+   "id": "train-other-13",
+   "label": "other",
+   "lang": "en",
+   "text": "I would like to volunteer at the autumn fair.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "bcdd6322c1fac07159bdf53cd37edcc346045b72238b6cfdfaa2edc21adbe718"
+  },
+  {
+   "id": "train-other-14",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I request a replacement bus pass for {ref}?",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "eb4a16c6598d2b9fbe12d6ecdbbd3ba5c43879d53291974b754f5078a9b7816c"
+  },
+  {
+   "id": "train-other-15",
+   "label": "other",
+   "lang": "en",
+   "text": "Is the tennis court booking system open to non-members?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "6ea60d687214b51ad32570b5f449047ad97a2af26037fcdd81fff5d10f89c915"
+  },
+  {
+   "id": "train-other-16",
+   "label": "other",
+   "lang": "en",
+   "text": "Please tell me the closing time of the reference library.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "4688bb5a6bbb0c4ddc27ba5609f7f31d54805f08ee25efdc1527031186a1ce34"
+  },
+  {
+   "id": "train-other-17",
+   "label": "other",
+   "lang": "en",
+   "text": "Our residents group wants to display a notice on the board.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "27e84ae6ac9c533d580c8277f4374fa5323f257e27d2fbb4f3243a3c84254d13"
+  },
+  {
+   "id": "train-other-18",
+   "label": "other",
+   "lang": "en",
+   "text": "Is there a form for adding a second driver to the car share scheme?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "6bd02bdc4744a7c90b4c749176ece991600b7bbc83f9971e46960278186dfbe2"
+  },
+  {
+   "id": "train-other-19",
+   "label": "other",
+   "lang": "en",
+   "text": "The parish council minutes for {ref} are not on the website.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "c03a9b174761e0abf9429471775d98ac9824b93db287a71c2f6df4ae43797c7f"
+  },
+  {
+   "id": "train-other-20",
+   "label": "other",
+   "lang": "en",
+   "text": "Which department issues parking permits for the harbour?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "7f86f5132454d72b3cc2aeafd35e29b382d1752340053631b8f0eb01c66b0da5"
+  },
+  {
+   "id": "train-other-21",
+   "label": "other",
+   "lang": "en",
+   "text": "Can you confirm the date of the summer fete this year?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "00768678615a8088c8f7921b04039228d94f316a0fc5066343fc80eded63c27c"
+  },
+  {
+   "id": "train-other-22",
+   "label": "other",
+   "lang": "en",
+   "text": "I need the contact details for the school governors.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "6605277dab36c316b771354af0a66bd949e5cd9417d1a445d65a746fece5bc1e"
+  },
+  {
+   "id": "train-other-23",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I return the hire equipment borrowed for {ref}?",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "7d7b56dea3144969d07138a639b5c6b3a89460578707d892cddbf5c801254b16"
+  }
+ ],
+ "counts": {
+  "billing": 24,
+  "technical": 24,
+  "sales": 24,
+  "other": 24
+ },
+ "combos_per_class": {
+  "billing": 11424,
+  "technical": 1734,
+  "sales": 2304,
+  "other": 499
+ }
+}

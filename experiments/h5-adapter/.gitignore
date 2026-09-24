@@ -1,0 +1,4 @@
+# Encoder feature cache: large, regenerable from plan.json + the checkpoint.
+cache/
+# Trained head weights are small and ARE committed; optimiser state is not.
+*.optim.pt

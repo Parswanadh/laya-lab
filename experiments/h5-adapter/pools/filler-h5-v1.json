@@ -1,0 +1,1032 @@
+{
+ "pool_id": "filler-h5-v1",
+ "kind": "filler",
+ "provenance": {
+  "authored_by": "engineer agent, laya-lab, 2026, for the H5 aggregation-path experiment",
+  "basis": "building/grounds/supplies register. Authored *for this experiment* because harness/pools/filler-v1 was written against the earlier support-domain needle set and shares generic content words (team, quarter, window, run, desk, leaves) with the wider H5 needle vocabulary.",
+  "selection_rule": "a candidate sentence is dropped if (a) it shares a whole content word (harness/pools.words, filtered by harness/pools.STOPWORDS, length >= 3) with the union of the H5 needle templates and the question's instructions and criteria, or (b) it contains any forbidden_stem as a substring -- the check that catches 'cardboard' for 'card' and 'border' for 'order'. No sentence was rewritten to pass; candidates are only kept or dropped, and every drop is listed below.",
+  "n_candidates": 204,
+  "n_kept": 104,
+  "n_dropped": 100,
+  "dropped": [
+   {
+    "sentence": "The hedge along the north path was trimmed on Wednesday morning.",
+    "shared_content_words": [
+     "morning",
+     "wednesday"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A wasp nest was found under the eaves near the bicycle rack.",
+    "shared_content_words": [
+     "near"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The padlock on the tool shed has been replaced with a combination latch.",
+    "shared_content_words": [
+     "been",
+     "tool"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Fresh compost was spread on the raised beds behind the greenhouse.",
+    "shared_content_words": [
+     "behind"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Two stepping stones near the pond have sunk into the soil.",
+    "shared_content_words": [
+     "near"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The gate hinge squeaks loudly whenever anyone walks through.",
+    "shared_content_words": [
+     "through",
+     "whenever"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The lawn was mown on Friday and the clippings were taken to the tip.",
+    "shared_content_words": [
+     "friday"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A fox has been digging under the fence beside the compost heap.",
+    "shared_content_words": [
+     "been"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Seed trays were moved into the cold frame before the frost.",
+    "shared_content_words": [
+     "moved"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The drain in the courtyard was cleared of silt on Tuesday.",
+    "shared_content_words": [
+     "cleared"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Moss is spreading across the paving stones by the back steps.",
+    "shared_content_words": [
+     "back"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The water butt is nearly empty after the dry spell.",
+    "shared_content_words": [
+     "empty"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The kettle in the small kitchen takes a long time to boil.",
+    "shared_content_words": [
+     "long"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Someone put the teapot back on the shelf without rinsing it.",
+    "shared_content_words": [
+     "back"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The dishwasher finished its cycle but the cups were still damp.",
+    "shared_content_words": [
+     "cycle"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "We have run out of washing up liquid and sponges.",
+    "shared_content_words": [
+     "run"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The toaster trips the socket whenever it is switched on.",
+    "shared_content_words": [
+     "switched",
+     "whenever"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The box of envelopes in the cupboard is almost empty.",
+    "shared_content_words": [
+     "empty"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Spare batteries for the torches are kept in the tin by the door.",
+    "shared_content_words": [
+     "are"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The stapler and the hole punch were moved to the other shelf.",
+    "shared_content_words": [
+     "moved"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Someone borrowed the long tape measure and did not return it.",
+    "shared_content_words": [
+     "borrowed",
+     "did",
+     "long",
+     "return"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The stack of cardboard boxes in the corridor is a trip hazard.",
+    "shared_content_words": [],
+    "stem_hits": [
+     "card"
+    ]
+   },
+   {
+    "sentence": "Old magazines were bundled up for the charity collection.",
+    "shared_content_words": [
+     "bundled",
+     "old"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The shelf labels have faded and are hard to read.",
+    "shared_content_words": [
+     "are",
+     "read"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A box of light bulbs was delivered and left in the porch.",
+    "shared_content_words": [
+     "delivered"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The extension lead in the store cupboard has a damaged plug.",
+    "shared_content_words": [
+     "lead"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Paper clips and rubber bands are mixed together in the same jar.",
+    "shared_content_words": [
+     "are"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A parcel arrived on Tuesday and was signed for at the desk.",
+    "shared_content_words": [
+     "arrived",
+     "desk",
+     "signed"
+    ],
+    "stem_hits": [
+     "desk"
+    ]
+   },
+   {
+    "sentence": "The courier left a note because nobody was in to receive it.",
+    "shared_content_words": [
+     "nobody"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Post is collected from the box by the gate each morning.",
+    "shared_content_words": [
+     "collected",
+     "morning"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Someone signed for a crate that was meant for the neighbours.",
+    "shared_content_words": [
+     "signed"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The return label was stuck on upside down and the parcel came back.",
+    "shared_content_words": [
+     "back",
+     "return"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A sack of bird seed was stored in the wrong cupboard.",
+    "shared_content_words": [
+     "stored",
+     "wrong"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The paint on the skirting board is peeling near the radiator.",
+    "shared_content_words": [
+     "board",
+     "near",
+     "paint"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The clock above the stairs has stopped again.",
+    "shared_content_words": [
+     "clock",
+     "stopped"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A coat hook has been pulled out of the wall in the porch.",
+    "shared_content_words": [
+     "been"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The radiator in the back room needs bleeding before winter.",
+    "shared_content_words": [
+     "back",
+     "room"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A bookshelf was moved to make space for the armchair.",
+    "shared_content_words": [
+     "moved"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The recycling bin was not emptied because the lid was jammed.",
+    "shared_content_words": [
+     "recycling"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Someone left a bag of rubbish beside the bin instead of inside it.",
+    "shared_content_words": [
+     "instead"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A mop and bucket are kept behind the door in the utility corner.",
+    "shared_content_words": [
+     "are",
+     "behind"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Old paint tins are stacked in the shed awaiting a tip run.",
+    "shared_content_words": [
+     "are",
+     "old",
+     "paint",
+     "run",
+     "tins"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Scrap wood from the shelf project is piled behind the shed.",
+    "shared_content_words": [
+     "behind"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The drain outside the kitchen was blocked with tea leaves.",
+    "shared_content_words": [
+     "leaves"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A notice about the summer fair was pinned to the board.",
+    "shared_content_words": [
+     "board",
+     "fair",
+     "notice",
+     "summer"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The minutes from the spring gathering were filed in the folder.",
+    "shared_content_words": [
+     "folder",
+     "spring"
+    ],
+    "stem_hits": [
+     "folder"
+    ]
+   },
+   {
+    "sentence": "A photograph of the old mill was framed and hung in the hall.",
+    "shared_content_words": [
+     "hall",
+     "mill",
+     "old"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The visitors book has not been signed since March.",
+    "shared_content_words": [
+     "been",
+     "march",
+     "signed"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A list of key holders is kept in the drawer by the telephone.",
+    "shared_content_words": [
+     "key",
+     "list"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The rota for watering the plants was rewritten after the holiday.",
+    "shared_content_words": [
+     "holiday"
+    ],
+    "stem_hits": [
+     "plan"
+    ]
+   },
+   {
+    "sentence": "A reminder about the quiz night was sent round by hand.",
+    "shared_content_words": [
+     "hand",
+     "sent"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The thank you letters from the raffle were posted on Friday.",
+    "shared_content_words": [
+     "friday"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A map of the allotment plots is pinned beside the gate.",
+    "shared_content_words": [
+     "allotment"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Frost was thick on the windscreen again this morning.",
+    "shared_content_words": [
+     "morning"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The wind brought a branch down across the footpath.",
+    "shared_content_words": [
+     "footpath"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Rain has been running down the inside of the porch wall.",
+    "shared_content_words": [
+     "been"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Swallows have been nesting under the eaves since May.",
+    "shared_content_words": [
+     "been"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The apple tree by the wall produced very little fruit this autumn.",
+    "shared_content_words": [
+     "autumn"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "Fallen acorns make the path slippery near the bench.",
+    "shared_content_words": [
+     "near"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A hedgehog was seen shuffling along the border after dusk.",
+    "shared_content_words": [],
+    "stem_hits": [
+     "order"
+    ]
+   },
+   {
+    "sentence": "The stream behind the meadow ran very high last week.",
+    "shared_content_words": [
+     "behind"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A neighbour borrowed the long ladder and returned it on Sunday.",
+    "shared_content_words": [
+     "borrowed",
+     "long",
+     "returned"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The choir practised in the hall on Thursday evening.",
+    "shared_content_words": [
+     "choir",
+     "hall"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A volunteer signed up to help with the spring clear out.",
+    "shared_content_words": [
+     "signed",
+     "spring",
+     "volunteer"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The walking group met at the gate at nine on Saturday.",
+    "shared_content_words": [
+     "group"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A new key was cut for the side entrance.",
+    "shared_content_words": [
+     "key",
+     "new"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The quiz team is short of one player for the next round.",
+    "shared_content_words": [
+     "team"
+    ],
+    "stem_hits": [
+     "team"
+    ]
+   },
+   {
+    "sentence": "Someone has been leaving muddy boots in the porch.",
+    "shared_content_words": [
+     "been"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The knitting circle meets in the back room on alternate weeks.",
+    "shared_content_words": [
+     "back",
+     "meets",
+     "room"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A crate of apples was shared round after the harvest.",
+    "shared_content_words": [
+     "shared"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The handbell ringers need a replacement case for the bells.",
+    "shared_content_words": [
+     "replacement"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The bread dough was left to prove on the windowsill.",
+    "shared_content_words": [],
+    "stem_hits": [
+     "window"
+    ]
+   },
+   {
+    "sentence": "Tomato seedlings were pricked out into larger pots.",
+    "shared_content_words": [
+     "larger"
+    ],
+    "stem_hits": [
+     "pric"
+    ]
+   },
+   {
+    "sentence": "A swarm of bees settled in the hollow of the lime tree.",
+    "shared_content_words": [
+     "settled"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A robin has taken to following the spade around the border.",
+    "shared_content_words": [],
+    "stem_hits": [
+     "order"
+    ]
+   },
+   {
+    "sentence": "A kettle of water was carried round for the hanging baskets.",
+    "shared_content_words": [
+     "carried"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A wheelbarrow load of leaf mould was spread on the beds.",
+    "shared_content_words": [
+     "load"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The path edging was trimmed with long handled shears.",
+    "shared_content_words": [
+     "long"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A batch of scones was baked for the afternoon tea.",
+    "shared_content_words": [
+     "batch"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The preserving pan was borrowed and washed before returning.",
+    "shared_content_words": [
+     "borrowed"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The saddle was raised a little for the longer ride.",
+    "shared_content_words": [
+     "longer"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The cycle path was resurfaced over the summer.",
+    "shared_content_words": [
+     "cycle",
+     "summer"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A flask of tea was carried up in the rucksack.",
+    "shared_content_words": [
+     "carried"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A kestrel hovered above the ridge for several minutes.",
+    "shared_content_words": [
+     "several"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A rope swing hangs from the oak by the ford.",
+    "shared_content_words": [
+     "hangs"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The sheep were moved to the lower field.",
+    "shared_content_words": [
+     "moved"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The quarry pool was clear enough to see the bottom.",
+    "shared_content_words": [
+     "enough",
+     "pool"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A wooden signpost was repainted by hand.",
+    "shared_content_words": [
+     "hand"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The reed bed was cut back in February.",
+    "shared_content_words": [
+     "back"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The watercress beds were harvested by hand.",
+    "shared_content_words": [
+     "hand"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The mill pond was drained for the sluice repair.",
+    "shared_content_words": [
+     "mill"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A punt was moored against the grassy bank.",
+    "shared_content_words": [
+     "bank"
+    ],
+    "stem_hits": [
+     "bank"
+    ]
+   },
+   {
+    "sentence": "The narrowboat was repainted in green and cream.",
+    "shared_content_words": [
+     "green"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The swing bridge was closed for maintenance.",
+    "shared_content_words": [
+     "closed",
+     "maintenance"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The trestle tables were wiped down after the fete.",
+    "shared_content_words": [
+     "fete"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The bunting was taken down and stored in the loft.",
+    "shared_content_words": [
+     "stored"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "A brass band played on the green until dusk.",
+    "shared_content_words": [
+     "band",
+     "green",
+     "until"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The raffle tickets were counted twice.",
+    "shared_content_words": [
+     "twice"
+    ],
+    "stem_hits": [
+     "ticket"
+    ]
+   },
+   {
+    "sentence": "A hog roast was served from the far corner.",
+    "shared_content_words": [
+     "far"
+    ],
+    "stem_hits": []
+   },
+   {
+    "sentence": "The skittles were returned to the village hall cupboard.",
+    "shared_content_words": [
+     "hall",
+     "returned",
+     "village"
+    ],
+    "stem_hits": []
+   }
+  ],
+  "note": "contains no digits, so every digit in a document comes from the needle. Repeated per document by the builder, as upstream's filler is."
+ },
+ "forbidden_stems": [
+  "bill",
+  "invoic",
+  "paym",
+  "refund",
+  "charg",
+  "crash",
+  "bug",
+  "error",
+  "outage",
+  "system",
+  "sale",
+  "pric",
+  "contract",
+  "plan",
+  "upgrad",
+  "licen",
+  "seat",
+  "subscri",
+  "depart",
+  "request",
+  "ticket",
+  "technic",
+  "dashboard",
+  "api",
+  "server",
+  "support",
+  "account",
+  "order",
+  "receipt",
+  "cancel",
+  "downtime",
+  "portal",
+  "report",
+  "customer",
+  "money",
+  "card",
+  "billing",
+  "team",
+  "quarter",
+  "window",
+  "desk",
+  "office",
+  "schedul",
+  "availab",
+  "option",
+  "servic",
+  "workflow",
+  "endpoint",
+  "upload",
+  "export",
+  "backup",
+  "queue",
+  "cache",
+  "replica",
+  "shard",
+  "session",
+  "cookie",
+  "certificat",
+  "migrat",
+  "vendor",
+  "quotation",
+  "quot",
+  "licence",
+  "licens",
+  "discount",
+  "mailbox",
+  "workspace",
+  "timezone",
+  "retention",
+  "archive",
+  "questionnaire",
+  "subprocessor",
+  "digest",
+  "folder",
+  "colleague",
+  "language",
+  "region",
+  "accessib",
+  "warrant",
+  "ledger",
+  "statement",
+  "debit",
+  "credit",
+  "instalment",
+  "instal",
+  "remittance",
+  "pro forma",
+  "proforma",
+  "surcharge",
+  "voucher",
+  "mandate",
+  "settlement",
+  "balance",
+  "amount",
+  "overdue",
+  "statement",
+  "renewal",
+  "currency",
+  "transfer",
+  "bank",
+  "cheque",
+  "deposit",
+  "refundable",
+  "tax",
+  "unit",
+  "endpoint",
+  "gateway",
+  "webhook",
+  "worker",
+  "restart",
+  "container",
+  "health",
+  "probe",
+  "compaction",
+  "replication",
+  "failover",
+  "threshold",
+  "latency",
+  "concurrency",
+  "schema",
+  "payload",
+  "parser",
+  "scheduler",
+  "index",
+  "node",
+  "cluster",
+  "tenant",
+  "quota",
+  "permission",
+  "authentication",
+  "certificate",
+  "bandwidth",
+  "disk",
+  "memory",
+  "cpu",
+  "upgrade",
+  "downgrade",
+  "release",
+  "version",
+  "deploy",
+  "rollback",
+  "incident",
+  "alert",
+  "metric",
+  "trace",
+  "span",
+  "log"
+ ],
+ "sentences": [
+  "Someone has left a ladder leaning against the shed door.",
+  "The gutter above the east entrance overflowed during the storm.",
+  "The gravel path needs raking after the delivery vans turned on it.",
+  "The hose reel by the tap is leaking at the joint again.",
+  "The greenhouse panes rattled all night in the wind.",
+  "The wheelbarrow tyre has gone flat and needs pumping up.",
+  "A bird feeder was hung from the branch above the bench.",
+  "The wooden bench beside the pond has a loose slat.",
+  "A tin of biscuits was left open on the counter overnight.",
+  "The fridge door seal is perished and needs replacing.",
+  "A carton of milk was left out and had to be thrown away.",
+  "The mug cupboard is overflowing and needs a clear out.",
+  "The tea towels were taken home to be washed.",
+  "A roll of parcel tape has gone missing from the drawer.",
+  "The label printer ran out of paper on Thursday.",
+  "Two pallets were left on the loading bay overnight.",
+  "The trolley by the entrance has a wobbly wheel.",
+  "A delivery of potting compost is expected before the weekend.",
+  "The van could not get up the track because of the mud.",
+  "The chair in the corner has a wobbly leg and should be repaired.",
+  "A picture frame fell off the wall in the corridor.",
+  "A bulb has gone in the lamp beside the armchair.",
+  "The doormat curls up at the corner and catches on the door.",
+  "The curtain rail came loose when the curtains were pulled.",
+  "The floorboards creak loudly on the landing.",
+  "The umbrella stand by the door is full of broken umbrellas.",
+  "Glass jars should go in the crate, not the general waste.",
+  "The floor in the porch was mopped after the rain came in.",
+  "The compost caddy needs emptying before it starts to smell.",
+  "The vacuum cleaner bag is full and needs changing.",
+  "An inventory of the tools was taken before the winter break.",
+  "The pond froze over for three nights in a row.",
+  "Salt was spread on the steps after the ice warnings.",
+  "The daffodils along the drive came up earlier than usual.",
+  "Sunflower heads were left standing for the birds.",
+  "Someone kindly watered the ferns while the household was away.",
+  "A rota was drawn up for sweeping the front steps.",
+  "A jar of plum jam was labelled and put in the pantry.",
+  "The roses were deadheaded after the first flush of flowers.",
+  "The pea netting came loose during the gale.",
+  "Runner beans were sown along the cane wigwam.",
+  "The rhubarb patch was mulched with well rotted manure.",
+  "A bucket of rainwater was left standing by the greenhouse.",
+  "The strawberry runners were pegged down into fresh pots.",
+  "Parsley and thyme were potted up for the kitchen sill.",
+  "The fig tree was wrapped in fleece for the winter.",
+  "A tray of cuttings was placed under the bench in the shade.",
+  "The pumpkin vines spread right across the vegetable patch.",
+  "The herb bed was edged with clipped box.",
+  "The bird bath was scrubbed and refilled.",
+  "A pile of prunings was left beside the bonfire spot.",
+  "The mower blade was sharpened before the first cut.",
+  "The garden fork was left standing in the bed overnight.",
+  "The sweet peas were tied in with soft twine.",
+  "A clump of chives was lifted and divided.",
+  "The cold frame lid was propped open on warm days.",
+  "The compost heap was turned with the fork on Sunday.",
+  "The crab apple jelly set firmly in the jars.",
+  "A pan of soup was left simmering on the stove.",
+  "The oven was cleaned after the roasting tin bubbled over.",
+  "A sack of flour was tipped into the bin in the pantry.",
+  "The spice jars were rearranged alphabetically on the rack.",
+  "A bowl of lemons was left on the sill to ripen.",
+  "The chopping block was scrubbed with coarse salt.",
+  "A loaf was left to cool on the wire rack.",
+  "The apron was hung on the hook by the stove.",
+  "A jug of elderflower cordial was chilled in the fridge.",
+  "The picnic hamper was aired out after the trip.",
+  "A rug was shaken over the fence on Saturday.",
+  "The bicycle chain was oiled and the brakes adjusted.",
+  "A puncture was mended with a patch kit at the roadside.",
+  "A pannier was strapped onto the rack for the shopping.",
+  "The bell on the handlebar has a pleasant ring.",
+  "A reflective tabard was hung up in the porch.",
+  "A water bottle was left clipped in its cage.",
+  "The tandem was wheeled out for the first time this year.",
+  "A walking stick was left propped against the stile.",
+  "The footbridge over the brook was repaired in April.",
+  "A cairn marks the junction of the two tracks.",
+  "The stile at the field corner has a broken step.",
+  "The map was folded away after the last turn.",
+  "The bothy was swept out and left tidy.",
+  "A drystone wall collapsed along the lane.",
+  "The gatepost was reset in fresh mortar.",
+  "A hare was startled on the track at dusk.",
+  "The stepping stones were submerged after the rain.",
+  "A kingfisher flashed past the bend in the river.",
+  "A dragonfly rested on the lily pad.",
+  "The otter spraint was found on the flat stone.",
+  "A heron stood motionless in the shallows.",
+  "A mayfly hatch brought the trout up.",
+  "The towpath was muddy after the weekend.",
+  "A lock keeper's cottage stands at the second gate.",
+  "A moorhen nested under the overhanging willow.",
+  "A pair of swans nested on the island.",
+  "The weir was noisy after the heavy rain.",
+  "A rowing eight practised upstream at dawn.",
+  "The ferry timetable changes at the equinox.",
+  "A string of bunting was hung across the marquee.",
+  "A tombola drum was left in the scout hut.",
+  "A cake stall raised a decent sum for the roof fund.",
+  "The coconut shy was packed away in the van.",
+  "The maypole ribbons were untangled before the dancing.",
+  "A bouncy castle was deflated at six."
+ ]
+}

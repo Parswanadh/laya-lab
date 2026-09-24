@@ -1,0 +1,202 @@
+{
+ "artifact": "experiments/h5-adapter/leakage_report.json",
+ "reproduce": "env/venv/bin/python experiments/h5-adapter/leakage_check.py",
+ "eval_pool": {
+  "path": "experiments/h5-adapter/pools/needles-h5-eval-v1.json",
+  "sha256": "1ab55323ebdbf4370e547d38d44a63435bb4f477606ae1be4f79fdaf125a104d",
+  "n_templates": 96,
+  "counts": {
+   "billing": 24,
+   "technical": 24,
+   "sales": 24,
+   "other": 24
+  }
+ },
+ "train_pool": {
+  "path": "experiments/h5-adapter/pools/needles-h5-train-v1.json",
+  "sha256": "e88a68874a1153b2c627bd06470bf38b80b1eed4017b0dd57eac0f1c44edc733",
+  "n_templates": 96,
+  "counts": {
+   "billing": 24,
+   "technical": 24,
+   "sales": 24,
+   "other": 24
+  }
+ },
+ "plan": {
+  "path": "experiments/h5-adapter/plan.json",
+  "eval_n": 1600,
+  "train_n": 1008,
+  "train_long_boost_n": 1584
+ },
+ "c1_template_ids_disjoint": {
+  "n_shared": 0,
+  "shared": [],
+  "passed": true
+ },
+ "c2_canonical_sha256_disjoint": {
+  "n_shared": 0,
+  "eval_templates_matching_train_text": [],
+  "passed": true
+ },
+ "c3_rendered_needle_sha256_disjoint": {
+  "eval_unique": 800,
+  "train_unique": 1008,
+  "n_shared_uniform_train": 0,
+  "n_shared_long_boost_train": 0,
+  "passed": true
+ },
+ "c4_longest_shared_word_ngram": {
+  "longest_shared_word_ngram": 4,
+  "n_shared": 4,
+  "example": "i would like to",
+  "example_is_stopword_only": false,
+  "passed": true
+ },
+ "c5_longest_shared_char_ngram": {
+  "longest_shared_char_ngram": 20,
+  "n_shared": 1,
+  "example": " of @ dollars appear",
+  "gating": false,
+  "why_not_gating": "a shared character window is not template reuse. The longest one here spans a morphological variant ('appear' inside 'appeared'), which a word n-gram correctly does not treat as a match. Reported in full so this reading can be checked rather than taken on trust; the binding disjointness gates are c1/c2/c3."
+ },
+ "c6_max_rendered_token_jaccard": {
+  "max_jaccard": 0.2667,
+  "a": "Please tell me the closing time of the reference library.",
+  "b": "Please tell me the office opening hours for the support desk.",
+  "passed": true
+ },
+ "c7_slot_value_pools_disjoint": {
+  "n_shared": 0,
+  "shared": [],
+  "passed": true
+ },
+ "c8_filler_vs_needle_eval": {
+  "filler_pool": "filler-h5-v1",
+  "needle_pool": "needles-h5-eval-v1",
+  "needle_vocab_size": 434,
+  "filler_vocab_size": 455,
+  "word_overlap_all": [
+   "after",
+   "again",
+   "all",
+   "and",
+   "because",
+   "before",
+   "could",
+   "down",
+   "for",
+   "from",
+   "into",
+   "its",
+   "last",
+   "needs",
+   "not",
+   "off",
+   "onto",
+   "open",
+   "out",
+   "second",
+   "should",
+   "taken",
+   "than",
+   "the",
+   "this",
+   "three",
+   "time",
+   "two",
+   "under",
+   "was",
+   "when",
+   "with",
+   "year"
+  ],
+  "content_word_overlap": [],
+  "stem_hits": [],
+  "passed": true
+ },
+ "c8_filler_vs_needle_train": {
+  "filler_pool": "filler-h5-v1",
+  "needle_pool": "needles-h5-train-v1",
+  "needle_vocab_size": 498,
+  "filler_vocab_size": 455,
+  "word_overlap_all": [
+   "after",
+   "against",
+   "and",
+   "because",
+   "before",
+   "could",
+   "during",
+   "first",
+   "for",
+   "from",
+   "had",
+   "has",
+   "its",
+   "last",
+   "needs",
+   "not",
+   "off",
+   "open",
+   "out",
+   "second",
+   "should",
+   "someone",
+   "taken",
+   "than",
+   "the",
+   "this",
+   "three",
+   "time",
+   "two",
+   "under",
+   "was",
+   "were",
+   "when",
+   "with",
+   "year"
+  ],
+  "content_word_overlap": [],
+  "stem_hits": [],
+  "passed": true
+ },
+ "c9_label_position_independence": {
+  "eval_cells_balanced": true,
+  "train_regimes_balanced": true,
+  "eval_position_oracle": 0.25,
+  "train_position_oracle": 0.25,
+  "n_eval_cells": 8,
+  "n_train_regimes": 21
+ },
+ "c10_no_degenerate_template": {
+  "empty_renders": [],
+  "passed": true
+ },
+ "c11_prefix_absent_from_filler": {
+  "prefix": "\n\nActual request: ",
+  "present": false,
+  "passed": true
+ },
+ "summary": {
+  "gating_checks": [
+   "c1_template_ids_disjoint",
+   "c2_canonical_sha256_disjoint",
+   "c3_rendered_needle_sha256_disjoint",
+   "c4_longest_shared_word_ngram",
+   "c6_max_rendered_token_jaccard",
+   "c7_slot_value_pools_disjoint",
+   "c10_no_degenerate_template",
+   "c11_prefix_absent_from_filler"
+  ],
+  "diagnostic_checks": [
+   "c5_longest_shared_char_ngram"
+  ],
+  "failed": [],
+  "filler_eval_passed": true,
+  "filler_train_passed": true,
+  "content_word_overlap_eval": [],
+  "content_word_overlap_train": [],
+  "passed": true
+ }
+}

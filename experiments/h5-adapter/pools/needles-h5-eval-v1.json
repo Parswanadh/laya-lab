@@ -1,0 +1,1216 @@
+{
+ "pool_id": "needles-h5-eval-v1",
+ "kind": "balanced",
+ "split": "eval",
+ "labels": [
+  "billing",
+  "technical",
+  "sales",
+  "other"
+ ],
+ "question": {
+  "department": {
+   "type": "choice",
+   "instructions": "Which department should handle this request?",
+   "criteria": {
+    "billing": "invoices, payments, refunds",
+    "technical": "bugs, outages, system errors",
+    "sales": "pricing, new contracts, plan upgrades",
+    "other": "everything else"
+   }
+  }
+ },
+ "slots": {
+  "n": [
+   "310",
+   "313",
+   "316",
+   "319",
+   "322",
+   "325",
+   "328",
+   "331",
+   "334",
+   "337",
+   "340",
+   "343",
+   "346",
+   "349",
+   "352",
+   "355",
+   "358",
+   "361",
+   "364",
+   "367",
+   "370",
+   "373",
+   "376",
+   "379",
+   "382",
+   "385",
+   "388",
+   "391",
+   "394",
+   "397",
+   "400",
+   "403",
+   "406",
+   "409",
+   "412",
+   "415",
+   "418",
+   "421",
+   "424",
+   "427",
+   "430",
+   "433",
+   "436",
+   "439",
+   "442",
+   "445",
+   "448",
+   "451",
+   "454",
+   "457",
+   "460",
+   "463",
+   "466",
+   "469",
+   "472",
+   "475",
+   "478",
+   "481",
+   "484",
+   "487",
+   "490",
+   "493",
+   "496",
+   "499",
+   "502",
+   "505",
+   "508",
+   "511",
+   "514",
+   "517",
+   "520",
+   "523",
+   "526",
+   "529",
+   "532",
+   "535",
+   "538",
+   "541",
+   "544",
+   "547",
+   "550",
+   "553",
+   "556",
+   "559",
+   "562",
+   "565",
+   "568",
+   "571",
+   "574",
+   "577",
+   "580",
+   "583",
+   "586",
+   "589",
+   "592",
+   "595"
+  ],
+  "ref": [
+   "EV-8200",
+   "EV-8213",
+   "EV-8226",
+   "EV-8239",
+   "EV-8252",
+   "EV-8265",
+   "EV-8278",
+   "EV-8291",
+   "EV-8304",
+   "EV-8317",
+   "EV-8330",
+   "EV-8343",
+   "EV-8356",
+   "EV-8369",
+   "EV-8382",
+   "EV-8395",
+   "EV-8408",
+   "EV-8421",
+   "EV-8434",
+   "EV-8447",
+   "EV-8460",
+   "EV-8473",
+   "EV-8486",
+   "EV-8499",
+   "EV-8512",
+   "EV-8525",
+   "EV-8538",
+   "EV-8551",
+   "EV-8564",
+   "EV-8577",
+   "EV-8590",
+   "EV-8603",
+   "EV-8616",
+   "EV-8629",
+   "EV-8642",
+   "EV-8655",
+   "EV-8668",
+   "EV-8681",
+   "EV-8694",
+   "EV-8707",
+   "EV-8720",
+   "EV-8733",
+   "EV-8746",
+   "EV-8759",
+   "EV-8772",
+   "EV-8785",
+   "EV-8798",
+   "EV-8811",
+   "EV-8824",
+   "EV-8837",
+   "EV-8850",
+   "EV-8863",
+   "EV-8876",
+   "EV-8889",
+   "EV-8902",
+   "EV-8915",
+   "EV-8928",
+   "EV-8941",
+   "EV-8954",
+   "EV-8967",
+   "EV-8980",
+   "EV-8993",
+   "EV-9006",
+   "EV-9019",
+   "EV-9032",
+   "EV-9045",
+   "EV-9058",
+   "EV-9071",
+   "EV-9084",
+   "EV-9097",
+   "EV-9110",
+   "EV-9123",
+   "EV-9136",
+   "EV-9149",
+   "EV-9162",
+   "EV-9175",
+   "EV-9188",
+   "EV-9201",
+   "EV-9214",
+   "EV-9227",
+   "EV-9240",
+   "EV-9253",
+   "EV-9266",
+   "EV-9279",
+   "EV-9292",
+   "EV-9305",
+   "EV-9318",
+   "EV-9331",
+   "EV-9344",
+   "EV-9357",
+   "EV-9370",
+   "EV-9383",
+   "EV-9396",
+   "EV-9409",
+   "EV-9422",
+   "EV-9435"
+  ]
+ },
+ "templates": [
+  {
+   "id": "eval-billing-00",
+   "label": "billing",
+   "lang": "en",
+   "text": "I was charged twice for invoice {n}, please refund the duplicate payment.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "a859e5ef5bf9bf7f2cecc373762cd03400ac67c74b419bcafea18dc1304d8382"
+  },
+  {
+   "id": "eval-billing-01",
+   "label": "billing",
+   "lang": "en",
+   "text": "My card was billed {n} dollars more than the amount on my last statement.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "ac9d621df7aafb1043b5143d3af115669a2c73a42f32fa3940c2366738d82a60"
+  },
+  {
+   "id": "eval-billing-02",
+   "label": "billing",
+   "lang": "en",
+   "text": "Please refund invoice {n}, the payment went through twice this morning.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "f44c78b7e72f1d6f4076e9ab095644ba9378b9a018dfc8a10b01a60d507d1f4d"
+  },
+  {
+   "id": "eval-billing-03",
+   "label": "billing",
+   "lang": "en",
+   "text": "There is an unexpected charge of {n} dollars on my account this month.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "f837611dc32499098892f96001466ea0ed5b039c565a7a22a4e12b66270fdc27"
+  },
+  {
+   "id": "eval-billing-04",
+   "label": "billing",
+   "lang": "en",
+   "text": "I need a refund for the duplicate transaction on invoice {n}.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "0a7ce8d9122c533d01d8048746ad70dcaa68947fe9e8c0460b6d3326a83e156d"
+  },
+  {
+   "id": "eval-billing-05",
+   "label": "billing",
+   "lang": "en",
+   "text": "My last statement shows a payment of {n} dollars I never authorised.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "cc949da59073795715e31c2ce0b850e3e2f8444c6a395810113a6e4f6585286f"
+  },
+  {
+   "id": "eval-billing-06",
+   "label": "billing",
+   "lang": "en",
+   "text": "Can you reverse the double charge on invoice {n}?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "4226aa361275dea2645a67b3f3a6de9005ec57f4dfbe781064c919c98aa15dc8"
+  },
+  {
+   "id": "eval-billing-07",
+   "label": "billing",
+   "lang": "en",
+   "text": "The renewal payment of {n} dollars was taken from the wrong card.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "1d7d647196a7a325a5bad0c71efc86b005beea97b71d023a0b1481fd3f620c45"
+  },
+  {
+   "id": "eval-billing-08",
+   "label": "billing",
+   "lang": "en",
+   "text": "I am disputing a charge of {n} dollars that appeared on my bill.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "705af59f29b08cb5730b7f96b7f9984ace7d31de850bb6406948dade43f23562"
+  },
+  {
+   "id": "eval-billing-09",
+   "label": "billing",
+   "lang": "en",
+   "text": "Please credit back the overpayment of {n} dollars on my account.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "8ba3f2a7d799d4185c4322249737b5cef51368bc4e527a69f9b22828482b7558"
+  },
+  {
+   "id": "eval-billing-10",
+   "label": "billing",
+   "lang": "en",
+   "text": "Invoice {n} was paid twice, I would like the second payment returned.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "b43880f29d05bf7a5979ecf43013d7a6d31800ddc60b1fee1401d709488890f5"
+  },
+  {
+   "id": "eval-billing-11",
+   "label": "billing",
+   "lang": "en",
+   "text": "Why was I billed {n} dollars when my plan costs less than that?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "eb241244614f44e4107334bbe41317665a0d3afa459a6b2e4f10250c1e79db88"
+  },
+  {
+   "id": "eval-billing-12",
+   "label": "billing",
+   "lang": "en",
+   "text": "The receipt for order {n} shows a total higher than the price we agreed.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "ee33890f4dcc43d4649841854495c74db265ff3a39f007445c1601fb34f4bd2b"
+  },
+  {
+   "id": "eval-billing-13",
+   "label": "billing",
+   "lang": "en",
+   "text": "Two identical debits of {n} dollars appear on my statement for the same day.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "4620ccb1b10502494d41f5318c395ebb0932d8ca282f8e4244b061e0ea13b78b"
+  },
+  {
+   "id": "eval-billing-14",
+   "label": "billing",
+   "lang": "en",
+   "text": "I was told the {n} dollar setup fee would be waived but it was taken anyway.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "8f7c8dd508e7c6b71ac8cb41b98188ae3133abf0915a71faaeed7246a649d874"
+  },
+  {
+   "id": "eval-billing-15",
+   "label": "billing",
+   "lang": "en",
+   "text": "Our workspace was suspended for non-payment even though the balance is zero.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "e2535349198c48b2ba8a47a2c3f99739dd952db33c4989ae9e0f164d20c4602d"
+  },
+  {
+   "id": "eval-billing-16",
+   "label": "billing",
+   "lang": "en",
+   "text": "The refund of {n} dollars was promised last month and never arrived.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "022b5173817248c05fc48744dab0a48fd596c7361afd15eaccbaad18f137d727"
+  },
+  {
+   "id": "eval-billing-17",
+   "label": "billing",
+   "lang": "en",
+   "text": "Please move the {n} dollar credit sitting in ledger {ref} onto the current one.",
+   "slots_used": [
+    "n",
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "f704e211b418adf1762544a07157b578338f77c96e4186dc0abdd5691051862f"
+  },
+  {
+   "id": "eval-billing-18",
+   "label": "billing",
+   "lang": "en",
+   "text": "The annual renewal for invoice {n} was charged to a card we closed.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "0c8ece926b50f2c003b60e42470889d0ccd5081f45ca318e87fcc6c325705511"
+  },
+  {
+   "id": "eval-billing-19",
+   "label": "billing",
+   "lang": "en",
+   "text": "I keep receiving overdue notices for an amount that was settled already.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "34f99912d96fcd22f571c444569def396b54f9c5822f770ceeadb72d5002d4df"
+  },
+  {
+   "id": "eval-billing-20",
+   "label": "billing",
+   "lang": "en",
+   "text": "The currency on invoice {n} is wrong, so the total is about twelve percent off.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "2a0440bb79566c61344c2e2d9f428b2e573792737ccc475361f9d6984faea297"
+  },
+  {
+   "id": "eval-billing-21",
+   "label": "billing",
+   "lang": "en",
+   "text": "A late fee of {n} dollars was added even though the transfer cleared on time.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "026e53efdd488fbf804af630d6550099594da52dad97b3b5a343e854d850ecdb"
+  },
+  {
+   "id": "eval-billing-22",
+   "label": "billing",
+   "lang": "en",
+   "text": "Half of my payment of {n} dollars was applied to an unrelated account.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "ac9d7a76abeeb3f64c15715ca063902daa4ec4180f286d764887a83622f44afc"
+  },
+  {
+   "id": "eval-billing-23",
+   "label": "billing",
+   "lang": "en",
+   "text": "The automatic top-up of {n} dollars fired twice within the same hour.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "d7cce93ca6efba4b5992ccb27b18625d21784c6f5386a849396ebf3ea0b1c277"
+  },
+  {
+   "id": "eval-technical-00",
+   "label": "technical",
+   "lang": "en",
+   "text": "The dashboard throws an error every time I open report {n}.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "9153a180ba6f0f9ec02f59df339461efe8af418825757ea3c8a0c99558063d90"
+  },
+  {
+   "id": "eval-technical-01",
+   "label": "technical",
+   "lang": "en",
+   "text": "Our API returns 500 responses since this morning and the service is down.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "006a009a58867dc02fdbe67878a6cd30309892a2845bf2c92934e1dfcca65496"
+  },
+  {
+   "id": "eval-technical-02",
+   "label": "technical",
+   "lang": "en",
+   "text": "The application crashes whenever I try to export file {n}.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "54c5477691314f22a842e0bd5e000650794a991139b9f59c74447d154d46518e"
+  },
+  {
+   "id": "eval-technical-03",
+   "label": "technical",
+   "lang": "en",
+   "text": "Sync stopped working after the last update and nothing uploads now.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "e5b5efb966388afce5057819f21e4f9b8655bdb93db7ed4d1edb0dec9f0a5243"
+  },
+  {
+   "id": "eval-technical-04",
+   "label": "technical",
+   "lang": "en",
+   "text": "The login page hangs and then times out for every user.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "a8c56a3f7619b840ce9dade406ce0bf15aa83a58bd12a9475575e29bcfc4b44e"
+  },
+  {
+   "id": "eval-technical-05",
+   "label": "technical",
+   "lang": "en",
+   "text": "We are seeing repeated outages on the {n} endpoint today.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "bb0872c082a700bd6a1368000fd24d48ed4221ec1f23b3c009f8e30a373aef73"
+  },
+  {
+   "id": "eval-technical-06",
+   "label": "technical",
+   "lang": "en",
+   "text": "The mobile app closes itself as soon as I open the settings screen.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "a630ebdf1e4ef5f2a4c3e1a03c75389d2907c8377c2e774ae4ce55ce5cc18275"
+  },
+  {
+   "id": "eval-technical-07",
+   "label": "technical",
+   "lang": "en",
+   "text": "Database connections are failing and requests are timing out.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "63b64fb9837ec6440cfc0239e26d0fa1ce0a59925565404f1429e83adac31c92"
+  },
+  {
+   "id": "eval-technical-08",
+   "label": "technical",
+   "lang": "en",
+   "text": "The search feature returns an internal error for every query.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "ff374afb78b50bc593e8f05d700bf74a9681a90cc5c87184d3c1dcd18a25663f"
+  },
+  {
+   "id": "eval-technical-09",
+   "label": "technical",
+   "lang": "en",
+   "text": "Uploads larger than {n} megabytes fail with a server error.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "a33489f12b3fdae8f11ed6caaae0ad4072bd91546dfd5177a46774ccd56e5c3f"
+  },
+  {
+   "id": "eval-technical-10",
+   "label": "technical",
+   "lang": "en",
+   "text": "The nightly job did not run and the data is stale again.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "e1278d7756d1530b3c174a4439eae59e9a57c2882738f66a923036c245d1e9fe"
+  },
+  {
+   "id": "eval-technical-11",
+   "label": "technical",
+   "lang": "en",
+   "text": "Webhooks stopped being delivered after the maintenance window.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "57326b65ec4e72ce82a096fdbd198b1effa47adc095cb81786dfde4964f42ede"
+  },
+  {
+   "id": "eval-technical-12",
+   "label": "technical",
+   "lang": "en",
+   "text": "Every call to the search endpoint returns a 502 since the release.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "70955d586bb545437ee0a01395e32f9ee903b7d2e7639284bb62c4cfff741783"
+  },
+  {
+   "id": "eval-technical-13",
+   "label": "technical",
+   "lang": "en",
+   "text": "The export job for {n} rows never finishes and leaves the file empty.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "95f6b1b7cb49e9062f46ddaaed5336e9f56e33a23a64af1cc19599754103690e"
+  },
+  {
+   "id": "eval-technical-14",
+   "label": "technical",
+   "lang": "en",
+   "text": "Our nightly backup of the {n} gigabyte volume fails with a checksum mismatch.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "412ba3291994766fc68371765dd449aeb6332c8fa68a79c78c80aeca91539601"
+  },
+  {
+   "id": "eval-technical-15",
+   "label": "technical",
+   "lang": "en",
+   "text": "The worker pool stops consuming the queue after about {n} seconds.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "067628535e38d78a9548c2dec325d63d263435f546599734ff6fca436938288f"
+  },
+  {
+   "id": "eval-technical-16",
+   "label": "technical",
+   "lang": "en",
+   "text": "Single sign-on loops between the identity provider and the application.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "c2004020a86f282ee9263f939b001f7f05fa6af7109b814dfa27e8311a994aed"
+  },
+  {
+   "id": "eval-technical-17",
+   "label": "technical",
+   "lang": "en",
+   "text": "The desktop client cannot reach the sync service from behind our proxy.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "59021b21624c8f309cb3bd8aefc5f3316ea78ff231dba77ad6faef4db8049602"
+  },
+  {
+   "id": "eval-technical-18",
+   "label": "technical",
+   "lang": "en",
+   "text": "Uploads of {n} megabytes are rejected with a gateway timeout.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "fe0a83fb9b4accf634135317bd56804bb224cdcc36e424a096ed5f2adeb4a15b"
+  },
+  {
+   "id": "eval-technical-19",
+   "label": "technical",
+   "lang": "en",
+   "text": "The scheduler skips every second run and the dashboards go stale.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "a086fa43b428b9c32e75c3e476dfacf94cc63fc55480e7a92f61ae4f3a180dfe"
+  },
+  {
+   "id": "eval-technical-20",
+   "label": "technical",
+   "lang": "en",
+   "text": "Memory grows until the process is killed, roughly every {n} hours.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "2ae593df6dba04723ee2db495d060ec5357787ebe6f5788c55cbd460644e95f6"
+  },
+  {
+   "id": "eval-technical-21",
+   "label": "technical",
+   "lang": "en",
+   "text": "The signature check on payload {ref} rejects bodies the sender considers valid.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "74b33bbf1bf64588ffcf62ac89a204559232b4cca390378e535ea46fbc9e6b77"
+  },
+  {
+   "id": "eval-technical-22",
+   "label": "technical",
+   "lang": "en",
+   "text": "Log ingestion stopped at {n} events and no new rows appear in the console.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "b0bdebea7142508157bc44b873ddbd6146d79a420925c193b8b9c2a2f8734317"
+  },
+  {
+   "id": "eval-technical-23",
+   "label": "technical",
+   "lang": "en",
+   "text": "The container restarts in a loop because the health probe never turns green.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "4a6d00c0a00ab9995378051e64fd5e6b98ab754dab102a4106bd0e5fe0802a8f"
+  },
+  {
+   "id": "eval-sales-00",
+   "label": "sales",
+   "lang": "en",
+   "text": "What would an enterprise contract for {n} seats cost per year?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "a553654ff1baeba3ad8812cb737b351dde5947f4895aa45a48dddcc8e588cfc2"
+  },
+  {
+   "id": "eval-sales-01",
+   "label": "sales",
+   "lang": "en",
+   "text": "Can you send pricing for upgrading our team to the business tier?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "90a31c6bba27e116274e6141e62d07c2cb750fd08f91362aa7972682a6c02c71"
+  },
+  {
+   "id": "eval-sales-02",
+   "label": "sales",
+   "lang": "en",
+   "text": "We would like a quote for {n} licences billed annually.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "11329eb0b8f65f184873fd390bf82e4fc142c30ef6cd2601e558d49da28e4512"
+  },
+  {
+   "id": "eval-sales-03",
+   "label": "sales",
+   "lang": "en",
+   "text": "Is there a volume discount if we purchase {n} seats this quarter?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "970c03b3c579f3155ff01f36ad56bd0e854e1d8fb8b08000f8524168cb10aaa1"
+  },
+  {
+   "id": "eval-sales-04",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please share the price of the premium plan for a team of {n}.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "d5c50b4fead95c480c3f64ef1cfc1720259e54f1950509d1079d7f47ddab8faa"
+  },
+  {
+   "id": "eval-sales-05",
+   "label": "sales",
+   "lang": "en",
+   "text": "What are the contract terms for an annual plan with {n} users?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "a8f2ad75207be35a3b325a649643ce2e2d2a24e214086191e66345423fe29ed3"
+  },
+  {
+   "id": "eval-sales-06",
+   "label": "sales",
+   "lang": "en",
+   "text": "I want to compare the cost of the pro and enterprise plans.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "7e892d92fe3718a955dca25debf0a53ca5d07cdcbc6f741c7d923d6923fd0928"
+  },
+  {
+   "id": "eval-sales-07",
+   "label": "sales",
+   "lang": "en",
+   "text": "Could you prepare a proposal for {n} additional seats?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "b67eead47258d51de487571ffbb62155b28ee038f8068f3cd80787ff554babe4"
+  },
+  {
+   "id": "eval-sales-08",
+   "label": "sales",
+   "lang": "en",
+   "text": "What discount applies if we commit to {n} seats for two years?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "2b83c0b9fe67d9879e6725fd20fa7a41af5c1b4e8e39afbdbefbb2a514248bd2"
+  },
+  {
+   "id": "eval-sales-09",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please quote the enterprise tier for our department of {n} people.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "bbcb50d032d512095e3a85388238aebe025e5feaf99e380b87b94af17d9b3464"
+  },
+  {
+   "id": "eval-sales-10",
+   "label": "sales",
+   "lang": "en",
+   "text": "How much more would {n} extra seats add to our current contract?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "3a9589aff5e4ca0994d8f3cbc017332fe4b9b5da7e90e558d810025d8fc4f9b4"
+  },
+  {
+   "id": "eval-sales-11",
+   "label": "sales",
+   "lang": "en",
+   "text": "We are evaluating vendors and need pricing for {n} users.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "p1b",
+   "sha256": "bc732dc309d99b2f11019ab0ebb41cbdf94d743169eeb5fb02eadc7c962375af"
+  },
+  {
+   "id": "eval-sales-12",
+   "label": "sales",
+   "lang": "en",
+   "text": "What would {n} named users cost on the enterprise agreement?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "3ad71db01cae551deb9ee9e4e89f36a11b7a668ccea6b6c5736c6fb5a449f555"
+  },
+  {
+   "id": "eval-sales-13",
+   "label": "sales",
+   "lang": "en",
+   "text": "We are comparing three vendors and need your price for {n} workstations.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "2042d5258425177c54e3d4e2ef871a4a9bc4200d67feefeb6f29bf9a22e75bb5"
+  },
+  {
+   "id": "eval-sales-14",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please send a formal quotation for {n} additional licences.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "e2ecdd156e1343ea5ed66100019c3d81f7a88c456b1a46362dfcc0290d05dee4"
+  },
+  {
+   "id": "eval-sales-15",
+   "label": "sales",
+   "lang": "en",
+   "text": "Does the volume band change if we buy {n} units before the end of the quarter?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "83cda06c82caf75354bc1813178898b7c5943817cd09555d28013adfbc99c552"
+  },
+  {
+   "id": "eval-sales-16",
+   "label": "sales",
+   "lang": "en",
+   "text": "Our procurement team needs the unit rate for {n} units in writing.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "e94d8239757406fbd527bdb79de7c5942b2961fa3ae1f8aa05c60f15f3c4ceb4"
+  },
+  {
+   "id": "eval-sales-17",
+   "label": "sales",
+   "lang": "en",
+   "text": "Can we fold {n} more users into the agreement we signed in spring?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "17340d9b7f645b45cd29922a1af21c8d553fd4009c248c358eb273f027b4bfba"
+  },
+  {
+   "id": "eval-sales-18",
+   "label": "sales",
+   "lang": "en",
+   "text": "What is the difference in annual cost between {n} and twice that many?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "3c162c15ed3446f7c54d2eb1e317c473b0687c00782b6a9b238134bbfbbd4bf1"
+  },
+  {
+   "id": "eval-sales-19",
+   "label": "sales",
+   "lang": "en",
+   "text": "We would like a proposal covering {n} sites under one agreement.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "6489766de54943dfcec82003fdc87ee2bf6ddcff2c1952d7e7cc6e45ed4e636d"
+  },
+  {
+   "id": "eval-sales-20",
+   "label": "sales",
+   "lang": "en",
+   "text": "Does a discount tier begin once we reach {n} units annually?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "9d8639ea5167a9730a392ad4cd3d5c10b3e0cc2fb1f09321cf6cc3aa97cfb939"
+  },
+  {
+   "id": "eval-sales-21",
+   "label": "sales",
+   "lang": "en",
+   "text": "Please quote the migration package for {n} mailboxes.",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "639cf912c31268b6f83e2b7e60248d327b8a930ca6f449342db12dcd2fffd6f9"
+  },
+  {
+   "id": "eval-sales-22",
+   "label": "sales",
+   "lang": "en",
+   "text": "Our budget assumes {n} units; what would that come to per month?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "f1072dd2024245581c91026794c0f5d2dddc5928edb1d2519e157de54c415b94"
+  },
+  {
+   "id": "eval-sales-23",
+   "label": "sales",
+   "lang": "en",
+   "text": "Could you price a pilot for {n} users with an option to expand?",
+   "slots_used": [
+    "n"
+   ],
+   "source": "h5-new",
+   "sha256": "65056b8ae26bb87059d52b3b0f68b8f82da78db34c567270b1a1ffd47788d0d6"
+  },
+  {
+   "id": "eval-other-00",
+   "label": "other",
+   "lang": "en",
+   "text": "Please update the shipping address on my account to the new office.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "597856a810c3d3797676b35bfe1b14ca5993e395ca90bb2acf3ef943c5f963f4"
+  },
+  {
+   "id": "eval-other-01",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I change the email address associated with my profile?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "ac513e09fdd14397a4fce4539842a6e04c5f71a14eb0a32ff00dbc1f7eb1bee9"
+  },
+  {
+   "id": "eval-other-02",
+   "label": "other",
+   "lang": "en",
+   "text": "I would like to close my account and delete all stored data.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "029343b1749cc5360d5aa0c05d85a30cc844487e45176d2182a3c9e904989eba"
+  },
+  {
+   "id": "eval-other-03",
+   "label": "other",
+   "lang": "en",
+   "text": "Can you confirm which timezone my scheduled reports use?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "71e90eeaca8c70c07d46b23f16015a860835e85273815af1b81e9b3bea9ae86c"
+  },
+  {
+   "id": "eval-other-04",
+   "label": "other",
+   "lang": "en",
+   "text": "Where can I download the accessibility documentation?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "5bf0e318663ff70937d0e219aebd934c459449ff5ada68bf441ed1b82c177fe6"
+  },
+  {
+   "id": "eval-other-05",
+   "label": "other",
+   "lang": "en",
+   "text": "I need a copy of the data processing agreement for our records.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "96031ef3e0b62ca0bdf037bb8592a2c74a455a025658a042ee464db0da2a09b8"
+  },
+  {
+   "id": "eval-other-06",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I add a colleague to our workspace as a viewer?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "6c0b6d19f20480ef6b3e1f2e6ab103e418d8d83fa69d64a514d6f4d03db1becc"
+  },
+  {
+   "id": "eval-other-07",
+   "label": "other",
+   "lang": "en",
+   "text": "Please tell me the office opening hours for the support desk.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "acaa0878482d496f6868f5c37c4c0153e0d15e4b74fa47360fac21872c4f9fbb"
+  },
+  {
+   "id": "eval-other-08",
+   "label": "other",
+   "lang": "en",
+   "text": "Is there a way to export my settings to another workspace?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "e8d0e01c9b6d6ff0910507f8a60cfda8f31253c77d10cafd17fada46f7c60af2"
+  },
+  {
+   "id": "eval-other-09",
+   "label": "other",
+   "lang": "en",
+   "text": "I want to change the display language of the interface.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "a971b51a17e29e657e76ef576c272cfed1031a5de3899c7323ae07b786954907"
+  },
+  {
+   "id": "eval-other-10",
+   "label": "other",
+   "lang": "en",
+   "text": "Could you explain how the retention policy applies to archived items?",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "06705aa6e00599e63248bb9bffaea855163e6945ecdaaa419b1c6ad0c9d91927"
+  },
+  {
+   "id": "eval-other-11",
+   "label": "other",
+   "lang": "en",
+   "text": "Please confirm whether the service is available in my region.",
+   "slots_used": [],
+   "source": "p1b",
+   "sha256": "178dc5411e2a666fe5e658a79323d87d956f0986f8cadffbf43f4b68fd0b7bfb"
+  },
+  {
+   "id": "eval-other-12",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I transfer ownership of the shared folder {ref} to a colleague?",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "4bae06be59ac56487da508674d71f18d384ebe9491b0ab63b143d6181ceff95f"
+  },
+  {
+   "id": "eval-other-13",
+   "label": "other",
+   "lang": "en",
+   "text": "Please send the accessibility statement for our procurement file {ref}.",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "a1003006c1978d84632675fbdd655383ccb036b3638477ed93fef48a4c296589"
+  },
+  {
+   "id": "eval-other-14",
+   "label": "other",
+   "lang": "en",
+   "text": "Which timezone is used for the timestamps in the activity feed?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "d87621f0fc8c15dbc09a5beca9c39f3d91d974e553e534c58afaac3b97557f72"
+  },
+  {
+   "id": "eval-other-15",
+   "label": "other",
+   "lang": "en",
+   "text": "I would like the interface language switched to French.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "ed0e9283cdd4ce7a0d7abc17bf4e307f26c8ae8ed59f67953d0c07ab63345e5e"
+  },
+  {
+   "id": "eval-other-16",
+   "label": "other",
+   "lang": "en",
+   "text": "Where can I find the retention schedule for archived material?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "5b09421ae90c79889381e4b7beab09e2b17a6a75db8146034272fac68935087e"
+  },
+  {
+   "id": "eval-other-17",
+   "label": "other",
+   "lang": "en",
+   "text": "Can you confirm whether the service is offered in Portugal?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "628bde41f88f79644555c7d5f7d0ad9da9c548007b771af51b04caac3f285504"
+  },
+  {
+   "id": "eval-other-18",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I remove a former colleague from the notification list?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "5ec4f4487b28fd0ed08fb662dc6c65e47c9fc75599a9ade9c5f76a1746fa6617"
+  },
+  {
+   "id": "eval-other-19",
+   "label": "other",
+   "lang": "en",
+   "text": "Please provide the completed security questionnaire for our auditors.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "cab0c6e5424499edd9a01b57e8b4e2af7feebdb2cfea30a23446431414ea9bd3"
+  },
+  {
+   "id": "eval-other-20",
+   "label": "other",
+   "lang": "en",
+   "text": "Is there a way to merge the two workspaces {ref} into one?",
+   "slots_used": [
+    "ref"
+   ],
+   "source": "h5-new",
+   "sha256": "f62a8cfc8c757cb8f4b7c7f2281c0a1a8d5289fc1e965bb28a6978764eaba3a1"
+  },
+  {
+   "id": "eval-other-21",
+   "label": "other",
+   "lang": "en",
+   "text": "I need a copy of the subprocessor list for our records.",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "0497fcfb9ec63fcc82fdff571f2dfb041a952df155c071e44ca8b22eee33bcf5"
+  },
+  {
+   "id": "eval-other-22",
+   "label": "other",
+   "lang": "en",
+   "text": "How do I change the mailbox that receives the weekly digest?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "5071ffc5845080c86000d44713cc7e99c0f88816c1c8c5e6e89c817e742d21d1"
+  },
+  {
+   "id": "eval-other-23",
+   "label": "other",
+   "lang": "en",
+   "text": "What is the process for closing a workspace and purging its contents?",
+   "slots_used": [],
+   "source": "h5-new",
+   "sha256": "20f76544eb2e7ea3fa51dc811fac1de4d7f7fe3f4c6251d20e7304d33a6df942"
+  }
+ ],
+ "counts": {
+  "billing": 24,
+  "technical": 24,
+  "sales": 24,
+  "other": 24
+ },
+ "combos_per_class": {
+  "billing": 11234,
+  "technical": 1069,
+  "sales": 2114,
+  "other": 309
+ }
+}
