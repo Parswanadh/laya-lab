@@ -24,6 +24,7 @@ LAB = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(LAB, "worktrees", "h5"))
 
+import numpy as np  # noqa: E402
 import torch  # noqa: E402
 from transformers import AutoConfig, AutoModel, AutoTokenizer  # noqa: E402
 
@@ -41,6 +42,7 @@ def check_true(name, cond, detail=""):
 
 def main() -> int:
     import arms as A
+    import check_learnability as _learn
     import common_h5 as C
     import docs as D
     import features as FEAT
@@ -235,6 +237,39 @@ def main() -> int:
                        <= set(c) for c in summ["comparisons"]))
         check_true("stats/summary records the metrics module hash it was computed with",
                    len(summ["metrics_module_sha256"]) == 64)
+
+        # ---- 8. can the loop actually learn anything?
+        # A tiny *random* encoder has nothing to learn, so the checks above cannot tell a working
+        # training loop from a broken one. This builds a synthetic feature cache whose state
+        # positions literally carry the label, so a working head + optimiser must reach ~1.0 train
+        # accuracy -- and a second cache whose state carries an *uncorrelated* label, which must
+        # stay at chance. Without the second one, "it learned" could just mean "it memorised".
+        synth_cache = _learn.synth_cache
+
+        learn_items = full["train_items"][:128]
+        # lr and budget are taken from check_learnability.py's sweep, which is itself tuned on
+        # *train* accuracy only. At lr=1e-4 this loop does not fit even a label sitting in the
+        # features -- which is exactly the failure mode that would make a real null result
+        # uninterpretable, so the check asserts the loop fits when the signal is unambiguous.
+        for arm, floor in (("arm2_shipped_init", 0.85), ("arm3_xattn", 0.85)):
+            for correlated, tag, want_floor in ((True, "learns", floor), (False, "stays at chance", None)):
+                C.CACHE_DIR = tmp
+                sub = os.path.join(tmp, "synth_%s_%s" % (arm, tag.split()[0]))
+                synth_cache(os.path.join(sub, "train"), learn_items, correlated)
+                C.CACHE_DIR = sub
+                res = T.train_arm(arm, seed=0, epochs=60, lr=5e-4, token_budget=4096, max_batch=8,
+                                  device_name="cpu", log_every=0,
+                                  train_items_override=learn_items, shipped_override=shipped)
+                final = res["history"][-1]["train_accuracy"]
+                if correlated:
+                    check_true("learn/%s %s a label the state carries (final train acc %.2f)"
+                               % (arm, tag, final), final >= want_floor,
+                               "floor %.2f, got %.2f" % (want_floor, final))
+                else:
+                    check_true("learn/%s does not fit a decoy label (final train acc %.2f)"
+                               % (arm, final), final <= 0.55,
+                               "a decoy label was fitted, so the fit above proves nothing")
+                C.CACHE_DIR = tmp
 
         print("\n%d passed, %d failed" % (len(PASS), len(FAIL)))
         for f in FAIL:

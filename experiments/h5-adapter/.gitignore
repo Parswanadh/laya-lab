@@ -2,3 +2,5 @@
 cache/
 # Trained head weights are small and ARE committed; optimiser state is not.
 *.optim.pt
+# Scratch logs from iterative runs; run.log / launch.log ARE committed as evidence.
+_*.out

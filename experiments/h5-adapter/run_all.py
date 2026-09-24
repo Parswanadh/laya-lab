@@ -35,8 +35,8 @@ MANIFEST = os.path.join(HERE, "manifest.json")
 # Ordered most-valuable-first: if the GPU lock is lost or the window closes, whatever ran is the
 # part of the experiment that mattered most. `latency` is last because the accuracy result does not
 # depend on it, and `arm2_step0` (the cache-fidelity bridge) is cheap and sits beside `arm1`.
-ALL_STAGES = ("manifest", "pilot", "cache_eval", "arm1", "cache_train", "train", "eval",
-              "arm2_step0", "stats", "latency")
+ALL_STAGES = ("manifest", "pilot", "learnability", "cache_eval", "arm1", "cache_train", "train",
+              "eval", "arm2_step0", "stats", "latency")
 
 
 def log(msg: str) -> None:
@@ -147,6 +147,7 @@ def main() -> int:
     ap.add_argument("--skip", default="", help="comma-separated stages to skip")
     ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--epochs", type=int, default=8)
+    ap.add_argument("--lr", type=float, default=5e-4)
     ap.add_argument("--latency-seeds", default="0,1,2")
     a = ap.parse_args()
     stages = [s for s in (a.only.split(",") if a.only else ALL_STAGES)
@@ -165,6 +166,8 @@ def main() -> int:
             write_manifest()
         elif stage == "pilot":
             run([py, "experiments/h5-adapter/pilot.py"])
+        elif stage == "learnability":
+            run([py, "experiments/h5-adapter/check_learnability.py"])
         elif stage == "cache_eval":
             run([py, "experiments/h5-adapter/build_cache.py", "--split", "eval"])
         elif stage == "cache_train":
@@ -175,11 +178,15 @@ def main() -> int:
             run([py, "experiments/h5-adapter/eval.py", "--arm", "arm2_step0"])
         elif stage == "train":
             import arms as A
-            for arm in A.TRAINED_ARMS:
-                for seed in seeds:
+            # seed-major: a run killed part-way leaves a *complete* four-arm table at the seeds it
+            # reached, which is a usable result, rather than three seeds of one arm and none of the
+            # arm the comparison needs.
+            for seed in seeds:
+                for arm in A.TRAINED_ARMS:
                     out = subprocess.run(
                         [py, "experiments/h5-adapter/train.py", "--arm", arm, "--seed", str(seed),
-                         "--epochs", str(a.epochs)], cwd=LAB, capture_output=True, text=True)
+                         "--epochs", str(a.epochs), "--lr", str(a.lr)],
+                        cwd=LAB, capture_output=True, text=True)
                     sys.stdout.write(out.stdout)
                     sys.stderr.write(out.stderr)
                     if out.returncode != 0:
@@ -190,8 +197,8 @@ def main() -> int:
                             training_summary["%s|seed%d" % (arm, seed)] = json.load(fh)
         elif stage == "eval":
             import arms as A
-            for arm in A.TRAINED_ARMS:
-                for seed in seeds:
+            for seed in seeds:
+                for arm in A.TRAINED_ARMS:
                     run([py, "experiments/h5-adapter/eval.py", "--arm", arm, "--seed", str(seed)])
         elif stage == "latency":
             run([py, "experiments/h5-adapter/latency.py", "--gpu-lock-held",

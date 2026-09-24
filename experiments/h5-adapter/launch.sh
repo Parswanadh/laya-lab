@@ -63,6 +63,7 @@ else
   systemd-run --user --scope -p MemoryMax="$CAP" -p MemorySwapMax=0 --unit=laya-h5-adapter-$$ \
       env CUDA_VISIBLE_DEVICES=0 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True USE_TF=0 \
       "$PY" experiments/h5-adapter/run_all.py --seeds "${SEEDS:-0,1,2}" --epochs "${EPOCHS:-8}" \
+      --lr "${LR:-5e-4}" \
       >> "$RUN/run.log" 2>&1 || rc=$?
 fi
 log "run_all.py exited $rc"
