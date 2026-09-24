@@ -27,83 +27,89 @@ HEAD_LAYERS = 2   # rl_agent_config.json: head_layers = 2
 def hr(t): print("\n" + "=" * 78 + "\n" + t + "\n" + "=" * 78)
 
 # ================================================================= 1 REACHABILITY
-hr("1. REACHABILITY (exact simulation of the programmed mask)")
+hr("1. REACHABILITY (exact ancestral-set simulation of the programmed mask)")
 
 def reach(marker, n, layer_types=LAYER_TYPES, w=W):
-    """BACKWARD ancestral set with per-step composition.
-    A_t = set of positions whose value at the input of layer t-... can reach `marker` at
-    the output of layer t, grown one layer at a time.  A full layer lets EVERY query read
-    EVERY key, so once a position is in the set the set becomes all of [0,n) at the NEXT
-    full layer; a sliding layer only adds +-w around the positions already in the set.
-    This is the graph-composition model: one mask per hop, no short-circuiting."""
+    """EXACT backward ancestral set.  S_0 = {marker}.  Layer t: the query at any position
+    in S_{t-1} reads its mask's key set, so
+        S_t = union over q in S_{t-1} of keys(q),   keys(q) = [0,n) if full else [q-w,q+w].
+    Starting from x_m only, this is the information-flow graph: an edge q -> m exists iff
+    q is in some keys() at some layer, i.e. iff q is reachable in one hop, and then two
+    hops through the composed sets, etc."""
     pos = {marker}
-    widths, sizes = [], []
+    sizes, widths, members = [], [], []
     for t, lt in enumerate(layer_types):
         if lt == "full_attention":
             pos = set(range(0, n))
         else:
             pos = {q for p in pos for q in range(max(0, p - w), min(n - 1, p + w) + 1)}
-        widths.append(max(abs(p - marker) for p in pos))
         sizes.append(len(pos))
-    return widths, sizes, pos
+        widths.append(max(abs(p - marker) for p in pos))
+        members.append(set(pos))
+    return widths, sizes, members
 
-def reach_boundary_only(marker, n, layer_types=LAYER_TYPES, w=W):
-    """Same recurrence but tracking only the UPWARD half-width, so the exponential growth
-    is visible instead of being saturated by the layer-0 full mask.  This is the model the
-    task statement asks for: how far past the marker can information be pulled, per hop."""
-    width = 0
-    out = []
-    for t, lt in enumerate(layer_types):
-        if lt == "full_attention":
-            width = (n - 1 - marker) if t > 0 else w
-        else:
-            width = min(n - 1 - marker, width + w)
-        out.append(width)
+def reach_horizon(layer_types=LAYER_TYPES, w=W):
+    """Per-hop HORIZON model requested by the task: how far past the marker can information
+    be pulled, one mask at a time.  Global layers double the previous horizon (their query
+    can pick any key, and each key carries everything the previous layers pooled), sliding
+    layers add w.  H_0 = w for a sliding layer 0 and the whole document for a full layer 0."""
+    H = w  # layer 0
+    out = [H]
+    for lt in layer_types[1:]:
+        H = 2 * H if lt == "full_attention" else H + w
+        out.append(H)
     return out
 
-# closed form for the programmed pattern (global layers at index 3k)
+# closed form for the programmed pattern (global layers at index 3k, gaps of 2 sliding)
 def R_closed(k, w=W):
-    """Half-width reachable at global-layer index k (i.e. layer 3k).
-    R_0 = w (the marker's own window); for k>=1, R_k = 512*2^k - 64 = (8*2^k - 1)*w."""
-    return w if k == 0 else (8 * 2**k - 1) * w
+    """Per-hop horizon at global-layer index k (i.e. layer 3k).
+    R_0 = 2w (the marker's window, doubled by the global layer); for k>=1,
+    R_k = (8*2^k - 1)w.  Recurrence R_k = 2*R_{k-1} + 6w with R_0 = 2w."""
+    return 2 * w if k == 0 else (8 * 2**k - 1) * w
 
 SIM_N = 8192
 MARKER = 300
 BOUND = SIM_N - 1 - MARKER          # furthest token from the marker inside the sequence
-w_sim = reach_boundary_only(MARKER, SIM_N)
-print(f"per-hop reach model, marker at {MARKER}, n = {SIM_N} (bound {BOUND}):")
-print(f"{'layer':>5}  {'type':<18} {'half-width':>11} {'closed form R_k':>16} {'clipped':>9}  {'check':<8}")
+w_sim, s_sim, m_sim = reach(MARKER, SIM_N)
+h_sim = reach_horizon()
+print(f"marker at {MARKER}, n = {SIM_N} (max possible distance {BOUND})")
+print(f"{'layer':>5}  {'type':<18} {'|S_t| ancestral':>15} {'half-width':>11} "
+      f"{'per-hop horizon':>16} {'closed form R_k':>16} {'check':<8}")
 for t, lt in enumerate(LAYER_TYPES):
     k = t // 3
     if lt == "full_attention":
         rc = R_closed(k)
-        chk = "OK" if min(rc, BOUND) == w_sim[t] else "MISMATCH"
-        print(f"{t:>5}  {lt:<18} {w_sim[t]:>11} {rc:>16} {min(rc, BOUND):>9}  {chk:<8}")
+        chk = "OK" if min(rc, BOUND) == min(h_sim[t], BOUND) else "MISMATCH"
+        print(f"{t:>5}  {lt:<18} {s_sim[t]:>15} {w_sim[t]:>11} {h_sim[t]:>16} "
+              f"{rc:>16} {chk:<8}")
     else:
-        print(f"{t:>5}  {lt:<18} {w_sim[t]:>11} {'':>16} {'':>9}")
+        print(f"{t:>5}  {lt:<18} {s_sim[t]:>15} {w_sim[t]:>11} {h_sim[t]:>16}")
 
-print("\nclosed form for the global layers: R_k = half-width reachable at layer 3k")
-print(f"{'k':>2} {'layer':>6} {'R_k (tokens)':>13} {'clipped to n=8192':>18} {'reachable frac of doc':>23}")
+print("\nRESULT A (exact ancestral set): because LAYER 0 IS GLOBAL, S_0 = [0, n) after a")
+print("single layer. Every token in the sequence, however far, is an ancestor of the")
+print("marker at depth 1. The reachability graph has diameter 1.")
+print("\nRESULT B (per-hop horizon requested by the task): if the layer-0 short circuit is")
+print("excluded and only per-hop composition counts, the horizon at the global layers is")
+print(f"{'k':>2} {'layer':>6} {'R_k (tokens)':>13} {'clipped to n=8192':>18} {'frac of doc':>13}")
 for k in range(8):
     rc = R_closed(k)
-    print(f"{k:>2} {3*k:>6} {rc:>13d} {min(rc, BOUND):>18d} "
-          f"{min(rc, BOUND)/BOUND:>22.2%}")
+    print(f"{k:>2} {3*k:>6} {rc:>13d} {min(rc, BOUND):>18d} {min(rc, BOUND)/BOUND:>12.2%}")
 
 def min_layer_index(d, w=W):
     for k in range(8):
         if d <= R_closed(k, w): return 3 * k
     return None
-print("\nminimum layer index L*(d):")
-print(f"{'d =':>8} {'L*(d)':>6}  {'type at L*':<18} {'closed form':>14} "
-      f"{'global hops used k':>19} {'global hops REMAINING':>22}")
-for d in [1, 64, 65, 320, 321, 448, 449, 960, 961, 1984, 1985, 4032, 4033, 7000, 8128, 8129, 8191]:
+print("\nminimum layer index L*(d) under the per-hop horizon:")
+print(f"{'d =':>8} {'L*(d)':>6} {'closed form':>13} {'global hops used k':>19} "
+      f"{'global hops REMAINING (8-k)':>28} {'entry-dilution 1/(k+1)':>24}")
+for d in [1, 64, 65, 128, 129, 449, 960, 961, 1984, 1985, 4032, 4033, 7000, 8128, 8129, 8191]:
     L = min_layer_index(d)
-    cf = 0 if d <= W else 3 * math.ceil(math.log2((d / W + 1) / 8))
+    cf = max(0, 3 * math.ceil(math.log2((d / W + 1) / 8)))
     k = 0 if L is None else L // 3
-    print(f"{d:>8} {('>=22' if L is None else str(L)):>6}  "
-          f"{'' if L is None else LAYER_TYPES[L]:<18} {max(cf, 0):>14} "
-          f"{k:>19} {L_FULL - k:>22}")
-print("closed form: L*(d) = 0 for d <= w;  L*(d) = 3*ceil(log2((d/w + 1)/8)) for d > w")
+    print(f"{d:>8} {('>=22' if L is None else str(L)):>6} {cf:>13} {k:>19} "
+          f"{L_FULL - k:>28} {1.0/(k+1):>24.3f}")
+print("closed form: L*(d) = 0 for d <= 2w;  L*(d) = 3*ceil(log2((d/w + 1)/8)) for d > 2w")
+print("(R_k = (8*2^k - 1)w >= d  <=>  2^k >= (d/w + 1)/8  <=>  k >= log2((d/w+1)/8))")
 
 # ============================================================ 2 MIXING CAPACITY
 hr("2. MIXING CAPACITY (cross-document edges, head block = 0..H-1, state = H..n-1)")
@@ -143,11 +149,24 @@ for (n, H) in [(1024, 256), (8192, 384)]:
               f"({max(0, min(n - 1, H - 1 + W) - max(H, H - 1 - W) + 1):>5} tokens)")
 
 print("\n-- global-layer budget: hops needed to reach distance d vs hops left to MIX with --")
-print(f"{'d (tokens from marker)':>24} {'k = global hops used':>21} {'8 - k left to mix':>18}")
+print(f"{'d (tokens from marker)':>24} {'k = global hops used':>21} {'8 - k left to mix':>18}"
+      f" {'tail frac reached':>18}")
 for d in [64, 321, 960, 1984, 4032, 7000, 8128, 8191]:
     L = min_layer_index(d)
     k = 0 if L is None else L // 3
-    print(f"{d:>24} {k:>21} {L_FULL - k:>18}")
+    print(f"{d:>24} {k:>21} {L_FULL - k:>18} {min(R_closed(k), BOUND)/BOUND:>17.2%}")
+
+print("\n-- information available to the marker as a function of document position --")
+print("(under the exact model, every position is reachable at layer 0; what differs is how")
+print(" much of the network remains to process it. Under the per-hop horizon model, a token")
+print(" at distance d is first read at layer L*(d) and then has (21 - L*(d)) layers left.)")
+print(f"{'d':>8} {'L*(d)':>7} {'layers remaining after first read':>35} "
+      f"{'token count at this distance is':>32}")
+for d in [64, 320, 960, 1984, 4032, 7000, 8191]:
+    L = min_layer_index(d)
+    L = 22 if L is None else L
+    lo = max(1, d - 320)
+    print(f"{d:>8} {L:>7} {22 - L:>35} {'~%d tokens in [%d, %d]' % (320, lo, d):>32}")
 
 # head block width from build_sequence, computed exactly (published tokenizer)
 hr("2b. HEAD BLOCK WIDTH (computed with laya.build_sequence, fork source, CPU only)")

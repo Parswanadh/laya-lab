@@ -268,3 +268,32 @@ two-sided alpha=0.05), p1=0.50, normal approximation:
    n=1000: MDE = 0.0625 (6.2 accuracy points)
 
 paired design (McNemar, 80% power, alpha=0.05 two-sided). Item-level discordance
+rate d = P(one arm right, other wrong). n = (z_a*sqrt(d) + z_b*sqrt(d - delta^2))^2/delta^2
+   discordance d=0.06: delta=0.03->n=  521   delta=0.05->n=  186   delta=0.10->n=   45
+   discordance d=0.10: delta=0.03->n=  870   delta=0.05->n=  312   delta=0.10->n=   77
+   discordance d=0.15: delta=0.03->n= 1306   delta=0.05->n=  469   delta=0.10->n=  116
+   discordance d=0.20: delta=0.03->n= 1742   delta=0.05->n=  626   delta=0.10->n=  155
+
+family-wise error: 25 cells x 2 arms, independent two-proportion tests at alpha=0.05
+   m= 10 comparisons: P(>=1 false positive | all null) = 0.401; Bonferroni alpha = 0.00500
+   m= 25 comparisons: P(>=1 false positive | all null) = 0.723; Bonferroni alpha = 0.00200
+   m= 50 comparisons: P(>=1 false positive | all null) = 0.923; Bonferroni alpha = 0.00100
+
+Bonferroni-corrected alpha needs a larger raw p; per-cell n to keep the SAME MDE
+under alpha=0.05/m is roughly n * (z_(1-a/2m)/z_(1-a/2))^2:
+   m=  1: z=1.9600, inflation factor vs m=1 = 1.000
+   m= 10: z=2.8070, inflation factor vs m=1 = 2.051
+   m= 25: z=3.0902, inflation factor vs m=1 = 2.486
+   m= 50: z=3.2905, inflation factor vs m=1 = 2.819
+
+resolution floor: with n items and a 4-option task, accuracy is a multiple of 1/n.
+   n=  20: one item = 0.0500 accuracy; floor resolution with a majority-class baseline of 0.35 is 7/20
+   n= 200: one item = 0.0050 accuracy; floor resolution with a majority-class baseline of 0.35 is 70/200
+   n= 400: one item = 0.0025 accuracy; floor resolution with a majority-class baseline of 0.35 is 140/400
+   n= 600: one item = 0.0017 accuracy; floor resolution with a majority-class baseline of 0.35 is 210/600
+
+==============================================================================
+6. HEAD-BLOCK WIDTH PROBE (fork source, CPU tokenizer only)
+==============================================================================
+  max_len= 1024 head_max_len=256: len(ids)=1024, markers at [12, 22], state starts at 23 (first SEP after last marker + option tokens)
+  max_len= 8192 head_max_len=256: len(ids)=4033, markers at [12, 22], state starts at 23 (first SEP after last marker + option tokens)

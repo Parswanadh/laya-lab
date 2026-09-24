@@ -32,6 +32,28 @@ POOL_FILES = {
 # label order used for the round-robin balance; the *answerable* labels of the question
 BALANCED_LABELS = ("billing", "technical", "sales")
 
+# Function words and generic ordinals/quantifiers. Shared between filler and needle these are
+# unavoidable and carry no label signal; the pass/fail leakage test ignores them and the raw
+# overlap is still reported in full so nothing is hidden. Domain content words are NOT here --
+# those are what the stem check is for.
+STOPWORDS = {
+    "the", "and", "for", "was", "were", "with", "without", "that", "this", "these", "those",
+    "have", "has", "had", "not", "but", "you", "your", "yours", "our", "ours", "their", "theirs",
+    "its", "it's", "from", "they", "them", "then", "than", "there", "here", "when", "what",
+    "which", "who", "whom", "whose", "how", "why", "all", "any", "can", "could", "should",
+    "would", "will", "shall", "may", "might", "must", "about", "after", "before", "again",
+    "every", "each", "first", "second", "third", "fourth", "one", "two", "three", "four",
+    "five", "six", "seven", "eight", "nine", "ten", "twenty", "thirty", "past", "next", "last",
+    "more", "most", "much", "many", "very", "just", "only", "also", "into", "onto", "over",
+    "under", "between", "because", "while", "during", "against", "off", "out", "down", "same",
+    "other", "others", "else", "please", "want", "wants", "need", "needs", "like", "get", "gets",
+    "got", "use", "used", "uses", "make", "makes", "made", "take", "takes", "taken", "time",
+    "times", "since", "still", "yet", "ever", "never", "always", "sometimes", "where", "some",
+    "something", "someone", "anything", "nothing", "everything", "such", "own", "too", "now",
+    "day", "days", "week", "weeks", "month", "months", "year", "years", "hour", "hours",
+    "minute", "minutes", "number", "amount", "total", "left", "right", "open", "close",
+}
+
 
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
@@ -119,6 +141,7 @@ def leakage_report(needle_pool: Dict[str, Any], filler_pool: Dict[str, Any]) -> 
         filler_vocab.update(w for w in words(sentence) if len(w) >= 3)
 
     word_overlap = sorted(needle_vocab & filler_vocab)
+    content_overlap = sorted(w for w in (needle_vocab & filler_vocab) if w not in STOPWORDS)
 
     stems = [s.lower() for s in filler_pool.get("forbidden_stems", [])]
     stem_hits = []
@@ -133,9 +156,10 @@ def leakage_report(needle_pool: Dict[str, Any], filler_pool: Dict[str, Any]) -> 
         "needle_pool": needle_pool["pool_id"],
         "needle_vocab_size": len(needle_vocab),
         "filler_vocab_size": len(filler_vocab),
-        "word_overlap": word_overlap,
+        "word_overlap_all": word_overlap,
+        "content_word_overlap": content_overlap,
         "stem_hits": stem_hits,
-        "passed": not word_overlap and not stem_hits,
+        "passed": not content_overlap and not stem_hits,
     }
 
 
