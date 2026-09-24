@@ -152,6 +152,10 @@ def main() -> int:
     ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--epochs", type=int, default=8)
     ap.add_argument("--lr", type=float, default=5e-4)
+    ap.add_argument("--no-eval-each-seed", dest="eval_each_seed", action="store_false", default=True,
+                    help="train every seed before evaluating any (the old ordering)")
+    ap.add_argument("--force", action="store_true",
+                    help="re-evaluate arms whose prediction file already exists")
     ap.add_argument("--latency-seeds", default="0,1,2")
     a = ap.parse_args()
     stages = [s for s in (a.only.split(",") if a.only else ALL_STAGES)
@@ -182,9 +186,11 @@ def main() -> int:
             run([py, "experiments/h5-adapter/eval.py", "--arm", "arm2_step0"])
         elif stage == "train":
             import arms as A
-            # seed-major: a run killed part-way leaves a *complete* four-arm table at the seeds it
-            # reached, which is a usable result, rather than three seeds of one arm and none of the
-            # arm the comparison needs.
+            # Seed-major, and each seed's arms are *evaluated* before the next seed is trained.
+            # Two reasons: a run killed part-way leaves a complete four-arm table at the seeds it
+            # reached, which is a usable result rather than three seeds of one arm and none of the
+            # arm the comparison needs; and the primary-cell verdict is available after one seed
+            # instead of after all of them.
             for seed in seeds:
                 for arm in A.TRAINED_ARMS:
                     out = subprocess.run(
@@ -199,10 +205,20 @@ def main() -> int:
                     if os.path.exists(tp):
                         with open(tp, encoding="utf-8") as fh:
                             training_summary["%s|seed%d" % (arm, seed)] = json.load(fh)
+                if a.eval_each_seed:
+                    for arm in A.TRAINED_ARMS:
+                        run([py, "experiments/h5-adapter/eval.py", "--arm", arm,
+                             "--seed", str(seed)])
+                    run([py, "experiments/h5-adapter/stats.py"])
+                    write_manifest({"seeds_evaluated": seeds[: seeds.index(seed) + 1]})
         elif stage == "eval":
             import arms as A
             for seed in seeds:
                 for arm in A.TRAINED_ARMS:
+                    pred = os.path.join(HERE, "predictions", "%s-seed%d.jsonl" % (arm, seed))
+                    if os.path.exists(pred) and not a.force:
+                        log("  skip %s seed %d: %s already exists" % (arm, seed, os.path.basename(pred)))
+                        continue
                     run([py, "experiments/h5-adapter/eval.py", "--arm", arm, "--seed", str(seed)])
         elif stage == "latency":
             run([py, "experiments/h5-adapter/latency.py", "--gpu-lock-held",
