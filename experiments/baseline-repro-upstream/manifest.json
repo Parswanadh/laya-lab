@@ -1,15 +1,15 @@
 {
  "schema": "laya-lab.eval-manifest.v1",
- "run_id": "baseline-repro|balanced-v1|n20|seed20240924",
+ "run_id": "baseline-repro-upstream|upstream_multilingual|n20|seed20240924",
  "status": "finished",
- "started_utc": "2026-09-24T17:58:01Z",
- "finished_utc": "2026-09-24T18:00:08Z",
- "wall_seconds": 136.527,
- "command": "cd /home/parshu/projects/contri/laya-lab && USE_TF=0 CUDA_VISIBLE_DEVICES=0 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True /home/parshu/projects/contri/laya-lab/env/venv/bin/python experiments/harness/run.py --preset baseline-repro --device cuda --checkpoint models/multilingual",
+ "started_utc": "2026-09-24T18:00:21Z",
+ "finished_utc": "2026-09-24T18:00:49Z",
+ "wall_seconds": 36.741,
+ "command": "cd /home/parshu/projects/contri/laya-lab && USE_TF=0 CUDA_VISIBLE_DEVICES=0 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True /home/parshu/projects/contri/laya-lab/env/venv/bin/python experiments/harness/run.py --preset baseline-repro-upstream --device cuda --checkpoint models/multilingual",
  "argv": [
   "experiments/harness/run.py",
   "--preset",
-  "baseline-repro",
+  "baseline-repro-upstream",
   "--device",
   "cuda",
   "--checkpoint",
@@ -38,16 +38,16 @@
   },
   "memory_at_launch": {
    "mem_total_bytes": 16246595584,
-   "mem_available_bytes": 5769793536,
+   "mem_available_bytes": 5176471552,
    "swap_total_bytes": 28663341056,
-   "swap_free_bytes": 16433266688,
-   "mem_available_gib": 5.37
+   "swap_free_bytes": 17405997056,
+   "mem_available_gib": 4.82
   },
   "gpu_at_launch": {
    "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
-   "gpu_mem_free_bytes": 5737086976,
+   "gpu_mem_free_bytes": 5705891840,
    "gpu_mem_total_bytes": 8160673792,
-   "gpu_mem_free_gib": 5.34,
+   "gpu_mem_free_gib": 5.31,
    "gpu_compute_capability": [
     8,
     9
@@ -59,32 +59,33 @@
  "gpu_lock": {
   "held": true,
   "path": "/home/parshu/projects/contri/laya-lab/.gpu.lock",
-  "pid": 856996
+  "pid": 866508
  },
  "preflight": {
-  "mem_available_gib": 6.24,
-  "gpu_free_gib": 6.55,
+  "mem_available_gib": 6.29,
+  "gpu_free_gib": 6.54,
   "min_available_gib_required": 2.0,
   "gpu_min_free_gib_required": 2.0,
   "allow_low_mem": false,
-  "note": "host RAM at launch 6.24 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"
+  "note": "host RAM at launch 6.29 GiB available; launch is capped by systemd-run MemoryMax=4G when the documented launcher is used"
  },
  "git": {
   "lab": {
    "repo": "/home/parshu/projects/contri/laya-lab",
    "available": true,
-   "sha": "293fd84dfc1b6fef368cf73ad065954235cb5445",
+   "sha": "ffbdd7c4d725139a3e032c30b368bec1865b455d",
    "branch": "main",
    "dirty": true,
-   "dirty_file_count": 24,
+   "dirty_file_count": 19,
    "dirty_files_sample": [
     "M .gpu.lock",
+    " M experiments/baseline-repro/manifest.json",
+    " M experiments/baseline-repro/predictions.jsonl",
     " M experiments/baseline-repro/run.log",
+    " M experiments/baseline-repro/summary.json",
     " M experiments/h2h3-knobs/analyse.py",
     " M experiments/h2h3-knobs/analysis.json",
     " M experiments/h2h3-knobs/liveness.json",
-    " M experiments/h5-adapter/plan.json",
-    " M experiments/h5-adapter/plan.py",
     "?? experiments/h2h3-knobs/cost_interleave.py",
     "?? experiments/h2h3-knobs/mask_evidence.py",
     "?? experiments/h2h3-knobs/raw/stage4-balanced-v1__allglobal__p1_exact.jsonl",
@@ -93,13 +94,11 @@
     "?? experiments/h2h3-knobs/raw/stage4-balanced-v1__baseline__p1_exact.summary.json",
     "?? experiments/h2h3-knobs/raw/stage4-balanced-v1__w512__p1_exact.jsonl",
     "?? experiments/h2h3-knobs/raw/stage4-balanced-v1__w512__p1_exact.summary.json",
-    "?? experiments/h5-adapter/arms.py",
-    "?? experiments/h5-adapter/check_docs.py",
-    "?? experiments/h5-adapter/common_h5.py",
-    "?? experiments/h5-adapter/docs.py",
-    "?? experiments/h5-adapter/eval.py"
+    "?? experiments/h5-adapter/build_cache.py",
+    "?? experiments/h5-adapter/latency.py",
+    "?? experiments/h5-adapter/run_all.py"
    ],
-   "last_commit": "293fd84dfc1b6fef368cf73ad065954235cb5445 2026-09-24T23:20:26+05:30 exp(E-001): pre-register the position-sweep prediction before that run starts",
+   "last_commit": "ffbdd7c4d725139a3e032c30b368bec1865b455d 2026-09-24T23:28:33+05:30 exp(h5): training/eval pipeline for the four arms, with an offline end-to-end selftest",
    "remotes": "origin\thttps://github.com/Parswanadh/laya-lab.git (fetch)\norigin\thttps://github.com/Parswanadh/laya-lab.git (push)"
   },
   "fork": {
@@ -122,7 +121,7 @@
     "exists": true,
     "bytes": 643835514,
     "sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
-    "hash_seconds": 0.579
+    "hash_seconds": 0.471
    },
    {
     "path": "models/multilingual/rl_agent_config.json",
@@ -143,7 +142,7 @@
     "exists": true,
     "bytes": 34363188,
     "sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
-    "hash_seconds": 0.031
+    "hash_seconds": 0.026
    }
   ],
   "backend": {
@@ -154,7 +153,7 @@
    "dtype": "torch.bfloat16",
    "amp_enabled": true,
    "parameters": 321908995,
-   "load_seconds": 7.09,
+   "load_seconds": 6.557,
    "shipped_max_len": 1024,
    "shipped_head_max_len": 256,
    "encoder": "jhu-clsp/mmBERT-base",
@@ -163,7 +162,7 @@
    "tokenizer_class": "PreTrainedTokenizerFast",
    "tokenizer_vocab_size": 256000,
    "load_path_note": "laya.Agent.__init__ builds the model under transformers' no_init_weights() and fills it from safetensors.load_file, which reads lazily from the file; the public loader exposes no low_cpu_mem_usage flag.",
-   "gpu_mem_free_bytes_after_load": 5737086976,
+   "gpu_mem_free_bytes_after_load": 5705891840,
    "gpu_mem_total_bytes": 8160673792,
    "gpu_mem_allocated_bytes_after_load": 1287648768,
    "gpu_mem_reserved_bytes_after_load": 1302331392
@@ -172,11 +171,11 @@
  "pools": {
   "files": {
    "needle": {
-    "pool_id": "balanced-v1",
-    "_path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/needles-balanced-v1.json",
-    "_sha256": "bcb80ac1f4a38b3f8ce5224fc950b6014ed1d8391a311470f898f7496b34c7aa",
-    "_bytes": 16492,
-    "kind": "balanced"
+    "pool_id": "upstream_multilingual",
+    "_path": "/home/parshu/projects/contri/laya-lab/experiments/harness/pools/upstream-multilingual.json",
+    "_sha256": "f0e1a0c4e6e0b2107def700571c74444f41d716763ffa61cd717a89301f86178",
+    "_bytes": 5110,
+    "kind": "upstream"
    },
    "filler": {
     "pool_id": "filler-v1",
@@ -188,17 +187,18 @@
   },
   "leakage_check": {
    "filler_pool": "filler-v1",
-   "needle_pool": "balanced-v1",
-   "needle_vocab_size": 398,
+   "needle_pool": "upstream_multilingual",
+   "needle_vocab_size": 159,
    "filler_vocab_size": 178,
    "word_overlap_all": [
-    "about",
-    "after",
+    "and",
     "every",
     "for",
+    "from",
+    "last",
+    "month",
     "open",
     "please",
-    "second",
     "should",
     "the",
     "was"
@@ -219,280 +219,253 @@
     }
    }
   },
-  "internal_question_source": "laya.agent.Agent._to_internal"
+  "internal_question_source": "laya.agent.Agent._to_internal",
+  "upstream_transcription_check": {
+   "script": "/home/parshu/projects/contri/laya-lab/fork/research/scripts/bench_long_context.py",
+   "script_sha256": "1867b70d672f2af871989c2ea4c1e4d1beb967518679c002a9fb4b063688a79f",
+   "match": true,
+   "requests_match": true,
+   "filler_unit_match": true,
+   "question_match": true,
+   "n_requests": 20,
+   "label_counts": {
+    "billing": 9,
+    "sales": 4,
+    "technical": 7
+   }
+  }
  },
  "items": {
   "n": 20,
   "label_counts": {
-   "billing": 7,
-   "sales": 6,
+   "billing": 9,
+   "sales": 4,
    "technical": 7
   },
   "lang_counts": {
-   "ar": 2,
-   "de": 2,
-   "en": 2,
+   "ar": 1,
+   "de": 3,
+   "en": 6,
    "es": 3,
-   "fr": 3,
+   "fr": 2,
    "hi": 2,
-   "ja": 2,
-   "pt": 2,
-   "zh": 2
+   "ja": 1,
+   "pt": 2
   },
   "template_counts": {
-   "billing-ar-2": 1,
-   "billing-en-1": 1,
-   "billing-es-1": 1,
-   "billing-fr-2": 1,
-   "billing-hi-1": 1,
-   "billing-ja-2": 1,
-   "billing-pt-1": 1,
-   "sales-ar-2": 1,
-   "sales-de-2": 1,
-   "sales-es-3": 1,
-   "sales-fr-2": 1,
-   "sales-fr-3": 1,
-   "sales-zh-2": 1,
-   "technical-de-3": 1,
-   "technical-en-2": 1,
-   "technical-es-3": 1,
-   "technical-hi-2": 1,
-   "technical-ja-1": 1,
-   "technical-pt-1": 1,
-   "technical-zh-3": 1
+   "upstream|00": 1,
+   "upstream|01": 1,
+   "upstream|02": 1,
+   "upstream|03": 1,
+   "upstream|04": 1,
+   "upstream|05": 1,
+   "upstream|06": 1,
+   "upstream|07": 1,
+   "upstream|08": 1,
+   "upstream|09": 1,
+   "upstream|10": 1,
+   "upstream|11": 1,
+   "upstream|12": 1,
+   "upstream|13": 1,
+   "upstream|14": 1,
+   "upstream|15": 1,
+   "upstream|16": 1,
+   "upstream|17": 1,
+   "upstream|18": 1,
+   "upstream|19": 1
   },
-  "max_label_share": 0.35,
-  "balance_ok": true,
+  "max_label_share": 0.45,
+  "balance_ok": false,
   "item_table": [
    {
     "item_index": 0,
-    "item_id": "technical|technical-de-3|num6380",
-    "label": "technical",
-    "lang": "de",
-    "template_id": "technical-de-3",
-    "slots": {
-     "num": "6380"
-    },
-    "text": "Uploads zum Portal brechen nach etwa 6380 Sekunden ab."
+    "item_id": "upstream|18|ja",
+    "label": "billing",
+    "lang": "ja",
+    "template_id": "upstream|18",
+    "slots": {},
+    "text": "請求書が二重に請求されました。重複分を返金してください。"
    },
    {
     "item_index": 1,
-    "item_id": "technical|technical-ja-1|num6380",
-    "label": "technical",
-    "lang": "ja",
-    "template_id": "technical-ja-1",
-    "slots": {
-     "num": "6380"
-    },
-    "text": "レポート 6380 を開くたびにアプリが落ちます。"
+    "item_id": "upstream|02|en",
+    "label": "sales",
+    "lang": "en",
+    "template_id": "upstream|02",
+    "slots": {},
+    "text": "What would an enterprise contract for 200 seats cost per year?"
    },
    {
     "item_index": 2,
-    "item_id": "technical|technical-zh-3|num2746",
+    "item_id": "upstream|07|es",
     "label": "technical",
-    "lang": "zh",
-    "template_id": "technical-zh-3",
-    "slots": {
-     "num": "2746"
-    },
-    "text": "上传到门户大约 2746 秒后就会超时。"
+    "lang": "es",
+    "template_id": "upstream|07",
+    "slots": {},
+    "text": "La aplicación se cierra cada vez que abro la configuración."
    },
    {
     "item_index": 3,
-    "item_id": "technical|technical-pt-1|num1209",
-    "label": "technical",
-    "lang": "pt",
-    "template_id": "technical-pt-1",
-    "slots": {
-     "num": "1209"
-    },
-    "text": "O sistema cai toda vez que tento abrir o relatório 1209."
+    "item_id": "upstream|11|fr",
+    "label": "billing",
+    "lang": "fr",
+    "template_id": "upstream|11",
+    "slots": {},
+    "text": "J'ai été facturé deux fois ce mois-ci, merci de rembourser le doublon."
    },
    {
     "item_index": 4,
-    "item_id": "sales|sales-de-2|num8154",
-    "label": "sales",
-    "lang": "de",
-    "template_id": "sales-de-2",
-    "slots": {
-     "num": "8154"
-    },
-    "text": "Bitte senden Sie mir die Preise für ein Upgrade auf 8154 Lizenzen."
+    "item_id": "upstream|12|fr",
+    "label": "technical",
+    "lang": "fr",
+    "template_id": "upstream|12",
+    "slots": {},
+    "text": "L'application plante dès que j'ouvre la page des paramètres."
    },
    {
     "item_index": 5,
-    "item_id": "billing|billing-en-1|num1927",
-    "label": "billing",
+    "item_id": "upstream|04|en",
+    "label": "technical",
     "lang": "en",
-    "template_id": "billing-en-1",
-    "slots": {
-     "num": "1927"
-    },
-    "text": "I was charged twice for invoice 1927, please refund the duplicate payment."
+    "template_id": "upstream|04",
+    "slots": {},
+    "text": "Our API returns 500 errors since this morning and the service is down."
    },
    {
     "item_index": 6,
-    "item_id": "billing|billing-ar-2|num6380",
+    "item_id": "upstream|03|en",
     "label": "billing",
-    "lang": "ar",
-    "template_id": "billing-ar-2",
-    "slots": {
-     "num": "6380"
-    },
-    "text": "إيصال الطلب 6380 يحتوي على سطر مكرر، أرجو إعادة المبلغ."
+    "lang": "en",
+    "template_id": "upstream|03",
+    "slots": {},
+    "text": "Please refund my subscription payment from last month, it was billed by mistake."
    },
    {
     "item_index": 7,
-    "item_id": "billing|billing-es-1|num8824",
+    "item_id": "upstream|16|hi",
     "label": "billing",
-    "lang": "es",
-    "template_id": "billing-es-1",
-    "slots": {
-     "num": "8824"
-    },
-    "text": "Me cobraron dos veces la factura 8824, devuélvanme el cargo duplicado."
+    "lang": "hi",
+    "template_id": "upstream|16",
+    "slots": {},
+    "text": "मुझसे मार्च में दो बार शुल्क लिया गया, कृपया डुप्लिकेट राशि वापस करें।"
    },
    {
     "item_index": 8,
-    "item_id": "technical|technical-en-2|num4411",
-    "label": "technical",
-    "lang": "en",
-    "template_id": "technical-en-2",
-    "slots": {
-     "num": "4411"
-    },
-    "text": "Our API returns 500 errors for request 4411 since this morning."
+    "item_id": "upstream|08|es",
+    "label": "sales",
+    "lang": "es",
+    "template_id": "upstream|08",
+    "slots": {},
+    "text": "Quisiera una cotización para un contrato anual de 50 licencias."
    },
    {
     "item_index": 9,
-    "item_id": "sales|sales-fr-3|num7043",
-    "label": "sales",
-    "lang": "fr",
-    "template_id": "sales-fr-3",
-    "slots": {
-     "num": "7043"
-    },
-    "text": "Je souhaite un devis pour un accord annuel de 7043 postes."
+    "item_id": "upstream|06|es",
+    "label": "billing",
+    "lang": "es",
+    "template_id": "upstream|06",
+    "slots": {},
+    "text": "Me cobraron dos veces la factura de marzo, devuélvanme el cargo duplicado."
    },
    {
     "item_index": 10,
-    "item_id": "technical|technical-es-3|num8154",
-    "label": "technical",
-    "lang": "es",
-    "template_id": "technical-es-3",
-    "slots": {
-     "num": "8154"
-    },
-    "text": "Las subidas al portal fallan después de unos 8154 segundos."
+    "item_id": "upstream|00|en",
+    "label": "billing",
+    "lang": "en",
+    "template_id": "upstream|00",
+    "slots": {},
+    "text": "I was charged twice for invoice 4411, please refund the duplicate payment."
    },
    {
     "item_index": 11,
-    "item_id": "sales|sales-fr-2|num3097",
+    "item_id": "upstream|15|de",
     "label": "sales",
-    "lang": "fr",
-    "template_id": "sales-fr-2",
-    "slots": {
-     "num": "3097"
-    },
-    "text": "Pouvez-vous m'envoyer le tarif pour passer au forfait de 3097 utilisateurs ?"
+    "lang": "de",
+    "template_id": "upstream|15",
+    "slots": {},
+    "text": "Was kostet ein Jahresvertrag für 100 Nutzer?"
    },
    {
     "item_index": 12,
-    "item_id": "sales|sales-zh-2|num7043",
+    "item_id": "upstream|05|en",
     "label": "sales",
-    "lang": "zh",
-    "template_id": "sales-zh-2",
-    "slots": {
-     "num": "7043"
-    },
-    "text": "请发给我升级到 7043 个用户的报价。"
+    "lang": "en",
+    "template_id": "upstream|05",
+    "slots": {},
+    "text": "Can you send me pricing for upgrading our plan to the business tier?"
    },
    {
     "item_index": 13,
-    "item_id": "billing|billing-ja-2|num4411",
-    "label": "billing",
-    "lang": "ja",
-    "template_id": "billing-ja-2",
-    "slots": {
-     "num": "4411"
-    },
-    "text": "注文 4411 の領収書に重複した行があります。返金をお願いします。"
+    "item_id": "upstream|14|de",
+    "label": "technical",
+    "lang": "de",
+    "template_id": "upstream|14",
+    "slots": {},
+    "text": "Die Anwendung stürzt jedes Mal ab, wenn ich die Einstellungen öffne."
    },
    {
     "item_index": 14,
-    "item_id": "billing|billing-hi-1|num7043",
+    "item_id": "upstream|09|pt",
     "label": "billing",
-    "lang": "hi",
-    "template_id": "billing-hi-1",
-    "slots": {
-     "num": "7043"
-    },
-    "text": "मुझसे बिल 7043 के लिए दो बार शुल्क लिया गया, कृपया डुप्लिकेट भुगतान वापस करें।"
+    "lang": "pt",
+    "template_id": "upstream|09",
+    "slots": {},
+    "text": "Fui cobrado duas vezes na fatura de março, quero o reembolso da cobrança duplicada."
    },
    {
     "item_index": 15,
-    "item_id": "sales|sales-ar-2|num1927",
-    "label": "sales",
-    "lang": "ar",
-    "template_id": "sales-ar-2",
-    "slots": {
-     "num": "1927"
-    },
-    "text": "أرجو إرسال الأسعار للترقية إلى 1927 مستخدمًا."
+    "item_id": "upstream|10|pt",
+    "label": "technical",
+    "lang": "pt",
+    "template_id": "upstream|10",
+    "slots": {},
+    "text": "O sistema cai toda vez que tento gerar o relatório mensal."
    },
    {
     "item_index": 16,
-    "item_id": "technical|technical-hi-2|num2746",
+    "item_id": "upstream|01|en",
     "label": "technical",
-    "lang": "hi",
-    "template_id": "technical-hi-2",
-    "slots": {
-     "num": "2746"
-    },
-    "text": "आज सुबह से हमारा API अनुरोध 2746 के लिए 500 त्रुटि दे रहा है।"
+    "lang": "en",
+    "template_id": "upstream|01",
+    "slots": {},
+    "text": "The dashboard crashes with an error every time I open the reports page."
    },
    {
     "item_index": 17,
-    "item_id": "billing|billing-fr-2|num6380",
-    "label": "billing",
-    "lang": "fr",
-    "template_id": "billing-fr-2",
-    "slots": {
-     "num": "6380"
-    },
-    "text": "Le reçu de la commande 6380 contient une ligne en double, je demande le remboursement."
+    "item_id": "upstream|17|hi",
+    "label": "technical",
+    "lang": "hi",
+    "template_id": "upstream|17",
+    "slots": {},
+    "text": "ऐप हर बार सेटिंग्स खोलते ही बंद हो जाता है।"
    },
    {
     "item_index": 18,
-    "item_id": "sales|sales-es-3|num7782",
-    "label": "sales",
-    "lang": "es",
-    "template_id": "sales-es-3",
-    "slots": {
-     "num": "7782"
-    },
-    "text": "Necesito precios para un acuerdo anual de 7782 puestos."
+    "item_id": "upstream|19|ar",
+    "label": "billing",
+    "lang": "ar",
+    "template_id": "upstream|19",
+    "slots": {},
+    "text": "تم خصم المبلغ مرتين من بطاقتي، أرجو استرداد المبلغ المكرر."
    },
    {
     "item_index": 19,
-    "item_id": "billing|billing-pt-1|num1927",
+    "item_id": "upstream|13|de",
     "label": "billing",
-    "lang": "pt",
-    "template_id": "billing-pt-1",
-    "slots": {
-     "num": "1927"
-    },
-    "text": "Fui cobrado duas vezes na fatura 1927, quero o reembolso da cobrança duplicada."
+    "lang": "de",
+    "template_id": "upstream|13",
+    "slots": {},
+    "text": "Ich wurde zweimal belastet, bitte erstatten Sie die doppelte Zahlung."
    }
   ]
  },
  "protocol": {
   "protocol_md": "protocol.md (frozen, 2026-09-24)",
   "task": "synthetic needle-in-haystack decision; NOT evidence about real long documents (protocol section 10)",
-  "label_balanced": true,
+  "label_balanced": false,
   "label_counts": {
-   "billing": 7,
-   "sales": 6,
+   "billing": 9,
+   "sales": 4,
    "technical": 7
   },
   "n_per_cell": 20,
@@ -520,7 +493,7 @@
   "gpu_lock": {
    "held": true,
    "path": "/home/parshu/projects/contri/laya-lab/.gpu.lock",
-   "pid": 856996
+   "pid": 866508
   },
   "gpu_lock_held_for_timings": true,
   "torch_deterministic_algorithms": false,
@@ -650,10 +623,10 @@
   }
  ],
  "artifacts": {
-  "predictions_jsonl": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/predictions.jsonl",
-  "summary_json": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/summary.json",
-  "run_log": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/run.log",
-  "manifest_json": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro/manifest.json"
+  "predictions_jsonl": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream/predictions.jsonl",
+  "summary_json": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream/summary.json",
+  "run_log": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream/run.log",
+  "manifest_json": "/home/parshu/projects/contri/laya-lab/experiments/baseline-repro-upstream/manifest.json"
  },
  "dry_run": false,
  "harness_files": {

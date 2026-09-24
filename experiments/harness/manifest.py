@@ -151,6 +151,9 @@ def build_manifest(run_id: str, argv: List[str], lab: Path, fork: Path, config: 
     return {
         "schema": SCHEMA,
         "run_id": run_id,
+        "seed": config.get("seed"),
+        "n_per_cell": config.get("n"),
+        "languages": config.get("languages"),
         "status": "running",
         "started_utc": utc_now(),
         "finished_utc": None,

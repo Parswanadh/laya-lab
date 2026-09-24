@@ -1,0 +1,73 @@
+cell (tag | pad)                                   n corr      acc delta_vs_base mcnemar_p  median_s     p95_s   peakVRAM
+pilot-upstream_multilingual / allglobal / p1_exact|7000     5    2    0.400    -0.400   0.5000    1.9077    1.9416       2064
+pilot-upstream_multilingual / baseline / p1_exact|7000     5    4    0.800    +0.000   1.0000    1.8526    2.0996       2064
+pilot-upstream_multilingual / w1024 / p1_exact|7000     5    1    0.200    -0.600   0.2500    1.8722    1.8962       2064
+stage1-upstream_multilingual / baseline / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0224    0.0276       1246
+stage1-upstream_multilingual / baseline / p1_exact|1000    20   18    0.900    +0.000   1.0000    0.0934    0.1094       1286
+stage1-upstream_multilingual / baseline / p1_exact|2000    20   16    0.800    +0.000   1.0000    0.2275    0.2517       1366
+stage1-upstream_multilingual / baseline / p1_exact|4000    20   12    0.600    +0.000   1.0000    0.7152    0.7684       1568
+stage1-upstream_multilingual / baseline / p1_exact|7000    20    9    0.450    +0.000   1.0000    1.8452    2.2707       2068
+stage1-upstream_multilingual / baseline / upstream_rule|0    20   19    0.950    +0.000   1.0000    0.0223    0.0342       2068
+stage1-upstream_multilingual / baseline / upstream_rule|4000    20   17    0.850    +0.000   1.0000    0.6845    0.7098       2068
+stage1-upstream_multilingual / baseline / upstream_rule|7000    20   10    0.500    +0.000   1.0000     1.849    1.9341       2068
+stage2-upstream_multilingual / w1024 / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0181    0.0255       2068
+stage2-upstream_multilingual / w1024 / p1_exact|4000    20    3    0.150    -0.450   0.0117    0.7312    0.7616       2068
+stage2-upstream_multilingual / w1024 / p1_exact|7000    20    3    0.150    -0.300   0.1094    1.9238    1.9817       2068
+stage2-upstream_multilingual / w128 / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0206    0.0335       2068
+stage2-upstream_multilingual / w128 / p1_exact|4000    20   12    0.600    +0.000   1.0000     0.693    0.7282       2068
+stage2-upstream_multilingual / w128 / p1_exact|7000    20    9    0.450    +0.000   1.0000    1.8431    1.9429       2068
+stage2-upstream_multilingual / w256 / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0251    0.0336       2068
+stage2-upstream_multilingual / w256 / p1_exact|4000    20   13    0.650    +0.050   1.0000    0.7162    0.7546       2068
+stage2-upstream_multilingual / w256 / p1_exact|7000    20   10    0.500    +0.050   1.0000    1.9225    1.9775       2068
+stage2-upstream_multilingual / w512 / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0222    0.0231       2068
+stage2-upstream_multilingual / w512 / p1_exact|1000    20   13    0.650    -0.250   0.0625    0.0969    0.1122       2068
+stage2-upstream_multilingual / w512 / p1_exact|2000    20   14    0.700    -0.100   0.6250    0.2544    0.2619       2068
+stage2-upstream_multilingual / w512 / p1_exact|4000    20   13    0.650    +0.050   1.0000    0.7358    0.7527       2068
+stage2-upstream_multilingual / w512 / p1_exact|7000    20   10    0.500    +0.050   1.0000    1.9442    2.0081       2068
+stage2-upstream_multilingual / w64 / p1_exact|0    20   17    0.850    -0.100   0.5000     0.017    0.0206       1246
+stage2-upstream_multilingual / w64 / p1_exact|4000    20   12    0.600    +0.000   1.0000    0.6008    0.6485       1568
+stage2-upstream_multilingual / w64 / p1_exact|7000    20   10    0.500    +0.050   1.0000     1.762    1.8892       2068
+stage3-upstream_multilingual / allglobal / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0197    0.0256       1246
+stage3-upstream_multilingual / allglobal / p1_exact|1000    20    0    0.000    -0.900   0.0000    0.1009    0.1144       1286
+stage3-upstream_multilingual / allglobal / p1_exact|2000    20    4    0.200    -0.600   0.0075    0.2384    0.2521       1366
+stage3-upstream_multilingual / allglobal / p1_exact|4000    20    6    0.300    -0.300   0.1796    0.7318     0.768       1568
+stage3-upstream_multilingual / allglobal / p1_exact|7000    20    7    0.350    -0.100   0.5000    1.9593    2.1028       2068
+stage3-upstream_multilingual / allglobal_w512_combo / p1_exact|0    20   19    0.950    +0.000   1.0000    0.0308    0.0346       2068
+stage3-upstream_multilingual / allglobal_w512_combo / p1_exact|7000    20    7    0.350    -0.100   0.5000    1.8732    2.1184       2068
+stage4-balanced-v1 / allglobal / p1_exact|0      120   96    0.800    +0.000   1.0000    0.0221    0.0248       2066
+stage4-balanced-v1 / allglobal / p1_exact|7000   120   40    0.333    -0.233   0.0000    1.9104    2.0661       2066
+stage4-balanced-v1 / baseline / p1_exact|0       120   96    0.800    +0.000   1.0000    0.0183    0.0242       1246
+stage4-balanced-v1 / baseline / p1_exact|7000    120   68    0.567    +0.000   1.0000    1.9604     2.058       2066
+stage4-balanced-v1 / w512 / p1_exact|0           120   96    0.800    +0.000   1.0000    0.0211    0.0333       2066
+stage4-balanced-v1 / w512 / p1_exact|7000        120   49    0.408    -0.158   0.0094    1.8979    1.9858       2066
+
+identity w128 is the shipped config re-applied: must be identical to baseline: stage1-upstream_multilingual__baseline__p1_exact vs stage2-upstream_multilingual__w128__p1_exact -> {"0": {"n": 20, "identical_predictions": 20, "max_abs_delta_p_gold": 0.0}, "4000": {"n": 20, "identical_predictions": 20, "max_abs_delta_p_gold": 0.0}, "7000": {"n": 20, "identical_predictions": 20, "max_abs_delta_p_gold": 0.0}}
+
+identity all-global with config.local_attention=512 must equal all-global (falsifies 'the sliding mask is still in use'): stage3-upstream_multilingual__allglobal__p1_exact vs stage3-upstream_multilingual__allglobal_w512_combo__p1_exact -> {"0": {"n": 20, "identical_predictions": 20, "max_abs_delta_p_gold": 0.0}, "7000": {"n": 20, "identical_predictions": 20, "max_abs_delta_p_gold": 0.0}}
+pad=0 stage2-upstream_multilingual / w1024 / p1_exact base=0.950 arm=0.950 delta=+0.000 p=1.0000
+pad=0 stage2-upstream_multilingual / w128 / p1_exact base=0.950 arm=0.950 delta=+0.000 p=1.0000
+pad=0 stage2-upstream_multilingual / w256 / p1_exact base=0.950 arm=0.950 delta=+0.000 p=1.0000
+pad=0 stage2-upstream_multilingual / w512 / p1_exact base=0.950 arm=0.950 delta=+0.000 p=1.0000
+pad=0 stage2-upstream_multilingual / w64 / p1_exact base=0.950 arm=0.850 delta=-0.100 p=0.5000
+pad=0 stage3-upstream_multilingual / allglobal / p1_exact base=0.950 arm=0.950 delta=+0.000 p=1.0000
+pad=0 stage3-upstream_multilingual / allglobal_w512_combo / p1_exact base=0.950 arm=0.950 delta=+0.000 p=1.0000
+pad=0 stage4-balanced-v1 / allglobal / p1_exact    base=0.800 arm=0.800 delta=+0.000 p=1.0000
+pad=0 stage4-balanced-v1 / w512 / p1_exact         base=0.800 arm=0.800 delta=+0.000 p=1.0000
+
+truncation control: 41 cells, 0 with truncated items
+
+P1 reproduction (per item, baseline stage1-upstream_multilingual__baseline__p1_exact vs probes.C_length):
+  pad=0     n=20 identical_predictions=20/20 max|dp_gold|=0.00000 (P1 acc 0.950)
+  pad=1000  n=20 identical_predictions=20/20 max|dp_gold|=0.00000 (P1 acc 0.900)
+  pad=2000  n=20 identical_predictions=20/20 max|dp_gold|=0.00000 (P1 acc 0.800)
+  pad=4000  n=20 identical_predictions=20/20 max|dp_gold|=0.00000 (P1 acc 0.600)
+  pad=7000  n=20 identical_predictions=20/20 max|dp_gold|=0.00000 (P1 acc 0.450)
+
+pad=0 mask-binding control (sequence ~76 tokens; half-window >=128 allows all pairs):
+  reference stage2-upstream_multilingual__w1024__p1_exact
+    vs stage2-upstream_multilingual / w256 / p1_exact identical=20/20 max|dp_gold|=0.000000
+    vs stage2-upstream_multilingual / w512 / p1_exact identical=20/20 max|dp_gold|=0.000000
+    vs stage3-upstream_multilingual / allglobal / p1_exact identical=20/20 max|dp_gold|=0.000000
+    baseline_vs_w64                                   identical=18/20 max|dp_gold|=0.577800
+    baseline_vs_w1024                                 identical=20/20 max|dp_gold|=0.007700
+wrote analysis.json (41 cells)

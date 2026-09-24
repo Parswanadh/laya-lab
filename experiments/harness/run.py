@@ -169,6 +169,8 @@ def main(argv=None) -> int:
     ap.add_argument("--stub-head-max-len", dest="stub_head_max_len", type=int)
     ap.add_argument("--plan", action="store_true", help="print the resolved plan and exit")
     ap.add_argument("--check-only", metavar="RUN_DIR", help="run the structural checks on a finished run")
+    ap.add_argument("--recheck", metavar="RUN_DIR",
+                    help="re-run structural AND mechanism checks on a finished run (no model, no GPU)")
     ap.add_argument("--table", metavar="RUN_DIR", help="print the summary table of a finished run")
     args = ap.parse_args(argv)
 
@@ -176,6 +178,10 @@ def main(argv=None) -> int:
         import runner
         runner.print_table(Path(args.table))
         return 0
+
+    if args.recheck:
+        import runner
+        return runner.recheck(Path(args.recheck))
 
     if args.check_only:
         import checks

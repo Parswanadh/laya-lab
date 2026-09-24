@@ -17,6 +17,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from backends import LayaBackend, StubBackend
 from builder import DocBuilder, doc_row_fields
+import checks
 from checks import mechanism_checks, report, structural_checks
 from manifest import build_manifest, memory_state, gpu_state, utc_now, write_json
 from metrics import cell_summary, position_only_oracle
@@ -239,7 +240,8 @@ def run_sweep(cfg: Dict[str, Any]) -> int:
 
     manifest = build_manifest(
         run_id=cfg["run_id"], argv=list(sys.argv), lab=lab, fork=fork,
-        config={"checkpoint": cfg["checkpoint"], "out_dir": str(out_dir),
+        config={"checkpoint": cfg["checkpoint"], "out_dir": str(out_dir), "seed": cfg["seed"],
+                "n": cfg["n"], "languages": cfg.get("languages"),
                 "questions": questions, "internal_question_source": iq["source"],
                 "filler_mode": needle_pool.get("kind"), "needle_prefix_mode": needle_pool.get("needle_prefix_mode", "upstream_auto"),
                 "warmup": "one untimed call on the first item of every cell, plus one global call",
@@ -466,3 +468,42 @@ def print_table(out_dir: Path) -> None:
                  c["accuracy"], c["accuracy_ci95_low"], c["accuracy_ci95_high"],
                  c["median_latency_s"], c["median_state_tokens_kept"], c["modal_prediction"],
                  c["modal_prediction_share"], c["request_kept_fraction"] or 0.0))
+
+
+def recheck(run_dir: Path) -> int:
+    """Re-run every check on a finished run, from its artifacts only. No model, no GPU, no lock.
+
+    Reads the manifest for the pools, seed, item table and cell plan, rebuilds the documents with
+    the checkpoint tokenizer (tokenizer only -- the encoder is never constructed), and re-derives
+    every structural and mechanism fact. This is what a verifier can run on any run directory.
+    """
+    run_dir = Path(run_dir)
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+    log = Logger(run_dir / "recheck.log")
+    log("=== recheck %s ===" % run_dir)
+    ok_struct = report(structural_checks(run_dir, manifest, summary), log=log)
+
+    if manifest.get("dry_run"):
+        from backends import StubTokenizer
+        tok = StubTokenizer()
+    else:
+        fork = (manifest.get("git", {}).get("fork", {}) or {}).get("repo")
+        if fork and fork not in sys.path:
+            sys.path.insert(0, fork)
+        from laya.agent import _load_tokenizer
+        ckpt = Path(manifest["model"]["checkpoint_dir"])
+        cfg = json.loads((ckpt / "rl_agent_config.json").read_text(encoding="utf-8"))
+        tok = _load_tokenizer(str(ckpt / "tokenizer"), cfg)
+    needle_pool = pools_mod.load_pool(manifest["pools"]["files"]["needle"]["_path"])
+    filler_pool = pools_mod.load_pool(manifest["pools"]["files"]["filler"]["_path"])
+    iq = pools_mod.internal_question(needle_pool)
+    builder = DocBuilder(tok, needle_pool, filler_pool, iq["questions"])
+    rows = checks.load_rows(run_dir)
+    ok_mech = report(mechanism_checks(builder, items=manifest["items"]["item_table"],
+                                     cells=manifest["cells"],
+                                     seed=manifest.get("seed") or summary["seed"], rows=rows),
+                     log=log)
+    log("checks: structural=%s mechanism=%s" % (ok_struct, ok_mech))
+    log.close()
+    return 0 if (ok_struct and ok_mech) else 5

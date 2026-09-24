@@ -135,7 +135,7 @@ def main():
                 "delta_vs_baseline": None if d is None else d["delta"],
                 "delta_ci95": None if d is None else d["ci95"],
                 "mcnemar_exact_p": None if d is None else round(
-                    mcnemar_exact(d["b_base_right_arm_wrong"], d["c_base_wrong_arm_right"]), 5),
+                    mcnemar_exact(d["b_base_right_arm_wrong"], d["c_base_wrong_arm_right"]), 10),
                 "b_base_right_arm_wrong": None if d is None else d["b_base_right_arm_wrong"],
                 "c_base_wrong_arm_right": None if d is None else d["c_base_wrong_arm_right"],
                 "median_latency_s": cell["median_latency_s"],
@@ -266,6 +266,58 @@ def main():
                 print("  pad=%-5s n=%d identical_predictions=%d/%d max|dp_gold|=%.5f (P1 acc %.3f)"
                       % (pad_s, v["n"], v["prediction_agreement"], v["n"],
                          v["max_abs_delta_p_gold_same_gold"], v["p1_accuracy"]))
+
+    # ---- pad=0 mask-binding control: at pad=0 the sequence is ~76 tokens, so any half-window
+    # >= 128 allows every pair. The wide arms must then be bit-identical to each other (the mask
+    # is the only thing the arms change), while w64 (half 32) must differ.
+    wide = [t for t in order if sums.get(t, {}).get("arm") in
+            ("w256", "w512", "w1024", "allglobal")
+            and sums.get(t, {}).get("construction") == "p1_exact"
+            and sums.get(t, {}).get("pool") == "upstream_multilingual"
+            and sums.get(t, {}).get("n") == 20]
+    if len(wide) >= 2:
+        ref = wide[0]
+        rec = {"reference": ref, "pairs": {}}
+        for t in wide[1:]:
+            ids = sorted(set(correctness[ref][0]) & set(correctness[t][0]))
+            same = sum(1 for i in ids
+                       if per_item[(ref, 0, i)]["pred"] == per_item[(t, 0, i)]["pred"])
+            md = max(abs(p_gold[ref][0][i] - p_gold[t][0][i]) for i in ids)
+            rec["pairs"][t] = {"n": len(ids), "identical_predictions": same,
+                               "max_abs_delta_p_gold": round(md, 8)}
+        base_tags2 = [t for t in order if sums.get(t, {}).get("arm") == "baseline"
+                      and sums.get(t, {}).get("construction") == "p1_exact"
+                      and sums.get(t, {}).get("pool") == "upstream_multilingual"
+                      and sums.get(t, {}).get("n") == 20]
+
+        def one_arm(arm, tags):
+            hits = [t for t in tags if sums.get(t, {}).get("arm") == arm]
+            return hits[0] if hits else None
+
+        if base_tags2:
+            b0 = base_tags2[0]
+            for label, t in (("baseline_vs_w64", one_arm("w64", order)),
+                             ("baseline_vs_w1024", one_arm("w1024", wide))):
+                if t is None:
+                    continue
+                ids = sorted(set(correctness[b0][0]) & set(correctness[t][0]))
+                same = sum(1 for i in ids
+                           if per_item[(b0, 0, i)]["pred"] == per_item[(t, 0, i)]["pred"])
+                md = max(abs(p_gold[b0][0][i] - p_gold[t][0][i]) for i in ids)
+                rec[label] = {"n": len(ids), "identical_predictions": same,
+                              "max_abs_delta_p_gold": round(md, 8)}
+        out["pad0_mask_binding_control"] = rec
+        print("\npad=0 mask-binding control (sequence ~76 tokens; half-window >=128 allows all pairs):")
+        print("  reference %s" % ref)
+        for t, v in rec["pairs"].items():
+            print("    vs %-46s identical=%d/%d max|dp_gold|=%.6f"
+                  % (t.replace("__", " / "), v["identical_predictions"], v["n"],
+                     v["max_abs_delta_p_gold"]))
+        for k in ("baseline_vs_w64", "baseline_vs_w1024"):
+            if k in rec:
+                print("    %-49s identical=%d/%d max|dp_gold|=%.6f"
+                      % (k, rec[k]["identical_predictions"], rec[k]["n"],
+                         rec[k]["max_abs_delta_p_gold"]))
 
     with open(os.path.join(HERE, "analysis.json"), "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=1, ensure_ascii=False)

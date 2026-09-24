@@ -2212,5 +2212,506 @@
    "all_layers_same_rope_inv_freq": true,
    "n_sliding_at_load": 0
   }
+ },
+ "stage4-balanced-v1__baseline__p1_exact": {
+  "pool": "balanced-v1",
+  "n": 120,
+  "dtype": "float32",
+  "cells": [
+   {
+    "pad": 0,
+    "liveness": {
+     "forwards_recorded": 22,
+     "layers_total": 22,
+     "by_branch": {
+      "global": 8,
+      "sliding": 14
+     },
+     "sliding_half_windows_arg": [
+      64
+     ],
+     "last_query_row": "67",
+     "last_row_max_dist_histogram": {
+      "64": 14,
+      "67": 8
+     }
+    }
+   },
+   {
+    "pad": 7000,
+    "liveness": {
+     "forwards_recorded": 22,
+     "layers_total": 22,
+     "by_branch": {
+      "global": 8,
+      "sliding": 14
+     },
+     "sliding_half_windows_arg": [
+      64
+     ],
+     "last_query_row": "7067",
+     "last_row_max_dist_histogram": {
+      "64": 14,
+      "7067": 8
+     }
+    }
+   }
+  ],
+  "config_after_patch": {
+   "config_local_attention": 128,
+   "config_global_attn_every_n_layers": 3,
+   "num_hidden_layers": 22,
+   "max_position_embeddings": 8192,
+   "attn_impl": "sdpa",
+   "layer_attn_local_attention": [
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     -1,
+     -1
+    ]
+   ],
+   "has_attention_type_attr": false,
+   "has_self_attn_attr": false,
+   "layer_attention_type": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "all_layers_same_rope_inv_freq": true,
+   "n_sliding_at_load": 14
+  }
+ },
+ "stage4-balanced-v1__w512__p1_exact": {
+  "pool": "balanced-v1",
+  "n": 120,
+  "dtype": "float32",
+  "cells": [
+   {
+    "pad": 0,
+    "liveness": {
+     "forwards_recorded": 22,
+     "layers_total": 22,
+     "by_branch": {
+      "global": 8,
+      "sliding": 14
+     },
+     "sliding_half_windows_arg": [
+      256
+     ],
+     "last_query_row": "67",
+     "last_row_max_dist_histogram": {
+      "67": 22
+     }
+    }
+   },
+   {
+    "pad": 7000,
+    "liveness": {
+     "forwards_recorded": 22,
+     "layers_total": 22,
+     "by_branch": {
+      "global": 8,
+      "sliding": 14
+     },
+     "sliding_half_windows_arg": [
+      256
+     ],
+     "last_query_row": "7067",
+     "last_row_max_dist_histogram": {
+      "256": 14,
+      "7067": 8
+     }
+    }
+   }
+  ],
+  "config_after_patch": {
+   "config_local_attention": 512,
+   "config_global_attn_every_n_layers": 3,
+   "num_hidden_layers": 22,
+   "max_position_embeddings": 8192,
+   "attn_impl": "sdpa",
+   "layer_attn_local_attention": [
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     -1,
+     -1
+    ]
+   ],
+   "has_attention_type_attr": false,
+   "has_self_attn_attr": false,
+   "layer_attention_type": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "all_layers_same_rope_inv_freq": true,
+   "n_sliding_at_load": 14
+  }
+ },
+ "stage4-balanced-v1__allglobal__p1_exact": {
+  "pool": "balanced-v1",
+  "n": 120,
+  "dtype": "float32",
+  "cells": [
+   {
+    "pad": 0,
+    "liveness": {
+     "forwards_recorded": 22,
+     "layers_total": 22,
+     "by_branch": {
+      "global": 22
+     },
+     "sliding_half_windows_arg": [],
+     "last_query_row": "67",
+     "last_row_max_dist_histogram": {
+      "67": 22
+     }
+    }
+   },
+   {
+    "pad": 7000,
+    "liveness": {
+     "forwards_recorded": 22,
+     "layers_total": 22,
+     "by_branch": {
+      "global": 22
+     },
+     "sliding_half_windows_arg": [],
+     "last_query_row": "7067",
+     "last_row_max_dist_histogram": {
+      "7067": 22
+     }
+    }
+   }
+  ],
+  "config_after_patch": {
+   "config_local_attention": 128,
+   "config_global_attn_every_n_layers": 1,
+   "num_hidden_layers": 22,
+   "max_position_embeddings": 8192,
+   "attn_impl": "sdpa",
+   "layer_attn_local_attention": [
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ],
+    [
+     -1,
+     -1
+    ]
+   ],
+   "has_attention_type_attr": false,
+   "has_self_attn_attr": false,
+   "layer_attention_type": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "all_layers_same_rope_inv_freq": true,
+   "n_sliding_at_load": 0
+  }
  }
 }

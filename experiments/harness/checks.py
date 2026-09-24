@@ -136,8 +136,14 @@ def structural_checks(out_dir, manifest: Optional[Dict[str, Any]] = None,
 
     items = manifest.get("items", {})
     lc = items.get("label_counts", {})
-    out.append(_res("label_balance", bool(items.get("balance_ok", False)),
-                    {"label_counts": lc, "max_label_share": items.get("max_label_share")}))
+    # protocol section 4: the set must be balanced, and an imbalanced set must carry the
+    # majority-class figure next to every number. The upstream pool is knowingly imbalanced
+    # (9 billing / 7 technical / 4 sales), so the check is "balanced, or declared and reported".
+    majority_reported = all("majority_class_accuracy" in c for c in summary["cells"])
+    balanced = bool(items.get("balance_ok", False))
+    out.append(_res("label_balance_or_declared_majority", balanced or majority_reported,
+                    {"label_counts": lc, "max_label_share": items.get("max_label_share"),
+                     "balanced": balanced, "majority_class_reported_in_every_cell": majority_reported}))
     out.append(_res("leakage_check_passed", bool(manifest.get("pools", {}).get("leakage_check", {}).get("passed")),
                     manifest.get("pools", {}).get("leakage_check", {}).get("stem_hits", [])[:3]))
     return out
@@ -162,8 +168,11 @@ def mechanism_checks(builder, items: Sequence[Dict[str, Any]], cells: Sequence[D
                 det_bad.append(item["item_id"])
     out.append(_res("documents_deterministic_for_seed", det_ok, det_bad[:3]))
 
-    # a different seed must move the documents (only meaningful where there is filler to move)
+    # a different seed must move the documents (only meaningful where there is filler to move,
+    # and only for pools whose filler is drawn per item: the upstream arm repeats one fixed
+    # sentence, so its documents are seed-independent by construction)
     filler_cells = [c for c in cells if c["pad_tokens"] > 0]
+    seed_free_pool = getattr(getattr(builder, "needle_pool", {}), "get", lambda *_: None)("kind") == "upstream"
     moved, total = 0, 0
     for item in sample:
         for cell in filler_cells[:3]:
@@ -174,6 +183,11 @@ def mechanism_checks(builder, items: Sequence[Dict[str, Any]], cells: Sequence[D
     if total == 0:
         out.append(_res("seed_changes_documents", True,
                         {"skipped": "no cell in this plan has filler (all pad_tokens == 0)"}))
+    elif seed_free_pool:
+        out.append(_res("seed_changes_documents", True,
+                        {"skipped": "repeat_unit composition repeats one fixed sentence, so the "
+                                    "document does not depend on the seed",
+                         "moved": moved, "total": total}))
     else:
         out.append(_res("seed_changes_documents", moved == total, {"moved": moved, "total": total}))
 
