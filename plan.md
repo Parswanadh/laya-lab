@@ -214,3 +214,126 @@ parallel (cheap); the GPU stage is serialized through one runner.
 - Upstream `AGENTS.md` rules bind all work: no hosted-service dependency, conventional
   commits, no drive-by reformatting, one logical change per commit, `tests/test_hooks_api.py`
   updated with any public API change, CI gates green.
+
+---
+
+# REVISION 2 — after R-001 (prior art) and P1 (mechanism)
+
+R-001 is a 637-line prior-art review with 24 cited sources. It changed the strategy. Both
+revisions are recorded here rather than edited into §4, so the reasoning stays auditable.
+
+## What prior art settles before we spend compute
+
+| our hypothesis | prior art says | action |
+|---|---|---|
+| **H4** RoPE scaling (YaRN/NTK/ABF) helps at ≤8192 | **Ruled out on definitional grounds.** Dynamic scaling is *defined* as identity below the trained length; a fixed factor inside the window causes "a flat reduction of performance" (YaRN authors). YaRN/NTK/LongRoPE cost **3.5–7.6 MMLU points** applied at short lengths on Phi3-mini; LongRoPE2's contribution is *undoing* that damage and it **switches rescaled RoPE off** for in-window inputs. | Run anyway — it is a one-line config change and a *confirmed* negative is citable. Budget: one run. |
+| **H3** widening the sliding window helps | **Headroom is tiny and measured.** The one published window ablation on long-doc classification (MIMIC-III, 5 window sizes, each *retrained*): 32→512 tokens of window bought **+0.4 micro-F1** for 2.5× test cost. | Still run: the **inference-time** version of this question appears genuinely unmeasured for any architecture (R-001 §7 gap 2). But if we see a *large* gain, suspect a measurement artefact first. |
+| **H2** making all layers global helps | **Two independent negative results.** ModernBERT: global-every-layer "yielded identical downstream performance" to global-every-3rd. Longformer: "adding more tokens using global attention does not improve F1". | Run as the cheap falsification arm. Low prior. |
+| — | **mmBERT has never had a sliding-window or global/local ablation published at all** (R-001 §1.9, §7 gap 4). | Our H2/H3 measurements are **novel for this model family**, whatever they show. |
+
+**H4 is now a predicted-negative.** If we run it and it is negative, that is a *confirmation of
+prior art on a new model family*, which is worth reporting — and it costs one config line.
+
+## The finding that reshaped the objective
+
+R-001 §4.1 surfaced the closest published analogue to our failure. **Inverted EURLEX** is
+constructed by moving a document's decisive section — "the first two sections (header, recitals)
+carry the most relevant information" — **to the end**, "particularly challenging for models that
+focus only on the first 512 tokens."
+
+Results on it (third-party evaluation, ACL 2022):
+
+| model | Inverted EURLEX |
+|---|---|
+| BERT, truncate @512 | 70.53 |
+| BERT + TextRank selection | 71.30 |
+| BERT + **random** chunk selection | **71.47** |
+| Longformer @4096 (sparse long-context attention) | **56.47** |
+| ToBERT (hierarchical) | 67.31 |
+| CogLTX | 70.80 |
+
+**The long-context sparse-attention encoder lost by ~14 points to plain truncation, and the best
+models were chunk-*selectors* — including one that selects chunks at random.**
+
+This is the single most important input to our design, and it cuts against the obvious
+"just attend further" instinct:
+
+- Simply widening or globalising attention is **not** a promising direction. The literature has
+  already run that experiment in a neighbouring setting and it lost.
+- What wins is **non-diluted focus**: choose a small number of positions and let the decision
+  read them at full strength.
+- But selection is lossy, and a wrong selection destroys the evidence silently — the failure mode
+  we set out to remove.
+
+### The synthesis this forces
+
+The objective is **not** "attend to more positions". It is:
+
+> read **every** position, but let the decision head **choose what to weight** without the
+> softmax mass being spread thin across the whole document.
+
+That is precisely what a **learned query cross-attending over all encoded state positions**
+does. It keeps selection's focus (the query learns where to look) without selection's lossiness
+(every position is available, and the mechanism is differentiable end-to-end).
+
+**This reframes H5 from "a bigger attention window" into the actual contribution.**
+
+## Revised H5 — Decoupled State Encoder + Cross-Attention Decision Head
+
+```
+Stage 1  state encoder (FROZEN mmBERT)
+         D (n tokens) → H_D ∈ R^(n×768)          full bidirectional context, native 8192
+                                                  chunked w/ overlap beyond 8192
+Stage 2  decision tokens (small transformer, the existing head)
+         [CLS] type instr [SEP] [MASK] o1 … [MASK] ok [SEP] → H_M ∈ R^(m×768),  m ≈ 256
+Stage 3  CROSS-ATTENTION  (NEW — the architectural change, ~2 layers, 4 heads)
+         Q = W_q H_M ;  K = W_k H_D ;  V = W_v H_D
+         H_M ← H_M + MHA(Q, K, V) + FFN(·)
+Stage 4  scoring (UNCHANGED) — gather at marker positions → scorer → logits
+```
+
+**Why it addresses the measured mechanism.** In the flat layout a marker reaches a distant state
+token only through the **8 global layers**, and every filler token competes for its attention
+mass. Here every state token is a K/V pair, so each marker reaches **all n positions in one hop**,
+and the query is **trained for this task** rather than being a by-product of 22 self-attention
+layers. Focus without lossiness.
+
+**Marginal cost.** Stage 1 dominates and is unchanged. Stage 3 is `m·n·d ≈ 256 × 8192 × 768 ≈
+1.6 GFLOP` per layer — on the order of **1–2 % of the encoder's cost**. Sub-quadratic in the
+decision path. *(modelled, to be measured.)*
+
+**Training.** Stage 1 frozen; gradients flow through Stage 3 only (~3 M params). Fits the 8 GB
+card at 4096 tokens with batch 2–4 and the encoder under `no_grad`. Feasible here.
+
+**Honest risks, registered before the run.**
+1. Training data will be **synthetic** needle-in-haystack. Transfer to real documents is
+   **unproven** and will be labelled as such everywhere.
+2. The adapter could learn a **position heuristic** instead of reading content. The
+   cross-verifier's **position-only oracle** attack exists precisely to catch this, and it is
+   mandatory on this arm.
+3. R-001's own warning: absence of prior art is not support. Tight falsification budget.
+
+## The second contribution — a benchmark that does not exist
+
+R-001 §7 gap 5: **"No 'position of decisive evidence vs accuracy' study for encoders with a
+decision head."** *Lost in the Middle* and both *Found in the Middle* papers are decoder-only.
+
+Our P1 diagnostic already produces this curve. Done properly — balanced labels, `n ≥ 200`,
+length held fixed, distance swept, with random/majority/position-oracle baselines and McNemar —
+it is a **standalone contribution to the encoder literature**, independent of whether H5 wins.
+
+This matters for the PR strategy: even if the architectural arm does not beat the baseline, a
+correctly-powered position-sensitivity benchmark for decision encoders is a mergeable artifact.
+That de-risks the whole program.
+
+## Consequence for the PR
+
+The upstream contribution becomes:
+
+1. a **position-sensitivity benchmark harness** for decision encoders (the gap in the literature),
+2. the **measured mechanism** with the controls that isolated it, and
+3. the cross-attention adapter **if and only if** it clears the frozen baseline with
+   non-overlapping CIs, a surviving McNemar test, independent reproduction, and a failed
+   falsification attempt.
+
+Item 1 and 2 are deliverable regardless of item 3.

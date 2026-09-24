@@ -50,10 +50,11 @@ def reach(marker, n, layer_types=LAYER_TYPES, w=W):
 
 def reach_horizon(layer_types=LAYER_TYPES, w=W):
     """Per-hop HORIZON model requested by the task: how far past the marker can information
-    be pulled, one mask at a time.  Global layers double the previous horizon (their query
-    can pick any key, and each key carries everything the previous layers pooled), sliding
-    layers add w.  H_0 = w for a sliding layer 0 and the whole document for a full layer 0."""
-    H = w  # layer 0
+    be pulled, one mask at a time.  A global layer doubles the previous horizon (its query
+    can pick any key, and every key already carries what the previous layers pooled); a
+    sliding layer adds w.  H_0 = 2w: the fully-connected layer 0 reads every key, and each
+    key's own value already pooled its +-w window from the embedding layer."""
+    H = 2 * w
     out = [H]
     for lt in layer_types[1:]:
         H = 2 * H if lt == "full_attention" else H + w
@@ -175,41 +176,47 @@ hr("2b. HEAD BLOCK WIDTH (computed with laya.build_sequence, fork source, CPU on
 hr("3. COST MODEL")
 
 def flops(n, head_layers=HEAD_LAYERS, with_head=True):
-    lin = 17 * n * D * D                      # qkv 3d^2 + out d^2 + wi/wo 8d*F, F=1.5d
+    """MODELLED inference FLOPs (multiply-accumulate = 2 flops), forward pass only,
+    batch 1, no attention-mask materialisation, no softmax/norm/rope/embedding terms."""
+    proj = 17 * n * D * D                     # qkv = 3*d^2, out = d^2, wi = d*F, wo = F*d
+    mlp = 4 * n * D * F                       # (2*n*d*F) for each of Wi, Wo... 2 n d F each
     q_enc = 2 * L_FULL * n * n * D + 2 * L_LOCAL * n * (2 * W + 1) * D
-    q_head = 0
-    if with_head:
-        q_head = head_layers * 2 * n * n * D
-    mlp = 4 * n * D * F                       # wi + wo  (2*2*n*d*F)
-    return lin + q_enc + q_head + mlp, lin, q_enc, q_head, mlp
+    q_head = head_layers * 2 * n * n * D if with_head else 0
+    return proj + mlp + q_enc + q_head, proj, q_enc, q_head, mlp
 
 n0 = 1024
 tot0 = flops(n0)[0]
 print(f"d={D}  F={F}  22 layers = {L_FULL} full + {L_LOCAL} sliding (w={W})  head_layers={HEAD_LAYERS}")
 print(f"\n{'n':>7} {'total FLOPs':>16} {'ratio vs n=1024':>16} {'encoder q share':>16} {'head q share':>14}")
 for n in [61, 512, 1024, 2048, 3006, 3972, 4938, 5946, 6912, 8192]:
-    T, lin, qe, qh, mlp = flops(n)
+    T, proj, qe, qh, mlp = flops(n)
     print(f"{n:>7} {T:>16.4e} {T/tot0:>16.3f} {qe/T:>16.1%} {qh/T:>14.1%}")
 
-T8 = flops(8192)[0]
-print(f"\nMODELLED  FLOPs(8192)/FLOPs(1024) = {T8/tot0:.3f}x")
-Tgt = flops(7000)[0]
-print(f"MODELLED  FLOPs(7000)/FLOPs(1024) = {Tgt/tot0:.3f}x")
-print("theoretical closed form: ratio = (a + (2*L_FULL*n0 + (2W+1)*L_LOCAL)*n) / (a + b*n0)")
-print(f"  where a = 22*d^2 + 8*d*F = {22*D*D + 8*D*F:,},  b = 2*L_FULL*D = {2*L_FULL*D:,}")
-print("  -> the n^2 terms are 2*L_FULL*n0 = 16384 vs 0.5*(n+n0)*... - the ratio is")
-print(f"     ({2*L_FULL*n0 + (2*W+1)*L_LOCAL}*{8192} + {22*D*D+8*D*F}) / "
-      f"({2*L_FULL*n0 + (2*W+1)*L_LOCAL}*{1024} + {22*D*D+8*D*F})")
-num = (2*L_FULL*n0 + (2*W+1)*L_LOCAL)*8192 + (22*D*D + 8*D*F)
-den = (2*L_FULL*n0 + (2*W+1)*L_LOCAL)*1024 + (22*D*D + 8*D*F)
-print(f"     = {num/den:.3f}   (matches the FLOP table)")
+# closed form.  For n and n0 = 1024 both below saturation, encoder quadratic terms
+# contribute 2*L_FULL*n*d and the linear coefficient is
+#   b = 2*L_FULL*d (full-layer attn) + 2*L_LOCAL*(2w+1)*d (sliding attn) + 17*d^2 + 4*d*F
+b_c = 2 * L_FULL * D + 2 * L_LOCAL * (2 * W + 1) * D + 17 * D * D + 4 * D * F
+c_head = 2 * HEAD_LAYERS * D
+T8, T0 = flops(8192)[0], flops(1024)[0]
+print(f"\nMODELLED  FLOPs(8192)/FLOPs(1024) = {T8/T0:.3f}x")
+print(f"MODELLED  FLOPs(5946)/FLOPs(1024) = {flops(5946)[0]/T0:.3f}x")
+print(f"MODELLED  FLOPs(7000)/FLOPs(1024) = {flops(7000)[0]/T0:.3f}x")
+print(f"closed form: ratio = (b*n8 + c_head*n8^2) / (b*n0 + c_head*n0^2),")
+print(f"  b = 2*{L_FULL}*{D} + 2*{L_LOCAL}*{2*W+1}*{D} + 17*{D}^2 + 4*{D}*{F} = {b_c:,}")
+print(f"  c_head = 2*head_layers*d = {c_head:,}")
+num = b_c * 8192 + c_head * 8192**2
+den = b_c * 1024 + c_head * 1024**2
+print(f"  = ({b_c}*8192 + {c_head}*8192^2) / ({b_c}*1024 + {c_head}*1024^2) = {num/den:.3f}")
+print(f"  asymptote as n -> inf at fixed n0 = 1024: the n^2 terms dominate the numerator,")
+print(f"  so ratio/n = {T8/T0/8:.3f}  and ratio grows like n^2/(b*n0).")
 
-a_c = 22*D*D + 8*D*F
-cap = ((2*L_FULL*n0 + (2*W+1)*L_LOCAL)*8192 + a_c) / ((2*L_FULL*n0 + (2*W+1)*L_LOCAL)*n0 + a_c)
-print(f"\nBOUND: FLOPs(8192)/FLOPs(1024) <= {cap:.2f}x for ANY L_full >= 0 in this family.")
-print(f"  the n^2 term of a full layer at n=1024 costs 2*n0*d = {2*n0*D:,} FLOPs against the")
-print(f"  n-independent term {a_c:,} per layer, so at n=1024 the work is mostly linear and the")
-print(f"  ratio behaves like a linear-function ratio, asymptoting to 8192/1024 = 8x from below.")
+cap = T8 / T0
+print(f"\nBOUND: with L_full = {L_FULL} the FLOPs ratio is {cap:.2f}x. For the ratio to")
+print(f"  reach the headline 219x the model would need L_full*n0 >> n0 + ... ; solving")
+print(f"  (b'*8192 + c*8192^2)/(b'*1024 + c*1024^2) = 219 with b' scaled by x gives x = "
+      f"{(lambda: ( (219*(c_head*1024**2) - c_head*8192**2) / (b_c*8192 - 219*b_c*1024) )())():.3f}")
+print(f"  i.e. the ratio is bounded by the RATIO OF LINEAR COEFFICIENTS, ~{8192/1024:.0f}x-"
+      f"{cap:.1f}x in this regime, never 219x.")
 
 # ============================================================= 4 MEASURED DATA
 hr("4. MEASURED UPSTREAM DATA + NORMALISED COMPARISON")

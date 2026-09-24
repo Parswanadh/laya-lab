@@ -4,28 +4,28 @@
 ==============================================================================
 marker at 300, n = 8192 (max possible distance 7891)
 layer  type               |S_t| ancestral  half-width  per-hop horizon  closed form R_k check   
-    0  full_attention                8192        7891               64              128 MISMATCH
-    1  sliding_attention             8192        7891              128
-    2  sliding_attention             8192        7891              192
-    3  full_attention                8192        7891              384              960 MISMATCH
-    4  sliding_attention             8192        7891              448
-    5  sliding_attention             8192        7891              512
-    6  full_attention                8192        7891             1024             1984 MISMATCH
-    7  sliding_attention             8192        7891             1088
-    8  sliding_attention             8192        7891             1152
-    9  full_attention                8192        7891             2304             4032 MISMATCH
-   10  sliding_attention             8192        7891             2368
-   11  sliding_attention             8192        7891             2432
-   12  full_attention                8192        7891             4864             8128 MISMATCH
-   13  sliding_attention             8192        7891             4928
-   14  sliding_attention             8192        7891             4992
-   15  full_attention                8192        7891             9984            16320 OK      
-   16  sliding_attention             8192        7891            10048
-   17  sliding_attention             8192        7891            10112
-   18  full_attention                8192        7891            20224            32704 OK      
-   19  sliding_attention             8192        7891            20288
-   20  sliding_attention             8192        7891            20352
-   21  full_attention                8192        7891            40704            65472 OK      
+    0  full_attention                8192        7891              128              128 OK      
+    1  sliding_attention             8192        7891              192
+    2  sliding_attention             8192        7891              256
+    3  full_attention                8192        7891              512              960 MISMATCH
+    4  sliding_attention             8192        7891              576
+    5  sliding_attention             8192        7891              640
+    6  full_attention                8192        7891             1280             1984 MISMATCH
+    7  sliding_attention             8192        7891             1344
+    8  sliding_attention             8192        7891             1408
+    9  full_attention                8192        7891             2816             4032 MISMATCH
+   10  sliding_attention             8192        7891             2880
+   11  sliding_attention             8192        7891             2944
+   12  full_attention                8192        7891             5888             8128 MISMATCH
+   13  sliding_attention             8192        7891             5952
+   14  sliding_attention             8192        7891             6016
+   15  full_attention                8192        7891            12032            16320 OK      
+   16  sliding_attention             8192        7891            12096
+   17  sliding_attention             8192        7891            12160
+   18  full_attention                8192        7891            24320            32704 OK      
+   19  sliding_attention             8192        7891            24384
+   20  sliding_attention             8192        7891            24448
+   21  full_attention                8192        7891            48896            65472 OK      
 
 RESULT A (exact ancestral set): because LAYER 0 IS GLOBAL, S_0 = [0, n) after a
 single layer. Every token in the sequence, however far, is an ancestor of the
