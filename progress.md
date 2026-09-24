@@ -434,3 +434,54 @@ the easy cells**. Caveats recorded: single seed, not converged at 12 epochs.
 — cross-attention added *in parallel* with `out_proj` **zero-initialised**, so at step 0 arm3 ≡ arm2
 bit-for-bit and any gain is attributable to the architecture; `V-002` (issue #12) independently
 verifies the pipeline end to end and the arm2 claim from raw JSONL.
+
+---
+
+## 2026-09-25 · V-002 — independent verification: everything reproduced, one promotion caveat
+
+**Artifacts.** `findings/V-002.md`, `experiments/V-002/` · issue #12 · verifier did not produce any of it.
+
+### Reproduced, bit-for-bit
+- **End-to-end re-run** of arm1 and arm2 from pinned revision `54cff08`: **2200/2200 items, 0
+  prediction mismatches, max |Δp| = 0.0.**
+- **Split disjointness** re-established by the verifier's own content hashing: 0/96 shared
+  templates, 0 shared rendered needles across 800 eval × 1008 train, 0 shared slot values. Longest
+  shared word n-gram = 4, and it is pure function words.
+- **All 2200 eval documents rebuilt at token level**: `needle_token_start == round(p·pad)`, pad
+  exact after re-tokenisation, `state_sha256` matches an independent rebuild. Position-only oracle
+  exactly **0.2500** in every grouping. The ablated cell is verified needle-free **by token-id
+  subsequence**, not by a flag.
+- **arm2 statistics**: +9.00pp at L7000-p100 (exact McNemar p=2.102e-03), +16.50pp at L4000-p050
+  (p=3.609e-08), L0 −2.00pp (p=0.2891). **Holm: all 5 positive cells survive** (m=8).
+  **The pairing is load-bearing** — the wrong independent test gives p=0.067 at the primary cell
+  instead of 0.0021.
+
+### ⚠ The caveat that governs how this may be quoted
+**arm1/arm2 bootstrap CIs OVERLAP at both headline cells**: L7000-p100 [0.300, 0.435] vs
+[0.385, 0.525]; L4000-p100 [0.345, 0.485] vs [0.425, 0.565]. **Only `L4000-p050` and `L4000-p075`
+satisfy BOTH prongs** (non-overlapping CIs *and* a surviving paired test). At the primary cell the
+effect satisfies the **paired prong only**, so under our own `roles/README.md` promotion rule it is
+**not yet a promoted baseline**.
+
+**arm2 is also single-seed** (seed 0), so protocol §6's "gain must exceed the seed spread" is not
+evidenced. Seeds 1–2 retrains are queued.
+
+### What the attacks found
+- Position-only oracle is 0.2500 in every cell; slot-value shortcut oracle is at chance.
+- No *scored* cell collapses to a single answer (arm1 max modal share 0.96, arm2 0.73); only the
+  ablated cell is 1.00.
+- **arm1's above-oracle mid-document score is essentially an "always technical" prior** — technical
+  accuracy 0.96–1.00, **`other` accuracy 0.00**.
+- **arm2's gain is a genuine content gain but partial**: it concentrates in billing (+17..+25
+  discordant) and sales (+5..+15) with a small technical loss (−3..−7); its swapped-needle
+  follows-content accuracy rises to 0.415 from arm1's 0.275 (chance).
+
+### Defects filed (verifier fixed nothing)
+- **#13** `leakage_report.json` c6 is stale (true max Jaccard 0.3158 vs reported 0.2222; gate is
+  0.60, so no verdict changes).
+- **#14** H5 artifacts depend on an **uncommitted fork worktree**, and `laya/common.py` in it was
+  **edited by another agent during verification** (a0425683 → 134bc965). Runs still matched
+  bit-for-bit, but the revision is **unpinned** — must be pinned before any PR.
+- **#15** the L-038 numbers have **no committed generator** (`stats.py`'s `CANDIDATE_FAMILY`
+  excludes arm2), and `stats.py`'s `PRIMARY_CELL` is `L4000-p100` whereas the pre-registered
+  primary cell is `L7000-p100`.
