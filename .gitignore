@@ -1,0 +1,7 @@
+env/
+worktrees/
+*.log
+__pycache__/
+*.pyc
+.cache/
+models/
