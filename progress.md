@@ -485,3 +485,33 @@ evidenced. Seeds 1–2 retrains are queued.
 - **#15** the L-038 numbers have **no committed generator** (`stats.py`'s `CANDIDATE_FAMILY`
   excludes arm2), and `stats.py`'s `PRIMARY_CELL` is `L4000-p100` whereas the pre-registered
   primary cell is `L7000-p100`.
+
+---
+
+## 2026-09-25 · Fork branch validated end to end (PR readiness)
+
+Branch `exp/h5-adapter` on `Parswanadh/laya`, 2 commits ahead of `upstream/main`:
+
+```
+99020ba feat(common): parallel residual cross-attention head with a zero-initialised output projection
+c8d0d28 feat(common): selectable cross-attention aggregation head for the decision path
+ laya/common.py                     | 210 +++++++++++++++++++++++++--
+ tests/test_cross_attention_head.py | 286 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 484 insertions(+), 12 deletions(-)
+```
+
+A focused, PR-shaped diff: one source file, one test file, conventional commits, and the new head
+is **selectable** so upstream's default path is untouched.
+
+| gate | result |
+|---|---|
+| `ruff check laya/ --select=E9,F63,F7,F82,F401,F811 --line-length=120` | **All checks passed** |
+| `python -m compileall -q laya/ tests/` | **OK** |
+| `tests/test_cross_attention_head.py` (the new suite) | **31 passed, 0 failed** |
+| `tests/test_hooks_api.py` (upstream API contract) | **PASS** |
+| `tests/test_router.py` | **PASS** |
+| `tests/test_criteria.py` | **PASS** |
+| `tests/test_hooks.py` | **PASS** |
+
+Working tree clean, branch pushed to `origin`. **Defect #14 is now materially addressed** — the
+branch is committed and pinned at `99020ba` rather than living in an uncommitted worktree.
