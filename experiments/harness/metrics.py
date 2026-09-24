@@ -18,6 +18,57 @@ import statistics
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 
+def macro_f1(rows: Sequence[Dict[str, Any]]) -> float:
+    """Macro-F1 over the gold labels present in the cell. Predictions of a non-gold option
+    (``other``) count as errors for the label they should have been."""
+    gold = sorted({r["label"] for r in rows})
+    if not gold:
+        return float("nan")
+    scores = []
+    for lb in gold:
+        tp = sum(1 for r in rows if r["prediction"] == lb and r["label"] == lb)
+        fp = sum(1 for r in rows if r["prediction"] == lb and r["label"] != lb)
+        fn = sum(1 for r in rows if r["prediction"] != lb and r["label"] == lb)
+        denom = 2 * tp + fp + fn
+        scores.append((2 * tp / denom) if denom else 0.0)
+    return sum(scores) / len(scores)
+
+
+def position_only_oracle(rows: Sequence[Dict[str, Any]],
+                         group_fields: Tuple[str, ...] = ("pad_tokens", "needle_position")) -> Dict[str, Any]:
+    """Best accuracy achievable by answering from needle position alone.
+
+    For every group (default: one cell) the oracle answers that group's majority gold label. A
+    candidate whose accuracy is not above this has learned nothing about document content.
+    """
+    groups: Dict[Tuple[Any, ...], List[Dict[str, Any]]] = {}
+    for r in rows:
+        groups.setdefault(tuple(r[f] for f in group_fields), []).append(r)
+    total = 0
+    hits = 0
+    per_group = {}
+    for key, rs in sorted(groups.items(), key=lambda kv: tuple(str(x) for x in kv[0])):
+        counts: Dict[str, int] = {}
+        for r in rs:
+            counts[r["label"]] = counts.get(r["label"], 0) + 1
+        best_label, best = max(counts.items(), key=lambda kv: (kv[1], kv[0]))
+        total += len(rs)
+        hits += best
+        per_group["|".join(str(x) for x in key)] = {"n": len(rs), "oracle_label": best_label,
+                                                    "oracle_accuracy": best / len(rs),
+                                                    "label_distribution": counts}
+    return {"group_fields": list(group_fields), "n": total,
+            "oracle_accuracy": (hits / total) if total else float("nan"),
+            "per_group": per_group}
+
+
+def random_baselines(options: Sequence[str], gold_labels: Sequence[str]) -> Dict[str, float]:
+    """1/|options| for a blind guess over the answer options, and 1/|gold labels| for a guess
+    restricted to the labels that actually occur."""
+    return {"random_over_options": 1.0 / max(1, len(options)),
+            "random_over_gold_labels": 1.0 / max(1, len(set(gold_labels)))}
+
+
 def accuracy(rows: Sequence[Dict[str, Any]]) -> float:
     if not rows:
         return float("nan")
@@ -130,10 +181,12 @@ def cell_summary(rows: Sequence[Dict[str, Any]], n_boot: int = 10000, seed: int 
         "n": len(rows),
         "correct": sum(1 for c in correct if c),
         "accuracy": accuracy(rows),
+        "macro_f1": macro_f1(rows),
         "accuracy_ci95_low": lo,
         "accuracy_ci95_high": hi,
         "accuracy_ci_method": "percentile bootstrap over items, n_boot=%d, seed=%d" % (n_boot, seed),
         "majority_class_accuracy": majority_class_accuracy(labels),
+        "random_baselines": (random_baselines(rows[0]["options"], labels) if rows else {}),
         "modal_prediction": modal_label,
         "modal_prediction_share": modal_share,
         "predicted_distribution": predicted_distribution(rows),
@@ -150,6 +203,9 @@ def cell_summary(rows: Sequence[Dict[str, Any]], n_boot: int = 10000, seed: int 
         "pad_exact_all": all(bool(r.get("pad_exact")) for r in rows) if rows else None,
     }
     out.update(latency_stats(rows))
+    total_latency = sum(float(r["latency_s"]) for r in rows)
+    total_tokens = sum(int(r["input_tokens"]) for r in rows)
+    out["tokens_per_second"] = (total_tokens / total_latency) if total_latency > 0 else None
     return out
 
 

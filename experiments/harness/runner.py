@@ -19,7 +19,7 @@ from backends import LayaBackend, StubBackend
 from builder import DocBuilder, doc_row_fields
 from checks import mechanism_checks, report, structural_checks
 from manifest import build_manifest, memory_state, gpu_state, utc_now, write_json
-from metrics import cell_summary
+from metrics import cell_summary, position_only_oracle
 import pools as pools_mod
 
 
@@ -194,7 +194,8 @@ def run_sweep(cfg: Dict[str, Any]) -> int:
         {k: leakage[k] for k in ("needle_vocab_size", "filler_vocab_size", "content_word_overlap",
                                  "stem_hits")}, ensure_ascii=False))
 
-    items_info = pools_mod.build_items(needle_pool, cfg["n"], cfg["seed"])
+    items_info = pools_mod.build_items(needle_pool, cfg["n"], cfg["seed"],
+                                       languages=cfg.get("languages"))
     items = items_info["items"]
     log("items: n=%d label_counts=%s balance_ok=%s langs=%s"
         % (items_info["n"], items_info["label_counts"], items_info["balance_ok"],
@@ -252,6 +253,44 @@ def run_sweep(cfg: Dict[str, Any]) -> int:
         {k: it[k] for k in ("item_index", "item_id", "label", "lang", "template_id", "slots", "text")}
         for it in items]
     manifest["dry_run"] = bool(cfg["dry_run"])
+    if needle_pool.get("kind") == "upstream":
+        manifest["pools"]["upstream_transcription_check"] = pools_mod.verify_upstream_transcription(
+            needle_pool, fork / "research" / "scripts" / "bench_long_context.py")
+    manifest["protocol"] = {
+        "protocol_md": "protocol.md (frozen, 2026-09-24)",
+        "task": "synthetic needle-in-haystack decision; NOT evidence about real long documents (protocol section 10)",
+        "label_balanced": items_info["balance_ok"],
+        "label_counts": items_info["label_counts"],
+        "n_per_cell": cfg["n"],
+        "protocol_n_requirement": ("protocol section 3 requires n>=200 for a number quoted as a "
+                                   "result; this run is n=%d and every table must carry that n"
+                                   % cfg["n"]),
+        "L_axis": sorted({int(p) for p in cfg["pads"]}),
+        "L_cells_skipped": ("L=8192/16000/32000 from protocol section 2 are not run: the baseline "
+                            "question is the shipped 1024 limit versus 8192, and the encoder's "
+                            "max_position_embeddings is 8192 so longer L is an arm-side question, "
+                            "not a baseline one"),
+        "position_axis": sorted({float(p) for p in cfg["positions"]}),
+        "max_len_axis": [str(x) for x in cfg["max_lens"]],
+        "head_max_len_axis": [str(x) for x in cfg["head_max_lens"]],
+        "languages": cfg.get("languages") or "all pool languages",
+        "warmup": ("3 discarded forward passes after load, then one discarded pass per cell before "
+                   "the first timed item (protocol section 8 asks for >=3 before any timing)"),
+        "gpu_lock": lock_info,
+        "gpu_lock_held_for_timings": bool(lock_info.get("held")),
+        "torch_deterministic_algorithms": False,
+        "torch_deterministic_note": ("not enabled; instead the sweep re-runs the first cell and "
+                                     "records repeat_prediction_agreement, which is the property "
+                                     "that matters here"),
+        "raw_per_item_predictions": "predictions.jsonl (one row per cell per item)",
+        "baselines_reported": ["random_over_options", "random_over_gold_labels", "majority_class",
+                               "position_only_oracle"],
+        "baselines_unavailable": {
+            "predict_long_PR_363": "not present in fork @ %s" % (
+                __import__("manifest").git_state(fork).get("sha")),
+            "library_versions_and_git": "host.versions + git block",
+        },
+    }
     manifest["harness_files"] = {
         name: {"sha256": pools_mod.sha256_file(Path(__file__).resolve().parent / name)}
         for name in ("run.py", "runner.py", "builder.py", "pools.py", "metrics.py", "backends.py",
@@ -262,10 +301,12 @@ def run_sweep(cfg: Dict[str, Any]) -> int:
     write_json(out_dir / "manifest.json", manifest)
     write_json(out_dir / "summary.json", summary)
 
-    # ---- global warm-up -----------------------------------------------------
+    # ---- global warm-up (protocol section 8: >=3 discarded passes) -----------
     try:
-        backend.predict(items[0]["text"], questions, max_len=shipped_max, head_max_len=shipped_head)
-        log("global warm-up done")
+        for w in range(3):
+            st = items[w % len(items)]["text"]
+            backend.predict(st, questions, max_len=shipped_max, head_max_len=shipped_head)
+        log("global warm-up done (3 discarded passes at shipped max_len=%d)" % shipped_max)
     except Exception as e:
         log("global warm-up failed (continuing): %r" % e)
 
@@ -326,6 +367,59 @@ def run_sweep(cfg: Dict[str, Any]) -> int:
         log.close()
         raise
 
+    # ---- read the raw artifact back; every number below comes from it --------
+    all_rows: List[Dict[str, Any]] = []
+    with open(out_dir / "predictions.jsonl", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                all_rows.append(json.loads(line))
+
+    # ---- protocol-required reference numbers, from the same raw rows ---------
+    summary["baselines"] = {
+        "random_over_options": 1.0 / len(all_rows[0]["options"]) if all_rows else None,
+        "random_over_gold_labels": 1.0 / len({r["label"] for r in all_rows}) if all_rows else None,
+        "majority_class_accuracy_per_cell": {c["cell_key"]: c["majority_class_accuracy"]
+                                             for c in summary["cells"]},
+        "position_only_oracle": position_only_oracle(all_rows),
+    }
+
+    # ---- repeat check: is inference reproducible on this box? ---------------
+    if cfg.get("repeat_check_items", 0):
+        first = cells[0]
+        subset = list(items)[: cfg["repeat_check_items"]]
+        agree = 0
+        max_delta = 0.0
+        prior = {r["item_id"]: r for r in all_rows if r["cell"] == first["cell_key"]}
+        for it in subset:
+            doc = builder.build(it, first["pad_tokens"], first["needle_position"], cfg["seed"])
+            out = backend.predict(doc["state"], questions,
+                                  max_len=None if first["max_len_requested"] == "default" else first["max_len_effective"],
+                                  head_max_len=None if first["head_max_len_requested"] == "default" else first["head_max_len_effective"])
+            ans = out["result"]["answers"][qid]
+            prev = prior.get(it["item_id"])
+            if prev is None:
+                continue
+            agree += 1 if ans["choice"] == prev["prediction"] else 0
+            for k, v in ans["probabilities"].items():
+                max_delta = max(max_delta, abs(float(v) - float(prev["probabilities"][k])))
+        n_cmp = len(subset)
+        summary["repeat_check"] = {
+            "cell": first["cell_key"], "items": n_cmp,
+            "prediction_agreement": (agree / n_cmp) if n_cmp else None,
+            "max_abs_probability_delta": max_delta,
+            "note": "same process, same seeds, same inputs, GPU lock held for both passes",
+        }
+        log("repeat check: %d/%d identical predictions, max |dp| = %.6f"
+            % (agree, n_cmp, max_delta))
+
+    try:
+        import torch
+        if torch.cuda.is_available():
+            summary["peak_vram_allocated_bytes"] = int(torch.cuda.max_memory_allocated())
+            summary["peak_vram_reserved_bytes"] = int(torch.cuda.max_memory_reserved())
+    except Exception:
+        pass
+
     manifest["status"] = "finished"
     manifest["finished_utc"] = utc_now()
     manifest["wall_seconds"] = round(time.time() - t_start, 3)
@@ -339,12 +433,7 @@ def run_sweep(cfg: Dict[str, Any]) -> int:
     ok_mech = True
     if cfg.get("mechanism_checks", True):
         log("--- mechanism checks (rebuild from seed) ---")
-        rows = []
-        with open(out_dir / "predictions.jsonl", encoding="utf-8") as fh:
-            for line in fh:
-                if line.strip():
-                    rows.append(json.loads(line))
-        ok_mech = report(mechanism_checks(builder, items, cells, cfg["seed"], rows), log=log)
+        ok_mech = report(mechanism_checks(builder, items, cells, cfg["seed"], all_rows), log=log)
     summary["notes"].append("structural_checks_passed=%s" % ok_struct)
     summary["notes"].append("mechanism_checks_passed=%s" % ok_mech)
     summary["manifest_status"] = manifest["status"]

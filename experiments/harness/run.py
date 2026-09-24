@@ -55,6 +55,8 @@ DEFAULTS = {
     "stub_max_len": 64,
     "stub_head_max_len": 24,
     "memory_cap": os.environ.get("LAYA_MEMORY_CAP", "not recorded"),
+    "languages": None,
+    "repeat_check_items": 20,
 }
 
 
@@ -94,7 +96,7 @@ def build_config(args) -> dict:
         cfg["preset"] = args.preset
     # explicit CLI flags win over the preset
     for key in ("out", "pool", "filler_pool", "n", "seed", "device", "checkpoint", "subfolder",
-                "n_boot", "stub_max_len", "stub_head_max_len"):
+                "n_boot", "stub_max_len", "stub_head_max_len", "repeat_check_items"):
         val = getattr(args, key, None)
         if val is not None:
             cfg[key] = val
@@ -103,6 +105,8 @@ def build_config(args) -> dict:
         val = getattr(args, key, None)
         if val is not None:
             cfg[key] = conv(val)
+    if args.languages is not None:
+        cfg["languages"] = [x.strip().lower() for x in args.languages.split(",") if x.strip()]
     if args.dry_run:
         cfg["dry_run"] = True
     if args.allow_low_mem:
@@ -152,6 +156,9 @@ def main(argv=None) -> int:
     ap.add_argument("--checkpoint")
     ap.add_argument("--subfolder")
     ap.add_argument("--dry-run", action="store_true", help="stub tokenizer + tiny random model")
+    ap.add_argument("--languages", help="comma list of languages to draw items from (default: all)")
+    ap.add_argument("--repeat-check-items", dest="repeat_check_items", type=int,
+                    help="re-run this many items of the first cell and record agreement (0 disables)")
     ap.add_argument("--tag", default="", help="suffix for the run id")
     ap.add_argument("--n-boot", dest="n_boot", type=int, help="bootstrap resamples (default 10000)")
     ap.add_argument("--allow-low-mem", action="store_true")
@@ -183,7 +190,8 @@ def main(argv=None) -> int:
         needle_pool = pools_mod.load_pool(cfg["pool"])
         filler_pool = pools_mod.load_pool(cfg["filler_pool"])
         leak = pools_mod.leakage_report(needle_pool, filler_pool)
-        items_info = pools_mod.build_items(needle_pool, cfg["n"], cfg["seed"])
+        items_info = pools_mod.build_items(needle_pool, cfg["n"], cfg["seed"],
+                                           languages=cfg.get("languages"))
         smax, shead = shipped_defaults_from_config(cfg["checkpoint"])
         cells = resolve_cells(cfg["pads"], cfg["positions"], cfg["max_lens"], cfg["head_max_lens"],
                               smax, shead)
@@ -193,6 +201,7 @@ def main(argv=None) -> int:
         print("filler pool : %s (%s)" % (filler_pool["pool_id"], filler_pool["_sha256"][:12]))
         print("leakage     : passed=%s content_overlap=%s stems=%s"
               % (leak["passed"], leak["content_word_overlap"], leak["stem_hits"]))
+        print("languages   : %s" % (cfg.get("languages") or "all in pool"))
         print("items       : n=%d label_counts=%s balance_ok=%s lang_counts=%s"
               % (items_info["n"], items_info["label_counts"], items_info["balance_ok"],
                  items_info["lang_counts"]))

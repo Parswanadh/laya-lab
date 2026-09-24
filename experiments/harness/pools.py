@@ -185,12 +185,21 @@ def render_template(text: str, fill: Dict[str, str]) -> str:
     return out
 
 
-def build_items(pool: Dict[str, Any], n: int, seed: int) -> Dict[str, Any]:
-    """Deterministic item list. Same (pool, n, seed) -> byte-identical items, in any process."""
+def build_items(pool: Dict[str, Any], n: int, seed: int,
+                languages: Optional[List[str]] = None) -> Dict[str, Any]:
+    """Deterministic item list. Same (pool, n, seed, languages) -> byte-identical items, in any
+    process."""
+    if languages:
+        wanted = {str(x).lower() for x in languages}
+        have = {t["lang"] for t in pool.get("templates", [])} | {r["lang"] for r in pool.get("requests", [])}
+        missing = sorted(wanted - have)
+        if missing:
+            raise ValueError("pool %s has no items for language(s) %s (has %s)"
+                             % (pool["pool_id"], missing, sorted(have)))
     if pool.get("kind") == "balanced":
-        items = _balanced_items(pool, n, seed)
+        items = _balanced_items(pool, n, seed, languages)
     else:
-        items = _upstream_items(pool, n)
+        items = _upstream_items(pool, n, languages)
     order = random.Random("%d|order|%s" % (seed, pool["pool_id"]))
     order.shuffle(items)
     for i, it in enumerate(items):
@@ -211,25 +220,65 @@ def build_items(pool: Dict[str, Any], n: int, seed: int) -> Dict[str, Any]:
     }
 
 
-def _balanced_items(pool: Dict[str, Any], n: int, seed: int) -> List[Dict[str, Any]]:
+def _balanced_items(pool: Dict[str, Any], n: int, seed: int,
+                    languages: Optional[List[str]] = None) -> List[Dict[str, Any]]:
     """Label-balanced and language-balanced item draw.
 
-    The draw walks a seeded order of (label, language) pairs and takes one item from each pair per
-    pass, stopping when a label hits its quota. Every label therefore ends within one item of every
-    other, and every language gets a turn before any pair is drawn twice, so at n=20 all eight
-    languages are covered 2-3 times each rather than by luck.
+    The draw is an allocation over the (label, language) contingency table with *both* marginals
+    fixed: every label gets ``n // 3`` (+1 for the remainder) and every language gets ``n // 8``
+    (+1 for the remainder). Each cell is then filled from its own queue of (template, slot-fill)
+    combinations. Two consequences a reviewer can check without re-running anything:
+
+    * a constant answer cannot beat ~1/3 on any cell of any run, and
+    * the language mix is the same inside every label, so neither label nor language can carry a
+      signal the other does not have.
     """
     labels = list(pool["labels"])
     if n < len(labels):
         raise ValueError("n=%d is smaller than the %d labels" % (n, len(labels)))
-    counts = {lb: n // len(labels) for lb in labels}
+
+    label_counts = {lb: n // len(labels) for lb in labels}
     for lb in labels[: n % len(labels)]:
-        counts[lb] += 1
+        label_counts[lb] += 1
 
     slots = pool["slots"]
+    wanted = {str(x).lower() for x in languages} if languages else None
     by_pair: Dict[Any, List[Dict[str, Any]]] = {}
     for tpl in pool["templates"]:
+        if wanted is not None and tpl["lang"].lower() not in wanted:
+            continue
         by_pair.setdefault((tpl["label"], tpl["lang"]), []).append(tpl)
+
+    pairs = sorted(by_pair)
+    langs = sorted({lang for _lb, lang in pairs})
+    lang_counts = {lg: n // len(langs) for lg in langs}
+    lang_order = list(langs)
+    random.Random("%d|langs" % seed).shuffle(lang_order)
+    for lg in lang_order[: n % len(langs)]:
+        lang_counts[lg] += 1
+
+    # allocate cell counts so that both marginals come out exactly as requested
+    base = n // len(pairs)
+    cell = {p: base for p in pairs}
+    label_need = {lb: label_counts[lb] - base * len(langs) for lb in labels}
+    lang_need = {lg: lang_counts[lg] - base * len(labels) for lg in langs}
+    pair_order = list(pairs)
+    random.Random("%d|pairs" % seed).shuffle(pair_order)
+    pair_rank = {p: i for i, p in enumerate(pair_order)}
+    while sum(label_need.values()) > 0:
+        progressed = False
+        # Top up the least-loaded cell first so the remainder round-robins over the cells instead
+        # of piling onto whichever pair happens to come first. With exact marginals on both sides
+        # this keeps every label's language mix within one item of even.
+        for (lb, lg) in sorted(pairs, key=lambda p: (cell[p], pair_rank[p])):
+            if label_need[lb] > 0 and lang_need[lg] > 0:
+                cell[(lb, lg)] += 1
+                label_need[lb] -= 1
+                lang_need[lg] -= 1
+                progressed = True
+        if not progressed:
+            raise ValueError("pool %s cannot satisfy labels=%s and languages=%s at n=%d"
+                             % (pool["pool_id"], label_counts, lang_counts, n))
 
     queues: Dict[Any, List[Dict[str, Any]]] = {}
     for (label, lang), tpls in by_pair.items():
@@ -238,28 +287,16 @@ def _balanced_items(pool: Dict[str, Any], n: int, seed: int) -> List[Dict[str, A
             for fill in _slot_combos(tpl, slots):
                 combos.append({"template": tpl, "fill": fill})
         random.Random("%d|%s|%s" % (seed, label, lang)).shuffle(combos)
-        queues[(label, lang)] = combos
+        need = cell[(label, lang)]
+        if need > len(combos):
+            raise ValueError("pool %s has %d combos for %s/%s but needs %d"
+                             % (pool["pool_id"], len(combos), label, lang, need))
+        queues[(label, lang)] = combos[:need]
 
-    order = sorted(queues)
-    random.Random("%d|pairs" % seed).shuffle(order)
-
-    got = {lb: 0 for lb in labels}
-    cursor = {k: 0 for k in order}
     items: List[Dict[str, Any]] = []
-    total = sum(counts.values())
-    while len(items) < total:
-        progressed = False
-        for key in order:
-            if len(items) >= total:
-                break
-            label, lang = key
-            if got[label] >= counts[label]:
-                continue
-            q = queues[key]
-            if cursor[key] >= len(q):
-                continue
-            combo = q[cursor[key]]
-            cursor[key] += 1
+    for key in pairs:
+        label, lang = key
+        for combo in queues[key]:
             tpl, fill = combo["template"], combo["fill"]
             text = render_template(tpl["text"], fill)
             items.append({
@@ -271,15 +308,16 @@ def _balanced_items(pool: Dict[str, Any], n: int, seed: int) -> List[Dict[str, A
                 "text": text,
                 "split": "eval",
             })
-            got[label] += 1
-            progressed = True
-        if not progressed:
-            raise ValueError("pool %s cannot supply %s items" % (pool["pool_id"], counts))
+    assert len(items) == n, (len(items), n)
     return items
 
 
-def _upstream_items(pool: Dict[str, Any], n: int) -> List[Dict[str, Any]]:
+def _upstream_items(pool: Dict[str, Any], n: int,
+                    languages: Optional[List[str]] = None) -> List[Dict[str, Any]]:
     reqs = pool["requests"]
+    if languages:
+        wanted = {str(x).lower() for x in languages}
+        reqs = [r for r in reqs if r["lang"].lower() in wanted]
     if n > len(reqs):
         raise ValueError(
             "pool %s is the verbatim upstream request list (%d items); n=%d would duplicate "

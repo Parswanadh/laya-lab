@@ -5,9 +5,25 @@
     "authored_by": "engineer agent, laya-lab, 2026",
     "basis": "authored for this harness. Modelled on the 20 requests in fork/research/scripts/bench_long_context.py (same 8 languages, same 3 answerable departments, same question), but written independently so that the pool can be scaled past n=20 and is label-balanced.",
     "upstream_reference": "fork/research/scripts/bench_long_context.py @ 9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5",
-    "note": "No text is copied from the upstream request list; the overlap is the task shape only. Numeric slots are drawn from one shared pool for every label and every language, so the digits a document contains carry no label signal. Languages rotate within each label, so language carries no label signal."
+    "note": "No text is copied from the upstream request list; the overlap is the task shape only. Numeric slots are drawn from one shared pool for every label and every language, so the digits a document contains carry no label signal. Languages rotate within each label, so language carries no label signal.",
+    "languages": [
+      "ar",
+      "de",
+      "en",
+      "es",
+      "fr",
+      "hi",
+      "ja",
+      "pt",
+      "zh"
+    ],
+    "protocol_language_axis": "protocol.md section 2 lists en, es, hi, ja, ar, zh; the pool carries those six plus pt, fr and de (the languages upstream's request list used), nine languages in total"
   },
-  "labels": ["billing", "technical", "sales"],
+  "labels": [
+    "billing",
+    "technical",
+    "sales"
+  ],
   "question": {
     "department": {
       "type": "choice",
@@ -21,82 +37,507 @@
     }
   },
   "slots": {
-    "num": ["4411", "7782", "1209", "5530", "3097", "8824", "2615", "7043", "1927", "6380", "8154", "2746"]
+    "num": [
+      "4411",
+      "7782",
+      "1209",
+      "5530",
+      "3097",
+      "8824",
+      "2615",
+      "7043",
+      "1927",
+      "6380",
+      "8154",
+      "2746"
+    ]
   },
   "templates": [
-    {"id": "billing-en-1", "label": "billing", "lang": "en", "text": "I was charged twice for invoice {num}, please refund the duplicate payment."},
-    {"id": "billing-en-2", "label": "billing", "lang": "en", "text": "The receipt for order {num} shows a repeated line; please reverse the second payment."},
-    {"id": "billing-en-3", "label": "billing", "lang": "en", "text": "My card was billed again for subscription {num} after I cancelled it."},
-    {"id": "billing-es-1", "label": "billing", "lang": "es", "text": "Me cobraron dos veces la factura {num}, devuélvanme el cargo duplicado."},
-    {"id": "billing-es-2", "label": "billing", "lang": "es", "text": "El recibo del pedido {num} muestra un cobro repetido, quiero el reembolso."},
-    {"id": "billing-es-3", "label": "billing", "lang": "es", "text": "Volvieron a cobrar la suscripción {num} después de que la cancelé."},
-    {"id": "billing-pt-1", "label": "billing", "lang": "pt", "text": "Fui cobrado duas vezes na fatura {num}, quero o reembolso da cobrança duplicada."},
-    {"id": "billing-pt-2", "label": "billing", "lang": "pt", "text": "O recibo do pedido {num} tem uma linha repetida, peço o estorno do valor."},
-    {"id": "billing-pt-3", "label": "billing", "lang": "pt", "text": "Cobraram novamente a assinatura {num} depois que eu cancelei."},
-    {"id": "billing-fr-1", "label": "billing", "lang": "fr", "text": "J'ai été facturé deux fois pour la facture {num}, merci de rembourser le doublon."},
-    {"id": "billing-fr-2", "label": "billing", "lang": "fr", "text": "Le reçu de la commande {num} contient une ligne en double, je demande le remboursement."},
-    {"id": "billing-fr-3", "label": "billing", "lang": "fr", "text": "L'abonnement {num} a été débité de nouveau après mon annulation."},
-    {"id": "billing-de-1", "label": "billing", "lang": "de", "text": "Ich wurde zweimal für Rechnung {num} belastet, bitte erstatten Sie die doppelte Zahlung."},
-    {"id": "billing-de-2", "label": "billing", "lang": "de", "text": "Die Quittung für Bestellung {num} zeigt eine doppelte Position, bitte erstatten Sie den Betrag."},
-    {"id": "billing-de-3", "label": "billing", "lang": "de", "text": "Das Abonnement {num} wurde nach meiner Kündigung erneut abgebucht."},
-    {"id": "billing-hi-1", "label": "billing", "lang": "hi", "text": "मुझसे बिल {num} के लिए दो बार शुल्क लिया गया, कृपया डुप्लिकेट भुगतान वापस करें।"},
-    {"id": "billing-hi-2", "label": "billing", "lang": "hi", "text": "ऑर्डर {num} की रसीद में दोहरी प्रविष्टि है, कृपया राशि वापस करें।"},
-    {"id": "billing-hi-3", "label": "billing", "lang": "hi", "text": "रद्द करने के बाद भी सदस्यता {num} का शुल्क फिर लिया गया।"},
-    {"id": "billing-ja-1", "label": "billing", "lang": "ja", "text": "請求書 {num} が二重に請求されました。重複分を返金してください。"},
-    {"id": "billing-ja-2", "label": "billing", "lang": "ja", "text": "注文 {num} の領収書に重複した行があります。返金をお願いします。"},
-    {"id": "billing-ja-3", "label": "billing", "lang": "ja", "text": "解約したのに購読 {num} の料金が再度請求されました。"},
-    {"id": "billing-ar-1", "label": "billing", "lang": "ar", "text": "تم خصم المبلغ مرتين من بطاقتي للفاتورة {num}، أرجو استرداد المبلغ المكرر."},
-    {"id": "billing-ar-2", "label": "billing", "lang": "ar", "text": "إيصال الطلب {num} يحتوي على سطر مكرر، أرجو إعادة المبلغ."},
-    {"id": "billing-ar-3", "label": "billing", "lang": "ar", "text": "تم خصم الاشتراك {num} مرة أخرى بعد أن ألغيته."},
-
-    {"id": "technical-en-1", "label": "technical", "lang": "en", "text": "The dashboard crashes with an error every time I open report {num}."},
-    {"id": "technical-en-2", "label": "technical", "lang": "en", "text": "Our API returns 500 errors for request {num} since this morning."},
-    {"id": "technical-en-3", "label": "technical", "lang": "en", "text": "Uploads to the portal time out after about {num} seconds."},
-    {"id": "technical-es-1", "label": "technical", "lang": "es", "text": "La aplicación se cierra cada vez que abro el informe {num}."},
-    {"id": "technical-es-2", "label": "technical", "lang": "es", "text": "Nuestra API devuelve errores 500 para la solicitud {num} desde esta mañana."},
-    {"id": "technical-es-3", "label": "technical", "lang": "es", "text": "Las subidas al portal fallan después de unos {num} segundos."},
-    {"id": "technical-pt-1", "label": "technical", "lang": "pt", "text": "O sistema cai toda vez que tento abrir o relatório {num}."},
-    {"id": "technical-pt-2", "label": "technical", "lang": "pt", "text": "Nossa API retorna erros 500 para a requisição {num} desde hoje cedo."},
-    {"id": "technical-pt-3", "label": "technical", "lang": "pt", "text": "Os envios ao portal expiram depois de cerca de {num} segundos."},
-    {"id": "technical-fr-1", "label": "technical", "lang": "fr", "text": "L'application plante dès que j'ouvre le rapport {num}."},
-    {"id": "technical-fr-2", "label": "technical", "lang": "fr", "text": "Notre API renvoie des erreurs 500 pour la requête {num} depuis ce matin."},
-    {"id": "technical-fr-3", "label": "technical", "lang": "fr", "text": "Les envois vers le portail échouent au bout de {num} secondes."},
-    {"id": "technical-de-1", "label": "technical", "lang": "de", "text": "Die Anwendung stürzt jedes Mal ab, wenn ich Bericht {num} öffne."},
-    {"id": "technical-de-2", "label": "technical", "lang": "de", "text": "Unsere API liefert seit heute Morgen Fehler 500 für Anfrage {num}."},
-    {"id": "technical-de-3", "label": "technical", "lang": "de", "text": "Uploads zum Portal brechen nach etwa {num} Sekunden ab."},
-    {"id": "technical-hi-1", "label": "technical", "lang": "hi", "text": "ऐप हर बार रिपोर्ट {num} खोलते ही बंद हो जाता है।"},
-    {"id": "technical-hi-2", "label": "technical", "lang": "hi", "text": "आज सुबह से हमारा API अनुरोध {num} के लिए 500 त्रुटि दे रहा है।"},
-    {"id": "technical-hi-3", "label": "technical", "lang": "hi", "text": "पोर्टल पर अपलोड लगभग {num} सेकंड बाद बंद हो जाता है।"},
-    {"id": "technical-ja-1", "label": "technical", "lang": "ja", "text": "レポート {num} を開くたびにアプリが落ちます。"},
-    {"id": "technical-ja-2", "label": "technical", "lang": "ja", "text": "今朝から API がリクエスト {num} に対して 500 エラーを返します。"},
-    {"id": "technical-ja-3", "label": "technical", "lang": "ja", "text": "ポータルへのアップロードが約 {num} 秒で失敗します。"},
-    {"id": "technical-ar-1", "label": "technical", "lang": "ar", "text": "يتوقف التطبيق كلما فتحت التقرير {num}."},
-    {"id": "technical-ar-2", "label": "technical", "lang": "ar", "text": "واجهة API تعيد أخطاء 500 للطلب {num} منذ هذا الصباح."},
-    {"id": "technical-ar-3", "label": "technical", "lang": "ar", "text": "تفشل عمليات الرفع إلى البوابة بعد حوالي {num} ثانية."},
-
-    {"id": "sales-en-1", "label": "sales", "lang": "en", "text": "What would an enterprise contract for {num} seats cost per year?"},
-    {"id": "sales-en-2", "label": "sales", "lang": "en", "text": "Can you send pricing for upgrading our plan to {num} licenses?"},
-    {"id": "sales-en-3", "label": "sales", "lang": "en", "text": "We want a quote for a yearly agreement covering {num} users."},
-    {"id": "sales-es-1", "label": "sales", "lang": "es", "text": "¿Cuánto costaría un contrato anual para {num} licencias?"},
-    {"id": "sales-es-2", "label": "sales", "lang": "es", "text": "Quisiera una cotización para subir el plan a {num} usuarios."},
-    {"id": "sales-es-3", "label": "sales", "lang": "es", "text": "Necesito precios para un acuerdo anual de {num} puestos."},
-    {"id": "sales-pt-1", "label": "sales", "lang": "pt", "text": "Quanto custaria um contrato anual para {num} licenças?"},
-    {"id": "sales-pt-2", "label": "sales", "lang": "pt", "text": "Podem enviar o preço para subir o plano para {num} usuários?"},
-    {"id": "sales-pt-3", "label": "sales", "lang": "pt", "text": "Quero uma cotação para um acordo anual de {num} assentos."},
-    {"id": "sales-fr-1", "label": "sales", "lang": "fr", "text": "Combien coûterait un contrat annuel pour {num} licences ?"},
-    {"id": "sales-fr-2", "label": "sales", "lang": "fr", "text": "Pouvez-vous m'envoyer le tarif pour passer au forfait de {num} utilisateurs ?"},
-    {"id": "sales-fr-3", "label": "sales", "lang": "fr", "text": "Je souhaite un devis pour un accord annuel de {num} postes."},
-    {"id": "sales-de-1", "label": "sales", "lang": "de", "text": "Was kostet ein Jahresvertrag für {num} Nutzer?"},
-    {"id": "sales-de-2", "label": "sales", "lang": "de", "text": "Bitte senden Sie mir die Preise für ein Upgrade auf {num} Lizenzen."},
-    {"id": "sales-de-3", "label": "sales", "lang": "de", "text": "Ich möchte ein Angebot für einen Jahresvertrag mit {num} Arbeitsplätzen."},
-    {"id": "sales-hi-1", "label": "sales", "lang": "hi", "text": "{num} लाइसेंस के लिए वार्षिक अनुबंध की कीमत क्या होगी?"},
-    {"id": "sales-hi-2", "label": "sales", "lang": "hi", "text": "कृपया {num} उपयोगकर्ताओं के प्लान में अपग्रेड का मूल्य भेजें।"},
-    {"id": "sales-hi-3", "label": "sales", "lang": "hi", "text": "मुझे {num} सीटों के वार्षिक समझौते का कोटेशन चाहिए।"},
-    {"id": "sales-ja-1", "label": "sales", "lang": "ja", "text": "{num} 席の年間契約はいくらになりますか。"},
-    {"id": "sales-ja-2", "label": "sales", "lang": "ja", "text": "{num} ユーザーへのプラン変更の価格を送ってください。"},
-    {"id": "sales-ja-3", "label": "sales", "lang": "ja", "text": "{num} 席の年間契約の見積もりをお願いします。"},
-    {"id": "sales-ar-1", "label": "sales", "lang": "ar", "text": "كم تكلفة عقد سنوي لـ {num} مقعدًا؟"},
-    {"id": "sales-ar-2", "label": "sales", "lang": "ar", "text": "أرجو إرسال الأسعار للترقية إلى {num} مستخدمًا."},
-    {"id": "sales-ar-3", "label": "sales", "lang": "ar", "text": "أريد عرض سعر لعقد سنوي يغطي {num} مستخدمًا."}
+    {
+      "id": "billing-en-1",
+      "label": "billing",
+      "lang": "en",
+      "text": "I was charged twice for invoice {num}, please refund the duplicate payment."
+    },
+    {
+      "id": "billing-en-2",
+      "label": "billing",
+      "lang": "en",
+      "text": "The receipt for order {num} shows a repeated line; please reverse the second payment."
+    },
+    {
+      "id": "billing-en-3",
+      "label": "billing",
+      "lang": "en",
+      "text": "My card was billed again for subscription {num} after I cancelled it."
+    },
+    {
+      "id": "billing-es-1",
+      "label": "billing",
+      "lang": "es",
+      "text": "Me cobraron dos veces la factura {num}, devuélvanme el cargo duplicado."
+    },
+    {
+      "id": "billing-es-2",
+      "label": "billing",
+      "lang": "es",
+      "text": "El recibo del pedido {num} muestra un cobro repetido, quiero el reembolso."
+    },
+    {
+      "id": "billing-es-3",
+      "label": "billing",
+      "lang": "es",
+      "text": "Volvieron a cobrar la suscripción {num} después de que la cancelé."
+    },
+    {
+      "id": "billing-pt-1",
+      "label": "billing",
+      "lang": "pt",
+      "text": "Fui cobrado duas vezes na fatura {num}, quero o reembolso da cobrança duplicada."
+    },
+    {
+      "id": "billing-pt-2",
+      "label": "billing",
+      "lang": "pt",
+      "text": "O recibo do pedido {num} tem uma linha repetida, peço o estorno do valor."
+    },
+    {
+      "id": "billing-pt-3",
+      "label": "billing",
+      "lang": "pt",
+      "text": "Cobraram novamente a assinatura {num} depois que eu cancelei."
+    },
+    {
+      "id": "billing-fr-1",
+      "label": "billing",
+      "lang": "fr",
+      "text": "J'ai été facturé deux fois pour la facture {num}, merci de rembourser le doublon."
+    },
+    {
+      "id": "billing-fr-2",
+      "label": "billing",
+      "lang": "fr",
+      "text": "Le reçu de la commande {num} contient une ligne en double, je demande le remboursement."
+    },
+    {
+      "id": "billing-fr-3",
+      "label": "billing",
+      "lang": "fr",
+      "text": "L'abonnement {num} a été débité de nouveau après mon annulation."
+    },
+    {
+      "id": "billing-de-1",
+      "label": "billing",
+      "lang": "de",
+      "text": "Ich wurde zweimal für Rechnung {num} belastet, bitte erstatten Sie die doppelte Zahlung."
+    },
+    {
+      "id": "billing-de-2",
+      "label": "billing",
+      "lang": "de",
+      "text": "Die Quittung für Bestellung {num} zeigt eine doppelte Position, bitte erstatten Sie den Betrag."
+    },
+    {
+      "id": "billing-de-3",
+      "label": "billing",
+      "lang": "de",
+      "text": "Das Abonnement {num} wurde nach meiner Kündigung erneut abgebucht."
+    },
+    {
+      "id": "billing-hi-1",
+      "label": "billing",
+      "lang": "hi",
+      "text": "मुझसे बिल {num} के लिए दो बार शुल्क लिया गया, कृपया डुप्लिकेट भुगतान वापस करें।"
+    },
+    {
+      "id": "billing-hi-2",
+      "label": "billing",
+      "lang": "hi",
+      "text": "ऑर्डर {num} की रसीद में दोहरी प्रविष्टि है, कृपया राशि वापस करें।"
+    },
+    {
+      "id": "billing-hi-3",
+      "label": "billing",
+      "lang": "hi",
+      "text": "रद्द करने के बाद भी सदस्यता {num} का शुल्क फिर लिया गया।"
+    },
+    {
+      "id": "billing-ja-1",
+      "label": "billing",
+      "lang": "ja",
+      "text": "請求書 {num} が二重に請求されました。重複分を返金してください。"
+    },
+    {
+      "id": "billing-ja-2",
+      "label": "billing",
+      "lang": "ja",
+      "text": "注文 {num} の領収書に重複した行があります。返金をお願いします。"
+    },
+    {
+      "id": "billing-ja-3",
+      "label": "billing",
+      "lang": "ja",
+      "text": "解約したのに購読 {num} の料金が再度請求されました。"
+    },
+    {
+      "id": "billing-ar-1",
+      "label": "billing",
+      "lang": "ar",
+      "text": "تم خصم المبلغ مرتين من بطاقتي للفاتورة {num}، أرجو استرداد المبلغ المكرر."
+    },
+    {
+      "id": "billing-ar-2",
+      "label": "billing",
+      "lang": "ar",
+      "text": "إيصال الطلب {num} يحتوي على سطر مكرر، أرجو إعادة المبلغ."
+    },
+    {
+      "id": "billing-ar-3",
+      "label": "billing",
+      "lang": "ar",
+      "text": "تم خصم الاشتراك {num} مرة أخرى بعد أن ألغيته."
+    },
+    {
+      "id": "technical-en-1",
+      "label": "technical",
+      "lang": "en",
+      "text": "The dashboard crashes with an error every time I open report {num}."
+    },
+    {
+      "id": "technical-en-2",
+      "label": "technical",
+      "lang": "en",
+      "text": "Our API returns 500 errors for request {num} since this morning."
+    },
+    {
+      "id": "technical-en-3",
+      "label": "technical",
+      "lang": "en",
+      "text": "Uploads to the portal time out after about {num} seconds."
+    },
+    {
+      "id": "technical-es-1",
+      "label": "technical",
+      "lang": "es",
+      "text": "La aplicación se cierra cada vez que abro el informe {num}."
+    },
+    {
+      "id": "technical-es-2",
+      "label": "technical",
+      "lang": "es",
+      "text": "Nuestra API devuelve errores 500 para la solicitud {num} desde esta mañana."
+    },
+    {
+      "id": "technical-es-3",
+      "label": "technical",
+      "lang": "es",
+      "text": "Las subidas al portal fallan después de unos {num} segundos."
+    },
+    {
+      "id": "technical-pt-1",
+      "label": "technical",
+      "lang": "pt",
+      "text": "O sistema cai toda vez que tento abrir o relatório {num}."
+    },
+    {
+      "id": "technical-pt-2",
+      "label": "technical",
+      "lang": "pt",
+      "text": "Nossa API retorna erros 500 para a requisição {num} desde hoje cedo."
+    },
+    {
+      "id": "technical-pt-3",
+      "label": "technical",
+      "lang": "pt",
+      "text": "Os envios ao portal expiram depois de cerca de {num} segundos."
+    },
+    {
+      "id": "technical-fr-1",
+      "label": "technical",
+      "lang": "fr",
+      "text": "L'application plante dès que j'ouvre le rapport {num}."
+    },
+    {
+      "id": "technical-fr-2",
+      "label": "technical",
+      "lang": "fr",
+      "text": "Notre API renvoie des erreurs 500 pour la requête {num} depuis ce matin."
+    },
+    {
+      "id": "technical-fr-3",
+      "label": "technical",
+      "lang": "fr",
+      "text": "Les envois vers le portail échouent au bout de {num} secondes."
+    },
+    {
+      "id": "technical-de-1",
+      "label": "technical",
+      "lang": "de",
+      "text": "Die Anwendung stürzt jedes Mal ab, wenn ich Bericht {num} öffne."
+    },
+    {
+      "id": "technical-de-2",
+      "label": "technical",
+      "lang": "de",
+      "text": "Unsere API liefert seit heute Morgen Fehler 500 für Anfrage {num}."
+    },
+    {
+      "id": "technical-de-3",
+      "label": "technical",
+      "lang": "de",
+      "text": "Uploads zum Portal brechen nach etwa {num} Sekunden ab."
+    },
+    {
+      "id": "technical-hi-1",
+      "label": "technical",
+      "lang": "hi",
+      "text": "ऐप हर बार रिपोर्ट {num} खोलते ही बंद हो जाता है।"
+    },
+    {
+      "id": "technical-hi-2",
+      "label": "technical",
+      "lang": "hi",
+      "text": "आज सुबह से हमारा API अनुरोध {num} के लिए 500 त्रुटि दे रहा है।"
+    },
+    {
+      "id": "technical-hi-3",
+      "label": "technical",
+      "lang": "hi",
+      "text": "पोर्टल पर अपलोड लगभग {num} सेकंड बाद बंद हो जाता है।"
+    },
+    {
+      "id": "technical-ja-1",
+      "label": "technical",
+      "lang": "ja",
+      "text": "レポート {num} を開くたびにアプリが落ちます。"
+    },
+    {
+      "id": "technical-ja-2",
+      "label": "technical",
+      "lang": "ja",
+      "text": "今朝から API がリクエスト {num} に対して 500 エラーを返します。"
+    },
+    {
+      "id": "technical-ja-3",
+      "label": "technical",
+      "lang": "ja",
+      "text": "ポータルへのアップロードが約 {num} 秒で失敗します。"
+    },
+    {
+      "id": "technical-ar-1",
+      "label": "technical",
+      "lang": "ar",
+      "text": "يتوقف التطبيق كلما فتحت التقرير {num}."
+    },
+    {
+      "id": "technical-ar-2",
+      "label": "technical",
+      "lang": "ar",
+      "text": "واجهة API تعيد أخطاء 500 للطلب {num} منذ هذا الصباح."
+    },
+    {
+      "id": "technical-ar-3",
+      "label": "technical",
+      "lang": "ar",
+      "text": "تفشل عمليات الرفع إلى البوابة بعد حوالي {num} ثانية."
+    },
+    {
+      "id": "sales-en-1",
+      "label": "sales",
+      "lang": "en",
+      "text": "What would an enterprise contract for {num} seats cost per year?"
+    },
+    {
+      "id": "sales-en-2",
+      "label": "sales",
+      "lang": "en",
+      "text": "Can you send pricing for upgrading our plan to {num} licenses?"
+    },
+    {
+      "id": "sales-en-3",
+      "label": "sales",
+      "lang": "en",
+      "text": "We want a quote for a yearly agreement covering {num} users."
+    },
+    {
+      "id": "sales-es-1",
+      "label": "sales",
+      "lang": "es",
+      "text": "¿Cuánto costaría un contrato anual para {num} licencias?"
+    },
+    {
+      "id": "sales-es-2",
+      "label": "sales",
+      "lang": "es",
+      "text": "Quisiera una cotización para subir el plan a {num} usuarios."
+    },
+    {
+      "id": "sales-es-3",
+      "label": "sales",
+      "lang": "es",
+      "text": "Necesito precios para un acuerdo anual de {num} puestos."
+    },
+    {
+      "id": "sales-pt-1",
+      "label": "sales",
+      "lang": "pt",
+      "text": "Quanto custaria um contrato anual para {num} licenças?"
+    },
+    {
+      "id": "sales-pt-2",
+      "label": "sales",
+      "lang": "pt",
+      "text": "Podem enviar o preço para subir o plano para {num} usuários?"
+    },
+    {
+      "id": "sales-pt-3",
+      "label": "sales",
+      "lang": "pt",
+      "text": "Quero uma cotação para um acordo anual de {num} assentos."
+    },
+    {
+      "id": "sales-fr-1",
+      "label": "sales",
+      "lang": "fr",
+      "text": "Combien coûterait un contrat annuel pour {num} licences ?"
+    },
+    {
+      "id": "sales-fr-2",
+      "label": "sales",
+      "lang": "fr",
+      "text": "Pouvez-vous m'envoyer le tarif pour passer au forfait de {num} utilisateurs ?"
+    },
+    {
+      "id": "sales-fr-3",
+      "label": "sales",
+      "lang": "fr",
+      "text": "Je souhaite un devis pour un accord annuel de {num} postes."
+    },
+    {
+      "id": "sales-de-1",
+      "label": "sales",
+      "lang": "de",
+      "text": "Was kostet ein Jahresvertrag für {num} Nutzer?"
+    },
+    {
+      "id": "sales-de-2",
+      "label": "sales",
+      "lang": "de",
+      "text": "Bitte senden Sie mir die Preise für ein Upgrade auf {num} Lizenzen."
+    },
+    {
+      "id": "sales-de-3",
+      "label": "sales",
+      "lang": "de",
+      "text": "Ich möchte ein Angebot für einen Jahresvertrag mit {num} Arbeitsplätzen."
+    },
+    {
+      "id": "sales-hi-1",
+      "label": "sales",
+      "lang": "hi",
+      "text": "{num} लाइसेंस के लिए वार्षिक अनुबंध की कीमत क्या होगी?"
+    },
+    {
+      "id": "sales-hi-2",
+      "label": "sales",
+      "lang": "hi",
+      "text": "कृपया {num} उपयोगकर्ताओं के प्लान में अपग्रेड का मूल्य भेजें।"
+    },
+    {
+      "id": "sales-hi-3",
+      "label": "sales",
+      "lang": "hi",
+      "text": "मुझे {num} सीटों के वार्षिक समझौते का कोटेशन चाहिए।"
+    },
+    {
+      "id": "sales-ja-1",
+      "label": "sales",
+      "lang": "ja",
+      "text": "{num} 席の年間契約はいくらになりますか。"
+    },
+    {
+      "id": "sales-ja-2",
+      "label": "sales",
+      "lang": "ja",
+      "text": "{num} ユーザーへのプラン変更の価格を送ってください。"
+    },
+    {
+      "id": "sales-ja-3",
+      "label": "sales",
+      "lang": "ja",
+      "text": "{num} 席の年間契約の見積もりをお願いします。"
+    },
+    {
+      "id": "sales-ar-1",
+      "label": "sales",
+      "lang": "ar",
+      "text": "كم تكلفة عقد سنوي لـ {num} مقعدًا؟"
+    },
+    {
+      "id": "sales-ar-2",
+      "label": "sales",
+      "lang": "ar",
+      "text": "أرجو إرسال الأسعار للترقية إلى {num} مستخدمًا."
+    },
+    {
+      "id": "sales-ar-3",
+      "label": "sales",
+      "lang": "ar",
+      "text": "أريد عرض سعر لعقد سنوي يغطي {num} مستخدمًا."
+    },
+    {
+      "id": "billing-zh-1",
+      "label": "billing",
+      "lang": "zh",
+      "text": "发票 {num} 被重复扣款了，请退还多收的款项。"
+    },
+    {
+      "id": "billing-zh-2",
+      "label": "billing",
+      "lang": "zh",
+      "text": "订单 {num} 的收据上有一行重复，请退回这笔款项。"
+    },
+    {
+      "id": "billing-zh-3",
+      "label": "billing",
+      "lang": "zh",
+      "text": "我已经取消订阅，但 {num} 仍然再次扣费。"
+    },
+    {
+      "id": "technical-zh-1",
+      "label": "technical",
+      "lang": "zh",
+      "text": "每次打开报表 {num}，应用都会崩溃。"
+    },
+    {
+      "id": "technical-zh-2",
+      "label": "technical",
+      "lang": "zh",
+      "text": "从今天早上开始，接口对请求 {num} 一直返回 500 错误。"
+    },
+    {
+      "id": "technical-zh-3",
+      "label": "technical",
+      "lang": "zh",
+      "text": "上传到门户大约 {num} 秒后就会超时。"
+    },
+    {
+      "id": "sales-zh-1",
+      "label": "sales",
+      "lang": "zh",
+      "text": "{num} 个席位的年度合同大概要多少钱？"
+    },
+    {
+      "id": "sales-zh-2",
+      "label": "sales",
+      "lang": "zh",
+      "text": "请发给我升级到 {num} 个用户的报价。"
+    },
+    {
+      "id": "sales-zh-3",
+      "label": "sales",
+      "lang": "zh",
+      "text": "我想要一份覆盖 {num} 名用户的年度协议报价。"
+    }
   ]
 }
