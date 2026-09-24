@@ -1,0 +1,37 @@
+== pinned revision ==
+54cff08f9089ad1efa2690a74f6a504748eb260c
+== fork worktree (dirty, as the runs were made) ==
+c8d0d2877a633d97573926e5286c62ab91e4cbb2
+a0425683558cd37858a76f9748ef28009dc198a31d405a2645ad1e7b85a259c8  /home/parshu/projects/contri/laya-lab/worktrees/h5/laya/common.py
+== arm1_frozen (shipped model, live encoder path, no cache) ==
+wrote ../../../../experiments/V-002/repro_arm1_frozen.jsonl  n=2200
+  L0                 n=200 acc=0.640 p50=0.003s p95=0.004s
+  L4000-p000         n=200 acc=0.580 p50=0.219s p95=0.226s
+  L4000-p025         n=200 acc=0.295 p50=0.221s p95=0.228s
+  L4000-p050         n=200 acc=0.335 p50=0.220s p95=0.226s
+  L4000-p075         n=200 acc=0.280 p50=0.219s p95=0.225s
+  L4000-p100         n=200 acc=0.415 p50=0.221s p95=0.230s
+  L4000-p100-ablated n=200 acc=0.250 p50=0.216s p95=0.223s
+  L4000-p100-perm    n=200 acc=0.465 p50=0.221s p95=0.230s
+  L4000-p100-swapped n=200 acc=0.250 p50=0.214s p95=0.230s
+  L7000-p000         n=200 acc=0.595 p50=0.544s p95=0.585s
+  L7000-p100         n=200 acc=0.365 p50=0.537s p95=0.597s
+[W925 01:50:26.837286438 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+== arm2_shipped_init seed0 (committed head.pt over the committed feature cache) ==
+  loaded arm2_shipped_init (state_dict ok)
+wrote ../../../../experiments/V-002/repro_arm2_shipped_init-seed0.jsonl  n=2200
+  L0                 n=200 acc=0.620
+  L4000-p000         n=200 acc=0.590
+  L4000-p025         n=200 acc=0.430
+  L4000-p050         n=200 acc=0.500
+  L4000-p075         n=200 acc=0.425
+  L4000-p100         n=200 acc=0.495
+  L4000-p100-ablated n=200 acc=0.265
+  L4000-p100-perm    n=200 acc=0.555
+  L4000-p100-swapped n=200 acc=0.250
+  L7000-p000         n=200 acc=0.585
+  L7000-p100         n=200 acc=0.455
+[W925 01:52:31.522040602 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+== fork worktree hash after (must be unchanged) ==
+134bc965bc9da9fdf25a95eb4140ec84be37258619724b86a02d2e28f76d870f  /home/parshu/projects/contri/laya-lab/worktrees/h5/laya/common.py
+DONE

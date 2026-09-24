@@ -1,0 +1,117 @@
+{
+ "stored": "experiments/h5-adapter/predictions/arm2_shipped_init-seed0.jsonl",
+ "rerun": "experiments/V-002/repro_arm2_shipped_init-seed0.jsonl",
+ "n_stored": 2200,
+ "n_rerun": 2200,
+ "n_shared": 2200,
+ "only_stored": [],
+ "only_rerun": [],
+ "prediction_mismatches": 0,
+ "slot_mismatches": 0,
+ "correct_mismatches": 0,
+ "label_mismatches": 0,
+ "examples": [],
+ "max_abs_prob_diff": 0.0,
+ "mean_abs_prob_diff": 0.0,
+ "per_cell": {
+  "L0": {
+   "n": 200,
+   "stored_accuracy": 0.62,
+   "rerun_accuracy": 0.62,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p000": {
+   "n": 200,
+   "stored_accuracy": 0.59,
+   "rerun_accuracy": 0.59,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p025": {
+   "n": 200,
+   "stored_accuracy": 0.43,
+   "rerun_accuracy": 0.43,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p050": {
+   "n": 200,
+   "stored_accuracy": 0.5,
+   "rerun_accuracy": 0.5,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p075": {
+   "n": 200,
+   "stored_accuracy": 0.425,
+   "rerun_accuracy": 0.425,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p100": {
+   "n": 200,
+   "stored_accuracy": 0.495,
+   "rerun_accuracy": 0.495,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p100-ablated": {
+   "n": 200,
+   "stored_accuracy": 0.265,
+   "rerun_accuracy": 0.265,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p100-perm": {
+   "n": 200,
+   "stored_accuracy": 0.555,
+   "rerun_accuracy": 0.555,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L4000-p100-swapped": {
+   "n": 200,
+   "stored_accuracy": 0.25,
+   "rerun_accuracy": 0.25,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L7000-p000": {
+   "n": 200,
+   "stored_accuracy": 0.585,
+   "rerun_accuracy": 0.585,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  },
+  "L7000-p100": {
+   "n": 200,
+   "stored_accuracy": 0.455,
+   "rerun_accuracy": 0.455,
+   "agreement_rate": 1.0,
+   "b_rerun_only_right": 0,
+   "c_stored_only_right": 0,
+   "mcnemar_p_rerun_vs_stored": 1.0
+  }
+ }
+}

@@ -1,0 +1,13 @@
+wrote .scratch/V-002/leakage_report_verifier.json
+  c1  template ids disjoint            : True
+  c2  canonical sha256 disjoint        : True
+  c3  rendered needle sha256 disjoint  : True (0/0 shared)
+  c4  longest shared word n-gram       : 4  (i would like to)
+  c5  longest shared char n-gram       : 20  (' of @ dollars appear')
+  c6  max rendered token Jaccard       : 0.222
+  c7  slot value pools disjoint        : True
+  c8  filler vs needle (eval/train)    : True / True  content overlap=[]
+  c9  label/position independence      : cells=True regimes=True oracle=0.2500
+  c10 no degenerate template           : True
+  c11 prefix absent from filler        : True
+  ALL GATING CHECKS                    : PASS

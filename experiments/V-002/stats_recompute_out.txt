@@ -1,0 +1,66 @@
+pairing: n_arm1=2200 n_arm2=2200 shared=2200
+  field diffs: {"label": 0, "template_id": 0, "pad": 0, "needle_position": 0, "slot_gold": 0, "option_order": 0}
+  doc metadata diffs: {"input_tokens": 0, "needle_token_start": 0, "state_tokens_kept": 0, "truncated": 0, "needle_kept": 0}
+  cache state hashes: {"n_items_in_cache": 2200, "n_items_in_arm_files_missing_from_cache": 0, "n_items_missing_from_plan": 600, "n_label_mismatch_vs_plan": 0, "n_distinct_state_hashes": 2000, "n_state_hashes_shared_by_multiple_items": 200, "note": "state_sha256 is the sha256 of the exact token-id list the encoder was given; a shared value across two item ids would mean the same document was scored under two labels"}
+
+per-cell accuracy (n, arm1, arm2, oracle, modal share)
+  L0                   n=200 arm1=0.640 arm2=0.620 oracle=0.25 | arm1 modal=0.47 (technical) arm2 modal=0.40 (technical)
+  L4000-p000           n=200 arm1=0.580 arm2=0.590 oracle=0.25 | arm1 modal=0.52 (technical) arm2 modal=0.45 (technical)
+  L4000-p025           n=200 arm1=0.295 arm2=0.430 oracle=0.25 | arm1 modal=0.95 (technical) arm2 modal=0.69 (technical)
+  L4000-p050           n=200 arm1=0.335 arm2=0.500 oracle=0.25 | arm1 modal=0.91 (technical) arm2 modal=0.66 (technical)
+  L4000-p075           n=200 arm1=0.280 arm2=0.425 oracle=0.25 | arm1 modal=0.96 (technical) arm2 modal=0.73 (technical)
+  L4000-p100           n=200 arm1=0.415 arm2=0.495 oracle=0.25 | arm1 modal=0.81 (technical) arm2 modal=0.61 (technical)
+  L7000-p000           n=200 arm1=0.595 arm2=0.585 oracle=0.25 | arm1 modal=0.47 (technical) arm2 modal=0.41 (technical)
+  L7000-p100           n=200 arm1=0.365 arm2=0.455 oracle=0.25 | arm1 modal=0.81 (technical) arm2 modal=0.59 (technical)
+  L4000-p100-perm      n=200 arm1=0.465 arm2=0.555 oracle=0.25 | arm1 modal=0.74 (technical) arm2 modal=0.54 (technical)
+  L4000-p100-ablated   n=200 arm1=0.250 arm2=0.265 oracle=0.25 | arm1 modal=1.00 (technical) arm2 modal=0.93 (technical)
+  L4000-p100-swapped   n=200 arm1=0.250 arm2=0.250 oracle=0.25 | arm1 modal=0.97 (technical) arm2 modal=0.70 (technical)
+
+arm2 vs arm1 (paired McNemar exact); holm p over each family
+  L0                   n=200 acc 0.640 -> 0.620   -2.00pp  b=  2 c=  6  p=2.891e-01 | holm8=0.867 holm9=0.867 holm11=1
+  L4000-p000           n=200 acc 0.580 -> 0.590   +1.00pp  b=  7 c=  5  p=7.744e-01 | holm8=1 holm9=1 holm11=1
+  L4000-p025           n=200 acc 0.295 -> 0.430  +13.50pp  b= 31 c=  4  p=3.465e-06 | holm8=2.08e-05 holm9=2.43e-05 holm11=3.12e-05
+  L4000-p050           n=200 acc 0.335 -> 0.500  +16.50pp  b= 36 c=  3  p=3.609e-08 | holm8=2.89e-07 holm9=3.25e-07 holm11=3.97e-07
+  L4000-p075           n=200 acc 0.280 -> 0.425  +14.50pp  b= 32 c=  3  p=4.177e-07 | holm8=2.92e-06 holm9=3.34e-06 holm11=4.18e-06
+  L4000-p100           n=200 acc 0.415 -> 0.495   +8.00pp  b= 21 c=  5  p=2.494e-03 | holm8=0.0105 holm9=0.0126 holm11=0.0168
+  L7000-p000           n=200 acc 0.595 -> 0.585   -1.00pp  b=  6 c=  8  p=7.905e-01 | holm8=1 holm9=1 holm11=1
+  L7000-p100           n=200 acc 0.365 -> 0.455   +9.00pp  b= 25 c=  7  p=2.102e-03 | holm8=0.0105 holm9=0.0126 holm11=0.0168
+  L4000-p100-perm      n=200 acc 0.465 -> 0.555   +9.00pp  b= 25 c=  7  p=2.102e-03 | holm8=nan holm9=0.0126 holm11=0.0168
+  L4000-p100-ablated   n=200 acc 0.250 -> 0.265   +1.50pp  b=  4 c=  1  p=3.750e-01 | holm8=nan holm9=nan holm11=1
+  L4000-p100-swapped   n=200 acc 0.250 -> 0.250   +0.00pp  b=  3 c=  3  p=1.000e+00 | holm8=nan holm9=nan holm11=1
+
+independent-test contrast (p_paired -> p_independent, ratio)
+  L0                   2.891e-01 -> 6.787e-01  x2.35
+  L4000-p000           7.744e-01 -> 8.392e-01  x1.08
+  L4000-p025           3.465e-06 -> 4.981e-03  x1437.26
+  L4000-p050           3.609e-08 -> 8.203e-04  x22729.48
+  L4000-p075           4.177e-07 -> 2.405e-03  x5757.28
+  L4000-p100           2.494e-03 -> 1.082e-01  x43.37
+  L7000-p000           7.905e-01 -> 8.389e-01  x1.06
+  L7000-p100           2.102e-03 -> 6.727e-02  x32.00
+  L4000-p100-perm      2.102e-03 -> 7.180e-02  x34.15
+  L4000-p100-ablated   3.750e-01 -> 7.316e-01  x1.95
+  L4000-p100-swapped   1.000e+00 -> 1.000e+00  x1.00
+
+swapped-cell content test (accuracy vs substituted needle's class)
+  arm1_frozen          n=200 acc_vs_original=0.250 follows_needle=0.275 (n=200)
+  arm2_shipped_init    n=200 acc_vs_original=0.250 follows_needle=0.415 (n=200)
+  arm3_xattn           n=200 acc_vs_original=0.275 follows_needle=0.230 (n=200)
+
+ablated-cell collapse (needle removed by content)
+  arm1_frozen          n=200 acc=0.250 modal=technical share=1.000
+  arm2_shipped_init    n=200 acc=0.265 modal=technical share=0.925
+  arm3_xattn           n=200 acc=0.250 modal=billing share=0.850
+
+label distributions (arm1 rows; gold labels)
+  L0                   {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p000           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p025           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p050           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p075           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p100           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L7000-p000           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L7000-p100           {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p100-perm      {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p100-ablated   {"billing": 50, "other": 50, "sales": 50, "technical": 50}
+  L4000-p100-swapped   {"billing": 50, "other": 50, "sales": 50, "technical": 50}
