@@ -210,3 +210,62 @@ control was wrong** — a random-chunk arm is required, because on ECtHR the lon
 
 **In flight.** 5 agents at the concurrency cap: math (#2), harness (#1), H2/H3 knobs (#4),
 verifier (#5), and H5 aggregation geometry (#6).
+
+---
+
+## 2026-09-24 · CORRECTIONS — verification caught three of our own claims
+
+Three results landed at once and **corrected the orchestrator's own work**. Recorded in full
+because the corrections matter more than the original claims.
+
+### 1. The "0.35 long-context floor" is a NO-EVIDENCE floor (V-001, defect #7) — `falsified`
+V-001 proved by **state hash** that the four `limit=1024, pad≥1000` rows of `orch-baseline` are
+**one request-free measurement repeated four times**: the request begins at document token 1000
+while only 978 tokens of state survive, so **zero request tokens are in the model input**. The
+model answers `technical` for 20/20 items and 0.35 is just the `technical` share of that draw
+(7/20) — **below the trivial constant-`billing` baseline of 0.45**.
+
+It is a **truncation** result. It is not evidence about attention, architecture, or long context,
+and it cannot support any. `P1-mechanism.md` has been corrected in place.
+
+### 2. "Our 8192 arm degrades far below upstream's" is confounded (V-001, defect #8) — `falsified`
+`orch-baseline` differs from upstream in at least five ways: a JSON wrapper (+5 tokens) vs a plain
+string; upstream prepends `"\n\nActual request: "` which we omit; whole-repeat vs exact padding;
+no warm-up; cuda/bf16 vs mps/fp32. **The cross-machine comparison is withdrawn.** It must be
+re-run like-for-like or not made at all.
+
+### 3. "8 cross-document hops" is refuted (M-001) — `falsified`
+Layer 0 is `full_attention`, so the reachable set after one hop is already `[0, n)`. **The
+reachability graph has diameter 1**; any state token reaches any marker in **one** layer,
+independent of distance. The `plan.md` §2 mechanism has been rewritten: the binding constraint is
+**dilution** — 99.9 % of cross-document edges come from the 8 global layers, and the sliding
+layers' contribution is constant at 29,120 edges regardless of `n`.
+
+### Also corrected
+- **Prefix length.** The head is **45** tokens (markers at 12/20/29/39), not 256; `head_max_len`
+  is an upper bound. State budget is **978**, not ~764. V-001 defect #9 — and it makes P1's
+  Control 2 **exact** rather than approximate, since both quoted positions are the same sequence
+  position ~1050.
+- **Power.** `n ≥ 200` → **`n ≥ 400`**; ±0.066 was a single-proportion number, not arm-vs-arm
+  resolution; the exact-*conditional* McNemar is conservative and must not be used for sizing or
+  p-values. **H3 and H5 are not powered at n=400 for a +0.05 effect** — a null there must be
+  reported as **underpowered**, not as no effect. A pilot measuring `q` is now mandatory.
+- **Protocol amendment A1.** first-`k` truncation alone overstates long-context effects ~3×;
+  random-chunk and lexical-chunk baselines added.
+- **`head_max_len` trap.** `render_options` reads `q["crit"]`, not `q["criteria"]` — the wrong key
+  silently renders empty options and collapses the head to ~23 tokens.
+
+### Verified reproduced
+V-001 re-ran both orchestrator artifacts in fresh processes under the GPU lock, unmodified:
+**all 10 baseline cells and all 13 diagnostic cells REPRODUCED exactly**, 0/20 per-item prediction
+differences, max |Δp_gold| = 0.000000, and **zero nondeterminism** across repeated runs. The
+measurement pipeline is sound; it was the *interpretation* that was wrong.
+
+### What survives
+Probes B and C at `max_len=8192` — where V-001 confirmed the request **is** present — remain
+valid: same document length, accuracy 0.900 → 0.600 on position alone; same absolute position,
+0.900 in a 1018-token document vs 0.500 in a 4018-token one. And P1b stands: information reaches
+the marker positions (0.82, held-out templates) while the shipped head returns 0.30.
+
+**Defects filed:** #7, #8, #9, #10. **Repo hygiene:** agents running `git add -A` swept other
+agents' in-flight files; scoped adds are now required.

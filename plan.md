@@ -70,19 +70,39 @@ The encoder is **not** the limit — it was trained at 8192. The prompt layout i
 
 ```
 [CLS] <type> instructions [SEP] [MASK] opt0 [MASK] opt1 … [SEP] <state> [SEP]
-       └──────────── head, ~256 tok ────────┘         └── the document ──┘
+       └───── head, 45 tok measured ─────┘        └──── the document ────┘
 ```
 
-The option markers sit at the **start**; the evidence sits **after** them. For a marker to
-be influenced by a state token, the information must cross the sequence, and in this
-architecture it can only do so in the **8 global layers**. The 14 sliding layers bridge
-±64 tokens. So the marker's final representation aggregates an 8192-token document through
-8 cross-document hops, while the O(n²) cost of those 8 global layers is what makes
-`max_len=8192` 17× slower.
+> ⚠ **CORRECTED (M-001, 2026-09-24).** Two claims that stood here are **refuted**. They are
+> recorded rather than deleted, because both were load-bearing and both were wrong:
+>
+> 1. **"The head is ~256 tokens."** `head_max_len` is an **upper bound, not the head length**.
+>    Probed with the shipped tokenizer and question, the option markers land at positions
+>    `[12, 20, 29, 39]` and the state begins at **~45**, not ~256. The shipped state budget at
+>    `max_len=1024` is therefore **978 tokens, not ~764**.
+> 2. **"The marker must cross the document through 8 cross-document hops."** **False.** Layer 0
+>    is `full_attention`, so the set reachable from a marker after **one** hop is already
+>    `[0, n)`. **The reachability graph has diameter 1.** The minimum number of layers for a
+>    nonzero attention path from any state token to any marker is **1, independent of distance**,
+>    verified by exact simulation at `n=8192`. Any argument of the form "the marker cannot reach
+>    position 7000" is wrong, and no experiment should be built whose only informative outcome
+>    requires it to be true.
 
-**This is the lever.** The cost is concentrated in a handful of quadratic layers; the
-long-range mixing capacity is concentrated in the same handful. That tension is what an
-architectural intervention has to resolve.
+**What actually binds is dilution, not reachability.** Every state token is reachable from every
+marker, but the cross-document *edge budget* is overwhelmingly concentrated: at `n=8192` there
+are 24,015,296 (head-query × state-key) edges, **99.9 % of them from the 8 global layers** and
+0.1 % from the 14 sliding ones — and the sliding contribution is **constant** at 29,120 edges,
+independent of `n`. As the document grows, each additional filler token is another competitor for
+a fixed pool of long-range attention mass. A token 7000 positions away is first *read* at layer
+12, leaving only 4 of the 8 global layers to mix it (M-001's mixing budget).
+
+This is the mechanism our own measurements support: information **arrives** at the marker
+positions (P1b: 0.82 linear probe on held-out templates) while the shipped head returns 0.30. The
+constraint is **how much attention mass the evidence can command**, not whether a path exists.
+
+**This is the lever.** The cost is concentrated in the quadratic global layers, and so is the
+long-range mixing capacity. An architectural intervention has to break that coupling.
+
 
 ## 3. Why not "just select the right window"
 
@@ -137,11 +157,37 @@ Defined in `protocol.md` and hashed into every experiment manifest. Summary:
   position `p` in a document of length `L` of domain-matched filler.
 - **Sweep.** `L ∈ {0, 1k, 2k, 4k, 7k, 8k, 16k, 32k}` × `p ∈ {0.0, 0.25, 0.5, 0.75, 1.0}`.
 - **Languages.** en, es, hi, ja, ar, zh — chosen to span scripts and tokenizer fertility.
-- **n ≥ 200 per cell** (upstream used 20). Power: ±0.066 at 95% for a proportion near 0.5.
+- **n ≥ 400 per cell** (upstream used 20). *Corrected by M-001; the original said 200.* At n=400
+  the single-proportion 95 % CI half-width at p̂=0.5 is **±0.049** (Wald) / **±0.050** (exact
+  Clopper–Pearson). At n=200 it is ±0.069/±0.071.
 - **Metrics.** accuracy, macro-F1, ECE, p50/p95 latency, peak VRAM, token throughput.
 - **Statistics.** 10k-resample bootstrap CIs; **McNemar's paired test** for candidate-vs-
-  baseline (paired by item, so it is far more sensitive than comparing two CIs); Holm
-  correction across the sweep.
+  baseline (paired by item); Holm correction within a **pre-registered small primary family**.
+
+  > ⚠ **CORRECTED (M-001) — the original power argument was wrong in two ways.**
+  >
+  > 1. **±0.066 at n≥200 is a *single-proportion* number, not arm-vs-arm resolution.** It says
+  >    nothing about whether two arms differ.
+  > 2. **The exact-*conditional* McNemar test is conservative** — its power stays in 0.054–0.089
+  >    for every (n, δ, q) out to n=1600. **Do not size the study on it and do not quote its
+  >    p-values.** Use the exact *unconditional* test.
+  >
+  > Power is set by **q = P(the two arms disagree on an item)**, not by the effect size δ alone.
+  > At δ=0.10, n=400 gives ≥0.90 power for every q ≤ 0.50. But **at δ=0.05, n=400 gives 0.89 at
+  > q=0.10, 0.62 at q=0.20, and 0.48 at q=0.30** — so **H3 and H5, both of which use a +0.05
+  > threshold, are NOT powered at n=400.** Normal-approximation design numbers: δ=0.05 needs
+  > n = 312 / 626 / 1568 for q = 0.10 / 0.20 / 0.50; δ=0.10 needs 77 / 155 / 391.
+  >
+  > **Consequences, binding on every arm:**
+  > - **A pilot that measures `q` in the tail cells (d ≥ 2048) from ~100 items is mandatory**
+  >   before sizing the main run. Realized `q` is reported with every comparison.
+  > - **A null result on a +0.05 arm at n=400 must be reported as UNDERPOWERED, not as "no
+  >   effect".** This is the single easiest way for this program to publish a false negative.
+  > - Multiplicity: 46 cells at α=0.05 gives P(≥1 false positive) = 0.72 and inflates the required
+  >   n by 2.49× under Bonferroni. Pre-register a **small primary family** (M-001 suggests
+  >   d ∈ {64, 2048, 4096, end} × n ∈ {2048, 8192} = 8 comparisons), Holm within it only, and
+  >   label everything else exploratory.
+
 - **Leakage guard.** Filler and needle drawn from disjoint pools; needle templates held out
   from any training set; positions and labels balanced so position or majority priors
   cannot beat chance.

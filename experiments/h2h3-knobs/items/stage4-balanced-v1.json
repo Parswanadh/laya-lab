@@ -1,0 +1,1456 @@
+{
+ "tag": "stage4-balanced-v1",
+ "pool": "balanced-v1",
+ "pool_sha256": "bcb80ac1f4a38b3f8ce5224fc950b6014ed1d8391a311470f898f7496b34c7aa",
+ "n": 120,
+ "seed": 20260924,
+ "items_sha256": "fe211a1745de867d85b729eca9694a1a492d8a6bb5c8aec6f7eb5835c799a60b",
+ "harness_pools_py_sha256": "2e3535235e0703d9cb9646c17d54339836c34977f79398cac7346e53231dfa86",
+ "label_counts": {
+  "billing": 40,
+  "sales": 40,
+  "technical": 40
+ },
+ "items": [
+  {
+   "item_id": "sales|sales-ar-1|num5530",
+   "label": "sales",
+   "lang": "ar",
+   "template_id": "sales-ar-1",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "كم تكلفة عقد سنوي لـ 5530 مقعدًا؟",
+   "split": "eval",
+   "item_index": 0
+  },
+  {
+   "item_id": "billing|billing-de-3|num7782",
+   "label": "billing",
+   "lang": "de",
+   "template_id": "billing-de-3",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "Das Abonnement 7782 wurde nach meiner Kündigung erneut abgebucht.",
+   "split": "eval",
+   "item_index": 1
+  },
+  {
+   "item_id": "billing|billing-de-1|num8154",
+   "label": "billing",
+   "lang": "de",
+   "template_id": "billing-de-1",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "Ich wurde zweimal für Rechnung 8154 belastet, bitte erstatten Sie die doppelte Zahlung.",
+   "split": "eval",
+   "item_index": 2
+  },
+  {
+   "item_id": "sales|sales-pt-3|num1209",
+   "label": "sales",
+   "lang": "pt",
+   "template_id": "sales-pt-3",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Quero uma cotação para um acordo anual de 1209 assentos.",
+   "split": "eval",
+   "item_index": 3
+  },
+  {
+   "item_id": "technical|technical-ja-3|num2615",
+   "label": "technical",
+   "lang": "ja",
+   "template_id": "technical-ja-3",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "ポータルへのアップロードが約 2615 秒で失敗します。",
+   "split": "eval",
+   "item_index": 4
+  },
+  {
+   "item_id": "billing|billing-zh-2|num2615",
+   "label": "billing",
+   "lang": "zh",
+   "template_id": "billing-zh-2",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "订单 2615 的收据上有一行重复，请退回这笔款项。",
+   "split": "eval",
+   "item_index": 5
+  },
+  {
+   "item_id": "sales|sales-pt-2|num8154",
+   "label": "sales",
+   "lang": "pt",
+   "template_id": "sales-pt-2",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "Podem enviar o preço para subir o plano para 8154 usuários?",
+   "split": "eval",
+   "item_index": 6
+  },
+  {
+   "item_id": "billing|billing-de-2|num3097",
+   "label": "billing",
+   "lang": "de",
+   "template_id": "billing-de-2",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "Die Quittung für Bestellung 3097 zeigt eine doppelte Position, bitte erstatten Sie den Betrag.",
+   "split": "eval",
+   "item_index": 7
+  },
+  {
+   "item_id": "technical|technical-zh-1|num7782",
+   "label": "technical",
+   "lang": "zh",
+   "template_id": "technical-zh-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "每次打开报表 7782，应用都会崩溃。",
+   "split": "eval",
+   "item_index": 8
+  },
+  {
+   "item_id": "technical|technical-pt-1|num5530",
+   "label": "technical",
+   "lang": "pt",
+   "template_id": "technical-pt-1",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "O sistema cai toda vez que tento abrir o relatório 5530.",
+   "split": "eval",
+   "item_index": 9
+  },
+  {
+   "item_id": "billing|billing-hi-1|num3097",
+   "label": "billing",
+   "lang": "hi",
+   "template_id": "billing-hi-1",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "मुझसे बिल 3097 के लिए दो बार शुल्क लिया गया, कृपया डुप्लिकेट भुगतान वापस करें।",
+   "split": "eval",
+   "item_index": 10
+  },
+  {
+   "item_id": "billing|billing-en-3|num2615",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "billing-en-3",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "My card was billed again for subscription 2615 after I cancelled it.",
+   "split": "eval",
+   "item_index": 11
+  },
+  {
+   "item_id": "sales|sales-en-2|num5530",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "sales-en-2",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "Can you send pricing for upgrading our plan to 5530 licenses?",
+   "split": "eval",
+   "item_index": 12
+  },
+  {
+   "item_id": "technical|technical-zh-1|num7043",
+   "label": "technical",
+   "lang": "zh",
+   "template_id": "technical-zh-1",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "每次打开报表 7043，应用都会崩溃。",
+   "split": "eval",
+   "item_index": 13
+  },
+  {
+   "item_id": "technical|technical-fr-2|num5530",
+   "label": "technical",
+   "lang": "fr",
+   "template_id": "technical-fr-2",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "Notre API renvoie des erreurs 500 pour la requête 5530 depuis ce matin.",
+   "split": "eval",
+   "item_index": 14
+  },
+  {
+   "item_id": "sales|sales-es-1|num1209",
+   "label": "sales",
+   "lang": "es",
+   "template_id": "sales-es-1",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "¿Cuánto costaría un contrato anual para 1209 licencias?",
+   "split": "eval",
+   "item_index": 15
+  },
+  {
+   "item_id": "billing|billing-en-1|num4411",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "billing-en-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "I was charged twice for invoice 4411, please refund the duplicate payment.",
+   "split": "eval",
+   "item_index": 16
+  },
+  {
+   "item_id": "billing|billing-pt-3|num7782",
+   "label": "billing",
+   "lang": "pt",
+   "template_id": "billing-pt-3",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "Cobraram novamente a assinatura 7782 depois que eu cancelei.",
+   "split": "eval",
+   "item_index": 17
+  },
+  {
+   "item_id": "sales|sales-de-3|num7043",
+   "label": "sales",
+   "lang": "de",
+   "template_id": "sales-de-3",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "Ich möchte ein Angebot für einen Jahresvertrag mit 7043 Arbeitsplätzen.",
+   "split": "eval",
+   "item_index": 18
+  },
+  {
+   "item_id": "billing|billing-fr-3|num3097",
+   "label": "billing",
+   "lang": "fr",
+   "template_id": "billing-fr-3",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "L'abonnement 3097 a été débité de nouveau après mon annulation.",
+   "split": "eval",
+   "item_index": 19
+  },
+  {
+   "item_id": "technical|technical-zh-2|num2746",
+   "label": "technical",
+   "lang": "zh",
+   "template_id": "technical-zh-2",
+   "slots": {
+    "num": "2746"
+   },
+   "text": "从今天早上开始，接口对请求 2746 一直返回 500 错误。",
+   "split": "eval",
+   "item_index": 20
+  },
+  {
+   "item_id": "billing|billing-ar-2|num5530",
+   "label": "billing",
+   "lang": "ar",
+   "template_id": "billing-ar-2",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "إيصال الطلب 5530 يحتوي على سطر مكرر، أرجو إعادة المبلغ.",
+   "split": "eval",
+   "item_index": 21
+  },
+  {
+   "item_id": "billing|billing-en-3|num6380",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "billing-en-3",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "My card was billed again for subscription 6380 after I cancelled it.",
+   "split": "eval",
+   "item_index": 22
+  },
+  {
+   "item_id": "sales|sales-fr-2|num2615",
+   "label": "sales",
+   "lang": "fr",
+   "template_id": "sales-fr-2",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "Pouvez-vous m'envoyer le tarif pour passer au forfait de 2615 utilisateurs ?",
+   "split": "eval",
+   "item_index": 23
+  },
+  {
+   "item_id": "technical|technical-fr-3|num7782",
+   "label": "technical",
+   "lang": "fr",
+   "template_id": "technical-fr-3",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "Les envois vers le portail échouent au bout de 7782 secondes.",
+   "split": "eval",
+   "item_index": 24
+  },
+  {
+   "item_id": "sales|sales-en-2|num8154",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "sales-en-2",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "Can you send pricing for upgrading our plan to 8154 licenses?",
+   "split": "eval",
+   "item_index": 25
+  },
+  {
+   "item_id": "technical|technical-en-2|num4411",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "technical-en-2",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "Our API returns 500 errors for request 4411 since this morning.",
+   "split": "eval",
+   "item_index": 26
+  },
+  {
+   "item_id": "sales|sales-pt-2|num7043",
+   "label": "sales",
+   "lang": "pt",
+   "template_id": "sales-pt-2",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "Podem enviar o preço para subir o plano para 7043 usuários?",
+   "split": "eval",
+   "item_index": 27
+  },
+  {
+   "item_id": "sales|sales-es-3|num7043",
+   "label": "sales",
+   "lang": "es",
+   "template_id": "sales-es-3",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "Necesito precios para un acuerdo anual de 7043 puestos.",
+   "split": "eval",
+   "item_index": 28
+  },
+  {
+   "item_id": "sales|sales-fr-1|num7043",
+   "label": "sales",
+   "lang": "fr",
+   "template_id": "sales-fr-1",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "Combien coûterait un contrat annuel pour 7043 licences ?",
+   "split": "eval",
+   "item_index": 29
+  },
+  {
+   "item_id": "technical|technical-de-3|num7043",
+   "label": "technical",
+   "lang": "de",
+   "template_id": "technical-de-3",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "Uploads zum Portal brechen nach etwa 7043 Sekunden ab.",
+   "split": "eval",
+   "item_index": 30
+  },
+  {
+   "item_id": "billing|billing-es-2|num6380",
+   "label": "billing",
+   "lang": "es",
+   "template_id": "billing-es-2",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "El recibo del pedido 6380 muestra un cobro repetido, quiero el reembolso.",
+   "split": "eval",
+   "item_index": 31
+  },
+  {
+   "item_id": "sales|sales-ja-1|num2615",
+   "label": "sales",
+   "lang": "ja",
+   "template_id": "sales-ja-1",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "2615 席の年間契約はいくらになりますか。",
+   "split": "eval",
+   "item_index": 32
+  },
+  {
+   "item_id": "technical|technical-ar-2|num2746",
+   "label": "technical",
+   "lang": "ar",
+   "template_id": "technical-ar-2",
+   "slots": {
+    "num": "2746"
+   },
+   "text": "واجهة API تعيد أخطاء 500 للطلب 2746 منذ هذا الصباح.",
+   "split": "eval",
+   "item_index": 33
+  },
+  {
+   "item_id": "billing|billing-pt-1|num2615",
+   "label": "billing",
+   "lang": "pt",
+   "template_id": "billing-pt-1",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "Fui cobrado duas vezes na fatura 2615, quero o reembolso da cobrança duplicada.",
+   "split": "eval",
+   "item_index": 34
+  },
+  {
+   "item_id": "technical|technical-es-1|num2746",
+   "label": "technical",
+   "lang": "es",
+   "template_id": "technical-es-1",
+   "slots": {
+    "num": "2746"
+   },
+   "text": "La aplicación se cierra cada vez que abro el informe 2746.",
+   "split": "eval",
+   "item_index": 35
+  },
+  {
+   "item_id": "technical|technical-fr-1|num1209",
+   "label": "technical",
+   "lang": "fr",
+   "template_id": "technical-fr-1",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "L'application plante dès que j'ouvre le rapport 1209.",
+   "split": "eval",
+   "item_index": 36
+  },
+  {
+   "item_id": "technical|technical-hi-1|num8154",
+   "label": "technical",
+   "lang": "hi",
+   "template_id": "technical-hi-1",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "ऐप हर बार रिपोर्ट 8154 खोलते ही बंद हो जाता है।",
+   "split": "eval",
+   "item_index": 37
+  },
+  {
+   "item_id": "technical|technical-pt-1|num8154",
+   "label": "technical",
+   "lang": "pt",
+   "template_id": "technical-pt-1",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "O sistema cai toda vez que tento abrir o relatório 8154.",
+   "split": "eval",
+   "item_index": 38
+  },
+  {
+   "item_id": "sales|sales-ja-2|num3097",
+   "label": "sales",
+   "lang": "ja",
+   "template_id": "sales-ja-2",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "3097 ユーザーへのプラン変更の価格を送ってください。",
+   "split": "eval",
+   "item_index": 39
+  },
+  {
+   "item_id": "technical|technical-ja-1|num7782",
+   "label": "technical",
+   "lang": "ja",
+   "template_id": "technical-ja-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "レポート 7782 を開くたびにアプリが落ちます。",
+   "split": "eval",
+   "item_index": 40
+  },
+  {
+   "item_id": "technical|technical-de-2|num5530",
+   "label": "technical",
+   "lang": "de",
+   "template_id": "technical-de-2",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "Unsere API liefert seit heute Morgen Fehler 500 für Anfrage 5530.",
+   "split": "eval",
+   "item_index": 41
+  },
+  {
+   "item_id": "billing|billing-hi-3|num6380",
+   "label": "billing",
+   "lang": "hi",
+   "template_id": "billing-hi-3",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "रद्द करने के बाद भी सदस्यता 6380 का शुल्क फिर लिया गया।",
+   "split": "eval",
+   "item_index": 42
+  },
+  {
+   "item_id": "technical|technical-en-3|num1209",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "technical-en-3",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Uploads to the portal time out after about 1209 seconds.",
+   "split": "eval",
+   "item_index": 43
+  },
+  {
+   "item_id": "technical|technical-pt-1|num1209",
+   "label": "technical",
+   "lang": "pt",
+   "template_id": "technical-pt-1",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "O sistema cai toda vez que tento abrir o relatório 1209.",
+   "split": "eval",
+   "item_index": 44
+  },
+  {
+   "item_id": "sales|sales-ja-1|num2746",
+   "label": "sales",
+   "lang": "ja",
+   "template_id": "sales-ja-1",
+   "slots": {
+    "num": "2746"
+   },
+   "text": "2746 席の年間契約はいくらになりますか。",
+   "split": "eval",
+   "item_index": 45
+  },
+  {
+   "item_id": "sales|sales-ar-2|num2615",
+   "label": "sales",
+   "lang": "ar",
+   "template_id": "sales-ar-2",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "أرجو إرسال الأسعار للترقية إلى 2615 مستخدمًا.",
+   "split": "eval",
+   "item_index": 46
+  },
+  {
+   "item_id": "sales|sales-fr-1|num1927",
+   "label": "sales",
+   "lang": "fr",
+   "template_id": "sales-fr-1",
+   "slots": {
+    "num": "1927"
+   },
+   "text": "Combien coûterait un contrat annuel pour 1927 licences ?",
+   "split": "eval",
+   "item_index": 47
+  },
+  {
+   "item_id": "billing|billing-fr-1|num7782",
+   "label": "billing",
+   "lang": "fr",
+   "template_id": "billing-fr-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "J'ai été facturé deux fois pour la facture 7782, merci de rembourser le doublon.",
+   "split": "eval",
+   "item_index": 48
+  },
+  {
+   "item_id": "technical|technical-es-1|num5530",
+   "label": "technical",
+   "lang": "es",
+   "template_id": "technical-es-1",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "La aplicación se cierra cada vez que abro el informe 5530.",
+   "split": "eval",
+   "item_index": 49
+  },
+  {
+   "item_id": "technical|technical-hi-2|num7782",
+   "label": "technical",
+   "lang": "hi",
+   "template_id": "technical-hi-2",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "आज सुबह से हमारा API अनुरोध 7782 के लिए 500 त्रुटि दे रहा है।",
+   "split": "eval",
+   "item_index": 50
+  },
+  {
+   "item_id": "billing|billing-fr-2|num2615",
+   "label": "billing",
+   "lang": "fr",
+   "template_id": "billing-fr-2",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "Le reçu de la commande 2615 contient une ligne en double, je demande le remboursement.",
+   "split": "eval",
+   "item_index": 51
+  },
+  {
+   "item_id": "technical|technical-en-2|num1927",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "technical-en-2",
+   "slots": {
+    "num": "1927"
+   },
+   "text": "Our API returns 500 errors for request 1927 since this morning.",
+   "split": "eval",
+   "item_index": 52
+  },
+  {
+   "item_id": "technical|technical-ar-1|num7782",
+   "label": "technical",
+   "lang": "ar",
+   "template_id": "technical-ar-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "يتوقف التطبيق كلما فتحت التقرير 7782.",
+   "split": "eval",
+   "item_index": 53
+  },
+  {
+   "item_id": "sales|sales-es-1|num7782",
+   "label": "sales",
+   "lang": "es",
+   "template_id": "sales-es-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "¿Cuánto costaría un contrato anual para 7782 licencias?",
+   "split": "eval",
+   "item_index": 54
+  },
+  {
+   "item_id": "technical|technical-pt-1|num3097",
+   "label": "technical",
+   "lang": "pt",
+   "template_id": "technical-pt-1",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "O sistema cai toda vez que tento abrir o relatório 3097.",
+   "split": "eval",
+   "item_index": 55
+  },
+  {
+   "item_id": "technical|technical-en-1|num4411",
+   "label": "technical",
+   "lang": "en",
+   "template_id": "technical-en-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "The dashboard crashes with an error every time I open report 4411.",
+   "split": "eval",
+   "item_index": 56
+  },
+  {
+   "item_id": "technical|technical-pt-3|num6380",
+   "label": "technical",
+   "lang": "pt",
+   "template_id": "technical-pt-3",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "Os envios ao portal expiram depois de cerca de 6380 segundos.",
+   "split": "eval",
+   "item_index": 57
+  },
+  {
+   "item_id": "sales|sales-de-1|num7782",
+   "label": "sales",
+   "lang": "de",
+   "template_id": "sales-de-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "Was kostet ein Jahresvertrag für 7782 Nutzer?",
+   "split": "eval",
+   "item_index": 58
+  },
+  {
+   "item_id": "billing|billing-hi-2|num1209",
+   "label": "billing",
+   "lang": "hi",
+   "template_id": "billing-hi-2",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "ऑर्डर 1209 की रसीद में दोहरी प्रविष्टि है, कृपया राशि वापस करें।",
+   "split": "eval",
+   "item_index": 59
+  },
+  {
+   "item_id": "sales|sales-zh-2|num5530",
+   "label": "sales",
+   "lang": "zh",
+   "template_id": "sales-zh-2",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "请发给我升级到 5530 个用户的报价。",
+   "split": "eval",
+   "item_index": 60
+  },
+  {
+   "item_id": "billing|billing-fr-1|num4411",
+   "label": "billing",
+   "lang": "fr",
+   "template_id": "billing-fr-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "J'ai été facturé deux fois pour la facture 4411, merci de rembourser le doublon.",
+   "split": "eval",
+   "item_index": 61
+  },
+  {
+   "item_id": "billing|billing-zh-3|num1209",
+   "label": "billing",
+   "lang": "zh",
+   "template_id": "billing-zh-3",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "我已经取消订阅，但 1209 仍然再次扣费。",
+   "split": "eval",
+   "item_index": 62
+  },
+  {
+   "item_id": "billing|billing-es-2|num7043",
+   "label": "billing",
+   "lang": "es",
+   "template_id": "billing-es-2",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "El recibo del pedido 7043 muestra un cobro repetido, quiero el reembolso.",
+   "split": "eval",
+   "item_index": 63
+  },
+  {
+   "item_id": "billing|billing-ar-3|num7782",
+   "label": "billing",
+   "lang": "ar",
+   "template_id": "billing-ar-3",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "تم خصم الاشتراك 7782 مرة أخرى بعد أن ألغيته.",
+   "split": "eval",
+   "item_index": 64
+  },
+  {
+   "item_id": "technical|technical-de-2|num1209",
+   "label": "technical",
+   "lang": "de",
+   "template_id": "technical-de-2",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Unsere API liefert seit heute Morgen Fehler 500 für Anfrage 1209.",
+   "split": "eval",
+   "item_index": 65
+  },
+  {
+   "item_id": "sales|sales-ja-2|num1209",
+   "label": "sales",
+   "lang": "ja",
+   "template_id": "sales-ja-2",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "1209 ユーザーへのプラン変更の価格を送ってください。",
+   "split": "eval",
+   "item_index": 66
+  },
+  {
+   "item_id": "technical|technical-ja-2|num2615",
+   "label": "technical",
+   "lang": "ja",
+   "template_id": "technical-ja-2",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "今朝から API がリクエスト 2615 に対して 500 エラーを返します。",
+   "split": "eval",
+   "item_index": 67
+  },
+  {
+   "item_id": "billing|billing-zh-3|num4411",
+   "label": "billing",
+   "lang": "zh",
+   "template_id": "billing-zh-3",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "我已经取消订阅，但 4411 仍然再次扣费。",
+   "split": "eval",
+   "item_index": 68
+  },
+  {
+   "item_id": "sales|sales-de-1|num7043",
+   "label": "sales",
+   "lang": "de",
+   "template_id": "sales-de-1",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "Was kostet ein Jahresvertrag für 7043 Nutzer?",
+   "split": "eval",
+   "item_index": 69
+  },
+  {
+   "item_id": "billing|billing-es-1|num8824",
+   "label": "billing",
+   "lang": "es",
+   "template_id": "billing-es-1",
+   "slots": {
+    "num": "8824"
+   },
+   "text": "Me cobraron dos veces la factura 8824, devuélvanme el cargo duplicado.",
+   "split": "eval",
+   "item_index": 70
+  },
+  {
+   "item_id": "sales|sales-hi-1|num7782",
+   "label": "sales",
+   "lang": "hi",
+   "template_id": "sales-hi-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "7782 लाइसेंस के लिए वार्षिक अनुबंध की कीमत क्या होगी?",
+   "split": "eval",
+   "item_index": 71
+  },
+  {
+   "item_id": "technical|technical-hi-1|num7043",
+   "label": "technical",
+   "lang": "hi",
+   "template_id": "technical-hi-1",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "ऐप हर बार रिपोर्ट 7043 खोलते ही बंद हो जाता है।",
+   "split": "eval",
+   "item_index": 72
+  },
+  {
+   "item_id": "sales|sales-fr-3|num3097",
+   "label": "sales",
+   "lang": "fr",
+   "template_id": "sales-fr-3",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "Je souhaite un devis pour un accord annuel de 3097 postes.",
+   "split": "eval",
+   "item_index": 73
+  },
+  {
+   "item_id": "sales|sales-ar-1|num1927",
+   "label": "sales",
+   "lang": "ar",
+   "template_id": "sales-ar-1",
+   "slots": {
+    "num": "1927"
+   },
+   "text": "كم تكلفة عقد سنوي لـ 1927 مقعدًا؟",
+   "split": "eval",
+   "item_index": 74
+  },
+  {
+   "item_id": "sales|sales-zh-1|num4411",
+   "label": "sales",
+   "lang": "zh",
+   "template_id": "sales-zh-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "4411 个席位的年度合同大概要多少钱？",
+   "split": "eval",
+   "item_index": 75
+  },
+  {
+   "item_id": "billing|billing-ja-3|num2615",
+   "label": "billing",
+   "lang": "ja",
+   "template_id": "billing-ja-3",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "解約したのに購読 2615 の料金が再度請求されました。",
+   "split": "eval",
+   "item_index": 76
+  },
+  {
+   "item_id": "technical|technical-fr-3|num1927",
+   "label": "technical",
+   "lang": "fr",
+   "template_id": "technical-fr-3",
+   "slots": {
+    "num": "1927"
+   },
+   "text": "Les envois vers le portail échouent au bout de 1927 secondes.",
+   "split": "eval",
+   "item_index": 77
+  },
+  {
+   "item_id": "technical|technical-ar-1|num6380",
+   "label": "technical",
+   "lang": "ar",
+   "template_id": "technical-ar-1",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "يتوقف التطبيق كلما فتحت التقرير 6380.",
+   "split": "eval",
+   "item_index": 78
+  },
+  {
+   "item_id": "billing|billing-ja-3|num1209",
+   "label": "billing",
+   "lang": "ja",
+   "template_id": "billing-ja-3",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "解約したのに購読 1209 の料金が再度請求されました。",
+   "split": "eval",
+   "item_index": 79
+  },
+  {
+   "item_id": "technical|technical-fr-2|num2615",
+   "label": "technical",
+   "lang": "fr",
+   "template_id": "technical-fr-2",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "Notre API renvoie des erreurs 500 pour la requête 2615 depuis ce matin.",
+   "split": "eval",
+   "item_index": 80
+  },
+  {
+   "item_id": "billing|billing-ja-1|num4411",
+   "label": "billing",
+   "lang": "ja",
+   "template_id": "billing-ja-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "請求書 4411 が二重に請求されました。重複分を返金してください。",
+   "split": "eval",
+   "item_index": 81
+  },
+  {
+   "item_id": "sales|sales-zh-3|num7043",
+   "label": "sales",
+   "lang": "zh",
+   "template_id": "sales-zh-3",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "我想要一份覆盖 7043 名用户的年度协议报价。",
+   "split": "eval",
+   "item_index": 82
+  },
+  {
+   "item_id": "billing|billing-es-1|num1209",
+   "label": "billing",
+   "lang": "es",
+   "template_id": "billing-es-1",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Me cobraron dos veces la factura 1209, devuélvanme el cargo duplicado.",
+   "split": "eval",
+   "item_index": 83
+  },
+  {
+   "item_id": "billing|billing-de-3|num5530",
+   "label": "billing",
+   "lang": "de",
+   "template_id": "billing-de-3",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "Das Abonnement 5530 wurde nach meiner Kündigung erneut abgebucht.",
+   "split": "eval",
+   "item_index": 84
+  },
+  {
+   "item_id": "billing|billing-pt-1|num8154",
+   "label": "billing",
+   "lang": "pt",
+   "template_id": "billing-pt-1",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "Fui cobrado duas vezes na fatura 8154, quero o reembolso da cobrança duplicada.",
+   "split": "eval",
+   "item_index": 85
+  },
+  {
+   "item_id": "sales|sales-es-3|num1209",
+   "label": "sales",
+   "lang": "es",
+   "template_id": "sales-es-3",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Necesito precios para un acuerdo anual de 1209 puestos.",
+   "split": "eval",
+   "item_index": 86
+  },
+  {
+   "item_id": "sales|sales-pt-3|num8154",
+   "label": "sales",
+   "lang": "pt",
+   "template_id": "sales-pt-3",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "Quero uma cotação para um acordo anual de 8154 assentos.",
+   "split": "eval",
+   "item_index": 87
+  },
+  {
+   "item_id": "sales|sales-ar-2|num5530",
+   "label": "sales",
+   "lang": "ar",
+   "template_id": "sales-ar-2",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "أرجو إرسال الأسعار للترقية إلى 5530 مستخدمًا.",
+   "split": "eval",
+   "item_index": 88
+  },
+  {
+   "item_id": "billing|billing-zh-1|num1927",
+   "label": "billing",
+   "lang": "zh",
+   "template_id": "billing-zh-1",
+   "slots": {
+    "num": "1927"
+   },
+   "text": "发票 1927 被重复扣款了，请退还多收的款项。",
+   "split": "eval",
+   "item_index": 89
+  },
+  {
+   "item_id": "billing|billing-en-3|num5530",
+   "label": "billing",
+   "lang": "en",
+   "template_id": "billing-en-3",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "My card was billed again for subscription 5530 after I cancelled it.",
+   "split": "eval",
+   "item_index": 90
+  },
+  {
+   "item_id": "billing|billing-fr-1|num7043",
+   "label": "billing",
+   "lang": "fr",
+   "template_id": "billing-fr-1",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "J'ai été facturé deux fois pour la facture 7043, merci de rembourser le doublon.",
+   "split": "eval",
+   "item_index": 91
+  },
+  {
+   "item_id": "sales|sales-zh-2|num7043",
+   "label": "sales",
+   "lang": "zh",
+   "template_id": "sales-zh-2",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "请发给我升级到 7043 个用户的报价。",
+   "split": "eval",
+   "item_index": 92
+  },
+  {
+   "item_id": "billing|billing-ar-1|num5530",
+   "label": "billing",
+   "lang": "ar",
+   "template_id": "billing-ar-1",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "تم خصم المبلغ مرتين من بطاقتي للفاتورة 5530، أرجو استرداد المبلغ المكرر.",
+   "split": "eval",
+   "item_index": 93
+  },
+  {
+   "item_id": "sales|sales-hi-1|num2746",
+   "label": "sales",
+   "lang": "hi",
+   "template_id": "sales-hi-1",
+   "slots": {
+    "num": "2746"
+   },
+   "text": "2746 लाइसेंस के लिए वार्षिक अनुबंध की कीमत क्या होगी?",
+   "split": "eval",
+   "item_index": 94
+  },
+  {
+   "item_id": "sales|sales-ja-3|num1927",
+   "label": "sales",
+   "lang": "ja",
+   "template_id": "sales-ja-3",
+   "slots": {
+    "num": "1927"
+   },
+   "text": "1927 席の年間契約の見積もりをお願いします。",
+   "split": "eval",
+   "item_index": 95
+  },
+  {
+   "item_id": "technical|technical-de-2|num8824",
+   "label": "technical",
+   "lang": "de",
+   "template_id": "technical-de-2",
+   "slots": {
+    "num": "8824"
+   },
+   "text": "Unsere API liefert seit heute Morgen Fehler 500 für Anfrage 8824.",
+   "split": "eval",
+   "item_index": 96
+  },
+  {
+   "item_id": "technical|technical-ja-1|num4411",
+   "label": "technical",
+   "lang": "ja",
+   "template_id": "technical-ja-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "レポート 4411 を開くたびにアプリが落ちます。",
+   "split": "eval",
+   "item_index": 97
+  },
+  {
+   "item_id": "sales|sales-ar-2|num7043",
+   "label": "sales",
+   "lang": "ar",
+   "template_id": "sales-ar-2",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "أرجو إرسال الأسعار للترقية إلى 7043 مستخدمًا.",
+   "split": "eval",
+   "item_index": 98
+  },
+  {
+   "item_id": "billing|billing-hi-3|num3097",
+   "label": "billing",
+   "lang": "hi",
+   "template_id": "billing-hi-3",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "रद्द करने के बाद भी सदस्यता 3097 का शुल्क फिर लिया गया।",
+   "split": "eval",
+   "item_index": 99
+  },
+  {
+   "item_id": "billing|billing-zh-1|num2615",
+   "label": "billing",
+   "lang": "zh",
+   "template_id": "billing-zh-1",
+   "slots": {
+    "num": "2615"
+   },
+   "text": "发票 2615 被重复扣款了，请退还多收的款项。",
+   "split": "eval",
+   "item_index": 100
+  },
+  {
+   "item_id": "billing|billing-pt-3|num1209",
+   "label": "billing",
+   "lang": "pt",
+   "template_id": "billing-pt-3",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Cobraram novamente a assinatura 1209 depois que eu cancelei.",
+   "split": "eval",
+   "item_index": 101
+  },
+  {
+   "item_id": "sales|sales-pt-1|num1209",
+   "label": "sales",
+   "lang": "pt",
+   "template_id": "sales-pt-1",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "Quanto custaria um contrato anual para 1209 licenças?",
+   "split": "eval",
+   "item_index": 102
+  },
+  {
+   "item_id": "technical|technical-es-1|num7782",
+   "label": "technical",
+   "lang": "es",
+   "template_id": "technical-es-1",
+   "slots": {
+    "num": "7782"
+   },
+   "text": "La aplicación se cierra cada vez que abro el informe 7782.",
+   "split": "eval",
+   "item_index": 103
+  },
+  {
+   "item_id": "billing|billing-de-3|num8154",
+   "label": "billing",
+   "lang": "de",
+   "template_id": "billing-de-3",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "Das Abonnement 8154 wurde nach meiner Kündigung erneut abgebucht.",
+   "split": "eval",
+   "item_index": 104
+  },
+  {
+   "item_id": "technical|technical-ar-3|num8154",
+   "label": "technical",
+   "lang": "ar",
+   "template_id": "technical-ar-3",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "تفشل عمليات الرفع إلى البوابة بعد حوالي 8154 ثانية.",
+   "split": "eval",
+   "item_index": 105
+  },
+  {
+   "item_id": "billing|billing-ja-1|num3097",
+   "label": "billing",
+   "lang": "ja",
+   "template_id": "billing-ja-1",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "請求書 3097 が二重に請求されました。重複分を返金してください。",
+   "split": "eval",
+   "item_index": 106
+  },
+  {
+   "item_id": "technical|technical-es-1|num1209",
+   "label": "technical",
+   "lang": "es",
+   "template_id": "technical-es-1",
+   "slots": {
+    "num": "1209"
+   },
+   "text": "La aplicación se cierra cada vez que abro el informe 1209.",
+   "split": "eval",
+   "item_index": 107
+  },
+  {
+   "item_id": "sales|sales-en-3|num3097",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "sales-en-3",
+   "slots": {
+    "num": "3097"
+   },
+   "text": "We want a quote for a yearly agreement covering 3097 users.",
+   "split": "eval",
+   "item_index": 108
+  },
+  {
+   "item_id": "technical|technical-hi-2|num6380",
+   "label": "technical",
+   "lang": "hi",
+   "template_id": "technical-hi-2",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "आज सुबह से हमारा API अनुरोध 6380 के लिए 500 त्रुटि दे रहा है।",
+   "split": "eval",
+   "item_index": 109
+  },
+  {
+   "item_id": "sales|sales-en-1|num4411",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "sales-en-1",
+   "slots": {
+    "num": "4411"
+   },
+   "text": "What would an enterprise contract for 4411 seats cost per year?",
+   "split": "eval",
+   "item_index": 110
+  },
+  {
+   "item_id": "technical|technical-ar-2|num8154",
+   "label": "technical",
+   "lang": "ar",
+   "template_id": "technical-ar-2",
+   "slots": {
+    "num": "8154"
+   },
+   "text": "واجهة API تعيد أخطاء 500 للطلب 8154 منذ هذا الصباح.",
+   "split": "eval",
+   "item_index": 111
+  },
+  {
+   "item_id": "billing|billing-ar-3|num5530",
+   "label": "billing",
+   "lang": "ar",
+   "template_id": "billing-ar-3",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "تم خصم الاشتراك 5530 مرة أخرى بعد أن ألغيته.",
+   "split": "eval",
+   "item_index": 112
+  },
+  {
+   "item_id": "billing|billing-es-3|num6380",
+   "label": "billing",
+   "lang": "es",
+   "template_id": "billing-es-3",
+   "slots": {
+    "num": "6380"
+   },
+   "text": "Volvieron a cobrar la suscripción 6380 después de que la cancelé.",
+   "split": "eval",
+   "item_index": 113
+  },
+  {
+   "item_id": "sales|sales-hi-1|num7043",
+   "label": "sales",
+   "lang": "hi",
+   "template_id": "sales-hi-1",
+   "slots": {
+    "num": "7043"
+   },
+   "text": "7043 लाइसेंस के लिए वार्षिक अनुबंध की कीमत क्या होगी?",
+   "split": "eval",
+   "item_index": 114
+  },
+  {
+   "item_id": "technical|technical-hi-2|num8824",
+   "label": "technical",
+   "lang": "hi",
+   "template_id": "technical-hi-2",
+   "slots": {
+    "num": "8824"
+   },
+   "text": "आज सुबह से हमारा API अनुरोध 8824 के लिए 500 त्रुटि दे रहा है।",
+   "split": "eval",
+   "item_index": 115
+  },
+  {
+   "item_id": "technical|technical-zh-3|num2746",
+   "label": "technical",
+   "lang": "zh",
+   "template_id": "technical-zh-3",
+   "slots": {
+    "num": "2746"
+   },
+   "text": "上传到门户大约 2746 秒后就会超时。",
+   "split": "eval",
+   "item_index": 116
+  },
+  {
+   "item_id": "sales|sales-de-1|num5530",
+   "label": "sales",
+   "lang": "de",
+   "template_id": "sales-de-1",
+   "slots": {
+    "num": "5530"
+   },
+   "text": "Was kostet ein Jahresvertrag für 5530 Nutzer?",
+   "split": "eval",
+   "item_index": 117
+  },
+  {
+   "item_id": "sales|sales-en-2|num8824",
+   "label": "sales",
+   "lang": "en",
+   "template_id": "sales-en-2",
+   "slots": {
+    "num": "8824"
+   },
+   "text": "Can you send pricing for upgrading our plan to 8824 licenses?",
+   "split": "eval",
+   "item_index": 118
+  },
+  {
+   "item_id": "sales|sales-hi-3|num8824",
+   "label": "sales",
+   "lang": "hi",
+   "template_id": "sales-hi-3",
+   "slots": {
+    "num": "8824"
+   },
+   "text": "मुझे 8824 सीटों के वार्षिक समझौते का कोटेशन चाहिए।",
+   "split": "eval",
+   "item_index": 119
+  }
+ ]
+}

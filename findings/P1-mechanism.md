@@ -28,11 +28,17 @@ not numerical. fp32 also costs 3.3× the latency for nothing — a usable second
 
 | needle fraction | absolute position | accuracy | mean P(gold) |
 |---|---|---|---|
-| 0.00 (start) | ~256 | **0.900** | 0.794 |
-| 0.25 | ~1256 | 0.500 | 0.450 |
-| 0.50 | ~2256 | 0.500 | 0.415 |
-| 0.75 | ~3256 | 0.500 | 0.409 |
-| 1.00 (end) | ~4256 | 0.600 | 0.459 |
+| 0.00 (start) | ~50 | **0.900** | 0.794 |
+| 0.25 | ~1050 | 0.500 | 0.450 |
+| 0.50 | ~2050 | 0.500 | 0.415 |
+| 0.75 | ~3050 | 0.500 | 0.409 |
+| 1.00 (end) | ~4050 | 0.600 | 0.459 |
+
+> ⚠ **CORRECTED (V-001 defect #9).** The original column read 256 / 1256 / 2256 / 3256 / 4256,
+> computed by treating `head_max_len=256` as the head length. `head_max_len` is an **upper bound**;
+> the real prefix is **45 head tokens + a 5-token JSON wrapper = 50**. The correction *strengthens*
+> Control 2 below rather than weakening it.
+
 
 ## Probe C — document length at **fixed** needle fraction (1.0, limit=8192, fp32)
 
@@ -56,33 +62,58 @@ at all at this setting; it is positional.
 **Control 2 — position alone is not the variable either.** The needle at absolute position ~1000
 scores **0.900** in a 1018-token document (probe C, pad=1000) but **0.500** at the same absolute
 position in a 4018-token document (probe B, frac=0.25). Same evidence, same position, same
-checkpoint — the only difference is **how much text surrounds it**.
+checkpoint — the only difference is **how much text surrounds it**. *(With the corrected prefix of
+50 rather than 256, the two positions are both ~1050 and the comparison is **exact**, not
+approximate — V-001 defect #9.)*
 
 ## Mechanism
 
 Neither distance nor length alone explains the data; both act. This is consistent with
-**attention dilution over the full key set**, compounded by a **shortage of long-range mixing
-paths**:
+**attention dilution over the full key set**:
 
 - The option `[MASK]` markers sit at the **start** of the sequence; the document follows them.
-- 14 of 22 layers are sliding-attention with a **±64-token** half-window. They cannot move
-  information more than 64 positions per hop.
-- Only the **8 global layers** (indices 0,3,6,9,12,15,18,21) create direct long-range edges.
-- Every additional filler token is another key competing for the markers' attention mass, while
-  the number of *useful* hops is fixed at 8.
+- 14 of 22 layers are sliding-attention with a **±64-token** half-window; the other 8 are global.
+- Every additional filler token is another key competing for the markers' attention mass.
+
+> ⚠ **CORRECTED (M-001).** This section originally claimed the markers "must route through 8
+> cross-document hops", implying distance was a *reachability* constraint. **That is refuted.**
+> Layer 0 is `full_attention`, so the reachable set after one hop is already `[0, n)` — **the
+> reachability graph has diameter 1**, and any state token reaches any marker in a single layer.
+> What is concentrated is the *edge budget*: at `n=8192`, 99.9 % of cross-document edges come from
+> the 8 global layers, and the sliding layers' contribution is constant at 29,120 edges regardless
+> of `n`. The binding constraint is **dilution**, not distance-as-reachability. The measurements
+> below are unaffected; only the explanation was wrong.
 
 Two consequences, both observed:
 
-1. **Dilution.** At pad=7000 the score lands on **0.450 — exactly the majority class**. The model
-   has not degraded gracefully; it has stopped reading the document and fallen back on its label
-   prior. That is the same terminal behaviour as the 0.35 floor at `max_len=1024`, reached by a
-   different route.
+1. **Dilution.** At pad=7000 the score lands on **0.450 — exactly the majority-class rate**. The
+   model has stopped discriminating. *(Caveat from V-001: in that cell the prediction histogram is
+   `{technical: 15, billing: 2, sales: 3}` — it equals the majority-class **rate** but is not
+   collapse to a single constant label. "Stopped discriminating" is supported; "collapsed to one
+   label" is not.)* It is **not** the same terminal behaviour as the `max_len=1024` case, which is
+   a different phenomenon — see the correction below.
 2. **Position dependence.** Evidence adjacent to the markers (frac=0.00) survives 4000 trailing
-   tokens at 0.90; evidence 1000+ positions away does not.
+   tokens at 0.90; evidence 1050+ positions away does not.
 
-**Both are consistent with one architectural statement:** the markers have no privileged,
-non-diluting path to distant document positions. Everything must route through 8 global layers
-and compete with every filler token for attention mass.
+> ⚠ **CORRECTED (V-001 defect #7) — the `max_len=1024` "0.35 floor" is a NO-EVIDENCE floor.**
+> This document originally called it "the same terminal behaviour reached by a different route".
+> That is **not verifiable as stated**. V-001 established by state hash that the four
+> `limit=1024, pad≥1000` rows are **one request-free measurement repeated four times**: the request
+> begins at document token 1000 while only 978 tokens of state survive, so **zero request tokens are
+> in the model input at all**. The model answers `technical` for 20/20 items, and 0.35 is simply the
+> `technical` share of that label draw (7/20) — **below the trivial constant-`billing` baseline of
+> 0.45**.
+>
+> So the correct statement is: *at `max_len=1024` a 4000-token document is not "handled badly", it
+> is **not handled at all** — the evidence is absent from the input.* That is a **truncation**
+> result, not a long-context result, and it cannot support any claim about attention or
+> architecture. The reachability/dilution findings stand on probes B and C at `max_len=8192`, where
+> V-001 confirmed the request is present.
+
+**What is consistent across the surviving evidence:** the markers have no privileged, non-diluting
+path to distant document positions. Information arrives (P1b: 0.82 linear probe at the marker
+positions), but it must compete with every filler token for a fixed pool of attention mass.
+
 
 ## What this predicts (falsifiable)
 
