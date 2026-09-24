@@ -84,10 +84,15 @@ def probe_cell(tok, doc, prefix_text, needle_text, cut_label=None, room=None):
             rec["start_minus_label"] = st - cut_label
             rec["label_frac"] = cut_label / n if n else None
     if room is not None:
-        seen = rec["state_seen_tokens"] = min(n, room)
+        # Both scripts call agent.predict({"text": ...}), and Agent._encode_state tokenizes
+        # serialize_state(state) = json.dumps({"text": doc}), i.e. a 5-token JSON wrapper around
+        # the document. Measure the wrapper, not the bare document.
+        wrapped = json.dumps({"text": doc}, ensure_ascii=False)
+        wrapped_ids = tok(wrapped, add_special_tokens=False)["input_ids"]
+        rec["wrapped_state_tokens"] = len(wrapped_ids)
+        seen = rec["state_seen_tokens"] = min(len(wrapped_ids), room)
         rec["needle_fully_visible"] = bool(st is not None and en is not None and en <= seen)
-        rec["state_hash"] = hashlib.sha256(
-            json.dumps(tok(doc, add_special_tokens=False)["input_ids"][:room]).encode()).hexdigest()[:16]
+        rec["state_hash"] = hashlib.sha256(json.dumps(wrapped_ids[:room]).encode()).hexdigest()[:16]
     return rec
 
 
@@ -256,7 +261,8 @@ def main():
         if c["limit"] != 1024 or c["pad"] == 0:
             continue
         b = (fid * (c["pad"] // max(1, len(fid)) + 1))[:c["pad"]]
-        ids_only = tok(tok.decode(b), add_special_tokens=False)["input_ids"][:room[1024]]
+        wrapped_only = json.dumps({"text": tok.decode(b)}, ensure_ascii=False)
+        ids_only = tok(wrapped_only, add_special_tokens=False)["input_ids"][:room[1024]]
         h_only = hashlib.sha256(json.dumps(ids_only).encode()).hexdigest()[:16]
         c["filler_only_state_hash"] = h_only
         c["request_absent_from_model_input"] = h_only in c["state_hashes"]

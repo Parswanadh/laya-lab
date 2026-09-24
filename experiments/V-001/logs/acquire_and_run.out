@@ -22,3 +22,11 @@ b5768830d543ab01b0ef20c67c6075a8f17b01fa4c361209654a959e8b234499  experiments/or
 == 1/3 orch-baseline (fresh process) ==
 baseline exit=0
 == 2/3 orch-diagnostic (fresh process) ==
+diagnostic exit=0
+== 3/3 instrumented repeat + per-item (fresh process) ==
+repeat exit=0
+== restored artifacts ==
+b5768830d543ab01b0ef20c67c6075a8f17b01fa4c361209654a959e8b234499  experiments/orch-baseline/results.json
+680970a28a61ebb523c6806ee4934bd65b2ea255ecf178acebed64150fed9ca8  experiments/orch-diagnostic/results.json
+== done ==
+REPRO_RC=0 (ran under the lock on attempt 5)

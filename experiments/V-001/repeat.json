@@ -1,0 +1,3333 @@
+{
+ "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "dtype_at_load": "torch.bfloat16",
+ "cfg_max_len": 1024,
+ "torch": "2.9.1+cu128",
+ "cells": {
+  "baseline_limit1024_pad0": {
+   "accuracy": 0.95,
+   "n": 20,
+   "median_latency_s": 0.0402,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 10,
+    "sales": 3,
+    "technical": 7
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 69,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9978,
+     "pred_p": 0.9978,
+     "input_tokens": 65,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.6691,
+     "pred_p": 0.6691,
+     "input_tokens": 66,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 66,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9974,
+     "pred_p": 0.9974,
+     "input_tokens": 68,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.9996,
+     "pred_p": 0.9996,
+     "input_tokens": 65,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 71,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9988,
+     "pred_p": 0.9988,
+     "input_tokens": 63,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.9959,
+     "pred_p": 0.9959,
+     "input_tokens": 66,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 73,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9709,
+     "pred_p": 0.9709,
+     "input_tokens": 64,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9999,
+     "pred_p": 0.9999,
+     "input_tokens": 72,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9724,
+     "pred_p": 0.9724,
+     "input_tokens": 65,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9999,
+     "pred_p": 0.9999,
+     "input_tokens": 66,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9658,
+     "pred_p": 0.9658,
+     "input_tokens": 66,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.0016,
+     "pred_p": 0.9977,
+     "input_tokens": 63,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9574,
+     "pred_p": 0.9574,
+     "input_tokens": 76,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9996,
+     "pred_p": 0.9996,
+     "input_tokens": 67,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9956,
+     "pred_p": 0.9956,
+     "input_tokens": 67,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.939,
+     "pred_p": 0.939,
+     "input_tokens": 75,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit1024_pad1000": {
+   "accuracy": 0.35,
+   "n": 20,
+   "median_latency_s": 0.0502,
+   "distinct_predictions": [
+    "technical"
+   ],
+   "pred_histogram": {
+    "technical": 20
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit1024_pad2000": {
+   "accuracy": 0.35,
+   "n": 20,
+   "median_latency_s": 0.0556,
+   "distinct_predictions": [
+    "technical"
+   ],
+   "pred_histogram": {
+    "technical": 20
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit1024_pad4000": {
+   "accuracy": 0.35,
+   "n": 20,
+   "median_latency_s": 0.0645,
+   "distinct_predictions": [
+    "technical"
+   ],
+   "pred_histogram": {
+    "technical": 20
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit1024_pad7000": {
+   "accuracy": 0.35,
+   "n": 20,
+   "median_latency_s": 0.0735,
+   "distinct_predictions": [
+    "technical"
+   ],
+   "pred_histogram": {
+    "technical": 20
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit8192_pad0": {
+   "accuracy": 0.95,
+   "n": 20,
+   "median_latency_s": 0.0251,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 10,
+    "sales": 3,
+    "technical": 7
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 69,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9978,
+     "pred_p": 0.9978,
+     "input_tokens": 65,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.6691,
+     "pred_p": 0.6691,
+     "input_tokens": 66,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 66,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9974,
+     "pred_p": 0.9974,
+     "input_tokens": 68,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.9996,
+     "pred_p": 0.9996,
+     "input_tokens": 65,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 71,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9988,
+     "pred_p": 0.9988,
+     "input_tokens": 63,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.9959,
+     "pred_p": 0.9959,
+     "input_tokens": 66,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 1.0,
+     "pred_p": 1.0,
+     "input_tokens": 73,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9709,
+     "pred_p": 0.9709,
+     "input_tokens": 64,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9999,
+     "pred_p": 0.9999,
+     "input_tokens": 72,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9724,
+     "pred_p": 0.9724,
+     "input_tokens": 65,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9999,
+     "pred_p": 0.9999,
+     "input_tokens": 66,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9658,
+     "pred_p": 0.9658,
+     "input_tokens": 66,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.0016,
+     "pred_p": 0.9977,
+     "input_tokens": 63,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9574,
+     "pred_p": 0.9574,
+     "input_tokens": 76,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.9996,
+     "pred_p": 0.9996,
+     "input_tokens": 67,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9956,
+     "pred_p": 0.9956,
+     "input_tokens": 67,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.939,
+     "pred_p": 0.939,
+     "input_tokens": 75,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit8192_pad1000": {
+   "accuracy": 0.9,
+   "n": 20,
+   "median_latency_s": 0.0514,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 11,
+    "sales": 2,
+    "technical": 7
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9962,
+     "pred_p": 0.9962,
+     "input_tokens": 1069,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8668,
+     "pred_p": 0.8668,
+     "input_tokens": 1065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.5674,
+     "pred_p": 0.5674,
+     "input_tokens": 1066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.8368,
+     "pred_p": 0.8368,
+     "input_tokens": 1066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.813,
+     "pred_p": 0.813,
+     "input_tokens": 1068,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.9138,
+     "pred_p": 0.9138,
+     "input_tokens": 1065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9973,
+     "pred_p": 0.9973,
+     "input_tokens": 1071,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7627,
+     "pred_p": 0.7627,
+     "input_tokens": 1063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.2183,
+     "pred_p": 0.4892,
+     "input_tokens": 1066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.6929,
+     "pred_p": 0.6929,
+     "input_tokens": 1073,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.4988,
+     "pred_p": 0.4988,
+     "input_tokens": 1064,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.634,
+     "pred_p": 0.634,
+     "input_tokens": 1072,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5691,
+     "pred_p": 0.5691,
+     "input_tokens": 1065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9662,
+     "pred_p": 0.9662,
+     "input_tokens": 1066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8118,
+     "pred_p": 0.8118,
+     "input_tokens": 1066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.0395,
+     "pred_p": 0.8707,
+     "input_tokens": 1063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.7788,
+     "pred_p": 0.7788,
+     "input_tokens": 1076,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.94,
+     "pred_p": 0.94,
+     "input_tokens": 1067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.8815,
+     "pred_p": 0.8815,
+     "input_tokens": 1067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.7836,
+     "pred_p": 0.7836,
+     "input_tokens": 1075,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit8192_pad2000": {
+   "accuracy": 0.8,
+   "n": 20,
+   "median_latency_s": 0.1055,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 11,
+    "sales": 1,
+    "technical": 8
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.9285,
+     "pred_p": 0.9285,
+     "input_tokens": 2069,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.855,
+     "pred_p": 0.855,
+     "input_tokens": 2065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.3232,
+     "pred_p": 0.3476,
+     "input_tokens": 2066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4013,
+     "pred_p": 0.4013,
+     "input_tokens": 2066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7705,
+     "pred_p": 0.7705,
+     "input_tokens": 2068,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.6042,
+     "pred_p": 0.6042,
+     "input_tokens": 2065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.8127,
+     "pred_p": 0.8127,
+     "input_tokens": 2071,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6894,
+     "pred_p": 0.6894,
+     "input_tokens": 2063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.3149,
+     "pred_p": 0.398,
+     "input_tokens": 2066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.3872,
+     "pred_p": 0.3872,
+     "input_tokens": 2073,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "billing",
+     "p_gold": 0.3639,
+     "pred_p": 0.3675,
+     "input_tokens": 2064,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.5741,
+     "pred_p": 0.5741,
+     "input_tokens": 2072,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6089,
+     "pred_p": 0.6089,
+     "input_tokens": 2065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.5586,
+     "pred_p": 0.5586,
+     "input_tokens": 2066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6776,
+     "pred_p": 0.6776,
+     "input_tokens": 2066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.0496,
+     "pred_p": 0.8384,
+     "input_tokens": 2063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.5768,
+     "pred_p": 0.5768,
+     "input_tokens": 2076,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6915,
+     "pred_p": 0.6915,
+     "input_tokens": 2067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.5069,
+     "pred_p": 0.5069,
+     "input_tokens": 2067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4714,
+     "pred_p": 0.4714,
+     "input_tokens": 2075,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit8192_pad4000": {
+   "accuracy": 0.6,
+   "n": 20,
+   "median_latency_s": 0.2724,
+   "distinct_predictions": [
+    "billing",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 5,
+    "technical": 15
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.6878,
+     "pred_p": 0.6878,
+     "input_tokens": 4069,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8364,
+     "pred_p": 0.8364,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2329,
+     "pred_p": 0.5754,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.3212,
+     "pred_p": 0.3212,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.681,
+     "pred_p": 0.681,
+     "input_tokens": 4068,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2555,
+     "pred_p": 0.5335,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.226,
+     "pred_p": 0.4888,
+     "input_tokens": 4071,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6252,
+     "pred_p": 0.6252,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.3183,
+     "pred_p": 0.5046,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4147,
+     "pred_p": 0.4147,
+     "input_tokens": 4073,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7041,
+     "pred_p": 0.7041,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2945,
+     "pred_p": 0.4154,
+     "input_tokens": 4072,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6462,
+     "pred_p": 0.6462,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2618,
+     "pred_p": 0.3945,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6857,
+     "pred_p": 0.6857,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1225,
+     "pred_p": 0.4797,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.479,
+     "pred_p": 0.479,
+     "input_tokens": 4076,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6578,
+     "pred_p": 0.6578,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4547,
+     "pred_p": 0.4547,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2309,
+     "pred_p": 0.3897,
+     "input_tokens": 4075,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_limit8192_pad7000": {
+   "accuracy": 0.45,
+   "n": 20,
+   "median_latency_s": 0.6794,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 3,
+    "sales": 3,
+    "technical": 14
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4483,
+     "pred_p": 0.4483,
+     "input_tokens": 7069,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8372,
+     "pred_p": 0.8372,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2159,
+     "pred_p": 0.5,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4225,
+     "pred_p": 0.4225,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6673,
+     "pred_p": 0.6673,
+     "input_tokens": 7068,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1664,
+     "pred_p": 0.4103,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.2917,
+     "pred_p": 0.3945,
+     "input_tokens": 7071,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5899,
+     "pred_p": 0.5899,
+     "input_tokens": 7063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.268,
+     "pred_p": 0.4631,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2615,
+     "pred_p": 0.4089,
+     "input_tokens": 7073,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6303,
+     "pred_p": 0.6303,
+     "input_tokens": 7064,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1999,
+     "pred_p": 0.4621,
+     "input_tokens": 7072,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6557,
+     "pred_p": 0.6557,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2412,
+     "pred_p": 0.4393,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7829,
+     "pred_p": 0.7829,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.1535,
+     "pred_p": 0.3651,
+     "input_tokens": 7063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.3272,
+     "pred_p": 0.6357,
+     "input_tokens": 7076,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6511,
+     "pred_p": 0.6511,
+     "input_tokens": 7067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.2857,
+     "pred_p": 0.6489,
+     "input_tokens": 7067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2375,
+     "pred_p": 0.4481,
+     "input_tokens": 7075,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  }
+ },
+ "repeats": {
+  "baseline_8192_7000_run2": {
+   "accuracy": 0.45,
+   "n": 20,
+   "median_latency_s": 0.5539,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 3,
+    "sales": 3,
+    "technical": 14
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4483,
+     "pred_p": 0.4483,
+     "input_tokens": 7069,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8372,
+     "pred_p": 0.8372,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2159,
+     "pred_p": 0.5,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4225,
+     "pred_p": 0.4225,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6673,
+     "pred_p": 0.6673,
+     "input_tokens": 7068,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1664,
+     "pred_p": 0.4103,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.2917,
+     "pred_p": 0.3945,
+     "input_tokens": 7071,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5899,
+     "pred_p": 0.5899,
+     "input_tokens": 7063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.268,
+     "pred_p": 0.4631,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2615,
+     "pred_p": 0.4089,
+     "input_tokens": 7073,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6303,
+     "pred_p": 0.6303,
+     "input_tokens": 7064,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1999,
+     "pred_p": 0.4621,
+     "input_tokens": 7072,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6557,
+     "pred_p": 0.6557,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2412,
+     "pred_p": 0.4393,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7829,
+     "pred_p": 0.7829,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.1535,
+     "pred_p": 0.3651,
+     "input_tokens": 7063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.3272,
+     "pred_p": 0.6357,
+     "input_tokens": 7076,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6511,
+     "pred_p": 0.6511,
+     "input_tokens": 7067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.2857,
+     "pred_p": 0.6489,
+     "input_tokens": 7067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2375,
+     "pred_p": 0.4481,
+     "input_tokens": 7075,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_8192_7000_run3": {
+   "accuracy": 0.45,
+   "n": 20,
+   "median_latency_s": 0.6841,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 3,
+    "sales": 3,
+    "technical": 14
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4483,
+     "pred_p": 0.4483,
+     "input_tokens": 7069,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8372,
+     "pred_p": 0.8372,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2159,
+     "pred_p": 0.5,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4225,
+     "pred_p": 0.4225,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6673,
+     "pred_p": 0.6673,
+     "input_tokens": 7068,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1664,
+     "pred_p": 0.4103,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.2917,
+     "pred_p": 0.3945,
+     "input_tokens": 7071,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5899,
+     "pred_p": 0.5899,
+     "input_tokens": 7063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.268,
+     "pred_p": 0.4631,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2615,
+     "pred_p": 0.4089,
+     "input_tokens": 7073,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6303,
+     "pred_p": 0.6303,
+     "input_tokens": 7064,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1999,
+     "pred_p": 0.4621,
+     "input_tokens": 7072,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6557,
+     "pred_p": 0.6557,
+     "input_tokens": 7065,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2412,
+     "pred_p": 0.4393,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7829,
+     "pred_p": 0.7829,
+     "input_tokens": 7066,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "billing",
+     "p_gold": 0.1535,
+     "pred_p": 0.3651,
+     "input_tokens": 7063,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.3272,
+     "pred_p": 0.6357,
+     "input_tokens": 7076,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6511,
+     "pred_p": 0.6511,
+     "input_tokens": 7067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.2857,
+     "pred_p": 0.6489,
+     "input_tokens": 7067,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2375,
+     "pred_p": 0.4481,
+     "input_tokens": 7075,
+     "max_len": 8192,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "baseline_1024_1000_run2": {
+   "accuracy": 0.35,
+   "n": 20,
+   "median_latency_s": 0.0584,
+   "distinct_predictions": [
+    "technical"
+   ],
+   "pred_histogram": {
+    "technical": 20
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1093,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.5639,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0541,
+     "pred_p": 0.5639,
+     "input_tokens": 1024,
+     "max_len": 1024,
+     "dtype": "torch.bfloat16"
+    }
+   ]
+  },
+  "diag_C4000_fp32_run1": {
+   "accuracy": 0.6,
+   "n": 20,
+   "median_latency_s": 0.6784,
+   "distinct_predictions": [
+    "billing",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 5,
+    "technical": 15
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.6913,
+     "pred_p": 0.6913,
+     "input_tokens": 4069,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.833,
+     "pred_p": 0.833,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2375,
+     "pred_p": 0.5683,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.3179,
+     "pred_p": 0.3179,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6781,
+     "pred_p": 0.6781,
+     "input_tokens": 4068,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2587,
+     "pred_p": 0.535,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2306,
+     "pred_p": 0.4828,
+     "input_tokens": 4071,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6233,
+     "pred_p": 0.6233,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.3308,
+     "pred_p": 0.4904,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4146,
+     "pred_p": 0.4146,
+     "input_tokens": 4073,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.701,
+     "pred_p": 0.701,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2943,
+     "pred_p": 0.4132,
+     "input_tokens": 4072,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6474,
+     "pred_p": 0.6474,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2697,
+     "pred_p": 0.3895,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6901,
+     "pred_p": 0.6901,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1244,
+     "pred_p": 0.4795,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4873,
+     "pred_p": 0.4873,
+     "input_tokens": 4076,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.653,
+     "pred_p": 0.653,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4685,
+     "pred_p": 0.4685,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2305,
+     "pred_p": 0.3879,
+     "input_tokens": 4075,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    }
+   ]
+  },
+  "diag_C4000_fp32_run2": {
+   "accuracy": 0.6,
+   "n": 20,
+   "median_latency_s": 0.6322,
+   "distinct_predictions": [
+    "billing",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 5,
+    "technical": 15
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.6913,
+     "pred_p": 0.6913,
+     "input_tokens": 4069,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.833,
+     "pred_p": 0.833,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2375,
+     "pred_p": 0.5683,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.3179,
+     "pred_p": 0.3179,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6781,
+     "pred_p": 0.6781,
+     "input_tokens": 4068,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2587,
+     "pred_p": 0.535,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2306,
+     "pred_p": 0.4828,
+     "input_tokens": 4071,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6233,
+     "pred_p": 0.6233,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.3308,
+     "pred_p": 0.4904,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4146,
+     "pred_p": 0.4146,
+     "input_tokens": 4073,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.701,
+     "pred_p": 0.701,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2943,
+     "pred_p": 0.4132,
+     "input_tokens": 4072,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6474,
+     "pred_p": 0.6474,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2697,
+     "pred_p": 0.3895,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6901,
+     "pred_p": 0.6901,
+     "input_tokens": 4066,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.1244,
+     "pred_p": 0.4795,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4873,
+     "pred_p": 0.4873,
+     "input_tokens": 4076,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.653,
+     "pred_p": 0.653,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4685,
+     "pred_p": 0.4685,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2305,
+     "pred_p": 0.3879,
+     "input_tokens": 4075,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    }
+   ]
+  },
+  "diag_B0.5_fp32_run1": {
+   "accuracy": 0.5,
+   "n": 20,
+   "median_latency_s": 0.6412,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 2,
+    "sales": 3,
+    "technical": 15
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1205,
+     "pred_p": 0.5587,
+     "input_tokens": 4068,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.781,
+     "pred_p": 0.781,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2088,
+     "pred_p": 0.5772,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1259,
+     "pred_p": 0.4657,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7029,
+     "pred_p": 0.7029,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2175,
+     "pred_p": 0.552,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4933,
+     "pred_p": 0.4933,
+     "input_tokens": 4070,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.749,
+     "pred_p": 0.749,
+     "input_tokens": 4062,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.213,
+     "pred_p": 0.5957,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.3548,
+     "pred_p": 0.3548,
+     "input_tokens": 4072,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7865,
+     "pred_p": 0.7865,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.3077,
+     "pred_p": 0.3978,
+     "input_tokens": 4071,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.733,
+     "pred_p": 0.733,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2402,
+     "pred_p": 0.4613,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6847,
+     "pred_p": 0.6847,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.4546,
+     "pred_p": 0.4546,
+     "input_tokens": 4062,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0866,
+     "pred_p": 0.631,
+     "input_tokens": 4076,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8706,
+     "pred_p": 0.8706,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.1038,
+     "pred_p": 0.8473,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.0715,
+     "pred_p": 0.7268,
+     "input_tokens": 4074,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    }
+   ]
+  },
+  "diag_B0.5_fp32_run2": {
+   "accuracy": 0.5,
+   "n": 20,
+   "median_latency_s": 0.7183,
+   "distinct_predictions": [
+    "billing",
+    "sales",
+    "technical"
+   ],
+   "pred_histogram": {
+    "billing": 2,
+    "sales": 3,
+    "technical": 15
+   },
+   "per_item": [
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1205,
+     "pred_p": 0.5587,
+     "input_tokens": 4068,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.781,
+     "pred_p": 0.781,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2088,
+     "pred_p": 0.5772,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.1259,
+     "pred_p": 0.4657,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7029,
+     "pred_p": 0.7029,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.2175,
+     "pred_p": 0.552,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.4933,
+     "pred_p": 0.4933,
+     "input_tokens": 4070,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.749,
+     "pred_p": 0.749,
+     "input_tokens": 4062,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "technical",
+     "p_gold": 0.213,
+     "pred_p": 0.5957,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "billing",
+     "p_gold": 0.3548,
+     "pred_p": 0.3548,
+     "input_tokens": 4072,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.7865,
+     "pred_p": 0.7865,
+     "input_tokens": 4063,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.3077,
+     "pred_p": 0.3978,
+     "input_tokens": 4071,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.733,
+     "pred_p": 0.733,
+     "input_tokens": 4064,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.2402,
+     "pred_p": 0.4613,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.6847,
+     "pred_p": 0.6847,
+     "input_tokens": 4065,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "sales",
+     "pred": "sales",
+     "p_gold": 0.4546,
+     "pred_p": 0.4546,
+     "input_tokens": 4062,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "technical",
+     "p_gold": 0.0866,
+     "pred_p": 0.631,
+     "input_tokens": 4076,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "technical",
+     "pred": "technical",
+     "p_gold": 0.8706,
+     "pred_p": 0.8706,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.1038,
+     "pred_p": 0.8473,
+     "input_tokens": 4067,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    },
+    {
+     "gold": "billing",
+     "pred": "sales",
+     "p_gold": 0.0715,
+     "pred_p": 0.7268,
+     "input_tokens": 4074,
+     "max_len": 8192,
+     "dtype": "torch.float32"
+    }
+   ]
+  }
+ }
+}

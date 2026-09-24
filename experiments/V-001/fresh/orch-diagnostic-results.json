@@ -1,0 +1,1303 @@
+{
+ "device": "cuda",
+ "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+ "probes": {
+  "A_dtype": {
+   "bf16 (shipped default)": {
+    "accuracy": 0.6,
+    "n": 20,
+    "median_latency_s": 0.2622
+   },
+   "fp16": {
+    "accuracy": 0.6,
+    "n": 20,
+    "median_latency_s": 0.2671
+   },
+   "fp32": {
+    "accuracy": 0.6,
+    "n": 20,
+    "median_latency_s": 0.8191
+   }
+  },
+  "B_position": {
+   "0.0": {
+    "accuracy": 0.9,
+    "n": 20,
+    "median_latency_s": 0.8213,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9561,
+      "pred_p": 0.9561
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.4038,
+      "pred_p": 0.4038
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8156,
+      "pred_p": 0.8156
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.7378,
+      "pred_p": 0.7378
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.891,
+      "pred_p": 0.891
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.1445,
+      "pred_p": 0.8528
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9998,
+      "pred_p": 0.9998
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7783,
+      "pred_p": 0.7783
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9936,
+      "pred_p": 0.9936
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7285,
+      "pred_p": 0.7285
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9898,
+      "pred_p": 0.9898
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7657,
+      "pred_p": 0.7657
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.057,
+      "pred_p": 0.9274
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9846,
+      "pred_p": 0.9846
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9366,
+      "pred_p": 0.9366
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9688,
+      "pred_p": 0.9688
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.7338,
+      "pred_p": 0.7338
+     }
+    ]
+   },
+   "0.25": {
+    "accuracy": 0.5,
+    "n": 20,
+    "median_latency_s": 0.8048,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1483,
+      "pred_p": 0.468
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7199,
+      "pred_p": 0.7199
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2646,
+      "pred_p": 0.5321
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1069,
+      "pred_p": 0.5136
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7053,
+      "pred_p": 0.7053
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1958,
+      "pred_p": 0.573
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.6259,
+      "pred_p": 0.6259
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8375,
+      "pred_p": 0.8375
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.5316,
+      "pred_p": 0.5316
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.6461,
+      "pred_p": 0.6461
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8242,
+      "pred_p": 0.8242
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1254,
+      "pred_p": 0.5355
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7414,
+      "pred_p": 0.7414
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1359,
+      "pred_p": 0.6466
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.876,
+      "pred_p": 0.876
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.2804,
+      "pred_p": 0.3931
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.0679,
+      "pred_p": 0.5294
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8848,
+      "pred_p": 0.8848
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.1931,
+      "pred_p": 0.623
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.0845,
+      "pred_p": 0.633
+     }
+    ]
+   },
+   "0.5": {
+    "accuracy": 0.5,
+    "n": 20,
+    "median_latency_s": 0.789,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1205,
+      "pred_p": 0.5587
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.781,
+      "pred_p": 0.781
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2088,
+      "pred_p": 0.5772
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1259,
+      "pred_p": 0.4657
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7029,
+      "pred_p": 0.7029
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2175,
+      "pred_p": 0.552
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4933,
+      "pred_p": 0.4933
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.749,
+      "pred_p": 0.749
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.213,
+      "pred_p": 0.5957
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.3548,
+      "pred_p": 0.3548
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7865,
+      "pred_p": 0.7865
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.3077,
+      "pred_p": 0.3978
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.733,
+      "pred_p": 0.733
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2402,
+      "pred_p": 0.4613
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6847,
+      "pred_p": 0.6847
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.4546,
+      "pred_p": 0.4546
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.0866,
+      "pred_p": 0.631
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8706,
+      "pred_p": 0.8706
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.1038,
+      "pred_p": 0.8473
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.0715,
+      "pred_p": 0.7268
+     }
+    ]
+   },
+   "0.75": {
+    "accuracy": 0.5,
+    "n": 20,
+    "median_latency_s": 0.7947,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2262,
+      "pred_p": 0.5236
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.692,
+      "pred_p": 0.692
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1657,
+      "pred_p": 0.5673
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1378,
+      "pred_p": 0.4668
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6207,
+      "pred_p": 0.6207
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2176,
+      "pred_p": 0.53
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.5618,
+      "pred_p": 0.5618
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6541,
+      "pred_p": 0.6541
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1944,
+      "pred_p": 0.5349
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2993,
+      "pred_p": 0.4264
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6201,
+      "pred_p": 0.6201
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2085,
+      "pred_p": 0.4669
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6447,
+      "pred_p": 0.6447
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4408,
+      "pred_p": 0.4408
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6976,
+      "pred_p": 0.6976
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1789,
+      "pred_p": 0.4851
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.3405,
+      "pred_p": 0.3405
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8663,
+      "pred_p": 0.8663
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.2581,
+      "pred_p": 0.7248
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.1466,
+      "pred_p": 0.6109
+     }
+    ]
+   },
+   "1.0": {
+    "accuracy": 0.6,
+    "n": 20,
+    "median_latency_s": 0.7999,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.6913,
+      "pred_p": 0.6913
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.833,
+      "pred_p": 0.833
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2375,
+      "pred_p": 0.5683
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.3179,
+      "pred_p": 0.3179
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6781,
+      "pred_p": 0.6781
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2587,
+      "pred_p": 0.535
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2306,
+      "pred_p": 0.4828
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6233,
+      "pred_p": 0.6233
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.3308,
+      "pred_p": 0.4904
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4146,
+      "pred_p": 0.4146
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.701,
+      "pred_p": 0.701
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2943,
+      "pred_p": 0.4132
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6474,
+      "pred_p": 0.6474
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2697,
+      "pred_p": 0.3895
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6901,
+      "pred_p": 0.6901
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1244,
+      "pred_p": 0.4795
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4873,
+      "pred_p": 0.4873
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.653,
+      "pred_p": 0.653
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4685,
+      "pred_p": 0.4685
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2305,
+      "pred_p": 0.3879
+     }
+    ]
+   }
+  },
+  "C_length": {
+   "0": {
+    "accuracy": 0.95,
+    "n": 20,
+    "median_latency_s": 0.0371,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9979,
+      "pred_p": 0.9979
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.6498,
+      "pred_p": 0.6498
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9974,
+      "pred_p": 0.9974
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.9996,
+      "pred_p": 0.9996
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9988,
+      "pred_p": 0.9988
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.9957,
+      "pred_p": 0.9957
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 1.0,
+      "pred_p": 1.0
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9713,
+      "pred_p": 0.9713
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9999,
+      "pred_p": 0.9999
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9728,
+      "pred_p": 0.9728
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9999,
+      "pred_p": 0.9999
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9656,
+      "pred_p": 0.9656
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.0016,
+      "pred_p": 0.9976
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.959,
+      "pred_p": 0.959
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9996,
+      "pred_p": 0.9996
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9962,
+      "pred_p": 0.9962
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9381,
+      "pred_p": 0.9381
+     }
+    ]
+   },
+   "1000": {
+    "accuracy": 0.9,
+    "n": 20,
+    "median_latency_s": 0.1153,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9967,
+      "pred_p": 0.9967
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8683,
+      "pred_p": 0.8683
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.5742,
+      "pred_p": 0.5742
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.8367,
+      "pred_p": 0.8367
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.815,
+      "pred_p": 0.815
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.9102,
+      "pred_p": 0.9102
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9965,
+      "pred_p": 0.9965
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7669,
+      "pred_p": 0.7669
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.2161,
+      "pred_p": 0.4816
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.6968,
+      "pred_p": 0.6968
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.497,
+      "pred_p": 0.497
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.6384,
+      "pred_p": 0.6384
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.574,
+      "pred_p": 0.574
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9669,
+      "pred_p": 0.9669
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8162,
+      "pred_p": 0.8162
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.0366,
+      "pred_p": 0.8807
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.7887,
+      "pred_p": 0.7887
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.9394,
+      "pred_p": 0.9394
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.8773,
+      "pred_p": 0.8773
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.7805,
+      "pred_p": 0.7805
+     }
+    ]
+   },
+   "2000": {
+    "accuracy": 0.8,
+    "n": 20,
+    "median_latency_s": 0.2707,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.9311,
+      "pred_p": 0.9311
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8552,
+      "pred_p": 0.8552
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.3274,
+      "pred_p": 0.3466
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4057,
+      "pred_p": 0.4057
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7719,
+      "pred_p": 0.7719
+     },
+     {
+      "gold": "sales",
+      "pred": "sales",
+      "p_gold": 0.61,
+      "pred_p": 0.61
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.8164,
+      "pred_p": 0.8164
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6913,
+      "pred_p": 0.6913
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.3188,
+      "pred_p": 0.3929
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.3871,
+      "pred_p": 0.3871
+     },
+     {
+      "gold": "technical",
+      "pred": "billing",
+      "p_gold": 0.3494,
+      "pred_p": 0.3832
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.5733,
+      "pred_p": 0.5733
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6132,
+      "pred_p": 0.6132
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.5483,
+      "pred_p": 0.5483
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6763,
+      "pred_p": 0.6763
+     },
+     {
+      "gold": "sales",
+      "pred": "billing",
+      "p_gold": 0.0472,
+      "pred_p": 0.8484
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.5858,
+      "pred_p": 0.5858
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6923,
+      "pred_p": 0.6923
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.5029,
+      "pred_p": 0.5029
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4709,
+      "pred_p": 0.4709
+     }
+    ]
+   },
+   "4000": {
+    "accuracy": 0.6,
+    "n": 20,
+    "median_latency_s": 0.8022,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.6913,
+      "pred_p": 0.6913
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.833,
+      "pred_p": 0.833
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2375,
+      "pred_p": 0.5683
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.3179,
+      "pred_p": 0.3179
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6781,
+      "pred_p": 0.6781
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2587,
+      "pred_p": 0.535
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2306,
+      "pred_p": 0.4828
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6233,
+      "pred_p": 0.6233
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.3308,
+      "pred_p": 0.4904
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4146,
+      "pred_p": 0.4146
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.701,
+      "pred_p": 0.701
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2943,
+      "pred_p": 0.4132
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6474,
+      "pred_p": 0.6474
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2697,
+      "pred_p": 0.3895
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6901,
+      "pred_p": 0.6901
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1244,
+      "pred_p": 0.4795
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4873,
+      "pred_p": 0.4873
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.653,
+      "pred_p": 0.653
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4685,
+      "pred_p": 0.4685
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2305,
+      "pred_p": 0.3879
+     }
+    ]
+   },
+   "7000": {
+    "accuracy": 0.45,
+    "n": 20,
+    "median_latency_s": 2.1065,
+    "per_item": [
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.455,
+      "pred_p": 0.455
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.8386,
+      "pred_p": 0.8386
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2173,
+      "pred_p": 0.5039
+     },
+     {
+      "gold": "billing",
+      "pred": "billing",
+      "p_gold": 0.4187,
+      "pred_p": 0.4187
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6706,
+      "pred_p": 0.6706
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1683,
+      "pred_p": 0.4111
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.2788,
+      "pred_p": 0.4133
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.5908,
+      "pred_p": 0.5908
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.2609,
+      "pred_p": 0.4777
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2596,
+      "pred_p": 0.409
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.6296,
+      "pred_p": 0.6296
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.199,
+      "pred_p": 0.456
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.658,
+      "pred_p": 0.658
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2416,
+      "pred_p": 0.4377
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.7847,
+      "pred_p": 0.7847
+     },
+     {
+      "gold": "sales",
+      "pred": "technical",
+      "p_gold": 0.1569,
+      "pred_p": 0.3669
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.3317,
+      "pred_p": 0.6319
+     },
+     {
+      "gold": "technical",
+      "pred": "technical",
+      "p_gold": 0.652,
+      "pred_p": 0.652
+     },
+     {
+      "gold": "billing",
+      "pred": "sales",
+      "p_gold": 0.2766,
+      "pred_p": 0.6647
+     },
+     {
+      "gold": "billing",
+      "pred": "technical",
+      "p_gold": 0.2391,
+      "pred_p": 0.4509
+     }
+    ]
+   }
+  }
+ },
+ "majority_class_accuracy": 0.45,
+ "label_counts": {
+  "billing": 9,
+  "sales": 4,
+  "technical": 7
+ }
+}
