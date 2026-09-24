@@ -17,9 +17,10 @@
   "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
  },
  "git": {
-  "laya_lab_sha": "28cc7215039988b4d9501beb95b674531828bea3",
+  "laya_lab_sha": "deae796e9aeb253547157c95cab01466ea792463",
   "laya_lab_branch": "main",
   "laya_lab_dirty": true,
+  "laya_lab_dirty_note": "one shared working tree: other agents' in-flight files also show as modified, so `dirty` is not specific to this run. The artifact that pins this run is arms[*].summary.json, which stores harness_run_py_sha256, pool_sha256, items_sha256 and the per-pad doc sha256.",
   "fork_submodule": "9fbb1ebecf33d3cf044f39d76b96d39ff77bfad5 fork (v0.3.20-68-g9fbb1eb)",
   "laya_version": "v0.3.20-68-g9fbb1eb"
  },
@@ -111,7 +112,7 @@
   "files": {
    "analyse.py": "060d42c72bba13da428093f67872173322465d08c417331e2ccc4747ca96c152",
    "cost_interleave.py": "2f671f57e25ab781bbda3c189c4d5207103dd42fdf038d56b9bf80f97608143e",
-   "make_manifest.py": "e5f99593ea26c6727aa8a6151e7abe447c3b5d2fa6228d5e74a8bddc97e21058",
+   "make_manifest.py": "48eefdc4d1c67b025d07b2c36664c3f63fa8fbb02114a79dcd43fdcfa447d93c",
    "mask_evidence.py": "b8969f9227be1fa9909e67a3b0ea7261e58975fed5ce2874539a6c0f8fe80620",
    "run.py": "3db4dd497bd18ada850d8626f4723daf6b4fde68e5c45076f463edd77e9e3c70",
    "sdpa_microbench.py": "b5c72069c94a3f0fa27e10c3b2f6a629e75899d4ec184be06913a28489e22e2b"

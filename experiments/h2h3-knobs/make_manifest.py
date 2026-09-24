@@ -65,6 +65,11 @@ def main():
             "laya_lab_sha": sh("git rev-parse HEAD"),
             "laya_lab_branch": sh("git rev-parse --abbrev-ref HEAD"),
             "laya_lab_dirty": bool(sh("git status --porcelain")),
+            "laya_lab_dirty_note": "one shared working tree: other agents' in-flight files also show "
+                                   "as modified, so `dirty` is not specific to this run. The "
+                                   "artifact that pins this run is arms[*].summary.json, which "
+                                   "stores harness_run_py_sha256, pool_sha256, items_sha256 and the "
+                                   "per-pad doc sha256.",
             "fork_submodule": sh("git submodule status"),
             "laya_version": sh("git -C fork describe --tags --always") or None,
         },
