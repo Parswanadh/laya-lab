@@ -193,18 +193,25 @@ def main() -> int:
     # A stronger probe, reported (not gated): does the branch have the *reach* to change answers at
     # all? If even a large perturbation left every prediction untouched, the branch could be wired in
     # yet unable to influence the decision, which is worth knowing before spending 76 minutes.
-    with torch.no_grad():
-        g2 = torch.Generator(device="cpu").manual_seed(1)
-        probe.cross.out_proj.weight.normal_(0, 3e-2, generator=g2)
-    ld, pd_ = forward_all(probe, store, live_cell, device)
-    reach = compare("reach: a large non-zero branch (3e-2) on L7000-p100", la_c, pa_c, ld, pd_)
-    reach["prediction_flips"] = sum(1 for x, y in zip(pa_c, pd_) if x != y)
-    report["reach_probe_out_proj_scale"] = 3e-2
-    report["reach"] = reach
+    try:
+        with torch.no_grad():
+            # a CPU generator plus an explicit copy: `normal_(generator=...)` on a CUDA tensor wants
+            # a CUDA generator, which killed the first two runs of this probe
+            g2 = torch.Generator().manual_seed(1)
+            probe.cross.out_proj.weight.copy_(
+                torch.randn(probe.cross.out_proj.weight.shape, generator=g2) * 3e-2)
+        ld, pd_ = forward_all(probe, store, live_cell, device)
+        reach = compare("reach: a large non-zero branch (3e-2) on L7000-p100", la_c, pa_c, ld, pd_)
+        reach["prediction_flips"] = sum(1 for x, y in zip(pa_c, pd_) if x != y)
+        report["reach_probe_out_proj_scale"] = 3e-2
+        report["reach"] = reach
+        print("        reach probe (3e-2): %s" % reach, flush=True)
+    except Exception as e:  # a diagnostic must never invalidate an identity check that passed
+        report["reach_error"] = "%s: %s" % (type(e).__name__, e)
+        print("        reach probe failed: %s" % e, flush=True)
     write(report)
     print("  [3/4] liveness control: %s" % live, flush=True)
-    print("        reach probe (3e-2): %s" % reach, flush=True)
-    del probe, lc, pc, ld, pd_, la_c, pa_c
+    del probe, lc, pc, la_c, pa_c
 
     # ---- 4. trainability of the branch on a real batch -------------------------------------
     # `no_grad`, not `inference_mode`: the batch has to be usable in an autograd-tracked forward,
