@@ -12,6 +12,7 @@ oriented — read this, then your role charter, then the one or two artifacts yo
 
 | path | what |
 |---|---|
+| **`BASELINE.md`** | **the frozen reference: every number we measure against, with n, CIs and reproduce commands. Read this to know what "the baseline" means.** |
 | `plan.md` | the master plan: problem, hypotheses H1–H5, phases, gates, budget |
 | `progress.md` | **append-only** state log, newest at the bottom. Read the last entry, not the whole file |
 | `LEDGER.md` | one row per claim: claim, artifact, verifier, status |
@@ -113,8 +114,16 @@ runtime can deadlock on this box.
 
 ## Current state
 
-See the **last entry** of `progress.md`. Phase 0 (baseline reproduction) is in flight;
-no candidate work starts until the baseline reproduces here.
+The baseline **is reproduced and frozen** — see `BASELINE.md`. Read that file, not this
+section, for numbers. Read the **last entry** of `progress.md` for what is in flight.
+
+**Already refuted — do not spend compute re-testing:** RoPE scaling (identity in-window by
+construction), sliding-window widening, all-layers-global, and bf16-vs-fp32 precision. All four
+have liveness-proved, falsifying controls in `findings/E-002.md` and `BASELINE.md` §5.
+
+**The strong intervention is arm2** — fine-tuning the shipped decision head with the encoder
+frozen: +9.0pp at the primary cell (p=0.0021), +16.5pp mid-document (p=3.6e-08), and no change at
+the easy cells.
 
 ## GPU is a single-writer resource — take the lock
 

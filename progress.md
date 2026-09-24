@@ -400,3 +400,37 @@ That is a real, significant, pre-registered intervention.
    is then attributable to the architecture, not to initialisation.
 2. **Longer schedule / convergence check** — 12 epochs is provably not enough.
 3. Report against **0.455**, with the position-only oracle (0.250) beside it.
+
+---
+
+## 2026-09-25 · The baseline is frozen, and it is validated end to end
+
+**New file: `BASELINE.md`** — the single frozen reference for what "the baseline" means. Every
+number carries its `n`, its CI, its artifact path and its reproduce command. `AGENTS.md` now points
+there first so agents stop re-deriving it.
+
+**End-to-end validation run just now** (`env/venv/bin/python experiments/harness/run.py --recheck`):
+
+| run | result |
+|---|---|
+| `baseline-power-n200` | **18/18 checks PASS** — 2000 rows, 10 cells, probabilities sum to 1, prediction is argmax, truncation matches the documented rule, **items paired across `max_len`**, **document independent of `max_len`**, label balance 67/66/67 (max share 0.335), deterministic for seed, seed changes documents, doc hashes rebuild from seed |
+| `baseline-repro-upstream` | checks PASS |
+| `position-sweep` | checks PASS |
+| `baseline-repro` | checks PASS |
+
+The `document_independent_of_max_len` check is the load-bearing one: it proves the two budget arms
+see the **same document**, so the 1024-vs-8192 comparison is a budget effect and not a
+construction artefact.
+
+**Strong baseline, restated.** The shipped checkpoint at n=200/cell, balanced: 0.840 at pad=0
+falling to **0.420** at pad=7000 with `max_len=8192`, and flat at **0.335** (= majority rate) for
+every pad ≥ 1000 at the shipped `max_len=1024`. Oracle 0.335, random 0.250.
+
+**Strongest verified intervention: arm2.** Fine-tune the shipped decision head, encoder frozen —
+**+9.0pp at the primary cell (p=0.0021)**, **+16.5pp mid-document (p=3.6e-08)**, and **no change at
+the easy cells**. Caveats recorded: single seed, not converged at 12 epochs.
+
+**Loop status.** Two agents running: `H5b` (issue #11) re-runs the cross-attention arm **init-fair**
+— cross-attention added *in parallel* with `out_proj` **zero-initialised**, so at step 0 arm3 ≡ arm2
+bit-for-bit and any gain is attributable to the architecture; `V-002` (issue #12) independently
+verifies the pipeline end to end and the arm2 claim from raw JSONL.
