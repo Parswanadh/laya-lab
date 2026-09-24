@@ -212,6 +212,14 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=None, help="smoke test only")
     ap.add_argument("--latency", action="store_true",
                     help="record head latency in the rows (off by default: timing rows are noise)")
+    ap.add_argument("--zero-branch", action="store_true",
+                    help="after loading the trained head, re-zero the parallel cross-attention "
+                         "branch's output projection -- i.e. arm3r minus the module it adds. The "
+                         "cheapest control that should not help if the branch is doing nothing, "
+                         "and the ablation that says how much of arm3r's score is the branch.")
+    ap.add_argument("--arm-label", default=None,
+                    help="label written into the rows; defaults to the arm name. Set it for "
+                         "controls so their rows are not confused with the arm they ablate.")
     a = ap.parse_args()
     device = torch.device(a.device)
     plan = C.load_plan()
@@ -241,8 +249,17 @@ def main() -> int:
             model = A.build_arm_model(agent.model, a.arm, a.seed).to(device)
             A.freeze_for_training(model)
             meta = load_trained(model, a.arm, a.seed, device)
-            arm_name, seed = a.arm, a.seed
+            arm_name, seed = a.arm_label or a.arm, a.seed
             print("  loaded %s (%s)" % (meta["arm"], meta["state_dict"] and "state_dict ok"))
+            if a.zero_branch:
+                if model.cross is None:
+                    raise SystemExit("--zero-branch on an arm with no parallel branch")
+                model.cross.zero_init_out_proj()
+                w = float(model.cross.out_proj.weight.detach().abs().sum())
+                b = float(model.cross.out_proj.bias.detach().abs().sum())
+                if w != 0.0 or b != 0.0:
+                    raise SystemExit("branch zeroing did not take: |W|=%.3g |b|=%.3g" % (w, b))
+                print("  branch ablation: out_proj re-zeroed (|W|=0, |b|=0), everything else trained")
         rows = evaluate_from_cache(model, store, conditions, device, arm_name, seed,
                                    with_latency=a.latency)
     write_rows(out, rows)

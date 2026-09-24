@@ -198,6 +198,8 @@ def analytic_parameter_table(d: int = 768, head_layers: int = 2,
     scorer = nn.Sequential(nn.LayerNorm(d), nn.Linear(d, d), nn.GELU(), nn.Linear(d, 1))
     n_se = sum(p.numel() for p in se.parameters())
     n_ca = sum(p.numel() for p in ca.parameters())
+    # the residual branch is a CrossAttentionHead plus its output projection
+    n_ca_res = n_ca + (d * d + d)
     extra = sum(p.numel() for p in type_emb.parameters()) + sum(p.numel() for p in scorer.parameters())
     return {
         "d_model": d, "head_layers": head_layers,
@@ -208,9 +210,10 @@ def analytic_parameter_table(d: int = 768, head_layers: int = 2,
         "type_emb_plus_scorer_parameters": extra,
         "arm2_self_attention_trainable": n_se + extra,
         "arm3_cross_attention_trainable": n_ca + extra,
-        "arm3r_residual_trainable": n_se + n_ca + extra,
-        "arm3r_extra_parameters_over_arm2": n_ca,
-        "arm3r_extra_parameters_over_arm2_pct": round(100.0 * n_ca / (n_se + extra), 2),
+        "residual_branch_parameters": n_ca_res,
+        "arm3r_residual_trainable": n_se + n_ca_res + extra,
+        "arm3r_extra_parameters_over_arm2": n_ca_res,
+        "arm3r_extra_parameters_over_arm2_pct": round(100.0 * n_ca_res / (n_se + extra), 2),
         "equal": (n_se + extra) == (n_ca + extra),
         "why": ("nn.MultiheadAttention costs 4*d^2 whether or not query and key/value are the same "
                 "tensor, and head count sets per-head width rather than parameter count"),

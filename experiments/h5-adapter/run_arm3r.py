@@ -57,6 +57,8 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=5e-4)
     ap.add_argument("--lr-cross", type=float, default=None)
     ap.add_argument("--keep-heads", action="store_true")
+    ap.add_argument("--skip-ablation", action="store_true",
+                    help="do not run the zeroed-branch control for arm3r_residual")
     ap.add_argument("--skip-eval-if-predictions-exist", action="store_true", default=True)
     a = ap.parse_args()
     stages = [s for s in a.stages.split(",") if s]
@@ -91,6 +93,20 @@ def main() -> int:
                     if rc != 0:
                         log("FAILED eval %s seed %d (rc=%d)" % (arm, seed, rc))
                         return rc
+                # The cheapest control: the same trained head with the added branch re-zeroed.
+                # Costs one extra eval pass and answers "how much of arm3r is the branch?".
+                if arm == "arm3r_residual" and not a.skip_ablation:
+                    abl = os.path.join(HERE, "predictions", "arm3r_residual_ablated-seed%d.jsonl" % seed)
+                    if os.path.exists(abl):
+                        log("skip ablation for %s seed %d: %s already exists"
+                            % (arm, seed, os.path.basename(abl)))
+                    else:
+                        rc = run([PY, "experiments/h5-adapter/eval.py", "--arm", arm,
+                                  "--seed", str(seed), "--zero-branch",
+                                  "--arm-label", "arm3r_residual_ablated", "--out", abl])
+                        if rc != 0:
+                            log("FAILED branch ablation %s seed %d (rc=%d)" % (arm, seed, rc))
+                            return rc
                 if not a.keep_heads:
                     head = os.path.join(HERE, "runs", arm, "seed%d" % seed, "head.pt")
                     if os.path.exists(head):

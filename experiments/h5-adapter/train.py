@@ -210,6 +210,11 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
                 logits, _act = model(None, b["attention_mask"], b["marker_pos"], b["marker_mask"],
                                      b["qtype"], state_start=b["state_start"], encoder_hidden=b["h"])
             loss = F.cross_entropy(logits.float(), tgt)
+            if not torch.isfinite(loss):
+                # A non-finite loss is a dead run, and at these rates it is the failure mode that
+                # looks like "the arm did not learn" from the epoch curve alone. Stop loudly.
+                raise AssertionError("%s seed %d: non-finite loss at step %d (%r)"
+                                     % (arm, seed, step, float(loss)))
             opt.zero_grad(set_to_none=True)
             loss.backward()
             if step == 0:

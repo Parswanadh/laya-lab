@@ -39,7 +39,10 @@ BOOT = 10000
 # arm3, not a control, so putting it in the baseline list would both duplicate the arm3/arm4
 # comparison and inflate the family the correction is applied over.
 BASELINES = ("arm1_frozen", "arm2_shipped_init", "arm2_random_init", "arm2long_shipped_init")
-CANDIDATE_FAMILY = ("arm3_xattn", "arm4_xattn_long", "arm3r_residual")
+# `arm3r_residual_ablated` is arm3r with its added branch re-zeroed after training: the
+# cheapest control that should *not* help if the branch contributes nothing.
+CANDIDATE_FAMILY = ("arm3_xattn", "arm4_xattn_long", "arm3r_residual",
+                    "arm3r_residual_ablated")
 PRIMARY_CELL = "L4000-p100"
 # The cell the H5 programme names as primary: pad=7000 at max_len=8192, where truncation is excluded
 # by construction (BASELINE.md §1, ledger L-033). Kept as a separate constant so the pre-existing
