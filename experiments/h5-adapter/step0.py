@@ -90,6 +90,19 @@ def compare(tag: str, la: List[torch.Tensor], pa: List[int],
     }
 
 
+def write(report: Dict[str, Any]) -> None:
+    """Persist after *every* section. The identity result is the artifact the arm's validity rests
+    on, and a later probe failing must not be able to take it down with it."""
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, "w", encoding="utf-8") as fh:
+        json.dump(report, fh, indent=1)
+        fh.write("\n")
+
+
+def subset(conditions: List[Dict[str, Any]], cells: List[str]) -> List[Dict[str, Any]]:
+    return [c for c in conditions if c["cell"] in cells]
+
+
 def main() -> int:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     t0 = time.time()
@@ -111,16 +124,17 @@ def main() -> int:
         "device": str(device),
         "checks": [],
     }
+    write(report)
 
-    # ---- 1. identity at the shipped initialisation ------------------------------------------
+    # ---- 1. identity at the shipped initialisation, over the whole evaluation set -------------
     ref = A.build_arm_model(shipped, REF_ARM, seed=0).to(device)
     new = A.build_arm_model(shipped, NEW_ARM, seed=0).to(device)
     A.freeze_for_training(ref)
     acc_new = A.freeze_for_training(new)
     report["arm3r_parameter_accounting"] = acc_new
     report["out_proj_zero_after_build"] = {
-        "weight_abs_sum": float(new.cross.out_proj.weight.abs().sum()),
-        "bias_abs_sum": float(new.cross.out_proj.bias.abs().sum()),
+        "weight_abs_sum": float(new.cross.out_proj.weight.detach().abs().sum()),
+        "bias_abs_sum": float(new.cross.out_proj.bias.detach().abs().sum()),
     }
     report["step0_gradient_expectation"] = (
         "at W = 0 the branch's *inner* weights receive exactly zero gradient (dL/dz = W^T dL/ddelta) "
@@ -128,10 +142,15 @@ def main() -> int:
 
     la, pa = forward_all(ref, store, conditions, device)
     lb, pb = forward_all(new, store, conditions, device)
-    report["checks"].append(compare("shipped_init: arm3r == arm2", la, pa, lb, pb))
+    report["checks"].append(compare("shipped_init: arm3r == arm2 (all cells)", la, pa, lb, pb))
+    write(report)
+    print("  [1/4] identity at the shipped init: %s" % report["checks"][-1], flush=True)
 
     # ---- 2. identity with arm 2's *trained* head in both architectures ----------------------
-    import eval as E  # noqa: E402  (the loader used by the eval stage, so this is that code path)
+    # Restricted to the three cells the issue names (L0, L4000-p050, L7000-p100): the property is
+    # about the code path, and the shipped-init check above already covers every cell.
+    ctrl = subset(conditions, ["L0", "L4000-p050", "L7000-p100"])
+    import eval as E  # noqa: E402  (the loader the eval stage uses, so this is that code path)
     trained_ref = A.build_arm_model(shipped, REF_ARM, seed=0).to(device)
     A.freeze_for_training(trained_ref)
     E.load_trained(trained_ref, REF_ARM, 0, device)
@@ -142,27 +161,38 @@ def main() -> int:
         if k in own and own[k].shape == v.shape and not k.startswith("cross."):
             own[k] = v.clone()
     trained_new.load_state_dict(own)
-    la2, pa2 = forward_all(trained_ref, store, conditions, device)
-    lb2, pb2 = forward_all(trained_new, store, conditions, device)
-    report["checks"].append(compare("arm2 trained head loaded in both: arm3r == arm2", la2, pa2, lb2, pb2))
+    la2, pa2 = forward_all(trained_ref, store, ctrl, device)
+    lb2, pb2 = forward_all(trained_new, store, ctrl, device)
+    report["checks"].append(compare("arm2's trained head in both: arm3r == arm2 (3 cells)",
+                                    la2, pa2, lb2, pb2))
+    write(report)
+    print("  [2/4] identity with arm2's trained head: %s" % report["checks"][-1], flush=True)
+    del trained_ref, trained_new, la2, pa2, lb2, pb2
 
     # ---- 3. liveness: a non-zero branch must move the logits -------------------------------
-    probe = A.build_arm_model(shipped, NEW_ARM, seed=0)
-    probe.to(device)
+    live_cell = subset(conditions, ["L7000-p100"])
+    la_c, pa_c = forward_all(ref, store, live_cell, device)
+    probe = A.build_arm_model(shipped, NEW_ARM, seed=0).to(device)
     with torch.no_grad():
         g = torch.Generator(device="cpu").manual_seed(0)
         probe.cross.out_proj.weight.copy_(
             torch.randn(probe.cross.out_proj.weight.shape, generator=g) * 1e-3)
-    lc, pc = forward_all(probe, store, conditions, device)
-    live = compare("liveness: non-zero branch != arm2 (must differ)", la, pa, lc, pc)
+    lc, pc = forward_all(probe, store, live_cell, device)
+    live = compare("liveness: a non-zero branch must NOT equal arm2 (L7000-p100)",
+                   la_c, pa_c, lc, pc)
     live["expected"] = "predictions_identical == false"
     live["liveness_proved"] = not live["predictions_identical"]
     report["checks"].append(live)
-    del probe, lc, pc
+    report["liveness_probe_out_proj_scale"] = 1e-3
+    write(report)
+    print("  [3/4] liveness control: %s" % live, flush=True)
+    del probe, lc, pc, la_c, pa_c
 
     # ---- 4. trainability of the branch on a real batch -------------------------------------
+    # `no_grad`, not `inference_mode`: the batch has to be usable in an autograd-tracked forward,
+    # and inference tensors cannot be saved for backward (this failed the first attempt).
     batch = None
-    with torch.inference_mode():
+    with torch.no_grad():
         for group in FEAT._token_budget_batches([store.items[i]["length"] for i in range(len(store))],
                                                 12288, 8):
             batch = FEAT.collate(store, group, device)
@@ -171,7 +201,7 @@ def main() -> int:
     logits, _ = new(None, batch["attention_mask"], batch["marker_pos"], batch["marker_mask"],
                     batch["qtype"], state_start=batch["state_start"], encoder_hidden=batch["h"])
     logits.float().sum().backward()
-    grads = {n: (None if p.grad is None else float(p.grad.abs().sum()))
+    grads = {n: (None if p.grad is None else float(p.grad.detach().abs().sum()))
              for n, p in new.named_parameters()
              if n.startswith("cross.") and p.requires_grad}
     inner = [v for k, v in grads.items() if k.startswith("cross.branch.")]
@@ -196,15 +226,11 @@ def main() -> int:
     report["seconds"] = round(time.time() - t0, 1)
     report["environment"] = C.environment(device)
     report["git"] = C.git_state()
-
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as fh:
-        json.dump(report, fh, indent=1)
-        fh.write("\n")
+    write(report)
 
     print("=== step-0 identity (arm3r_residual vs arm2_shipped_init) ===")
     for c in report["checks"]:
-        print("  %-52s n=%d  bitwise=%s  max|dlogit|=%.3g  pred_diffs=%d"
+        print("  %-58s n=%d  bitwise=%s  max|dlogit|=%.3g  pred_diffs=%d"
               % (c["check"], c["n_items"], c["bitwise_identical_logits"],
                  c["max_abs_logit_delta"] or 0.0, c["items_with_different_prediction"]))
     print("  trainability: out_proj grad=%s  inner max grad=%s"
