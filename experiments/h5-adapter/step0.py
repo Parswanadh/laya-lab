@@ -180,13 +180,31 @@ def main() -> int:
     lc, pc = forward_all(probe, store, live_cell, device)
     live = compare("liveness: a non-zero branch must NOT equal arm2 (L7000-p100)",
                    la_c, pa_c, lc, pc)
-    live["expected"] = "predictions_identical == false"
-    live["liveness_proved"] = not live["predictions_identical"]
+    # The gate is on the **logits**, not on the argmax: "is the branch wired into the output path?"
+    # and "is this perturbation large enough to flip a decision?" are different questions, and only
+    # the first one is liveness. Gating on prediction flips made this check report a false negative
+    # at a probe scale (1e-3) where the logits did move (max |dlogit| 0.03125 = one bf16 ULP) but
+    # no item's argmax changed. The flip count is reported beside it as a diagnostic.
+    live["expected"] = "bitwise_identical_logits == false"
+    live["liveness_proved"] = not live["bitwise_identical_logits"]
     report["checks"].append(live)
     report["liveness_probe_out_proj_scale"] = 1e-3
+
+    # A stronger probe, reported (not gated): does the branch have the *reach* to change answers at
+    # all? If even a large perturbation left every prediction untouched, the branch could be wired in
+    # yet unable to influence the decision, which is worth knowing before spending 76 minutes.
+    with torch.no_grad():
+        g2 = torch.Generator(device="cpu").manual_seed(1)
+        probe.cross.out_proj.weight.normal_(0, 3e-2, generator=g2)
+    ld, pd_ = forward_all(probe, store, live_cell, device)
+    reach = compare("reach: a large non-zero branch (3e-2) on L7000-p100", la_c, pa_c, ld, pd_)
+    reach["prediction_flips"] = sum(1 for x, y in zip(pa_c, pd_) if x != y)
+    report["reach_probe_out_proj_scale"] = 3e-2
+    report["reach"] = reach
     write(report)
     print("  [3/4] liveness control: %s" % live, flush=True)
-    del probe, lc, pc, la_c, pa_c
+    print("        reach probe (3e-2): %s" % reach, flush=True)
+    del probe, lc, pc, ld, pd_, la_c, pa_c
 
     # ---- 4. trainability of the branch on a real batch -------------------------------------
     # `no_grad`, not `inference_mode`: the batch has to be usable in an autograd-tracked forward,
@@ -219,8 +237,11 @@ def main() -> int:
     ok = all(c.get("predictions_identical") and c.get("bitwise_identical_logits")
              and c.get("items_with_different_prediction") == 0
              for c in report["checks"][:2])
+    # liveness = the branch moves the logits; the prediction-flip count stays a diagnostic
     ok = ok and live["liveness_proved"] and got_grad
-    report["verdict"] = "VALID -- arm 3r is arm 2 at step 0 and the branch is wired in" if ok else \
+    report["verdict"] = (
+        "VALID -- arm3r is arm2 at step 0 (bitwise, 0/%d items differ) and the branch moves the "
+        "logits when non-zero" % report["checks"][0]["n_items"]) if ok else \
         "INVALID -- do not train this arm"
     report["all_checks_passed"] = bool(ok)
     report["seconds"] = round(time.time() - t0, 1)
