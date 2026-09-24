@@ -85,14 +85,18 @@ def evaluate_arm1(agent, tok, builder, conditions: List[Dict[str, Any]], device,
     """The shipped model, end to end, over every condition."""
     model = agent.model
     model.eval()
-    built = [(c, builder.build(c, option_order=c.get("option_order"))) for c in conditions]
-    lengths = [len(d["input_ids"]) for _c, d in built]
+    # len per condition from the builder's estimate; documents are materialised one batch at a
+    # time so the full set is never resident
+    lengths = [builder.estimate_length(c) for c in conditions]
     rows: List[Dict[str, Any]] = []
     done_warmup = 0
     with torch.inference_mode():
         for group in FEAT._token_budget_batches(lengths, EVAL_TOKEN_BUDGET, EVAL_MAX_BATCH):
             L = max(lengths[i] for i in group)
             b = len(group)
+            built = {i: (conditions[i], builder.build(conditions[i],
+                                                      option_order=conditions[i].get("option_order")))
+                     for i in group}
             ids = torch.zeros(b, L, dtype=torch.long)
             att = torch.zeros(b, L, dtype=torch.long)
             kmax = max(len(built[i][1]["markers"]) for i in group)
@@ -129,6 +133,7 @@ def evaluate_arm1(agent, tok, builder, conditions: List[Dict[str, Any]], device,
                                                  "truncated": built[i][1]["truncated"],
                                                  "needle_kept": built[i][1]["needle_kept"]},
                                  probs, 0.0 if warm else dt, "arm1_frozen", None, dtype_note))
+            del built
     return rows
 
 

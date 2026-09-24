@@ -82,6 +82,20 @@ class H5DocBuilder:
         self._filler_cache[key] = ids
         return ids
 
+    def estimate_length(self, item: Dict[str, Any]) -> int:
+        """The final prompt length, without materialising the document.
+
+        Building all 1800 evaluation documents up front costs several hundred MB of Python ints and
+        is only needed to decide the batching. This computes the same number from the needle alone:
+        ``min(max_len, head_len + state_tokens + 1)``, with ``state_tokens = pad + needle block``.
+        ``build()`` asserts the estimate on every item it produces, so a drifting estimate raises
+        instead of silently mis-batching.
+        """
+        pad = int(item["pad"])
+        prefix = len(self.tok(NEEDLE_PREFIX, add_special_tokens=False)["input_ids"]) if pad > 0 else 0
+        block = prefix + len(self.tok(item["needle_text"], add_special_tokens=False)["input_ids"])
+        return min(self.max_len, self.head_len() + pad + block + 1)
+
     # ---------------- build ----------------
 
     def build(self, item: Dict[str, Any], option_order: Optional[List[int]] = None) -> Dict[str, Any]:

@@ -180,13 +180,11 @@ def build_cache(items: List[Dict[str, Any]], split: str, out_dir: str, model, bu
                 progress_every: int = 64) -> str:
     """Run the frozen encoder over ``items`` and write ``features.f16`` + ``index.json``."""
     os.makedirs(out_dir, exist_ok=True)
-    built: List[Dict[str, Any]] = []
-    lengths: List[int] = []
+    # Lengths come from the builder's estimate so the whole document set is never materialised at
+    # once; each batch is built, written and released. `build()` is asserted against the estimate
+    # below, so a drifting estimate raises rather than silently mis-batching.
+    lengths: List[int] = [builder.estimate_length(it) for it in items]
     t0 = time.time()
-    for n, item in enumerate(items):
-        doc = builder.build(item, option_order=item.get("option_order"))
-        built.append(doc)
-        lengths.append(doc["input_tokens"])
     total_tokens = int(sum(lengths))
     hidden = int(model.encoder.config.hidden_size)
     path = os.path.join(out_dir, "features.f16")
@@ -200,6 +198,13 @@ def build_cache(items: List[Dict[str, Any]], split: str, out_dir: str, model, bu
         for bi, batch in enumerate(_token_budget_batches(lengths, token_budget, max_batch)):
             L = max(lengths[i] for i in batch)
             b = len(batch)
+            built = {i: builder.build(items[i], option_order=items[i].get("option_order"))
+                     for i in batch}
+            for i in batch:
+                if built[i]["input_tokens"] != lengths[i]:
+                    raise AssertionError(
+                        "builder estimate %d != built length %d for %s"
+                        % (lengths[i], built[i]["input_tokens"], items[i]["item_id"]))
             ids = torch.zeros(b, L, dtype=torch.long)
             att = torch.zeros(b, L, dtype=torch.long)
             for j, i in enumerate(batch):
@@ -244,9 +249,10 @@ def build_cache(items: List[Dict[str, Any]], split: str, out_dir: str, model, bu
                     "filler_tokens_before": int(doc["filler_tokens_before"]),
                 })
                 offset += n
+            del built
             if (bi + 1) % max(1, progress_every // max_batch) == 0:
                 print("  [%s] %d/%d items, %d tokens, %.0fs"
-                      % (split, offset and len(index_items), len(items), offset, time.time() - t0),
+                      % (split, len(index_items), len(items), offset, time.time() - t0),
                       flush=True)
     mm.flush()
     del mm

@@ -98,6 +98,12 @@ def main() -> int:
         check("sweep/%s needle offsets are the sweep points" % h[:12],
               starts, [0, 1000, 2000, 3000, 4000])
 
+    # ---- 2b. the length estimate the streaming builders batch on must equal the real length
+    sample = ev[: min(120, len(ev))] + plan["train_items"][: min(60, len(plan["train_items"]))]
+    mismatches = [(it["item_id"], b.estimate_length(it), b.build(it)["input_tokens"])
+                  for it in sample if b.estimate_length(it) != b.build(it)["input_tokens"]]
+    check("estimate/builder length estimate equals the built length on a sample", mismatches, [])
+
     # ---- 3. determinism
     it = ev[7]
     check("determinism/same item built twice is byte-identical",
