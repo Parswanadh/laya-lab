@@ -74,7 +74,7 @@ def main() -> int:
 
     plan = C.load_plan()
     if a.split == "eval":
-        items = FEAT.build_eval_conditions(plan)
+        items = FEAT.build_eval_conditions(plan, pool=C.load_needle_pool("needles-h5-eval-v1.json"))
     else:
         items = plan["train_items"]
     agent = C.load_agent(a.device)

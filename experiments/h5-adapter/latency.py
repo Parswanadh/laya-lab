@@ -159,7 +159,7 @@ def main() -> int:
     seeds = [int(x) for x in a.seeds.split(",") if x != ""]
 
     plan = C.load_plan()
-    conditions = FEAT.build_eval_conditions(plan)
+    conditions = FEAT.build_eval_conditions(plan, pool=C.load_needle_pool("needles-h5-eval-v1.json"))
     agent = C.load_agent(a.device)
     builder = C.make_builder(agent.tok, C.load_filler(), C.load_needle_pool("needles-h5-eval-v1.json"))
 

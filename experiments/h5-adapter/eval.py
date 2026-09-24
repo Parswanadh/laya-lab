@@ -70,6 +70,12 @@ def _row(condition: Dict[str, Any], store_item: Dict[str, Any], probs: List[floa
         "slot_gold": gold_slot,
         "prediction": prediction,
         "correct": bool(prediction == condition["label"]),
+        # the swapped-needle control asks a different question: does the answer follow the text that
+        # is actually in the document? `label_if_needle_read` is that text's class.
+        "label_if_needle_read": condition.get("label_if_needle_read"),
+        "follows_needle": (None if condition.get("label_if_needle_read") is None
+                           else bool(prediction == condition["label_if_needle_read"])),
+        "control": condition.get("control"),
         "probability": p,
         "probabilities": [round(float(x), 6) for x in probs],
         "options": list(labels),
@@ -209,7 +215,7 @@ def main() -> int:
     a = ap.parse_args()
     device = torch.device(a.device)
     plan = C.load_plan()
-    conditions = FEAT.build_eval_conditions(plan)
+    conditions = FEAT.build_eval_conditions(plan, pool=C.load_needle_pool("needles-h5-eval-v1.json"))
     if a.limit:
         conditions = conditions[:a.limit]
     out = a.out or (

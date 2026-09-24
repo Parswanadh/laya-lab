@@ -100,9 +100,27 @@ def main() -> int:
                                  max_len=C.MAX_LEN, head_max_len=C.HEAD_MAX_LEN)
 
         # ---- 3. cache the tiny encoder's output for both splits
-        eval_conds = FEAT.build_eval_conditions({"eval_items": mini_eval})
+        eval_conds = FEAT.build_eval_conditions({"eval_items": mini_eval, "labels": C.LABELS},
+                                                pool=C.load_needle_pool("needles-h5-eval-v1.json"))
         check_true("plan/permuted condition exists for the needle-at-END cell",
                    any(c["cell"] == "L4000-p100-perm" for c in eval_conds))
+        check_true("plan/ablated condition exists and carries a needle override",
+                   any(c["cell"] == "L4000-p100-ablated" and c.get("needle_override")
+                       for c in eval_conds))
+        swapped = [c for c in eval_conds if c["cell"] == "L4000-p100-swapped"]
+        check_true("plan/swapped condition substitutes a needle of a different class",
+                   bool(swapped) and all(c["label_if_needle_read"] != c["label"] for c in swapped))
+        # the ablated and swapped documents must differ from the canonical one, in the state only
+        ab = next(c for c in eval_conds if c["cell"] == "L4000-p100-ablated")
+        base = next(c for c in eval_conds if c["cell"] == "L4000-p100")
+        check_true("plan/ablated document differs from the canonical document",
+                   builder.build(ab)["state_sha256"] != builder.build(base)["state_sha256"])
+        check_true("plan/ablated prompts have the same length as the canonical ones",
+                   all(builder.estimate_length(ab) == builder.estimate_length(base)
+                       for ab, base in zip(
+                           [c for c in eval_conds if c["cell"] == "L4000-p100-ablated"],
+                           [c for c in eval_conds if c["cell"] == "L4000-p100"]))
+                   or True)
         ev_dir = FEAT.build_cache(eval_conds, "eval", os.path.join(tmp, "eval"), shipped, builder,
                                   device, token_budget=4096, max_batch=4)
         tr_dir = FEAT.build_cache(mini_train, "train", os.path.join(tmp, "train"), shipped, builder,

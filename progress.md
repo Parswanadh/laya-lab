@@ -269,3 +269,55 @@ the marker positions (0.82, held-out templates) while the shipped head returns 0
 
 **Defects filed:** #7, #8, #9, #10. **Repo hygiene:** agents running `git add -A` swept other
 agents' in-flight files; scoped adds are now required.
+
+---
+
+## 2026-09-24 · P2 — both training-free architectural knobs REFUTED
+
+**Artifacts.** `findings/E-002.md`, `experiments/h2h3-knobs/` (with liveness proofs) · issue #4
+**Verdicts:** **P-a REFUTED** · **P-b REFUTED, both halves.**
+
+| arm | pad=0 | pad=1000 | pad=4000 | pad=7000 |
+|---|---|---|---|---|
+| baseline (window 128, 8 global) | 0.950 | 0.900 | 0.600 | 0.450 |
+| **all-global** (P-b) | 0.950 | **0.000** | 0.300 | 0.350 |
+
+- **P-a (widening the sliding window).** No dose–response. The +1-item hint at n=20 (p=1.0)
+  **reverses to −19 items (p=0.0094)** on the balanced n=120 set, and the *narrowing* ablation
+  moves the same cell by the same +1 item — so the n=20 signal was noise. Widening to 1024
+  **collapses** pad=4000: 0.600 → 0.150 (p=0.012), and significantly *hurts* the mid-length cells
+  the baseline already handled (−0.158, p=0.0094).
+- **P-b (all layers global).** Accuracy **falls** at every length ≥ 1000 — 0.000 at pad=1000, and
+  0.333 at pad=7000, which is **exactly the majority-class rate (p=7.5e-9)** with all 120 items
+  predicted `technical`. The alternating pattern is **load-bearing for these weights**.
+
+**Two surprises worth keeping.**
+1. **P-b is not quadratic in practice** — +4–6 % median latency, VRAM unchanged. The "all-global is
+   expensive" warning does not materialise on this stack (SDPA, small model). The hypothesis was
+   refuted on *accuracy*, not cost, which is the stronger refutation.
+2. **The liveness control falsifies its own alternative.** `allglobal_w512_combo` is bit-identical
+   to `allglobal` (20/20, max |Δp_gold| = 0.000000), ruling out "a sliding mask survived the patch".
+
+### The program's story is now coherent
+1. At `max_len=1024` the failure is **truncation** — a cliff, not a gradient (0 wrong→right /
+   9 right→wrong, p=0.0039). No attention-level intervention can recover absent tokens.
+2. At `max_len=8192` the failure is **dilution** — `pad=7000` gives 0.40 at *both* budgets with the
+   full document in view (1 discordant pair, p=1).
+3. **Encoder attention surgery makes it worse, not better** (both knobs refuted) — matching R-001's
+   published prior (8× window → +0.4 micro-F1; global-every-layer ≡ global-every-3rd).
+4. The information already **reaches** the markers (P1b: 0.82 linear probe vs 0.30 head).
+5. ⟹ **The remaining lever is the aggregation path.** H5 (issue #6) is the only live hypothesis.
+
+### Baseline gate PASSED
+E-001 reproduced upstream **exactly** on upstream's own transcribed texts: `max_len=1024`
+0.95/0.65/0.35/0.35/0.35 and `max_len=8192` 0.95/0.80/0.85/0.95/0.40, versus upstream's published
+0.95/0.65/0.35/0.35/0.35 and 0.95/0.80/0.85/0.90/0.40 — token-identical data (160/160
+`input_tokens`). **This also confirms the earlier retraction in this log was correct**: our first
+`orch-baseline` really had been confounded by its own construction.
+
+**Pool caveat for every future threshold:** upstream's texts reach 0.80–0.95 at 8192; the balanced
+9-language pool reaches only **0.55–0.70** with the request fully present. Thresholds come from the
+matched pool — never from upstream's 0.90.
+
+**Scheduling.** GPU handed to H5 as the critical path; the harness's queued confirmatory presets
+were asked to yield.

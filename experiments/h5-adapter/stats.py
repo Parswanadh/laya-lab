@@ -105,6 +105,33 @@ def fitted_temperature(rows: Sequence[Dict[str, Any]]) -> Dict[str, float]:
             "nll_at_raw": float(-np.log(np.clip(probs[np.arange(len(gold)), gold], 1e-12, 1.0)).mean())}
 
 
+CONTROL_CELLS = ("L4000-p100-ablated", "L4000-p100-swapped", "L4000-p100-perm")
+
+
+def control_stats(rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    """The mechanism controls, which need their own reading.
+
+    * **ablated** (the needle replaced by a sentence with no class cue): accuracy must be chance.
+      Anything above chance means the arm was scoring the haystack, the prompt or the position.
+    * **swapped** (the needle replaced by one from another class): accuracy against the *original*
+      label must collapse, and ``follows_needle_accuracy`` -- accuracy against the class of the
+      text actually present -- must be high. That pair is the sharpest available evidence that the
+      answer tracks the document's content.
+    * **perm** (same items, options reordered): if accuracy holds, the answer is not an option-index
+      artefact.
+    """
+    out: Dict[str, Any] = {"n": len(rows), "accuracy": M.accuracy(rows) if rows else None}
+    fn = [bool(r["follows_needle"]) for r in rows if r.get("follows_needle") is not None]
+    if fn:
+        out["follows_needle_n"] = len(fn)
+        out["follows_needle_accuracy"] = sum(fn) / len(fn)
+    preds = [r["prediction"] for r in rows]
+    out["predicted_distribution"] = {lb: preds.count(lb) for lb in sorted(set(preds))}
+    out["modal_prediction"] = max(sorted(set(preds)), key=lambda p: preds.count(p)) if preds else None
+    out["random"] = 1.0 / len(rows[0]["options"]) if rows else None
+    return out
+
+
 def cell_stats(rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
     correct = [bool(r["correct"]) for r in rows]
     labels = [r["label"] for r in rows]
@@ -315,6 +342,12 @@ def main() -> int:
         "per_arm_seed_cell": per_seed,
         "seed_spread": spread,
         "position_only_oracle": oracle,
+        "mechanism_controls": {
+            cell: {arm: control_stats([r for r in runs[k] if r["cell"] == cell])
+                   for (arm, _seed), rws in sorted(runs.items())
+                   for k in [(arm, _seed)] if any(r["cell"] == cell for r in rws)}
+            for cell in CONTROL_CELLS
+        },
         "comparisons": comparisons,
         "seed_sign_agreement": sign_summary,
         "holm_family_size": len(pvals),
@@ -355,6 +388,21 @@ def main() -> int:
                 print("  %-18s %-18s mean=%.3f spread=%.2fpp %s"
                       % (arm, cell, s["accuracy_mean"], s["seed_spread_pp"],
                          ["%.3f" % v for v in s["accuracy_per_seed"]]))
+    print("\nmechanism controls (the needle is absent in `ablated`, replaced by another class in "
+          "`swapped`, options reordered in `perm`)")
+    for cell in CONTROL_CELLS:
+        block = out["mechanism_controls"].get(cell, {})
+        if not block:
+            continue
+        print("  %s" % cell)
+        for arm in sorted(block):
+            st = block[arm]
+            extra = (" follows_needle=%.3f (n=%d)" % (st["follows_needle_accuracy"],
+                                                      st["follows_needle_n"])
+                     if st.get("follows_needle_accuracy") is not None else "")
+            print("    %-22s n=%3d acc=%.3f random=%.3f%s"
+                  % (arm, st["n"], st["accuracy"], st["random"], extra))
+
     print("\nverdict cells")
     for cell, row in verdict.items():
         print("  %s: %s" % (cell, json.dumps(row, sort_keys=True)))

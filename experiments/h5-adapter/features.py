@@ -30,7 +30,11 @@ LAB = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(LAB, "worktrees", "h5"))
 
+import re  # noqa: E402
+
 import numpy as np  # noqa: E402
+
+SLOT_RE = re.compile(r"\{[^}]*\}")
 import torch  # noqa: E402
 
 QTYPE_CHOICE = 0
@@ -38,34 +42,104 @@ DEFAULT_CACHE_DIR = os.path.join(HERE, "cache")
 
 
 # ---------------------------------------------------------------------------- eval conditions
-def build_eval_conditions(plan: Dict[str, Any], perm_seed: int = 20260924) -> List[Dict[str, Any]]:
-    """The plan's eval items, plus a per-item option-order permutation of the L4000 needle@END cell.
+# A request slot with no class cue at all: no domain word, no digit, nothing the four criteria
+# mention. Used as the *ablation* needle, so a document that is otherwise identical to the
+# needle-at-END cell has no answer in it.
+NEUTRAL_NEEDLE = ("Please take a look at this when you have a moment and let me know what you think "
+                  "about it afterwards.")
 
-    The permuted entries are *the same items* -- same needles, same haystacks, same labels -- with
-    the four options reordered. Reporting both is what separates "read the document" from "answer
-    by option index".
+ABLATION_CELLS = ("L4000-p100-ablated", "L4000-p100-swapped")
+
+
+def build_eval_conditions(plan: Dict[str, Any], perm_seed: int = 20260924,
+                          pool: Optional[Dict[str, Any]] = None,
+                          include_ablations: bool = True) -> List[Dict[str, Any]]:
+    """The plan's eval items, plus three controls built from the *same* haystacks.
+
+    ``-perm``     the same items with the four options reordered, so "answer by option index" is
+                  separated from "read the document".
+    ``-ablated``  the needle replaced by a sentence with no class cue at all. Accuracy here must be
+                  chance; if it is not, the arm was scoring the haystack, the prompt or the
+                  position rather than the evidence.
+    ``-swapped``  the needle replaced by one from a *different* class. A head that reads the needle
+                  should follow the substituted text, so accuracy against the *original* label
+                  should collapse while accuracy against the substituted label should be high.
+                  This is the sharpest available test that the answer tracks content.
+
+    The last two need ``pool`` (the evaluation needle pool) because a swap has to render a real
+    needle of another class with this item's own slot values.
     """
     import random
 
+    def render_from(label: str, slots: Dict[str, str], salt: str) -> Optional[str]:
+        """A needle of ``label`` rendered with this item's own slot values where the template needs
+        them. Preferring slot-carrying templates keeps the substitute a natural request rather than
+        the same boilerplate sentence on every item."""
+        if pool is None:
+            return None
+        usable = []
+        for t in pool["templates"]:
+            if t["label"] != label:
+                continue
+            need = set(SLOT_RE.findall(t["text"]))
+            if need <= set(slots):
+                usable.append(t)
+        if not usable:
+            usable = [t for t in pool["templates"] if t["label"] == label]
+        if not usable:
+            return None
+        rng = random.Random("%s|%s|%s" % (perm_seed, label, salt))
+        slotted = [t for t in usable if SLOT_RE.search(t["text"])] or usable
+        tpl = slotted[rng.randrange(len(slotted))]
+        text = tpl["text"]
+        for k, v in slots.items():
+            text = text.replace("{%s}" % k, v)
+        return text
+
+    labels = list(plan.get("labels") or ("billing", "technical", "sales", "other"))
     out: List[Dict[str, Any]] = []
     for it in plan["eval_items"]:
         base = dict(it)
         base["option_order"] = None
         out.append(base)
-        if it["cell"] == "L4000-p100":
-            order = [0, 1, 2, 3]
-            random.Random("%d|perm|%s" % (perm_seed, it["item_id"])).shuffle(order)
-            perm = dict(it)
-            perm["item_id"] = it["item_id"] + "|perm"
-            perm["cell"] = it["cell"] + "-perm"
-            perm["option_order"] = order
-            perm["label_index_canonical"] = None
-            out.append(perm)
+        if it["cell"] != "L4000-p100":
+            continue
+        order = [0, 1, 2, 3]
+        random.Random("%d|perm|%s" % (perm_seed, it["item_id"])).shuffle(order)
+        perm = dict(it)
+        perm["item_id"] = it["item_id"] + "|perm"
+        perm["cell"] = it["cell"] + "-perm"
+        perm["option_order"] = order
+        out.append(perm)
+        if not include_ablations:
+            continue
+        abl = dict(it)
+        abl["item_id"] = it["item_id"] + "|abl"
+        abl["cell"] = "L4000-p100-ablated"
+        abl["needle_override"] = NEUTRAL_NEEDLE
+        abl["control"] = "needle_ablated"
+        out.append(abl)
+        swapped_label = labels[(labels.index(it["label"]) + 1) % len(labels)]
+        swap_text = render_from(swapped_label, it["slots"], it["item_id"])
+        if swap_text is None:
+            continue
+        swp = dict(it)
+        swp["item_id"] = it["item_id"] + "|swp"
+        swp["cell"] = "L4000-p100-swapped"
+        swp["needle_override"] = swap_text
+        swp["label_if_needle_read"] = swapped_label
+        swp["control"] = "needle_swapped"
+        out.append(swp)
     return out
 
 
 def label_index(labels: Sequence[str], label: str) -> int:
     return list(labels).index(label)
+
+
+def needle_text_of(item: Dict[str, Any]) -> str:
+    """The text that actually goes in the request slot, honouring a control's override."""
+    return item.get("needle_override") or item["needle_text"]
 
 
 def target_index(item: Dict[str, Any], labels: Sequence[str]) -> int:

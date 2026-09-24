@@ -36,9 +36,10 @@ def main() -> int:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     plan = C.load_plan()
     agent = C.load_agent(str(device))
-    builder = C.make_builder(agent.tok, C.load_filler(),
-                             C.load_needle_pool("needles-h5-eval-v1.json"))
-    conditions = [c for c in FEAT.build_eval_conditions(plan) if c["cell"] == "L4000-p100"]
+    builder = C.make_builder(agent.tok, C.load_filler(), pool)
+    pool = C.load_needle_pool("needles-h5-eval-v1.json")
+    conditions = [c for c in FEAT.build_eval_conditions(plan, pool=pool)
+                  if c["cell"] == "L4000-p100"]
     docs = [builder.build(c, option_order=c.get("option_order")) for c in conditions]
     lengths = [len(d["input_ids"]) for d in docs]
     out: Dict[str, Any] = {
@@ -117,7 +118,7 @@ def main() -> int:
     approx = {0: 90, 1000: 1090, 2000: 2090, 4000: 4090, 7000: 7090}
     eval_tokens = sum(approx[0] if c["cell"] == "L0" else
                       (approx[7000] if c["cell"].startswith("L7000") else approx[4000])
-                      for c in FEAT.build_eval_conditions(plan))
+                      for c in FEAT.build_eval_conditions(plan, pool=pool))
     train_tokens = sum(approx[it["pad"]] for it in plan["train_items"])
     out["projection"] = {
         "measured_tokens_per_second": tok_per_s,

@@ -92,8 +92,9 @@ class H5DocBuilder:
         instead of silently mis-batching.
         """
         pad = int(item["pad"])
+        needle = item.get("needle_override") or item["needle_text"]
         prefix = len(self.tok(NEEDLE_PREFIX, add_special_tokens=False)["input_ids"]) if pad > 0 else 0
-        block = prefix + len(self.tok(item["needle_text"], add_special_tokens=False)["input_ids"])
+        block = prefix + len(self.tok(needle, add_special_tokens=False)["input_ids"])
         return min(self.max_len, self.head_len() + pad + block + 1)
 
     # ---------------- build ----------------
@@ -106,7 +107,8 @@ class H5DocBuilder:
         n_after = pad - n_before
 
         prefix_ids = self.tok(NEEDLE_PREFIX, add_special_tokens=False)["input_ids"] if pad > 0 else []
-        request_ids = self.tok(item["needle_text"], add_special_tokens=False)["input_ids"]
+        request_ids = self.tok(item.get("needle_override") or item["needle_text"],
+                               add_special_tokens=False)["input_ids"]
         block = prefix_ids + request_ids
 
         state_ids = filler[:n_before] + block + filler[n_before:]
