@@ -356,6 +356,11 @@ def main() -> int:
     out = {
         "artifact": "experiments/h5-adapter/summary.json",
         "reproduce": "env/venv/bin/python experiments/h5-adapter/stats.py",
+        # HANDOFF.md defect #15: the pre-registered primary cell for H5 is L7000-p100, while
+        # `PRIMARY_CELL` (L4000-p100) is this file's historical constant. Both are recorded, and
+        # the H5 verdict block covers both, so no reader has to guess which one a number means.
+        "h5_primary_cell": H5_PRIMARY_CELL,
+        "legacy_primary_cell": PRIMARY_CELL,
         "prediction_files": sorted(os.path.basename(p) for p in glob.glob(
             os.path.join(a.pred_dir, "*.jsonl"))),
         "metrics_module_sha256": metrics_sha,
