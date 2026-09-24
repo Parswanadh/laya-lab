@@ -1,0 +1,180 @@
+{
+ "arm": "arm2_shipped_init",
+ "seed": 0,
+ "epochs": 12,
+ "lr": 0.0005,
+ "weight_decay": 0.01,
+ "token_budget": 12288,
+ "max_batch": 8,
+ "warmup_steps": 242,
+ "steps": 4848,
+ "steps_per_epoch": 404,
+ "n_train_items": 1008,
+ "train_mode": "uniform",
+ "batches_with_verified_item_target_pairing": 4848,
+ "parameter_accounting": {
+  "trainable_parameters": 14770945,
+  "frozen_parameters": 307138050,
+  "trainable_tensors": 31,
+  "trainable_names": [
+   "head.layers.0.linear1.bias",
+   "head.layers.0.linear1.weight",
+   "head.layers.0.linear2.bias",
+   "head.layers.0.linear2.weight",
+   "head.layers.0.norm1.bias",
+   "head.layers.0.norm1.weight",
+   "head.layers.0.norm2.bias",
+   "head.layers.0.norm2.weight",
+   "head.layers.0.self_attn.in_proj_bias",
+   "head.layers.0.self_attn.in_proj_weight",
+   "head.layers.0.self_attn.out_proj.bias",
+   "head.layers.0.self_attn.out_proj.weight",
+   "head.layers.1.linear1.bias",
+   "head.layers.1.linear1.weight",
+   "head.layers.1.linear2.bias",
+   "head.layers.1.linear2.weight",
+   "head.layers.1.norm1.bias",
+   "head.layers.1.norm1.weight",
+   "head.layers.1.norm2.bias",
+   "head.layers.1.norm2.weight",
+   "head.layers.1.self_attn.in_proj_bias",
+   "head.layers.1.self_attn.in_proj_weight",
+   "head.layers.1.self_attn.out_proj.bias",
+   "head.layers.1.self_attn.out_proj.weight",
+   "scorer.0.bias",
+   "scorer.0.weight",
+   "scorer.1.bias",
+   "scorer.1.weight",
+   "scorer.3.bias",
+   "scorer.3.weight",
+   "type_emb.weight"
+  ],
+  "frozen_encoder_parameters": 306939648
+ },
+ "train_seconds": 1089.0,
+ "peak_vram_gb": 2.535258112,
+ "history": [
+  {
+   "epoch": 0,
+   "step": 404,
+   "train_loss": 1.4135799628519823,
+   "train_accuracy": 0.34424603174603174,
+   "lr": 0.0004984941657278392,
+   "seconds": 92.6
+  },
+  {
+   "epoch": 1,
+   "step": 808,
+   "train_loss": 1.3513983722835305,
+   "train_accuracy": 0.3412698412698413,
+   "lr": 0.0004816651462915908,
+   "seconds": 182.2
+  },
+  {
+   "epoch": 2,
+   "step": 1212,
+   "train_loss": 1.3437532933340186,
+   "train_accuracy": 0.3482142857142857,
+   "lr": 0.0004473567654833389,
+   "seconds": 272.6
+  },
+  {
+   "epoch": 3,
+   "step": 1616,
+   "train_loss": 1.3416511921714696,
+   "train_accuracy": 0.3392857142857143,
+   "lr": 0.00039815762411695365,
+   "seconds": 362.4
+  },
+  {
+   "epoch": 4,
+   "step": 2020,
+   "train_loss": 1.334012514335059,
+   "train_accuracy": 0.37003968253968256,
+   "lr": 0.0003377798454224564,
+   "seconds": 452.6
+  },
+  {
+   "epoch": 5,
+   "step": 2424,
+   "train_loss": 1.3150242988374972,
+   "train_accuracy": 0.3462301587301587,
+   "lr": 0.00027077899172561716,
+   "seconds": 542.9
+  },
+  {
+   "epoch": 6,
+   "step": 2828,
+   "train_loss": 1.3163443090364573,
+   "train_accuracy": 0.3382936507936508,
+   "lr": 0.00020221034282465699,
+   "seconds": 633.3
+  },
+  {
+   "epoch": 7,
+   "step": 3232,
+   "train_loss": 1.3022016342581502,
+   "train_accuracy": 0.35119047619047616,
+   "lr": 0.0001372474701959745,
+   "seconds": 722.8
+  },
+  {
+   "epoch": 8,
+   "step": 3636,
+   "train_loss": 1.2828290372466047,
+   "train_accuracy": 0.37103174603174605,
+   "lr": 8.079188597731265e-05,
+   "seconds": 811.9
+  },
+  {
+   "epoch": 9,
+   "step": 4040,
+   "train_loss": 1.2736391877932918,
+   "train_accuracy": 0.39285714285714285,
+   "lr": 3.710321909353134e-05,
+   "seconds": 901.6
+  },
+  {
+   "epoch": 10,
+   "step": 4444,
+   "train_loss": 1.2600255803914653,
+   "train_accuracy": 0.3958333333333333,
+   "lr": 9.477822097213012e-06,
+   "seconds": 996.2
+  },
+  {
+   "epoch": 11,
+   "step": 4848,
+   "train_loss": 1.2585146176288762,
+   "train_accuracy": 0.38293650793650796,
+   "lr": 5.815162754108094e-11,
+   "seconds": 1088.6
+  }
+ ],
+ "head_state_dict_path": "experiments/h5-adapter/runs/arm2_shipped_init/seed0/head.pt",
+ "git": {
+  "lab_head": "98d20c05ef5a4e36700731381d5bd7e9bf9fa861",
+  "lab_status_porcelain": "M experiments/h5-adapter/manifest.json\n M experiments/h5-adapter/pilot.json\n?? experiments/h5-adapter/predictions/\n?? experiments/h5-adapter/summary.json",
+  "fork_worktree_head": "c8d0d2877a633d97573926e5286c62ab91e4cbb2",
+  "fork_branch": "exp/h5-adapter",
+  "fork_status_porcelain": "M laya/common.py\n M tests/test_cross_attention_head.py"
+ },
+ "environment": {
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "torch": "2.9.1+cu128",
+  "transformers": "4.57.6",
+  "cuda_available": true,
+  "device": "cuda",
+  "USE_TF": "0",
+  "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+  "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "gpu_total_memory_gb": 8.16,
+  "cuda_version": "12.8"
+ },
+ "pool_hashes": {
+  "experiments/h5-adapter/pools/needles-h5-eval-v1.json": "1ab55323ebdbf4370e547d38d44a63435bb4f477606ae1be4f79fdaf125a104d",
+  "experiments/h5-adapter/pools/needles-h5-train-v1.json": "e88a68874a1153b2c627bd06470bf38b80b1eed4017b0dd57eac0f1c44edc733",
+  "experiments/h5-adapter/pools/filler-h5-v1.json": "37b89cc551e2a67925ff518a2319a79d3e52676f7e0257bba1d1c4f68d80eef1"
+ }
+}
