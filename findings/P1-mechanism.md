@@ -66,6 +66,22 @@ checkpoint — the only difference is **how much text surrounds it**. *(With the
 50 rather than 256, the two positions are both ~1050 and the comparison is **exact**, not
 approximate — V-001 defect #9.)*
 
+> ⚠ **CORRECTED AGAIN (H5 interim, n=200/cell).** The five-point position sweep on the balanced
+> H5 eval set shows the distance curve is **U-shaped, not monotone**:
+>
+> | needle position at pad=4000 | 0.00 | 0.25 | 0.50 | 0.75 | 1.00 |
+> |---|---|---|---|---|---|
+> | accuracy (arm 1, frozen) | **0.580** | 0.295 | 0.335 | 0.280 | **0.415** |
+>
+> The interior sits **below** the end. Probe B above sampled only the two endpoints (0.900 and
+> 0.600 on the `p1_exact` construction), and **a two-point sample cannot distinguish "decays with
+> distance" from "high at both edges, low in between."** The needle-at-start value reproduces
+> almost exactly across the two item sets (0.580 vs 0.585), so the disagreement is in the shape,
+> not the measurement. **Claims about the *shape* of the curve require a full position sweep, not
+> two endpoints** — the "position dependence" conclusion survives, the implied monotonicity does
+> not.
+
+
 ## Mechanism
 
 Neither distance nor length alone explains the data; both act. This is consistent with

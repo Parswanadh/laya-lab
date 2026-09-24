@@ -321,3 +321,44 @@ matched pool — never from upstream's 0.90.
 
 **Scheduling.** GPU handed to H5 as the critical path; the harness's queued confirmatory presets
 were asked to yield.
+
+---
+
+## 2026-09-25 · H5 interim — fine-tuning alone is a large win; the arm-3 bar is 0.455
+
+**Artifact.** `experiments/h5-adapter/predictions/`, `summary.json` · issue #6 · n=200/cell, balanced
+50/class, position-only oracle **0.2500 exactly**.
+
+| cell | arm1 frozen | **arm2** (same arch, fine-tuned) | Δ | McNemar |
+|---|---|---|---|---|
+| L0 | 0.640 | 0.620 | −2.0pp | p=0.29 |
+| L4000-p025 | 0.295 | 0.430 | +13.5pp | — |
+| L4000-p050 | 0.335 | **0.500** | +16.5pp | 3.6e-08 |
+| L4000-p075 | 0.280 | 0.425 | +14.5pp | — |
+| L4000-p100 | 0.415 | 0.495 | +8.0pp | 0.0025 |
+| L7000-p000 | 0.595 | 0.585 | −1.0pp | 0.79 |
+| **L7000-p100 (primary)** | **0.365** | **0.455** | **+9.0pp** | **0.0021** |
+| ablated | 0.250 | 0.265 | — | — |
+
+**Three framing changes.**
+
+1. **The bar for the architecture is 0.455, not 0.365.** Training the *existing* head on the task
+   recovers +9 to +16.5pp exactly where the headroom is, and changes nothing at the easy cells
+   (L0 p=0.29, L7000-p000 p=0.79). So a cross-attention arm that merely matches 0.455 means
+   **"the fix is adaptation, not design"** — the outcome issue #6 pre-registered as a real
+   possibility. Arm 3 must *beat* 0.455 for the architectural claim to stand.
+2. **The distance curve is U-shaped, not monotone** (0.580 / 0.295 / 0.335 / 0.280 / 0.415 at
+   pad=4000). P1b sampled only the two endpoints and read them as a monotone decline. Corrected in
+   `P1-mechanism.md` and ledger L-035. The *position dependence* conclusion survives; the implied
+   monotonicity does not.
+3. **The ablated control collapses to a constant `technical`** (200/200), so its 0.250 is a
+   balanced-pool artefact, not "reading nothing, guessing evenly". arm1's above-chance needle@END
+   score comes from a **minority** of items over a strong `technical` prior.
+
+**Cost / honesty.** ~18 min per self-attention arm at 12 epochs (4848 steps). arm2's train loss was
+**still falling at epoch 12** (1.414 → 1.259, train acc 0.383), so 12 epochs is **not converged** —
+recorded as a limitation, not hidden.
+
+**Disk incident.** The filesystem hit **100 % full** mid-run (1.6 GB free). I freed space without
+touching other projects' data; the H5 agent cleared ~10 GB of re-creatable caches. Training
+survived. Head checkpoints are now gitignored and deleted after eval; raw per-item JSONL is kept.

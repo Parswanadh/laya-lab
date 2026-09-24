@@ -24,18 +24,18 @@
  "encoder_throughput": {
   "batch1": {
    "n_batches": 3,
-   "ms_per_item": 246.47935099710594,
-   "tokens_per_second": 16500.368016823257
+   "ms_per_item": 189.43495799976517,
+   "tokens_per_second": 21469.110257912595
   },
   "batch2": {
    "n_batches": 3,
-   "ms_per_item": 203.5531274996174,
-   "tokens_per_second": 19980.04181983224
+   "ms_per_item": 152.68249700056913,
+   "tokens_per_second": 26636.97594613507
   },
   "batch4": {
    "n_batches": 2,
-   "ms_per_item": 169.1768507503184,
-   "tokens_per_second": 24039.93207086192
+   "ms_per_item": 149.4624178749291,
+   "tokens_per_second": 27210.853790705343
   }
  },
  "peak_vram_gb_at_batch4": 2.55879424,
@@ -58,17 +58,17 @@
    "other": 3
   },
   "published_p1b_reference_needle_at_end": 0.3,
-  "seconds": 38.3,
+  "seconds": 35.7,
   "latency_scope": "full model, encoder and head, single process"
  },
  "projection": {
-  "measured_tokens_per_second": 19980.04181983224,
+  "measured_tokens_per_second": 26636.97594613507,
   "note": "modelled from the measured throughput above; every number here is an estimate",
   "eval_encoder_tokens": 9398000,
   "train_encoder_tokens": 3450720,
-  "eval_cache_minutes": 7.839489764123451,
-  "train_cache_minutes": 2.8784724535918356,
-  "arm1_end_to_end_minutes": 7.839489764123451,
+  "eval_cache_minutes": 5.880297134707601,
+  "train_cache_minutes": 2.1591039506999588,
+  "arm1_end_to_end_minutes": 5.880297134707601,
   "median_l4000_tokens": 4067.0
  }
 }
