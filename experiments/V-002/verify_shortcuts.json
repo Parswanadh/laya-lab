@@ -1,0 +1,277 @@
+{
+ "files": {
+  "arm1_frozen.jsonl": {
+   "n_rows": 2200,
+   "n_problems": 0,
+   "problems": [],
+   "arm_field_mismatch": 0
+  },
+  "arm2_shipped_init-seed0.jsonl": {
+   "n_rows": 2200,
+   "n_problems": 0,
+   "problems": [],
+   "arm_field_mismatch": 0
+  },
+  "arm3_xattn-seed0.jsonl": {
+   "n_rows": 2200,
+   "n_problems": 0,
+   "problems": [],
+   "arm_field_mismatch": 0
+  }
+ },
+ "shortcut_oracles": {
+  "L0": {
+   "n": 200,
+   "n_distinct_slot_keys": 129,
+   "slot_value_oracle_insample": 0.84,
+   "slot_value_oracle_loo": 0.32,
+   "slot_value_oracle_insample_strict": 0.84,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.91,
+   "n_distinct_templates": 57,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p000": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.83,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p025": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.83,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p050": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.83,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p075": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.83,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p100": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.83,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p100-ablated": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.25,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p100-perm": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.25,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L4000-p100-swapped": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.83,
+   "slot_value_oracle_loo": 0.24,
+   "slot_value_oracle_insample_strict": 0.25,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L7000-p000": {
+   "n": 200,
+   "n_distinct_slot_keys": 127,
+   "slot_value_oracle_insample": 0.79,
+   "slot_value_oracle_loo": 0.21,
+   "slot_value_oracle_insample_strict": 0.79,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.92,
+   "n_distinct_templates": 54,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  },
+  "L7000-p100": {
+   "n": 200,
+   "n_distinct_slot_keys": 131,
+   "slot_value_oracle_insample": 0.815,
+   "slot_value_oracle_loo": 0.27,
+   "slot_value_oracle_insample_strict": 0.815,
+   "template_oracle_insample": 1.0,
+   "template_oracle_loo": 0.925,
+   "n_distinct_templates": 56,
+   "label_distribution": {
+    "billing": 50,
+    "other": 50,
+    "sales": 50,
+    "technical": 50
+   }
+  }
+ },
+ "position_oracles_all_rows": {
+  "cell": {
+   "group_fields": [
+    "cell"
+   ],
+   "oracle_accuracy": 0.25,
+   "n_groups": 11
+  },
+  "pad_position": {
+   "group_fields": [
+    "pad",
+    "needle_position"
+   ],
+   "oracle_accuracy": 0.25,
+   "n_groups": 8
+  },
+  "pad": {
+   "group_fields": [
+    "pad"
+   ],
+   "oracle_accuracy": 0.25,
+   "n_groups": 3
+  },
+  "position": {
+   "group_fields": [
+    "needle_position"
+   ],
+   "oracle_accuracy": 0.25,
+   "n_groups": 5
+  }
+ },
+ "position_oracle_by_cell": {
+  "L0": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p000": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p025": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p050": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p075": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p100": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p100-ablated": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p100-perm": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L4000-p100-swapped": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L7000-p000": {
+   "n": 200,
+   "oracle": 0.25
+  },
+  "L7000-p100": {
+   "n": 200,
+   "oracle": 0.25
+  }
+ }
+}

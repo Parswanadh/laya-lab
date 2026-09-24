@@ -38,9 +38,13 @@ BOOT = 10000
 # The comparison family for Holm-Bonferroni. Baselines only -- arm4 is a *candidate variant* of
 # arm3, not a control, so putting it in the baseline list would both duplicate the arm3/arm4
 # comparison and inflate the family the correction is applied over.
-BASELINES = ("arm1_frozen", "arm2_shipped_init", "arm2_random_init")
-CANDIDATE_FAMILY = ("arm3_xattn", "arm4_xattn_long")
+BASELINES = ("arm1_frozen", "arm2_shipped_init", "arm2_random_init", "arm2long_shipped_init")
+CANDIDATE_FAMILY = ("arm3_xattn", "arm4_xattn_long", "arm3r_residual")
 PRIMARY_CELL = "L4000-p100"
+# The cell the H5 programme names as primary: pad=7000 at max_len=8192, where truncation is excluded
+# by construction (BASELINE.md §1, ledger L-033). Kept as a separate constant so the pre-existing
+# `PRIMARY_CELL` value cannot be quietly changed by this experiment.
+H5_PRIMARY_CELL = "L7000-p100"
 
 
 def load_predictions(path: str) -> List[Dict[str, Any]]:
@@ -301,9 +305,11 @@ def main() -> int:
         return spread.get(arm, {}).get(cell)
 
     verdict = {}
-    for cell in (PRIMARY_CELL, "L7000-p100", "L4000-p000", "L0"):
+    for cell in (PRIMARY_CELL, H5_PRIMARY_CELL, "L4000-p050", "L4000-p000", "L0"):
         a3 = spread_of("arm3_xattn", cell)
+        a3r = spread_of("arm3r_residual", cell)
         a2s = spread_of("arm2_shipped_init", cell)
+        a2l = spread_of("arm2long_shipped_init", cell)
         a2r = spread_of("arm2_random_init", cell)
         a1 = spread_of("arm1_frozen", cell)
         a4 = spread_of("arm4_xattn_long", cell)
@@ -312,8 +318,10 @@ def main() -> int:
             "position_only_oracle": oracle.get(cell, {}).get("oracle_accuracy"),
             "arm1_frozen": a1 and a1["accuracy_mean"],
             "arm2_shipped_init": a2s and a2s["accuracy_mean"],
+            "arm2long_shipped_init": a2l and a2l["accuracy_mean"],
             "arm2_random_init": a2r and a2r["accuracy_mean"],
             "arm3_xattn": a3 and a3["accuracy_mean"],
+            "arm3r_residual": a3r and a3r["accuracy_mean"],
             "arm4_xattn_long": a4 and a4["accuracy_mean"],
         }
         if a3 and a2s:
@@ -322,11 +330,24 @@ def main() -> int:
                 a3["accuracy_mean"] - a2s["accuracy_mean"]) <= (a3["seed_spread_pp"] / 100.0)
             row["inside_arm2_seed_spread"] = abs(
                 a3["accuracy_mean"] - a2s["accuracy_mean"]) <= (a2s["seed_spread_pp"] / 100.0)
+        # the init-fair arm: against arm 2 on arm 2's own (short) schedule, and against the
+        # schedule-matched control, which is the comparison that isolates the architecture from
+        # "it simply trained for longer".
+        if a3r and a2s:
+            row["arm3r_minus_arm2_pp"] = 100.0 * (a3r["accuracy_mean"] - a2s["accuracy_mean"])
+            row["inside_arm3r_seed_spread"] = abs(
+                a3r["accuracy_mean"] - a2s["accuracy_mean"]) <= (a3r["seed_spread_pp"] / 100.0)
+        if a3r and a2l:
+            row["arm3r_minus_arm2long_pp"] = 100.0 * (a3r["accuracy_mean"] - a2l["accuracy_mean"])
+            row["inside_arm2long_seed_spread"] = abs(
+                a3r["accuracy_mean"] - a2l["accuracy_mean"]) <= (a2l["seed_spread_pp"] / 100.0)
         if a3 and a2r:
             row["arm3_minus_arm2_random_pp"] = 100.0 * (a3["accuracy_mean"] - a2r["accuracy_mean"])
         orc = row["position_only_oracle"]
         if a3 and orc is not None:
             row["arm3_beats_position_only_oracle"] = a3["accuracy_mean"] > orc + 1e-9
+        if a3r and orc is not None:
+            row["arm3r_beats_position_only_oracle"] = a3r["accuracy_mean"] > orc + 1e-9
         verdict[cell] = row
 
     out = {
@@ -361,15 +382,16 @@ def main() -> int:
     # ---- print ---------------------------------------------------------------------------
     print("metrics.py sha256 %s" % metrics_sha[:16])
     print("\nper-cell accuracy (mean over seeds; oracle = position-only)")
-    hdr = "%-18s %5s %6s | %8s %8s %8s %8s %8s | %7s" % (
-        "cell", "n", "oracle", "arm1", "arm2_shp", "arm2_rnd", "arm3_xa", "arm4_lng", "3-2shp")
+    hdr = "%-18s %5s %6s | %8s %8s %8s %8s %8s %8s %8s | %7s %7s" % (
+        "cell", "n", "oracle", "arm1", "arm2_shp", "arm2lng", "arm2_rnd", "arm3_xa", "arm3r_res",
+        "arm4_lng", "3-2shp", "3r-2shp")
     print(hdr)
     print("-" * len(hdr))
     for cell in cells:
         orc = oracle.get(cell, {}).get("oracle_accuracy")
         vals = []
-        for arm in ("arm1_frozen", "arm2_shipped_init", "arm2_random_init", "arm3_xattn",
-                    "arm4_xattn_long"):
+        for arm in ("arm1_frozen", "arm2_shipped_init", "arm2long_shipped_init",
+                    "arm2_random_init", "arm3_xattn", "arm3r_residual", "arm4_xattn_long"):
             s = spread.get(arm, {}).get(cell)
             vals.append("%8.3f" % s["accuracy_mean"] if s else "       -")
         # take n from whichever (arm, seed) first has this cell -- arm1 is keyed "seed-1", so
@@ -381,8 +403,11 @@ def main() -> int:
                 n = hit
                 break
         d = verdict.get(cell, {}).get("arm3_minus_arm2_shipped_pp")
-        print("%-18s %5d %6.3f | %s | %+7.2f" % (cell, n, orc if orc is not None else float("nan"),
-                                                 " ".join(vals), d if d is not None else float("nan")))
+        d3r = verdict.get(cell, {}).get("arm3r_minus_arm2_pp")
+        print("%-18s %5d %6.3f | %s | %+7.2f %+7.2f"
+              % (cell, n, orc if orc is not None else float("nan"), " ".join(vals),
+                 d if d is not None else float("nan"),
+                 d3r if d3r is not None else float("nan")))
     print("\nseed spreads (pp)")
     for arm in arms:
         if arm == "arm1_frozen":

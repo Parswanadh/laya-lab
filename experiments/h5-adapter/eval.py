@@ -205,7 +205,7 @@ def load_trained(model, arm: str, seed: int, device) -> Dict[str, Any]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", required=True,
-                    choices=["arm1_frozen", "arm2_step0"] + A.TRAINED_ARMS)
+                    choices=["arm1_frozen", "arm2_step0"] + A.ALL_TRAINED_ARMS)
     ap.add_argument("--seed", type=int, default=None)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--out", default=None)

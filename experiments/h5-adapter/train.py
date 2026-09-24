@@ -1,14 +1,18 @@
 """Train one H5 arm for one seed, on cached frozen-encoder features.
 
-    env/venv/bin/python experiments/h5-adapter/train.py --arm arm3_xattn --seed 0
+    env/venv/bin/python experiments/h5-adapter/train.py --arm arm3r_residual --seed 0 \\
+        --epochs 40 --lr 5e-4 [--lr-cross 5e-3]
 
 Writes `experiments/h5-adapter/runs/<arm>/seed<k>/{head.pt,training.json}`. The head state dict is
-small (~60 MB fp32) and is committed; optimiser state is not.
+~60 MB fp32, is **gitignored**, and `run_arm3r.py` deletes it immediately after the eval that needs
+it -- the filesystem reached 100 % full during the previous run of this experiment. `training.json`,
+which carries the per-epoch curve and the parameter accounting, is the kept artifact.
 
 Design notes that matter for the comparison:
 
 * **Same optimiser, schedule, epoch count, batch token budget and data for every trained arm.**
-  Only the head module differs.
+  Only the head module differs -- plus, for an arm that carries a zero-initialised parallel branch,
+  an optional separate rate for that branch (`--lr-cross`), reported in the run record.
 * **Gradients never touch the encoder**: the cached `h` was produced under `inference_mode`, and
   the encoder's parameters have `requires_grad=False`, so a backward that reached it would raise
   rather than silently fine-tune it. `train.py` additionally asserts the encoder's grad is `None`
@@ -16,6 +20,11 @@ Design notes that matter for the comparison:
 * Head forward/backward runs under bf16 autocast with fp32 master weights, which is how the
   shipped head was trained (`amp_dtype: bf16` in the checkpoint config). bf16 needs no loss
   scaling, so there is no GradScaler to get wrong.
+* **The added branch is measured every epoch**, not assumed: one fixed batch is scored with the
+  branch as trained and again with its output projection zeroed, and the max logit difference is
+  recorded. It is exactly `0` at step 0 (that is the identity the arm rests on) and has to grow for
+  the arm to be evidence at all -- an arm whose new module never moves is invalid, not null
+  (`protocol.md` §10).
 """
 from __future__ import annotations
 
@@ -63,11 +72,20 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
               token_budget: int = 12288, max_batch: int = 8, warmup_frac: float = 0.05,
               device_name: str = "cuda", limit_train: Optional[int] = None,
               log_every: int = 50, shipped_override=None,
-              train_items_override: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+              train_items_override: Optional[List[Dict[str, Any]]] = None,
+              lr_cross: Optional[float] = None, probe_every_epoch: bool = True) -> Dict[str, Any]:
     """``shipped_override`` and ``train_items_override`` let the offline selftest drive this loop
     with a tiny encoder and a stratified item subset, so the loop under test is this loop and not a
     copy of it. A subset whose positions are not its store row indices is the point: the arms train
     on stratified blocks, and an identity assumption between the two would be invisible otherwise.
+
+    ``lr_cross`` gives the parallel cross-attention branch its own learning rate (default: the same
+    as everything else). A zero-initialised branch starts from a linear read-out of random features
+    and has to travel further than a fine-tuned module does, so a higher rate for it is a *recipe*
+    choice that has to be reported, not a silent one. ``probe_every_epoch`` measures the branch's
+    contribution to the logits once per epoch by re-running one fixed batch with the branch's output
+    projection zeroed: an arm whose new module never moves is reported as invalid (protocol.md
+    §10), and this is the number that decides it.
     """
 
     spec = A.ARMS[arm]
@@ -99,7 +117,18 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
     model.train()
 
     params = [p for p in model.parameters() if p.requires_grad]
-    opt = torch.optim.AdamW(params, lr=lr, weight_decay=weight_decay)
+    # One optimiser, one schedule, one recipe -- except that the zero-initialised parallel branch
+    # may carry its own rate. Every parameter is in exactly one group, so `lr_at` scales both the
+    # same way and the ratio between them is constant for the whole run.
+    cross_params = [p for n, p in model.named_parameters()
+                    if p.requires_grad and n.startswith("cross.")]
+    rest_params = [p for n, p in model.named_parameters()
+                   if p.requires_grad and not n.startswith("cross.")]
+    groups_def = [{"params": rest_params, "lr": lr}]
+    if cross_params:
+        groups_def.append({"params": cross_params, "lr": lr_cross if lr_cross else lr})
+    opt = torch.optim.AdamW(groups_def, lr=lr, weight_decay=weight_decay)
+    base_lrs = [g["lr"] for g in opt.param_groups]
     # batches_by_length indexes the *subset*; every use below maps back through `idx`, so the
     # collate call and the target lookup address the same store rows the batch was built from
     groups = batches_by_length(subset, token_budget, max_batch, seed)
@@ -109,19 +138,60 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
 
     def lr_at(step: int) -> float:
         if step < warmup:
-            return lr * (step + 1) / warmup
+            return (step + 1) / warmup
         p = (step - warmup) / max(1, total_steps - warmup)
-        return 0.5 * lr * (1 + math.cos(math.pi * p))
+        return 0.5 * (1 + math.cos(math.pi * p))
+
+    def probe_branch_contribution(batch: Dict[str, Any]) -> Optional[float]:
+        """max |logit difference| between the branch as trained and the branch with its output
+        projection zeroed, on one fixed batch. Exactly 0 at step 0 by construction; non-zero and
+        growing means the added stage is doing something. Returns None for arms without a branch."""
+        if model.cross is None:
+            return None
+        was_training = model.training
+        model.eval()
+        with torch.no_grad():
+            with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
+                                enabled=device.type == "cuda"):
+                with_branch, _ = model(None, batch["attention_mask"], batch["marker_pos"],
+                                       batch["marker_mask"], batch["qtype"],
+                                       state_start=batch["state_start"], encoder_hidden=batch["h"])
+            w = model.cross.out_proj.weight.detach().clone()
+            b = model.cross.out_proj.bias.detach().clone()
+            model.cross.zero_init_out_proj()
+            without, _ = model(None, batch["attention_mask"], batch["marker_pos"],
+                               batch["marker_mask"], batch["qtype"],
+                               state_start=batch["state_start"], encoder_hidden=batch["h"])
+            with torch.no_grad():
+                model.cross.out_proj.weight.copy_(w)
+                model.cross.out_proj.bias.copy_(b)
+        if was_training:
+            model.train()
+        return float((with_branch.float() - without.float()).abs().max())
+
+    def branch_norms() -> Optional[Dict[str, float]]:
+        if model.cross is None:
+            return None
+        return {
+            "out_proj_weight_fro": float(model.cross.out_proj.weight.detach().float().norm()),
+            "out_proj_bias_norm": float(model.cross.out_proj.bias.detach().float().norm()),
+            "branch_in_proj_weight_fro": float(
+                model.cross.branch.layers[0].cross_attn.in_proj_weight.detach().float().norm()),
+        }
 
     history: List[Dict[str, Any]] = []
     verified_batches = 0
     step = 0
     t0 = time.time()
+    step0_grads: Optional[Dict[str, float]] = None
+    probe_batch = None
     for epoch in range(epochs):
         ep_loss, ep_correct, ep_n = 0.0, 0, 0
         for group in groups:
             rows = [idx[g] for g in group]
             b = FEAT.collate(store, rows, device)
+            if probe_batch is None and probe_every_epoch:
+                probe_batch = {k: v for k, v in b.items() if k != "meta"}
             tgt = torch.tensor([targets[i] for i in rows], dtype=torch.long, device=device)
             # The pairing invariant, checked on every batch rather than argued: the store rows the
             # features came from must be the plan items the targets were derived from. Without it a
@@ -133,8 +203,8 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
                         "batch row %r does not correspond to the plan item its target came from (%r)"
                         % (meta["item_id"], train_items[g]["item_id"]))
             verified_batches += 1
-            for g in opt.param_groups:
-                g["lr"] = lr_at(step)
+            for g, base in zip(opt.param_groups, base_lrs):
+                g["lr"] = base * lr_at(step)
             with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
                                 enabled=device.type == "cuda"):
                 logits, _act = model(None, b["attention_mask"], b["marker_pos"], b["marker_mask"],
@@ -142,7 +212,6 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
             loss = F.cross_entropy(logits.float(), tgt)
             opt.zero_grad(set_to_none=True)
             loss.backward()
-            opt.step()
             if step == 0:
                 grads = [n for n, p in model.named_parameters()
                          if p.grad is not None and n.startswith("encoder.")]
@@ -155,20 +224,44 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
                         break
                 if encoder_grad not in (None, 0.0):
                     raise AssertionError("encoder grad is %r after one step" % encoder_grad)
+                step0_grads = {
+                    "out_proj_weight_grad_sum": (
+                        float(model.cross.out_proj.weight.grad.abs().sum())
+                        if model.cross is not None and model.cross.out_proj.weight.grad is not None
+                        else None),
+                    "branch_in_proj_grad_sum": (
+                        float(model.cross.branch.layers[0].cross_attn.in_proj_weight.grad.abs().sum())
+                        if model.cross is not None
+                        and model.cross.branch.layers[0].cross_attn.in_proj_weight.grad is not None
+                        else None),
+                    "encoder_grad_sum": encoder_grad,
+                }
+            opt.step()
             with torch.no_grad():
                 ep_loss += float(loss) * len(group)
                 ep_correct += int((logits.float().argmax(-1) == tgt).sum())
                 ep_n += len(group)
             if log_every and step % log_every == 0:
-                print("  [%s s%d] step %4d/%d lr %.2e loss %.4f" % (arm, seed, step, total_steps,
-                                                                    lr_at(step), float(loss)), flush=True)
+                msg = "  [%s s%d] step %4d/%d lr %.2e loss %.4f" % (
+                    arm, seed, step, total_steps, opt.param_groups[0]["lr"], float(loss))
+                print(msg, flush=True)
             step += 1
         row = {"epoch": epoch, "step": step, "train_loss": ep_loss / ep_n,
-               "train_accuracy": ep_correct / ep_n, "lr": lr_at(max(0, step - 1)),
-               "seconds": round(time.time() - t0, 1)}
+               "train_accuracy": ep_correct / ep_n,
+               "lr": opt.param_groups[0]["lr"], "seconds": round(time.time() - t0, 1)}
+        if probe_batch is not None:
+            row["branch_logit_contribution_max"] = probe_branch_contribution(probe_batch)
+        norms = branch_norms()
+        if norms is not None:
+            row.update(norms)
         history.append(row)
-        print("  [%s s%d] epoch %d  train_loss=%.4f train_acc=%.4f  (%.0fs)"
-              % (arm, seed, epoch, row["train_loss"], row["train_accuracy"], row["seconds"]), flush=True)
+        extra_note = ""
+        if row.get("branch_logit_contribution_max") is not None:
+            extra_note = "  branch|dlogit|=%.4g  ||W||=%.3g" % (
+                row["branch_logit_contribution_max"], row["out_proj_weight_fro"])
+        print("  [%s s%d] epoch %d  train_loss=%.4f train_acc=%.4f  (%.0fs)%s"
+              % (arm, seed, epoch, row["train_loss"], row["train_accuracy"], row["seconds"],
+                 extra_note), flush=True)
 
     out_dir = os.path.join(RUNS_DIR, arm, "seed%d" % seed)
     os.makedirs(out_dir, exist_ok=True)
@@ -178,11 +271,16 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
                 "trainable_names": sorted(sd)}, os.path.join(out_dir, "head.pt"))
     peak_vram = (torch.cuda.max_memory_allocated(device) / 1e9) if device.type == "cuda" else None
     result = {
-        "arm": arm, "seed": seed, "epochs": epochs, "lr": lr, "weight_decay": weight_decay,
+        "arm": arm, "seed": seed, "epochs": epochs, "lr": lr, "lr_cross": lr_cross,
+        "weight_decay": weight_decay,
         "token_budget": token_budget, "max_batch": max_batch, "warmup_steps": warmup,
         "steps": step, "steps_per_epoch": steps_per_epoch,
         "n_train_items": len(idx), "train_mode": spec["train_mode"],
         "batches_with_verified_item_target_pairing": verified_batches,
+        "step0_gradients": step0_grads,
+        "final_branch_norms": branch_norms(),
+        "branch_contribution_last_epoch": (
+            history[-1].get("branch_logit_contribution_max") if history else None),
         "parameter_accounting": acc,
         "train_seconds": round(time.time() - t0, 1),
         "peak_vram_gb": peak_vram,
@@ -201,10 +299,13 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--arm", required=True, choices=A.TRAINED_ARMS)
+    ap.add_argument("--arm", required=True, choices=A.ALL_TRAINED_ARMS)
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--epochs", type=int, default=8)
     ap.add_argument("--lr", type=float, default=1e-4)
+    ap.add_argument("--lr-cross", type=float, default=None,
+                    help="learning rate for the parallel cross-attention branch (arm3r_residual); "
+                         "default: same as --lr")
     ap.add_argument("--token-budget", type=int, default=12288)
     ap.add_argument("--max-batch", type=int, default=8)
     ap.add_argument("--device", default="cuda")
@@ -212,7 +313,8 @@ def main() -> int:
                     help="smoke test only: train on the first N items")
     a = ap.parse_args()
     train_arm(a.arm, a.seed, epochs=a.epochs, lr=a.lr, token_budget=a.token_budget,
-              max_batch=a.max_batch, device_name=a.device, limit_train=a.limit_train)
+              max_batch=a.max_batch, device_name=a.device, limit_train=a.limit_train,
+              lr_cross=a.lr_cross)
     return 0
 
 

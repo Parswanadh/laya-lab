@@ -173,6 +173,55 @@ def main() -> int:
         check_true("train/loss is finite on every epoch",
                    all(h["train_loss"] == h["train_loss"] for h in tj["history"]))
 
+        # ---- 5b. the init-fair arm: identity at step 0, then a branch that actually trains
+        # This is the offline half of `step0.py` (which asserts the same over the real 1600-item
+        # eval set on GPU). `arm3r_residual` must be *bit-for-bit* `arm2_shipped_init` before any
+        # optimizer step, and its parallel branch must take a gradient and move -- both, or the arm
+        # is invalid rather than null (protocol.md §10).
+        m_ref = A.build_arm_model(shipped, "arm2_shipped_init", seed=0).to(device).eval()
+        m_new = A.build_arm_model(shipped, "arm3r_residual", seed=0).to(device).eval()
+        A.freeze_for_training(m_ref)
+        acc_new = A.freeze_for_training(m_new)
+        check("train/arm3r carries arm2's trainable tensors plus the branch",
+              acc_new["trainable_parameters"] - table["arm2_shipped_init"]["trainable_parameters"],
+              acc_new["trainable_cross_parameters"])
+        check_true("train/arm3r's branch is in the trainable set",
+                   acc_new["trainable_cross_parameters"] > 0)
+        with torch.no_grad():
+            l_ref = m_ref(None, b["attention_mask"], b["marker_pos"], b["marker_mask"], b["qtype"],
+                          state_start=b["state_start"], encoder_hidden=b["h"])[0]
+            l_new = m_new(None, b["attention_mask"], b["marker_pos"], b["marker_mask"], b["qtype"],
+                          state_start=b["state_start"], encoder_hidden=b["h"])[0]
+        check_true("train/arm3r at step 0 is bit-for-bit arm2 (zero-init parallel branch)",
+                   torch.equal(l_ref, l_new),
+                   "max |delta| %r" % float((l_new - l_ref).abs().max()))
+        with torch.no_grad():
+            m_new.cross.out_proj.weight.normal_(0, 1e-2)
+            l_probe = m_new(None, b["attention_mask"], b["marker_pos"], b["marker_mask"],
+                            b["qtype"], state_start=b["state_start"], encoder_hidden=b["h"])[0]
+        check_true("train/a non-zero branch moves the logits (the identity is not dead code)",
+                   not torch.allclose(l_ref, l_probe, atol=1e-6))
+        m_new.cross.zero_init_out_proj()
+        res3r = T.train_arm("arm3r_residual", seed=0, epochs=1, token_budget=4096, max_batch=4,
+                            device_name="cpu", log_every=0, train_items_override=mini_train,
+                            shipped_override=shipped, lr_cross=5e-3)
+        h1 = res3r["history"][-1]
+        check_true("train/arm3r's branch takes a non-zero gradient at step 0",
+                   (res3r["step0_gradients"] or {}).get("out_proj_weight_grad_sum", 0.0) > 0,
+                   str(res3r["step0_gradients"]))
+        check("train/step 0 of arm3r has exactly zero inner-branch gradient (W = 0)",
+              (res3r["step0_gradients"] or {}).get("branch_in_proj_grad_sum"), 0.0)
+        check_true("train/arm3r's branch contribution is zero at epoch 0 and non-zero by the end",
+                   h1.get("out_proj_weight_fro", 0.0) > 0,
+                   "||out_proj|| = %r" % h1.get("out_proj_weight_fro"))
+        check_true("train/arm3r records the branch's logit contribution every epoch",
+                   h1.get("branch_logit_contribution_max") is not None,
+                   str(sorted(h1)))
+        with open(os.path.join(T.RUNS_DIR, "arm3r_residual", "seed0", "training.json")) as fh:
+            tj3r = json.load(fh)
+        check("train/arm3r's separate branch rate is recorded",
+              tj3r["lr_cross"], 5e-3)
+
         # ---- 6. evaluate arm 2 at step 0 and the trained arm 3, from the cache
         import eval as E
         m0 = A.build_arm_model(shipped, "arm2_shipped_init", seed=0).to(device)
