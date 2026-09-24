@@ -32,7 +32,7 @@ sys.path.insert(0, HERE)
 
 import torch  # noqa: E402
 
-from laya.common import DecisionModel  # noqa: E402
+from laya.common import CrossAttentionHead, DecisionModel  # noqa: E402
 
 # Modules the arms are allowed to train. Everything else -- the encoder, the act head and the
 # temperature buffers -- is frozen in every arm, including the shipped baseline.
@@ -112,6 +112,40 @@ def build_arm_model(shipped: DecisionModel, arm: str, seed: int) -> DecisionMode
             raise AssertionError("shipped-init copied %d tensors, expected %d"
                                  % (len(copied), len([n for n in own if n.startswith(TRAINABLE_PREFIXES)])))
     return model
+
+
+def analytic_parameter_table(d: int = 768, head_layers: int = 2,
+                             shipped_nhead: Optional[int] = None,
+                             cross_nhead: int = 4) -> Dict[str, Any]:
+    """The trained-arm parameter counts from the module shapes alone -- no encoder, no checkpoint.
+
+    Used to state the arm-2/arm-3 match in the finding without needing a GPU to hand; the runtime
+    table below checks it against the real modules.
+    """
+    import torch.nn as nn
+
+    shipped_nhead = shipped_nhead or max(1, d // 64)
+    se_layer = nn.TransformerEncoderLayer(d, shipped_nhead, 4 * d, 0.1, batch_first=True, norm_first=True)
+    se = nn.TransformerEncoder(se_layer, head_layers, enable_nested_tensor=False)
+    ca = CrossAttentionHead(d, cross_nhead, 4 * d, head_layers, 0.1)
+    type_emb = nn.Embedding(3, d)
+    scorer = nn.Sequential(nn.LayerNorm(d), nn.Linear(d, d), nn.GELU(), nn.Linear(d, 1))
+    n_se = sum(p.numel() for p in se.parameters())
+    n_ca = sum(p.numel() for p in ca.parameters())
+    extra = sum(p.numel() for p in type_emb.parameters()) + sum(p.numel() for p in scorer.parameters())
+    return {
+        "d_model": d, "head_layers": head_layers,
+        "self_attention_head_nhead": shipped_nhead,
+        "cross_attention_head_nhead": cross_nhead,
+        "self_attention_head_parameters": n_se,
+        "cross_attention_head_parameters": n_ca,
+        "type_emb_plus_scorer_parameters": extra,
+        "arm2_self_attention_trainable": n_se + extra,
+        "arm3_cross_attention_trainable": n_ca + extra,
+        "equal": (n_se + extra) == (n_ca + extra),
+        "why": ("nn.MultiheadAttention costs 4*d^2 whether or not query and key/value are the same "
+                "tensor, and head count sets per-head width rather than parameter count"),
+    }
 
 
 def parameter_table(shipped: DecisionModel) -> Dict[str, Any]:

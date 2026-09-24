@@ -101,6 +101,7 @@ def write_manifest(extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
             "gating_checks_passed": None,  # filled in below from the report on disk
         },
         "arms": {k: v for k, v in A.ARMS.items()},
+        "parameter_matching_analytic": A.analytic_parameter_table(),
         "device": None,
     }
     lr = os.path.join(HERE, "leakage_report.json")
