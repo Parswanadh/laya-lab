@@ -111,7 +111,8 @@ def main():
             pad = cell["pad"]
             arm_tag = tag
             base_candidates = [t for t in order
-                              if t.endswith("__baseline__p1_exact")
+                              if sums.get(t, {}).get("arm") == "baseline"
+                              and sums.get(t, {}).get("construction") == s.get("construction")
                               and (sums.get(t, {}).get("pool") == s.get("pool"))
                               and (sums.get(t, {}).get("n") == s.get("n"))
                               and (sums.get(t, {}).get("seed") == s.get("seed"))

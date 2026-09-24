@@ -34,6 +34,7 @@ Outputs (append-by-arm, resume-safe):
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
@@ -111,6 +112,14 @@ STAGE_SEED = {"pilot": 20260924, "stage1": 20260924, "stage2": 20260924, "stage3
 
 
 # ---------------------------------------------------------------- P1 helpers, imported not copied
+def _sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def load_p1_module():
     """Import experiments/orch-diagnostic/run.py so `place`/`FILLER`/`REQUESTS` are *the same
     objects* the baseline was measured with — not a re-implementation of them."""
@@ -336,7 +345,6 @@ def score_cell(agent, probe, items, pad, text_of, construction, arm, spec, limit
     peak_a = torch.cuda.max_memory_allocated() / 2**20
     peak_r = torch.cuda.max_memory_reserved() / 2**20
     acc = sum(1 for i in per_item if i["correct"]) / max(1, len(per_item))
-    lat_sorted = sorted(lats_cold)
     cell = {
         "arm": arm, "construction": construction, "pad": pad, "limit": limit,
         "n": len(per_item), "correct": sum(1 for i in per_item if i["correct"]),
@@ -408,6 +416,9 @@ def main():
     filler_unit = pool.get("filler_unit") or p1.FILLER
 
     major = max(built["label_counts"].values()) / len(items)
+    items_sha = hashlib.sha256(json.dumps(
+        [(i["item_id"], i["text"], i["label"]) for i in items], ensure_ascii=False).encode()).hexdigest()
+    print("items_sha256=%s" % items_sha, flush=True)
     print("tag=%s pool=%s n=%d seed=%d dtype=%s limit=%d" % (tag, pool["pool_id"], len(items),
                                                              seed, dt_name, a.limit), flush=True)
     print("labels=%s majority=%.4f balance_ok=%s" % (built["label_counts"], major,
@@ -419,6 +430,17 @@ def main():
     agent.dtype = getattr(torch, dt_name)
     enc = agent.model.encoder
     orig = snapshot_config(enc)
+    # hash of every document actually scored, per pad (construction-independent for p1_exact /
+    # upstream_rule, so keyed by pad only)
+    constructions = sorted({c for _a, c, _ps in cells})
+    doc_sha = {}
+    for pad in sorted({p for _a, _c, ps in cells for p in ps}):
+        h = hashlib.sha256()
+        for c in constructions:
+            for it in items:
+                h.update(build_doc(p1, agent.tok, c, pad, it["text"], filler_unit).encode())
+        doc_sha[str(pad)] = h.hexdigest()
+    print("doc_sha256 per pad: %s" % json.dumps(doc_sha), flush=True)
     print("shipped config: local_attention=%d global_every=%d sliding_layers=%d "
           "attn=%s rope_same_all_layers=%s attention_type_attr=%s self_attn_attr=%s"
           % (orig["config_local_attention"], orig["config_global_attn_every_n_layers"],
@@ -486,7 +508,11 @@ def main():
         summary = {
             "tag": tag, "arm": arm, "construction": construction, "pool": pool["pool_id"],
             "pool_sha256": pool["_sha256"], "n": len(items), "seed": seed, "dtype": dt_name,
+            "items_sha256": items_sha, "doc_sha256_per_pad": doc_sha,
+            "harness_pools_py_sha256": _sha256_file(os.path.join(LAB, "experiments", "harness", "pools.py")),
+            "harness_run_py_sha256": _sha256_file(os.path.abspath(__file__)),
             "limit": a.limit, "device": a.device,
+            "agent_dtype": str(agent.dtype), "agent_amp_enabled": bool(agent.amp_enabled),
             "gpu": torch.cuda.get_device_name(0) if a.device == "cuda" else None,
             "arm_spec": spec, "cells": s_cells,
             "config_before": orig, "config_after_patch": applied,
