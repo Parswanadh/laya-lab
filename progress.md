@@ -515,3 +515,28 @@ is **selectable** so upstream's default path is untouched.
 
 Working tree clean, branch pushed to `origin`. **Defect #14 is now materially addressed** — the
 branch is committed and pinned at `99020ba` rather than living in an uncommitted worktree.
+
+---
+
+## 2026-09-25 · Seed spread measured — arm2's gain exceeds it
+
+V-002's agent died, but its **orphaned seed-attack process had already completed seed 1**. Artifact:
+`experiments/V-002/repro_arm2_shipped_init-seed1.jsonl` (n=200/cell).
+
+| cell | arm1 frozen | arm2 seed 0 | arm2 seed 1 | **seed spread** | gain vs arm1 |
+|---|---|---|---|---|---|
+| **L7000-p100** | 0.365 | **0.455** | **0.505** | **5.0pp** | **+9.0pp / +14.0pp** |
+| **L4000-p050** | 0.335 | **0.500** | **0.590** | **9.0pp** | **+16.5pp / +25.5pp** |
+| L0 | 0.640 | 0.620 | 0.635 | 1.5pp | −2.0pp / −0.5pp |
+
+**Protocol §6's "gain must exceed the seed spread" is now satisfied at both headline cells**: the
+spread is smaller than the effect, and **both seeds move in the same direction**. This materially
+strengthens arm2 — it is no longer a single-seed result. It is still **2 seeds against a protocol
+requirement of ≥3**, so L-043 is **narrowed, not closed**.
+
+### Orphaned lock holders cleared (infra)
+V-002's agent died leaving `flock` processes **1446815/1446816** holding `.gpu.lock` with their child
+already dead — permanent lock holders that blocked H5b indefinitely. I confirmed the PIDs against
+`/proc/*/cmdline`, killed both, and the lock passed to H5b immediately. **Lesson for the lab: an
+agent that dies while holding the lock strands it. Any launcher must release on exit, and the
+orchestrator should sweep `fuser .gpu.lock` for PIDs whose agent is gone.**
