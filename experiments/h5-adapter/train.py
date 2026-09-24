@@ -62,9 +62,13 @@ def batches_by_length(items: List[Dict[str, Any]], token_budget: int, max_batch:
 def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_decay: float = 0.01,
               token_budget: int = 12288, max_batch: int = 8, warmup_frac: float = 0.05,
               device_name: str = "cuda", limit_train: Optional[int] = None,
-              log_every: int = 50, shipped_override=None) -> Dict[str, Any]:
-    """``shipped_override`` lets the offline selftest drive this loop with a tiny encoder, so the
-    loop under test is this loop and not a copy of it."""
+              log_every: int = 50, shipped_override=None,
+              train_items_override: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+    """``shipped_override`` and ``train_items_override`` let the offline selftest drive this loop
+    with a tiny encoder and a stratified item subset, so the loop under test is this loop and not a
+    copy of it. A subset whose positions are not its store row indices is the point: the arms train
+    on stratified blocks, and an identity assumption between the two would be invisible otherwise.
+    """
 
     spec = A.ARMS[arm]
     if spec["train_mode"] is None:
@@ -76,7 +80,9 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
 
     plan = C.load_plan()
     train_items = C.checked_train_items(plan, spec["train_mode"])
-    if limit_train:
+    if train_items_override is not None:
+        train_items = list(train_items_override)
+    elif limit_train:
         train_items = train_items[:limit_train]
     store = FEAT.FeatureStore(os.path.join(C.CACHE_DIR, "train"))
     by_id = {it["item_id"]: i for i, it in enumerate(store.items)}
@@ -85,6 +91,7 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
         raise AssertionError("cache holds %d of the %d training items" % (len(idx), len(train_items)))
     labels = C.LABELS
     targets = {i: FEAT.target_index(store.items[i], labels) for i in idx}
+    subset = [store.items[i] for i in idx]
 
     shipped = shipped_override if shipped_override is not None else C.load_agent(device_name).model
     model = A.build_arm_model(shipped, arm, seed).to(device)
@@ -93,7 +100,9 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
 
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=weight_decay)
-    groups = batches_by_length([store.items[i] for i in idx], token_budget, max_batch, seed)
+    # batches_by_length indexes the *subset*; every use below maps back through `idx`, so the
+    # collate call and the target lookup address the same store rows the batch was built from
+    groups = batches_by_length(subset, token_budget, max_batch, seed)
     steps_per_epoch = len(groups)
     total_steps = steps_per_epoch * epochs
     warmup = max(1, int(warmup_frac * total_steps))
@@ -105,13 +114,25 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
         return 0.5 * lr * (1 + math.cos(math.pi * p))
 
     history: List[Dict[str, Any]] = []
+    verified_batches = 0
     step = 0
     t0 = time.time()
     for epoch in range(epochs):
         ep_loss, ep_correct, ep_n = 0.0, 0, 0
         for group in groups:
-            b = FEAT.collate(store, group, device)
-            tgt = torch.tensor([targets[i] for i in group], dtype=torch.long, device=device)
+            rows = [idx[g] for g in group]
+            b = FEAT.collate(store, rows, device)
+            tgt = torch.tensor([targets[i] for i in rows], dtype=torch.long, device=device)
+            # The pairing invariant, checked on every batch rather than argued: the store rows the
+            # features came from must be the plan items the targets were derived from. Without it a
+            # silent index-space mismatch trains the head against the wrong labels and every number
+            # downstream is meaningless while looking entirely normal.
+            for g, meta in zip(group, b["meta"]):
+                if meta["item_id"] != train_items[g]["item_id"]:
+                    raise AssertionError(
+                        "batch row %r does not correspond to the plan item its target came from (%r)"
+                        % (meta["item_id"], train_items[g]["item_id"]))
+            verified_batches += 1
             for g in opt.param_groups:
                 g["lr"] = lr_at(step)
             with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
@@ -161,6 +182,7 @@ def train_arm(arm: str, seed: int, epochs: int = 8, lr: float = 1e-4, weight_dec
         "token_budget": token_budget, "max_batch": max_batch, "warmup_steps": warmup,
         "steps": step, "steps_per_epoch": steps_per_epoch,
         "n_train_items": len(idx), "train_mode": spec["train_mode"],
+        "batches_with_verified_item_target_pairing": verified_batches,
         "parameter_accounting": acc,
         "train_seconds": round(time.time() - t0, 1),
         "peak_vram_gb": peak_vram,

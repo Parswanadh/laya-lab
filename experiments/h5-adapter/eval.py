@@ -74,6 +74,7 @@ def _row(condition: Dict[str, Any], store_item: Dict[str, Any], probs: List[floa
         "probabilities": [round(float(x), 6) for x in probs],
         "options": list(labels),
         "latency_s": latency_s,
+        "latency_scope": "full_model_encoder_and_head" if arm == "arm1_frozen" else "head_only_over_cached_features",
         "dtype_note": dtype_note,
     }
     return row

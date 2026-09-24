@@ -88,7 +88,10 @@ def main() -> int:
             mini_eval.extend(per_label[lb] for lb in sorted(per_label))
         check_true("plan/miniature cells are label-balanced (so the oracle check is meaningful)",
                    True)
-        mini_train = full["train_items"][:48]
+        # every other item, so the training subset's positions are NOT its store row indices.
+        # With a contiguous slice the map-back from subset index to store row is the identity and a
+        # bug in it is invisible; the arms train on a stratified subset, so the selftest must too.
+        mini_train = full["train_items"][:96:2]
         check("plan/miniature eval covers every cell", len(seen_cells), len(full["eval"]["cells"]))
 
         filler = C.load_filler()
@@ -137,7 +140,7 @@ def main() -> int:
         C.CACHE_DIR = tmp
         T.RUNS_DIR = os.path.join(tmp, "runs")
         T.train_arm("arm3_xattn", seed=0, epochs=1, token_budget=4096, max_batch=4,
-                    device_name="cpu", log_every=0, limit_train=len(mini_train),
+                    device_name="cpu", log_every=0, train_items_override=mini_train,
                     shipped_override=shipped)
         head_path = os.path.join(T.RUNS_DIR, "arm3_xattn", "seed0", "head.pt")
         check_true("train/wrote a head checkpoint", os.path.exists(head_path))
@@ -146,6 +149,8 @@ def main() -> int:
         check("train/trainable parameter count recorded equals the parameter table",
               tj["parameter_accounting"]["trainable_parameters"],
               table["arm3_xattn"]["trainable_parameters"])
+        check("train/every batch verified its feature-row-to-target pairing",
+              tj["batches_with_verified_item_target_pairing"], tj["steps"])
         check_true("train/loss is finite on every epoch",
                    all(h["train_loss"] == h["train_loss"] for h in tj["history"]))
 
