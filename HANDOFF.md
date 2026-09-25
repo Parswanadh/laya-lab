@@ -75,15 +75,27 @@ against the protocol's ≥3.
 
 ## 5. In flight when this was written
 
-**`H5b` (issue #11) — the init-fair cross-attention re-run**, holding the GPU lock and running.
-The first attempt replaced *pre-trained* self-attention with *randomly initialised* cross-attention
-under the identical recipe, and collapsed to 0.225–0.290 **at every cell including L0** — a training
-failure, not a verdict. The re-run adds cross-attention **in parallel** with a **zero-initialised
-`out_proj`**, so at step 0 arm3 ≡ arm2 bit-for-bit and any gain is attributable to the architecture.
-Pre-registered decision rule in `findings/E-004.md`. **The bar is 0.455.** If arm3r ≈ 0.455 the honest
-conclusion is *"the fix is adaptation, not design"* — pre-registered as a real outcome.
+**`H5` is RESOLVED, as a mechanistic negative.** `findings/E-004.md`, ledger L-054…L-058.
 
-**Also queued:** `arm2long_shipped_init` (schedule-matched control) and a third arm2 seed.
+The init-fair re-run (`arm3r`, cross-attention added *in parallel* with a **zero-initialised
+`out_proj`**, so it starts **bitwise identical** to arm2 — `max_abs_logit_delta = 0.0` over 2200 items)
+**trains, is harmless at L0, and beats the position-only oracle at every cell — but produces no
+significant primary-cell gain**: 0.485 vs arm2long 0.410 (+7.5pp, p=0.086, **Holm 1.0**) and vs arm2
+0.455 (+3.0pp, p=0.512, CIs overlap).
+
+**The decisive control:** `arm3r_residual_ablated` — the *same trained checkpoint* with `out_proj`
+re-zeroed **after** training — differs by **0/200 at L0, 3/200 at the primary cell, ≤5/200 anywhere**.
+The branch is live in training (contribution → ~0.5 logits, ‖W_out‖ 7→142) and **inference-inert**. The
+two Holm-surviving cells are won by the **ablated twin** by the same margin ⇒ **training-trajectory
+effects, not architecture**. Without that control the result would have read *"+7.5pp from
+cross-attention, promising"* — a false positive in the making.
+
+**A longer schedule hurts the plain head**: arm2long (40 ep) 0.410 < arm2 (12 ep) 0.455 at the primary
+cell, single seed — so the schedule-matched bar is itself schedule-limited.
+
+**In flight:** an **n=600 extension** at the primary cell (~20 min, 400 fresh items, leakage
+re-derived, 0 overlap) to power the pre-registered comparison. **No extra seeds** — with the mechanism
+falsified they would only sharpen a non-architectural quantity.
 
 ## 6. The PR
 

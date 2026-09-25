@@ -66,6 +66,17 @@ earlier reading of ours.)*
 
 At `max_len=1024` it is a **cliff, not a gradient**: 0 wrong→right / 9 right→wrong, p=0.0039.
 
+## 3b. Programme headline: **the fix is adaptation, not design**
+
+Four architectural interventions were tested and all failed — RoPE scaling (identity in-window by
+construction), sliding-window widening, all-layers-global, and a cross-attention aggregation head.
+The last is the most informative: built **init-fair** so it starts bitwise-identical to the fine-tuned
+baseline, it trains, it is harmless at short context, it beats the position-only oracle at every cell
+— and its own **ablation shows the added attention does not carry the decisions**. The one
+intervention that works is **fine-tuning the shipped head**.
+
+This is a **mechanistic negative**, not an inconclusive one, and it is the pre-registered outcome.
+
 ## 4. The strongest verified intervention
 
 **arm2 — fine-tune the shipped decision head, encoder frozen.** `experiments/h5-adapter/`
@@ -92,7 +103,8 @@ falling, 1.414 → 1.259); control `arm2_random_init` not yet run.*
 | **RoPE scaling** (YaRN / NTK / ABF / PI) | **Ruled out on definitional grounds** | HF clamps `seq_len` up to `max_position_embeddings` *before use*, so `dynamic` is the **identity** at ≤8192 for any factor; the other branches rescale in-window positions unconditionally. YaRN/NTK/LongRoPE cost **3.5–7.6 MMLU points** applied at short lengths. |
 | **Widening the sliding window** | **REFUTED** | No dose–response; the n=20 hint **reverses to −0.158 (p=0.0094)** at n=120; the *narrowing* ablation moves the same cell by the same amount. Widening to 1024 **collapses** pad=4000 (0.600 → 0.150). |
 | **All layers global** | **REFUTED, both halves** | **0.000 at pad=1000**; 0.333 at pad=7000 = exactly the majority rate (p=7.5e-9), all 120 items `technical`. Cost is only **+4–6 %** latency — measured dense masks mean the "quadratic" warning never materialised. |
-| **Cross-attention head (arm3, first attempt)** | **UNRESOLVED — the arm did not train** | 0.225–0.290 **at every cell including L0** (0.225 vs arm2 0.620). It replaced *pre-trained* self-attention with *randomly initialised* cross-attention under the identical recipe. Not a fair test; being re-run init-fair. |
+| **Cross-attention head (arm3, 1st attempt)** | **UNRESOLVED — the arm did not train** | 0.225–0.290 **at every cell including L0**. It replaced *pre-trained* self-attention with *randomly initialised* cross-attention under the identical recipe. Not a fair test. |
+| **Cross-attention head (arm3r, init-fair re-run)** | **NO SIGNIFICANT GAIN — and the branch is INFERENCE-INERT** | Init-fair by construction: **bitwise identical to arm2 at step 0** (`max_abs_logit_delta = 0.0`, 2200 items), 40 epochs, probed branch LR. Primary cell **0.485 vs arm2long 0.410 (+7.5pp, p=0.086, Holm 1.0)** and vs arm2 0.455 (**+3.0pp, p=0.512**, CIs overlap). **The decisive control:** the same trained checkpoint with `out_proj` re-zeroed *after* training differs by **0/200 at L0, 3/200 at the primary cell, ≤5/200 anywhere** — the branch is live in training and **unused at inference**. The two Holm-surviving cells are won by the **ablated twin** by the same margin ⇒ **training-trajectory effects, not architecture**. |
 | **Precision (bf16 vs fp16 vs fp32)** | **REFUTED** | bf16 = fp16 = fp32 = 0.600 to three decimals at pad=4000/limit=8192. fp32 also costs 3.3× latency for nothing. |
 
 ## 6. Reproduce
