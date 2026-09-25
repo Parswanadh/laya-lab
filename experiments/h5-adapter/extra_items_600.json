@@ -1,0 +1,151 @@
+{
+ "artifact": "experiments/h5-adapter/extra_items_600.json",
+ "what": "400 extra L7000-p100 eval items, so the primary cell is 600 items / 150 per class",
+ "why": "paired McNemar power scales with discordant pairs (items), not with training seeds; M-001/L-022 puts +0.05 at n ~ 312-1568 depending on q",
+ "cell": "L7000-p100",
+ "pad": 7000,
+ "needle_position": 1.0,
+ "n_extra": 400,
+ "per_class": 100,
+ "slice_used_by_original_plan": [
+  0,
+  200
+ ],
+ "slice_used_by_extension": [
+  200,
+  300
+ ],
+ "pool": "experiments/h5-adapter/pools/needles-h5-eval-v1.json",
+ "pool_sha256": "1ab55323ebdbf4370e547d38d44a63435bb4f477606ae1be4f79fdaf125a104d",
+ "leakage": "extra needles come from the evaluation pool only and are disjoint from every training needle; each new needle gets its own haystack (filler is seeded on the needle hash and the pad), so no document is reused",
+ "label_counts": {
+  "billing": 100,
+  "other": 100,
+  "sales": 100,
+  "technical": 100
+ },
+ "leakage_check": {
+  "checked": "content hash of every rendered needle",
+  "n_extra_needle_hashes": 400,
+  "n_train_needle_hashes": 1008,
+  "n_existing_eval_needle_hashes": 800,
+  "overlap_with_training": 0,
+  "overlap_with_existing_eval": 0
+ },
+ "provenance": {
+  "billing": {
+   "n": 100,
+   "first_needle_sha256": [
+    "b7b0c19513425144",
+    "2e978f8f8f9c7cd1",
+    "76821e22b3f30bc2"
+   ]
+  },
+  "technical": {
+   "n": 100,
+   "first_needle_sha256": [
+    "acf10d13739bd771",
+    "66c1e00608cfd435",
+    "262ff1251797b2a5"
+   ]
+  },
+  "sales": {
+   "n": 100,
+   "first_needle_sha256": [
+    "c44ffbc265badae9",
+    "368390530bf29d8d",
+    "e636802f060d717c"
+   ]
+  },
+  "other": {
+   "n": 100,
+   "first_needle_sha256": [
+    "59ef8b09f1537f03",
+    "3ed0305ce8bd53d4",
+    "14ab430b496b3436"
+   ]
+  }
+ },
+ "cell_row": {
+  "n": 400,
+  "pad": 7000,
+  "needle_position": 1.0,
+  "label_counts": {
+   "billing": 100,
+   "other": 100,
+   "sales": 100,
+   "technical": 100
+  },
+  "n_unique_needles": 400,
+  "duplicate_needles": 0,
+  "n_templates": 64,
+  "template_counts": {
+   "eval-billing-00": 1,
+   "eval-billing-01": 5,
+   "eval-billing-02": 4,
+   "eval-billing-03": 2,
+   "eval-billing-04": 8,
+   "eval-billing-05": 2,
+   "eval-billing-06": 3,
+   "eval-billing-07": 3,
+   "eval-billing-08": 2,
+   "eval-billing-09": 4,
+   "eval-billing-10": 4,
+   "eval-billing-11": 2,
+   "eval-billing-12": 5,
+   "eval-billing-13": 1,
+   "eval-billing-14": 5,
+   "eval-billing-16": 2,
+   "eval-billing-17": 23,
+   "eval-billing-18": 8,
+   "eval-billing-20": 3,
+   "eval-billing-21": 5,
+   "eval-billing-22": 3,
+   "eval-billing-23": 5,
+   "eval-other-02": 1,
+   "eval-other-08": 1,
+   "eval-other-11": 1,
+   "eval-other-12": 33,
+   "eval-other-13": 28,
+   "eval-other-16": 1,
+   "eval-other-20": 33,
+   "eval-other-21": 1,
+   "eval-other-23": 1,
+   "eval-sales-00": 2,
+   "eval-sales-02": 4,
+   "eval-sales-03": 5,
+   "eval-sales-04": 4,
+   "eval-sales-05": 6,
+   "eval-sales-07": 3,
+   "eval-sales-08": 4,
+   "eval-sales-09": 2,
+   "eval-sales-10": 5,
+   "eval-sales-11": 7,
+   "eval-sales-12": 4,
+   "eval-sales-13": 6,
+   "eval-sales-14": 3,
+   "eval-sales-15": 4,
+   "eval-sales-16": 5,
+   "eval-sales-17": 6,
+   "eval-sales-18": 4,
+   "eval-sales-19": 5,
+   "eval-sales-20": 3,
+   "eval-sales-21": 6,
+   "eval-sales-22": 6,
+   "eval-sales-23": 6,
+   "eval-technical-00": 13,
+   "eval-technical-02": 5,
+   "eval-technical-05": 8,
+   "eval-technical-09": 10,
+   "eval-technical-13": 7,
+   "eval-technical-14": 10,
+   "eval-technical-15": 13,
+   "eval-technical-18": 11,
+   "eval-technical-20": 7,
+   "eval-technical-21": 8,
+   "eval-technical-22": 8
+  },
+  "balanced": true
+ },
+ "generated_by": "experiments/h5-adapter/extra_items.py --plan"
+}
