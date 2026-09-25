@@ -157,7 +157,7 @@ def build_cache(conditions: List[Dict[str, Any]], device_name: str = "cuda") -> 
     return path
 
 
-def eval_arms(arms: List[str], seeds: List[int]) -> None:
+def eval_arms(arms: List[str], seeds: List[int], heads_dir: str = "") -> None:
     import torch
 
     import arms as A
@@ -165,6 +165,10 @@ def eval_arms(arms: List[str], seeds: List[int]) -> None:
     import eval as E
     import features as FEAT
 
+    if heads_dir:
+        # the staged driver deletes each head right after its own eval, so a later pass over extra
+        # items reads a preserved copy (cache/keep is gitignored) instead of retraining
+        E.RUNS_DIR = heads_dir
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     conditions = load_conditions()
     store = FEAT.FeatureStore(CACHE_EXTRA)
@@ -179,12 +183,19 @@ def eval_arms(arms: List[str], seeds: List[int]) -> None:
             path = os.path.join(HERE, "predictions", "%s-seed%d.jsonl" % (arm, seed))
             with open(path, encoding="utf-8") as fh:
                 existing = {json.loads(line)["item_id"] for line in fh if line.strip()}
+                n_original = sum(1 for line in open(path, encoding="utf-8")
+                                 if line.strip() and json.loads(line)["cell"] == CELL)
             if any(c["item_id"] in existing for c in conditions):
                 raise SystemExit("%s already contains extra items -- refusing to append twice" % path)
             model = A.build_arm_model(agent.model, arm, seed).to(device)
             A.freeze_for_training(model)
             E.load_trained(model, arm, seed, device)
             rows = E.evaluate_from_cache(model, store, conditions, device, arm, seed)
+            # mark the origin of every appended row, so "n=600 = 200 original + 400 extension" is
+            # checkable from the JSONL itself rather than only from this script's header
+            for r in rows:
+                r["cell_partition"] = "extension600"
+                r["cell_source"] = "extra_items.py";
             with open(path, "a", encoding="utf-8") as fh:
                 for r in rows:
                     fh.write(json.dumps(r, ensure_ascii=False) + "\n")
@@ -192,6 +203,8 @@ def eval_arms(arms: List[str], seeds: List[int]) -> None:
             by_label: Dict[str, List[int]] = {}
             for r in rows:
                 by_label.setdefault(r["label"], []).append(int(r["correct"]))
+            print("  %s seed%d: cell %s was n=%d, now n=%d (appended %d)"
+                  % (arm, seed, CELL, n_original, n_original + len(rows), len(rows)), flush=True)
             print("  %s seed%d: appended %d rows to %s  (extra-item accuracy %.3f; %s)"
                   % (arm, seed, len(rows), os.path.basename(path), acc,
                      " ".join("%s=%.3f" % (k, sum(v) / len(v)) for k, v in sorted(by_label.items()))),
@@ -206,6 +219,9 @@ def main() -> int:
     ap.add_argument("--eval", action="store_true", help="score trained arms and append JSONL (GPU)")
     ap.add_argument("--arms", default="arm3r_residual,arm2long_shipped_init")
     ap.add_argument("--seeds", default="0")
+    ap.add_argument("--heads-dir", default="",
+                    help="directory holding preserved <arm>/seed<k>/head.pt copies (default: the "
+                         "standard runs/ tree)")
     ap.add_argument("--device", default="cuda")
     a = ap.parse_args()
     t0 = time.time()
@@ -218,7 +234,8 @@ def main() -> int:
     if a.build_cache:
         build_cache(load_conditions(), a.device)
     if a.eval:
-        eval_arms([s for s in a.arms.split(",") if s], [int(s) for s in a.seeds.split(",") if s != ""])
+        eval_arms([s for s in a.arms.split(",") if s], [int(s) for s in a.seeds.split(",") if s != ""],
+                  a.heads_dir)
     if not (a.plan or a.build_cache or a.eval):
         ap.print_help()
         return 1
