@@ -11,16 +11,16 @@ Regenerate: `env/venv/bin/python experiments/h5-adapter/report_arm3r.py`
 
 ## Per-cell accuracy, n=200, label-balanced (oracle beside every number)
 
-| cell | oracle | arm1_frozen | arm2_shipped_init | arm2long_shipped_init | arm3_xattn | arm3r_residual | arm3r_residual_ablated |
-|---|---|---|---|---|---|---|---|
-| L0 | 0.2500 | 0.640 [0.575, 0.705] | 0.620 [0.550, 0.690] | 0.600 [0.530, 0.665] | 0.225 [0.170, 0.285] | 0.595 [0.530, 0.660] | 0.595 [0.530, 0.660] |
-| L4000-p000 | 0.2500 | 0.580 [0.510, 0.650] | 0.590 [0.520, 0.660] | 0.530 [0.460, 0.600] | 0.270 [0.210, 0.335] | 0.715 [0.650, 0.780] | 0.715 [0.650, 0.775] |
-| L4000-p025 | 0.2500 | 0.295 [0.235, 0.360] | 0.430 [0.360, 0.500] | 0.545 [0.475, 0.615] | 0.230 [0.175, 0.290] | 0.520 [0.450, 0.590] | 0.525 [0.455, 0.595] |
-| L4000-p050 | 0.2500 | 0.335 [0.270, 0.400] | 0.500 [0.430, 0.570] | 0.555 [0.485, 0.625] | 0.250 [0.190, 0.310] | 0.590 [0.520, 0.660] | 0.590 [0.520, 0.660] |
-| L4000-p075 | 0.2500 | 0.280 [0.220, 0.345] | 0.425 [0.360, 0.495] | 0.545 [0.475, 0.615] | 0.250 [0.190, 0.310] | 0.555 [0.485, 0.625] | 0.565 [0.495, 0.635] |
-| L4000-p100 | 0.2500 | 0.415 [0.345, 0.485] | 0.495 [0.425, 0.565] | 0.465 [0.395, 0.535] | 0.255 [0.195, 0.315] | 0.560 [0.490, 0.630] | 0.560 [0.490, 0.630] |
-| L7000-p000 | 0.2500 | 0.595 [0.525, 0.665] | 0.585 [0.515, 0.655] | 0.540 [0.470, 0.610] | 0.245 [0.185, 0.305] | 0.680 [0.615, 0.745] | 0.680 [0.615, 0.745] |
-| L7000-p100 | 0.2500 | 0.365 [0.300, 0.435] | 0.455 [0.385, 0.525] | 0.410 [0.340, 0.480] | 0.240 [0.185, 0.300] | 0.485 [0.415, 0.555] | 0.500 [0.430, 0.570] |
+| cell | oracle | arm1_frozen | arm2_shipped_init | arm2rerun_shipped_init | arm2long_shipped_init | arm3_xattn | arm3r_residual | arm3r_residual_ablated |
+|---|---|---|---|---|---|---|---|---|
+| L0 | 0.2500 | 0.640 [0.575, 0.705] | 0.620 [0.550, 0.690] | 0.630 [0.565, 0.695] | 0.600 [0.530, 0.665] | 0.225 [0.170, 0.285] | 0.595 [0.530, 0.660] | 0.595 [0.530, 0.660] |
+| L4000-p000 | 0.2500 | 0.580 [0.510, 0.650] | 0.590 [0.520, 0.660] | 0.580 [0.510, 0.650] | 0.530 [0.460, 0.600] | 0.270 [0.210, 0.335] | 0.715 [0.650, 0.780] | 0.715 [0.650, 0.775] |
+| L4000-p025 | 0.2500 | 0.295 [0.235, 0.360] | 0.430 [0.360, 0.500] | 0.450 [0.380, 0.515] | 0.545 [0.475, 0.615] | 0.230 [0.175, 0.290] | 0.520 [0.450, 0.590] | 0.525 [0.455, 0.595] |
+| L4000-p050 | 0.2500 | 0.335 [0.270, 0.400] | 0.500 [0.430, 0.570] | 0.530 [0.460, 0.600] | 0.555 [0.485, 0.625] | 0.250 [0.190, 0.310] | 0.590 [0.520, 0.660] | 0.590 [0.520, 0.660] |
+| L4000-p075 | 0.2500 | 0.280 [0.220, 0.345] | 0.425 [0.360, 0.495] | 0.440 [0.370, 0.510] | 0.545 [0.475, 0.615] | 0.250 [0.190, 0.310] | 0.555 [0.485, 0.625] | 0.565 [0.495, 0.635] |
+| L4000-p100 | 0.2500 | 0.415 [0.345, 0.485] | 0.495 [0.425, 0.565] | 0.520 [0.450, 0.590] | 0.465 [0.395, 0.535] | 0.255 [0.195, 0.315] | 0.560 [0.490, 0.630] | 0.560 [0.490, 0.630] |
+| L7000-p000 | 0.2500 | 0.595 [0.525, 0.665] | 0.585 [0.515, 0.655] | 0.635 [0.570, 0.700] | 0.540 [0.470, 0.610] | 0.245 [0.185, 0.305] | 0.680 [0.615, 0.745] | 0.680 [0.615, 0.745] |
+| L7000-p100 | 0.2500 | 0.365 [0.300, 0.435] | 0.455 [0.385, 0.525] | 0.450 [0.410, 0.490] | 0.428 [0.390, 0.468] | 0.240 [0.185, 0.300] | 0.472 [0.432, 0.512] | 0.472 [0.432, 0.510] |
 
 ## Paired McNemar, recomputed here from the raw per-item JSONL
 
@@ -36,6 +36,30 @@ Holm column: `summary.json`'s `comparisons` entry for the same pair where it exi
 | arm3r_residual | arm2_shipped_init | L4000-p100 | 0.560 | 0.495 | +6.5 | 25 | 38 | 0.13 | 1 |
 | arm3r_residual | arm2_shipped_init | L7000-p000 | 0.680 | 0.585 | +9.5 | 6 | 25 | 0.000878 | 0.0492 |
 | arm3r_residual | arm2_shipped_init | L7000-p100 | 0.485 | 0.455 | +3.0 | 26 | 32 | 0.512 | 1 |
+| arm3r_residual | arm2rerun_shipped_init | L0 | 0.595 | 0.630 | -3.5 | 23 | 16 | 0.337 | — |
+| arm3r_residual | arm2rerun_shipped_init | L4000-p000 | 0.715 | 0.580 | +13.5 | 10 | 37 | 9.85e-05 | — |
+| arm3r_residual | arm2rerun_shipped_init | L4000-p025 | 0.520 | 0.450 | +7.0 | 24 | 38 | 0.098 | — |
+| arm3r_residual | arm2rerun_shipped_init | L4000-p050 | 0.590 | 0.530 | +6.0 | 24 | 36 | 0.155 | — |
+| arm3r_residual | arm2rerun_shipped_init | L4000-p075 | 0.555 | 0.440 | +11.5 | 17 | 40 | 0.0032 | — |
+| arm3r_residual | arm2rerun_shipped_init | L4000-p100 | 0.560 | 0.520 | +4.0 | 29 | 37 | 0.389 | — |
+| arm3r_residual | arm2rerun_shipped_init | L7000-p000 | 0.680 | 0.635 | +4.5 | 11 | 20 | 0.15 | — |
+| arm3r_residual | arm2rerun_shipped_init | L7000-p100 | 0.472 | 0.450 | +2.2 | 92 | 105 | 0.393 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L0 | 0.630 | 0.620 | +1.0 | 2 | 4 | 0.688 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L4000-p000 | 0.580 | 0.590 | -1.0 | 8 | 6 | 0.791 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L4000-p025 | 0.450 | 0.430 | +2.0 | 10 | 14 | 0.541 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L4000-p050 | 0.530 | 0.500 | +3.0 | 7 | 13 | 0.263 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L4000-p075 | 0.440 | 0.425 | +1.5 | 11 | 14 | 0.69 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L4000-p100 | 0.520 | 0.495 | +2.5 | 8 | 13 | 0.383 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L7000-p000 | 0.635 | 0.585 | +5.0 | 3 | 13 | 0.0213 | — |
+| arm2rerun_shipped_init | arm2_shipped_init | L7000-p100 | 0.445 | 0.455 | -1.0 | 10 | 8 | 0.815 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L0 | 0.630 | 0.600 | +3.0 | 15 | 21 | 0.405 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L4000-p000 | 0.580 | 0.530 | +5.0 | 13 | 23 | 0.132 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L4000-p025 | 0.450 | 0.545 | -9.5 | 44 | 25 | 0.0295 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L4000-p050 | 0.530 | 0.555 | -2.5 | 46 | 41 | 0.668 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L4000-p075 | 0.440 | 0.545 | -10.5 | 46 | 25 | 0.017 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L4000-p100 | 0.520 | 0.465 | +5.5 | 34 | 45 | 0.26 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L7000-p000 | 0.635 | 0.540 | +9.5 | 12 | 31 | 0.0054 | — |
+| arm2rerun_shipped_init | arm2long_shipped_init | L7000-p100 | 0.450 | 0.428 | +2.2 | 124 | 137 | 0.458 | — |
 | arm3r_residual | arm2long_shipped_init | L0 | 0.595 | 0.600 | -0.5 | 11 | 10 | 1 | 1 |
 | arm3r_residual | arm2long_shipped_init | L4000-p000 | 0.715 | 0.530 | +18.5 | 9 | 46 | 4.34e-07 | 3.47e-05 |
 | arm3r_residual | arm2long_shipped_init | L4000-p025 | 0.520 | 0.545 | -2.5 | 26 | 21 | 0.56 | 1 |
@@ -43,7 +67,7 @@ Holm column: `summary.json`'s `comparisons` entry for the same pair where it exi
 | arm3r_residual | arm2long_shipped_init | L4000-p075 | 0.555 | 0.545 | +1.0 | 17 | 19 | 0.868 | 1 |
 | arm3r_residual | arm2long_shipped_init | L4000-p100 | 0.560 | 0.465 | +9.5 | 25 | 44 | 0.0295 | 1 |
 | arm3r_residual | arm2long_shipped_init | L7000-p000 | 0.680 | 0.540 | +14.0 | 14 | 42 | 0.000234 | 0.015 |
-| arm3r_residual | arm2long_shipped_init | L7000-p100 | 0.485 | 0.410 | +7.5 | 26 | 41 | 0.0864 | 1 |
+| arm3r_residual | arm2long_shipped_init | L7000-p100 | 0.472 | 0.428 | +4.3 | 95 | 121 | 0.0887 | 1 |
 | arm3r_residual_ablated | arm2_shipped_init | L0 | 0.595 | 0.620 | -2.5 | 23 | 18 | 0.533 | 1 |
 | arm3r_residual_ablated | arm2_shipped_init | L4000-p000 | 0.715 | 0.590 | +12.5 | 12 | 37 | 0.00047 | 0.0282 |
 | arm3r_residual_ablated | arm2_shipped_init | L4000-p025 | 0.525 | 0.430 | +9.5 | 22 | 41 | 0.0226 | 1 |
@@ -59,7 +83,7 @@ Holm column: `summary.json`'s `comparisons` entry for the same pair where it exi
 | arm3r_residual | arm3r_residual_ablated | L4000-p075 | 0.555 | 0.565 | -1.0 | 2 | 0 | 0.5 | — |
 | arm3r_residual | arm3r_residual_ablated | L4000-p100 | 0.560 | 0.560 | +0.0 | 1 | 1 | 1 | — |
 | arm3r_residual | arm3r_residual_ablated | L7000-p000 | 0.680 | 0.680 | +0.0 | 1 | 1 | 1 | — |
-| arm3r_residual | arm3r_residual_ablated | L7000-p100 | 0.485 | 0.500 | -1.5 | 3 | 0 | 0.25 | — |
+| arm3r_residual | arm3r_residual_ablated | L7000-p100 | 0.472 | 0.472 | +0.0 | 4 | 4 | 1 | — |
 | arm2long_shipped_init | arm2_shipped_init | L0 | 0.600 | 0.620 | -2.0 | 22 | 18 | 0.636 | — |
 | arm2long_shipped_init | arm2_shipped_init | L4000-p000 | 0.530 | 0.590 | -6.0 | 27 | 15 | 0.0884 | — |
 | arm2long_shipped_init | arm2_shipped_init | L4000-p025 | 0.545 | 0.430 | +11.5 | 21 | 44 | 0.00592 | — |
@@ -281,14 +305,14 @@ Last 5 epochs: loss 1.1850 → 1.1588 (Δ -0.0262), train acc 0.4415 → 0.4722.
   "arm1_frozen": 0.365,
   "arm2_random_init": null,
   "arm2_shipped_init": 0.455,
-  "arm2long_shipped_init": 0.41,
+  "arm2long_shipped_init": 0.42833333333333334,
   "arm3_beats_position_only_oracle": false,
   "arm3_minus_arm2_shipped_pp": -21.500000000000004,
   "arm3_xattn": 0.24,
   "arm3r_beats_position_only_oracle": true,
-  "arm3r_minus_arm2_pp": 2.9999999999999973,
-  "arm3r_minus_arm2long_pp": 7.500000000000001,
-  "arm3r_residual": 0.485,
+  "arm3r_minus_arm2_pp": 1.6666666666666663,
+  "arm3r_minus_arm2long_pp": 4.333333333333334,
+  "arm3r_residual": 0.4716666666666667,
   "arm4_xattn_long": null,
   "cell": "L7000-p100",
   "inside_arm2_seed_spread": false,

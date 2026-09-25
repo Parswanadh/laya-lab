@@ -71,6 +71,12 @@ ARMS: Dict[str, Dict[str, Any]] = {
         "kind": "cross_attention", "init": "random", "train_mode": "long_boost", "nhead": 4,
         "desc": "arm 3 plus long-distance oversampling",
     },
+    "arm2rerun_shipped_init": {
+        "kind": "self_attention", "init": "shipped", "train_mode": "uniform", "rerun": True,
+        "desc": ("arm 2's exact 12-epoch recipe re-run into its own directory: (a) a reproducibility "
+                 "check on the 0.455 bar, (b) the head needed to score the extended 600-item primary "
+                 "cell, which the original run's deleted checkpoint cannot do"),
+    },
     "arm2long_shipped_init": {
         "kind": "self_attention", "init": "shipped", "train_mode": "uniform", "long_schedule": True,
         "desc": "arm 2 exactly, on the long schedule -- the schedule-matched control for arm 3r",
@@ -86,7 +92,8 @@ ARMS: Dict[str, Dict[str, Any]] = {
 # Arms the original H5 pipeline drives end to end. Kept separate so `run_all.py` does not start a
 # 40-epoch schedule for every arm when it is asked to re-run the 12-epoch table.
 TRAINED_ARMS = [a for a, spec in ARMS.items()
-                if spec["train_mode"] is not None and not spec.get("long_schedule")]
+                if spec["train_mode"] is not None and not spec.get("long_schedule")
+                and not spec.get("rerun")]
 # Every arm `train.py`/`eval.py` can run, including the long-schedule pair.
 ALL_TRAINED_ARMS = [a for a, spec in ARMS.items() if spec["train_mode"] is not None]
 LONG_SCHEDULE_ARMS = [a for a in ALL_TRAINED_ARMS if a not in TRAINED_ARMS]

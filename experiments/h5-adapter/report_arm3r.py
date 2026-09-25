@@ -23,12 +23,15 @@ import metrics as M  # noqa: E402  (the program's canonical statistics, as stats
 OUT = os.path.join(HERE, "arm3r_report.md")
 CELLS = ["L0", "L4000-p000", "L4000-p025", "L4000-p050", "L4000-p075", "L4000-p100",
          "L7000-p000", "L7000-p100"]
-ARMS = ["arm1_frozen", "arm2_shipped_init", "arm2long_shipped_init", "arm3_xattn",
-        "arm3r_residual", "arm3r_residual_ablated"]
+ARMS = ["arm1_frozen", "arm2_shipped_init", "arm2rerun_shipped_init", "arm2long_shipped_init",
+        "arm3_xattn", "arm3r_residual", "arm3r_residual_ablated"]
 
 
 PAIRS = [
     ("arm3r_residual", "arm2_shipped_init"),
+    ("arm3r_residual", "arm2rerun_shipped_init"),
+    ("arm2rerun_shipped_init", "arm2_shipped_init"),
+    ("arm2rerun_shipped_init", "arm2long_shipped_init"),
     ("arm3r_residual", "arm2long_shipped_init"),
     ("arm3r_residual_ablated", "arm2_shipped_init"),
     ("arm3r_residual", "arm3r_residual_ablated"),

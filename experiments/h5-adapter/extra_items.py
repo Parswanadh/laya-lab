@@ -157,7 +157,8 @@ def build_cache(conditions: List[Dict[str, Any]], device_name: str = "cuda") -> 
     return path
 
 
-def eval_arms(arms: List[str], seeds: List[int], heads_dir: str = "") -> None:
+def eval_arms(arms: List[str], seeds: List[int], heads_dir: str = "",
+              ablate: bool = False) -> None:
     import torch
 
     import arms as A
@@ -167,8 +168,10 @@ def eval_arms(arms: List[str], seeds: List[int], heads_dir: str = "") -> None:
 
     if heads_dir:
         # the staged driver deletes each head right after its own eval, so a later pass over extra
-        # items reads a preserved copy (cache/keep is gitignored) instead of retraining
-        E.RUNS_DIR = heads_dir
+        # items reads a preserved copy (cache/keep is gitignored) instead of retraining. Resolved
+        # against this file's directory: the stage launcher runs from the lab root, so a relative
+        # path here would silently point at the wrong tree (it did, once).
+        E.RUNS_DIR = heads_dir if os.path.isabs(heads_dir) else os.path.join(HERE, heads_dir)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     conditions = load_conditions()
     store = FEAT.FeatureStore(CACHE_EXTRA)
@@ -180,17 +183,30 @@ def eval_arms(arms: List[str], seeds: List[int], heads_dir: str = "") -> None:
     agent = C.load_agent(str(device))
     for arm in arms:
         for seed in seeds:
-            path = os.path.join(HERE, "predictions", "%s-seed%d.jsonl" % (arm, seed))
+            # the ablation writes into a separate per-arm file, and the target has to be resolved
+            # *before* the duplicate guard below or the guard checks the wrong file (it did)
+            label = arm + "_ablated" if ablate else arm
+            path = os.path.join(HERE, "predictions", "%s-seed%d.jsonl" % (label, seed))
             with open(path, encoding="utf-8") as fh:
                 existing = {json.loads(line)["item_id"] for line in fh if line.strip()}
-                n_original = sum(1 for line in open(path, encoding="utf-8")
+            with open(path, encoding="utf-8") as fh:
+                n_original = sum(1 for line in fh
                                  if line.strip() and json.loads(line)["cell"] == CELL)
             if any(c["item_id"] in existing for c in conditions):
                 raise SystemExit("%s already contains extra items -- refusing to append twice" % path)
             model = A.build_arm_model(agent.model, arm, seed).to(device)
             A.freeze_for_training(model)
             E.load_trained(model, arm, seed, device)
-            rows = E.evaluate_from_cache(model, store, conditions, device, arm, seed)
+            if ablate:
+                # the load-bearing control at the extended cell: the trained checkpoint with the
+                # added branch switched off scores the same 600 items, so "how much of this arm is
+                # the branch?" is answered at the cell the verdict is about
+                if model.cross is None:
+                    raise SystemExit("--ablate on an arm with no parallel branch")
+                model.cross.zero_init_out_proj()
+                if float(model.cross.out_proj.weight.detach().abs().sum()) != 0.0:
+                    raise SystemExit("branch zeroing did not take")
+            rows = E.evaluate_from_cache(model, store, conditions, device, label, seed)
             # mark the origin of every appended row, so "n=600 = 200 original + 400 extension" is
             # checkable from the JSONL itself rather than only from this script's header
             for r in rows:
@@ -219,9 +235,12 @@ def main() -> int:
     ap.add_argument("--eval", action="store_true", help="score trained arms and append JSONL (GPU)")
     ap.add_argument("--arms", default="arm3r_residual,arm2long_shipped_init")
     ap.add_argument("--seeds", default="0")
-    ap.add_argument("--heads-dir", default="",
-                    help="directory holding preserved <arm>/seed<k>/head.pt copies (default: the "
-                         "standard runs/ tree)")
+    ap.add_argument("--heads-dir", default="cache/keep",
+                    help="directory holding preserved <arm>/seed<k>/head.pt copies, relative to "
+                         "this experiment's directory (default: cache/keep)")
+    ap.add_argument("--ablate", action="store_true",
+                    help="score the trained head with the parallel branch re-zeroed, appending to "
+                         "<arm>_ablated-seed<k>.jsonl")
     ap.add_argument("--device", default="cuda")
     a = ap.parse_args()
     t0 = time.time()
@@ -235,7 +254,7 @@ def main() -> int:
         build_cache(load_conditions(), a.device)
     if a.eval:
         eval_arms([s for s in a.arms.split(",") if s], [int(s) for s in a.seeds.split(",") if s != ""],
-                  a.heads_dir)
+                  a.heads_dir, a.ablate)
     if not (a.plan or a.build_cache or a.eval):
         ap.print_help()
         return 1

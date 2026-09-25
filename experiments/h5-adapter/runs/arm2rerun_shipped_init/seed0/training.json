@@ -1,0 +1,203 @@
+{
+ "arm": "arm2rerun_shipped_init",
+ "seed": 0,
+ "epochs": 12,
+ "lr": 0.0005,
+ "lr_cross": null,
+ "weight_decay": 0.01,
+ "eval_probe_cell": null,
+ "eval_probe_every": 8,
+ "token_budget": 12288,
+ "max_batch": 8,
+ "warmup_steps": 242,
+ "steps": 4848,
+ "steps_per_epoch": 404,
+ "n_train_items": 1008,
+ "train_mode": "uniform",
+ "batches_with_verified_item_target_pairing": 4848,
+ "step0_gradients": {
+  "out_proj_weight_grad_sum": null,
+  "branch_in_proj_grad_sum": null,
+  "encoder_grad_sum": null
+ },
+ "final_branch_norms": null,
+ "branch_contribution_last_epoch": null,
+ "parameter_accounting": {
+  "trainable_parameters": 14770945,
+  "frozen_parameters": 307138050,
+  "trainable_tensors": 31,
+  "trainable_names": [
+   "head.layers.0.linear1.bias",
+   "head.layers.0.linear1.weight",
+   "head.layers.0.linear2.bias",
+   "head.layers.0.linear2.weight",
+   "head.layers.0.norm1.bias",
+   "head.layers.0.norm1.weight",
+   "head.layers.0.norm2.bias",
+   "head.layers.0.norm2.weight",
+   "head.layers.0.self_attn.in_proj_bias",
+   "head.layers.0.self_attn.in_proj_weight",
+   "head.layers.0.self_attn.out_proj.bias",
+   "head.layers.0.self_attn.out_proj.weight",
+   "head.layers.1.linear1.bias",
+   "head.layers.1.linear1.weight",
+   "head.layers.1.linear2.bias",
+   "head.layers.1.linear2.weight",
+   "head.layers.1.norm1.bias",
+   "head.layers.1.norm1.weight",
+   "head.layers.1.norm2.bias",
+   "head.layers.1.norm2.weight",
+   "head.layers.1.self_attn.in_proj_bias",
+   "head.layers.1.self_attn.in_proj_weight",
+   "head.layers.1.self_attn.out_proj.bias",
+   "head.layers.1.self_attn.out_proj.weight",
+   "scorer.0.bias",
+   "scorer.0.weight",
+   "scorer.1.bias",
+   "scorer.1.weight",
+   "scorer.3.bias",
+   "scorer.3.weight",
+   "type_emb.weight"
+  ],
+  "trainable_cross_parameters": 0,
+  "frozen_encoder_parameters": 306939648
+ },
+ "train_seconds": 931.0,
+ "peak_vram_gb": 2.536787968,
+ "history": [
+  {
+   "epoch": 0,
+   "step": 404,
+   "train_loss": 1.3954025166670954,
+   "train_accuracy": 0.34424603174603174,
+   "lr": 0.0004984941657278392,
+   "seconds": 67.5,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 1,
+   "step": 808,
+   "train_loss": 1.3476643609030852,
+   "train_accuracy": 0.3333333333333333,
+   "lr": 0.0004816651462915908,
+   "seconds": 140.3,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 2,
+   "step": 1212,
+   "train_loss": 1.3522407952400426,
+   "train_accuracy": 0.33134920634920634,
+   "lr": 0.0004473567654833389,
+   "seconds": 216.4,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 3,
+   "step": 1616,
+   "train_loss": 1.335266686063112,
+   "train_accuracy": 0.3462301587301587,
+   "lr": 0.00039815762411695365,
+   "seconds": 293.5,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 4,
+   "step": 2020,
+   "train_loss": 1.341419376026366,
+   "train_accuracy": 0.3323412698412698,
+   "lr": 0.0003377798454224564,
+   "seconds": 371.3,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 5,
+   "step": 2424,
+   "train_loss": 1.31430504200167,
+   "train_accuracy": 0.35119047619047616,
+   "lr": 0.00027077899172561716,
+   "seconds": 451.2,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 6,
+   "step": 2828,
+   "train_loss": 1.3037388368831007,
+   "train_accuracy": 0.35119047619047616,
+   "lr": 0.00020221034282465699,
+   "seconds": 530.6,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 7,
+   "step": 3232,
+   "train_loss": 1.297838547503546,
+   "train_accuracy": 0.36607142857142855,
+   "lr": 0.0001372474701959745,
+   "seconds": 610.3,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 8,
+   "step": 3636,
+   "train_loss": 1.2757445137489527,
+   "train_accuracy": 0.3819444444444444,
+   "lr": 8.079188597731265e-05,
+   "seconds": 690.3,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 9,
+   "step": 4040,
+   "train_loss": 1.2683722186715356,
+   "train_accuracy": 0.37202380952380953,
+   "lr": 3.710321909353134e-05,
+   "seconds": 770.7,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 10,
+   "step": 4444,
+   "train_loss": 1.266987675579176,
+   "train_accuracy": 0.39880952380952384,
+   "lr": 9.477822097213012e-06,
+   "seconds": 850.5,
+   "branch_logit_contribution_max": null
+  },
+  {
+   "epoch": 11,
+   "step": 4848,
+   "train_loss": 1.2592407705424915,
+   "train_accuracy": 0.38095238095238093,
+   "lr": 5.815162754108094e-11,
+   "seconds": 930.7,
+   "branch_logit_contribution_max": null
+  }
+ ],
+ "head_state_dict_path": "experiments/h5-adapter/runs/arm2rerun_shipped_init/seed0/head.pt",
+ "git": {
+  "lab_head": "5d74f9b8679c74023d0416751ec92d149243b4b5",
+  "lab_status_porcelain": "M experiments/h5-adapter/arm3r_report.md\n M experiments/h5-adapter/arms.py\n M experiments/h5-adapter/extra_items.py\n M experiments/h5-adapter/predictions/arm2long_shipped_init-seed0.jsonl\n M experiments/h5-adapter/predictions/arm3r_residual-seed0.jsonl\n M experiments/h5-adapter/report_arm3r.py\n M experiments/h5-adapter/summary.json\n M findings/E-004.md",
+  "fork_worktree_head": "99020ba2a11d07ea2bf1dc463e872e7c83efe584",
+  "fork_branch": "exp/h5-adapter",
+  "fork_status_porcelain": ""
+ },
+ "environment": {
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "torch": "2.9.1+cu128",
+  "transformers": "4.57.6",
+  "cuda_available": true,
+  "device": "cuda",
+  "USE_TF": "0",
+  "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+  "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "gpu_total_memory_gb": 8.16,
+  "cuda_version": "12.8"
+ },
+ "pool_hashes": {
+  "experiments/h5-adapter/pools/needles-h5-eval-v1.json": "1ab55323ebdbf4370e547d38d44a63435bb4f477606ae1be4f79fdaf125a104d",
+  "experiments/h5-adapter/pools/needles-h5-train-v1.json": "e88a68874a1153b2c627bd06470bf38b80b1eed4017b0dd57eac0f1c44edc733",
+  "experiments/h5-adapter/pools/filler-h5-v1.json": "37b89cc551e2a67925ff518a2319a79d3e52676f7e0257bba1d1c4f68d80eef1"
+ }
+}
