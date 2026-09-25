@@ -612,3 +612,50 @@ comparison, and no amount of arm3r seeds repairs it.
 
 **Stage-major driver** trains both arms before evaluating either — ~60 min of extra latency for the
 primary verdict, nothing lost. Recorded as a driver limitation; not refactored mid-flight.
+
+---
+
+## 2026-09-25 · H5 VERDICT — the mechanism is falsified by its own ablation
+
+**seed 0, n=200/cell, oracle 0.2500, per-item JSONL committed.** `findings/E-004.md`
+
+| cell | arm1 | arm2 (12 ep) | **arm2long (40 ep, the bar)** | arm3_xattn | **arm3r** | arm3r-ablated |
+|---|---|---|---|---|---|---|
+| **L7000-p100** | 0.365 | 0.455 | **0.410** | 0.240 | **0.485** | 0.500 |
+| L0 *(control)* | 0.640 | 0.620 | 0.600 | 0.225 | 0.595 | 0.595 |
+
+- arm3r vs arm2long: **+7.5pp, p=0.086, Holm 1.0** (26 wrong→right / 41 right→wrong, 67 discordant).
+- arm3r vs arm2: +3.0pp, **p=0.512**, CIs overlap.
+- **arm3r beats the position-only oracle at every cell.** No short-context regression (−0.5pp at L0, p=1.0).
+
+### The control that decides it
+`arm3r_residual_ablated` — the **same trained checkpoint with `out_proj` re-zeroed after training** —
+differs from arm3r by **0/200 at L0, 3/200 at the primary cell, ≤5/200 anywhere** (all p ≥ 0.25).
+**The cross-attention branch is live in training and unused at inference.**
+
+So the two Holm-surviving cells (L4000-p000 +18.5pp, L7000-p000 +14.0pp) are **not** the architecture —
+**the ablated twin wins them by the same margin**. They are **training-trajectory effects**: arm3r and
+arm2long share seed and data order, but the branch consumes dropout RNG, so they are different draws
+from step 1. One seed cannot separate +7.5pp from that noise.
+
+**Without the ablation, the honest-looking sentence would have been "+7.5pp from cross-attention,
+p=0.086, promising" — a false positive in the making.** The ablation is the load-bearing measurement
+and it leads the finding.
+
+### Programme headline
+**"The fix is adaptation, not design."** Cross-attention is additive, trains, is harmless at L0, and
+is inference-inert; it yields no significant primary-cell gain. The one verified intervention remains
+**fine-tuning the shipped head**.
+
+**Schedule caveat recorded:** arm2long (40 ep) = 0.410 is **worse** than arm2 (12 ep) = 0.455 at the
+primary cell, single seed — the schedule-matched bar is itself schedule-limited, so no claim should
+rest on it uncritically. Both arms' held-out primary cell plateaued while train loss still fell:
+**task-metric-converged, schedule-limited on loss.**
+
+### Compute decision
+The seed-0 gap of +7.5pp triggered option (a) by my own table — **I overruled it.** The table was
+written before the ablation existed and assumed the gap was architectural. The ablation falsified
+that premise, so extra seeds would only sharpen a **non-architectural** quantity. H5b had already
+launched the better use of the time: **n=600 at the primary cell** (~20 min, 400 fresh items, leakage
+re-derived, 0 overlap with train or existing eval needles), which powers the **pre-registered**
+comparison instead. Endorsed; no seed runs.
