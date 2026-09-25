@@ -100,7 +100,7 @@ def main() -> int:
         "* `experiments/h5-adapter/runs/<arm>/seed<k>/training.json` — the per-epoch curves.\n")
     add("\nRegenerate: `env/venv/bin/python experiments/h5-adapter/report_arm3r.py`\n")
 
-    add("\n## Per-cell accuracy, n=200, label-balanced (oracle beside every number)\n")
+    add("\n## Per-cell accuracy, label-balanced, oracle beside every number\n")
     hdr = "| cell | oracle | " + " | ".join(ARMS) + " |"
     add(hdr)
     add("|" + "---|" * (len(ARMS) + 2))
@@ -113,6 +113,18 @@ def main() -> int:
                                                a["accuracy_ci95_high"]) if a else "—")
         add("| %s | %s | %s |" % (cell, "%.4f" % orc if orc is not None else "—",
                                   " | ".join(vals)))
+    # cell sizes, stated rather than assumed: the primary cell is 600 items for the arms scored on
+    # the extension and 200 for the ones that are not, and every other cell is 200 everywhere
+    odd = []
+    for cell in CELLS:
+        ns = {a: (acc(s, a, cell) or {}).get("n") for a in ARMS}
+        ns = {a: n for a, n in ns.items() if n}
+        if ns and len(set(ns.values())) > 1:
+            odd.append("* %s: %s." % (cell, ", ".join("%s n=%d" % (a, n) for a, n in ns.items())))
+    uniform = sorted({(acc(s, ARMS[0], c) or {}).get("n") for c in CELLS
+                      if len({(acc(s, a, c) or {}).get("n") for a in ARMS}) == 1})
+    add("\nCell sizes: every cell is n=200 for every arm, except " + " ".join(odd)
+        + " The extension items are marked `cell_partition=\"extension600\"` in the JSONL.\n")
 
     add("\n## Paired McNemar, recomputed here from the raw per-item JSONL\n")
     add("Holm column: `summary.json`'s `comparisons` entry for the same pair where it exists "

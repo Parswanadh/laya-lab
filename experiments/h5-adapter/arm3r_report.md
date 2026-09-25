@@ -9,7 +9,7 @@
 Regenerate: `env/venv/bin/python experiments/h5-adapter/report_arm3r.py`
 
 
-## Per-cell accuracy, n=200, label-balanced (oracle beside every number)
+## Per-cell accuracy, label-balanced, oracle beside every number
 
 | cell | oracle | arm1_frozen | arm2_shipped_init | arm2rerun_shipped_init | arm2long_shipped_init | arm3_xattn | arm3r_residual | arm3r_residual_ablated |
 |---|---|---|---|---|---|---|---|---|
@@ -21,6 +21,9 @@ Regenerate: `env/venv/bin/python experiments/h5-adapter/report_arm3r.py`
 | L4000-p100 | 0.2500 | 0.415 [0.345, 0.485] | 0.495 [0.425, 0.565] | 0.520 [0.450, 0.590] | 0.465 [0.395, 0.535] | 0.255 [0.195, 0.315] | 0.560 [0.490, 0.630] | 0.560 [0.490, 0.630] |
 | L7000-p000 | 0.2500 | 0.595 [0.525, 0.665] | 0.585 [0.515, 0.655] | 0.635 [0.570, 0.700] | 0.540 [0.470, 0.610] | 0.245 [0.185, 0.305] | 0.680 [0.615, 0.745] | 0.680 [0.615, 0.745] |
 | L7000-p100 | 0.2500 | 0.365 [0.300, 0.435] | 0.455 [0.385, 0.525] | 0.450 [0.410, 0.490] | 0.428 [0.390, 0.468] | 0.240 [0.185, 0.300] | 0.472 [0.432, 0.512] | 0.472 [0.432, 0.510] |
+
+Cell sizes: every cell is n=200 for every arm, except * L7000-p100: arm1_frozen n=200, arm2_shipped_init n=200, arm2rerun_shipped_init n=600, arm2long_shipped_init n=600, arm3_xattn n=200, arm3r_residual n=600, arm3r_residual_ablated n=600. The extension items are marked `cell_partition="extension600"` in the JSONL.
+
 
 ## Paired McNemar, recomputed here from the raw per-item JSONL
 
