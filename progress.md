@@ -659,3 +659,43 @@ that premise, so extra seeds would only sharpen a **non-architectural** quantity
 launched the better use of the time: **n=600 at the primary cell** (~20 min, 400 fresh items, leakage
 re-derived, 0 overlap with train or existing eval needles), which powers the **pre-registered**
 comparison instead. Endorsed; no seed runs.
+
+---
+
+## 2026-09-25 · H5 CLOSED — n=600 makes the negative conclusive
+
+**Primary cell at n=600** (200 original + 400 fresh items, label-balanced 150/class, leakage
+re-derived by content hash, oracle **0.2500**):
+
+| comparison | Δ | p | verdict |
+|---|---|---|---|
+| arm3r vs **arm2rerun** (12 ep) | **+2.2pp** | 0.393 | not significant |
+| arm3r vs **arm2long** (40 ep) | **+4.33pp** | 0.089 (Holm 1.0) | not significant |
+
+CIs: arm3r [0.432, 0.512], arm2rerun [0.410, 0.490], arm2long [0.390, 0.468] — **the three adapted
+arms span 0.428–0.472 with no pair significantly separated.**
+
+**The effect shrank as n grew** (+7.5pp at n=200 → +4.33pp at n=600). That is the signature of a null,
+not of a small true effect — and it is exactly why the n=600 extension was the right spend instead of
+4.2 h of extra seeds.
+
+**The ablation at n=600 is exact:** `arm3r_residual_ablated` = **0.4717 vs 0.4717, 8/600 predictions
+change (4 each way), Δ = 0.0pp, p = 1.0.** The added cross-attention is live in training and
+**contributes literally nothing at inference.**
+
+**And the control that gives the result meaning:** `arm2rerun` — a *fresh* 12-epoch run of the plain
+head — scores **0.445 vs arm2's 0.455 on shared items (−1.0pp, p=0.815)**, training curve matching to
+three decimals. So the **verified** intervention is stable across runs while the architectural arm is
+indistinguishable from it.
+
+### Final programme result
+**The fix is adaptation, not design** — the pre-registered outcome, now evidenced at n=600 with a
+mechanistic control that explains *why*.
+
+**Mergeable contributions (not the head):** the leakage-verified harness; the **step-0 bitwise identity
+methodology with a wiring control**; the ablation result; and the four negative architectural findings.
+
+**Stated limits, not papered over:** one training seed per arm (n=600 sharpens the *item* axis, not the
+*run* axis; extra seeds deliberately not spent); effects below ~2–4pp not excludable; the extended cell
+is a composition of 200 original + 400 extension items (`cell_partition="extension600"`); synthetic
+needle-in-haystack only. Filesystem at 97% — H5b freed its 4.1 GB intermediate.
