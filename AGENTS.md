@@ -12,6 +12,7 @@ oriented — read this, then your role charter, then the one or two artifacts yo
 
 | path | what |
 |---|---|
+| **`PR-PLAN.md`** | **where a PR can actually be raised: ranked candidates, evidence, scope, and what NOT to submit.** |
 | **`HANDOFF.md`** | **complete state: what was proved, what was refuted, what is in flight, open defects. Read after BASELINE.md.** |
 | **`BASELINE.md`** | **the frozen reference: every number we measure against, with n, CIs and reproduce commands. Read this to know what "the baseline" means.** |
 | `plan.md` | the master plan: problem, hypotheses H1–H5, phases, gates, budget |
