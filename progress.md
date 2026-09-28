@@ -699,3 +699,55 @@ methodology with a wiring control**; the ablation result; and the four negative 
 *run* axis; extra seeds deliberately not spent); effects below ~2–4pp not excludable; the extended cell
 is a composition of 200 original + 400 extension items (`cell_partition="extension600"`); synthetic
 needle-in-haystack only. Filesystem at 97% — H5b freed its 4.1 GB intermediate.
+
+---
+
+## 2026-09-25 · TWO PRs OPEN against upstream 0.3.21
+
+**Reconnaissance first.** Upstream moved to `9d95567` (**v0.3.21**) — **438 commits** past our fork
+point `9fbb1eb` (v0.3.20). Every long-context commit that landed while we worked is **plumbing**:
+`predict_long` (`#497/#577/#653/#689/#692`) and budget/truncation reporting
+(`#566/#668/#687/#691`). **Nobody has addressed *why* long-document accuracy collapses, or made it
+better.** The `predict_long` and truncation-reporting lanes are now heavily occupied — avoided.
+
+Both branches are cut **directly from `upstream/main`**, not from our stale fork, so they are
+rebase-proof; and **neither touches `laya/`**, so no `tests/test_hooks_api.py` update is required.
+
+| PR | title | state | size |
+|---|---|---|---|
+| **[#696](https://github.com/NandhaKishorM/laya/pull/696)** | `docs(common): the state budget is max_len - head_len - 1, not max_len - head_max_len` | OPEN, MERGEABLE | +160/−3, 2 files |
+| **[#697](https://github.com/NandhaKishorM/laya/pull/697)** | `research: accuracy against evidence position at fixed document length` | OPEN, MERGEABLE | +1982/−0, 3 files |
+
+### #696 — the docs defect
+`head_max_len` is a **cap, not the head length**; `build_sequence` sizes the state from the head it
+actually built. Measured with each checkpoint's own tokenizer and the shipped question: **english
+463 not 320 (understated 45 %)**, **multilingual 978 not 768 (27 %)**. Ships
+`tests/test_state_budget.py` (11/11) pinning the relationship, including the assertion the old
+wording contradicts — a state of the documented size survives untruncated.
+
+### #697 — the position finding
+`bench_long_context.py` samples **one** position on the axis (request always appended to the end),
+so it cannot separate document **length** from evidence **position**. New bench uses the same 20
+requests, filler and construction — `position=1.0` reproduces the published cell (0.950 at
+pad=4000) — then sweeps the request *through* a fixed-length document. At `max_len=8192`, nothing
+truncated:
+
+| filler | pos 0.00 | 0.25 | 0.50 | 0.75 | 1.00 | spread |
+|---|---|---|---|---|---|---|
+| 4,000 | 0.850 | 0.550 | 0.650 | 0.600 | **0.950** | **0.400** |
+| 7,000 | **0.850** | 0.550 | 0.500 | 0.650 | **0.400** | **0.450** |
+
+Majority-class rate is **0.450**, so the interior sits at the floor while endpoints reach 0.85–0.95 —
+and **which endpoint wins flips with length**, invisible to a pad-only sweep. Paired McNemar
+**p=0.0078** and **p=0.031**. n=20/cell stated as a limitation.
+
+### A near-miss worth recording
+The first P2 run used a construction without upstream's `"\n\nActual request: "` delimiter and
+reported **0.600** where upstream publishes **0.950** for the same nominal cell. Submitting that
+would have contradicted the maintainer's own table on the one cell they can check instantly. The
+construction is now replicated exactly — the same construction-sensitivity trap our ledger already
+flagged (L-028), caught this time before it shipped.
+
+**Not submitted:** the sliding-layer perf finding (P1) — strongest strategic fit, but needs a
+`research/`-convention benchmark and, with a fix, numerical-parity proof. Held in reserve. The
+cross-attention head stays excluded: its own ablation shows the branch is inference-inert.

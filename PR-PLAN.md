@@ -174,3 +174,24 @@ file, a README paragraph. That is deliberate: it makes them rebase-proof.
 3. **P1 third** (perf, split into measurement-then-fix). Land the benchmark first; offer the kernel
    fix as a follow-up once the measurement is accepted.
 4. **P4** folded into P2's discussion section.
+
+
+---
+
+## 5. STATUS — both PRs OPEN (2026-09-25)
+
+| # | title | state | size | branch |
+|---|---|---|---|---|
+| **[#696](https://github.com/NandhaKishorM/laya/pull/696)** | `docs(common): the state budget is max_len - head_len - 1, not max_len - head_max_len` | **OPEN**, MERGEABLE | +160/−3, 2 files | `pr/p3-state-budget` |
+| **[#697](https://github.com/NandhaKishorM/laya/pull/697)** | `research: accuracy against evidence position at fixed document length` | **OPEN**, MERGEABLE | +1982/−0, 3 files | `pr/p2-position-sensitivity` |
+
+Both branched from upstream `9d95567` (v0.3.21), **neither touches `laya/`**, so
+`tests/test_hooks_api.py` is unchanged and there is no public-API surface to review.
+
+**P1 (the sliding-layer perf finding) was NOT submitted.** It is the strongest *strategic* fit —
+upstream's identity is latency — but it needs a benchmark script written to `research/`
+conventions and, if the fix is included, numerical-parity proof against the dense path. Kept in
+reserve as a follow-up once the maintainer has reacted to the first two.
+
+**The cross-attention head remains excluded** (see §2): its own ablation shows the branch is
+inference-inert (0.4717 vs 0.4717, Δ=0.0pp, p=1.0 at n=600).
