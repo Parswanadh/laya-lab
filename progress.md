@@ -751,3 +751,64 @@ flagged (L-028), caught this time before it shipped.
 **Not submitted:** the sliding-layer perf finding (P1) — strongest strategic fit, but needs a
 `research/`-convention benchmark and, with a fix, numerical-parity proof. Held in reserve. The
 cross-attention head stays excluded: its own ablation shows the branch is inference-inert.
+
+---
+
+## 2026-09-29 · PR status check — one review, verified and addressed
+
+### #696 — CHANGES_REQUESTED, since fixed
+Reviewer **Bruce-Yii** confirmed the finding ("The core finding is right, and I reproduced it")
+and accepted **463/978 as the good part** — but **refuted my bound sentence**
+`head_len <= head_max_len + 3` as **false in the direction that matters**.
+
+**I verified the counterexample before changing anything** (both checkpoints, own tokenizers):
+
+```
+head_max_len=192:  k=46 head=195 (bound 195, holds)  k=47 head=199 FALSE  k=77 head=319 FALSE
+english      max_len=512 :  k=4 room=463 cap=320 (understates)  k=77 room=192 (overstates 128)  k=100 room=100 (overstates 220)
+multilingual max_len=1024:  k=4 room=978 cap=768 (understates)  k=100 room=612 (overstates 156)
+```
+
+Root cause is exactly as the reviewer said: `per = max(4, (head_max_len - 16) // k)` floors at **4**
+and `head_ids` floors at **8**, so past `k ≈ head_max_len / 4` the head grows **beyond** the cap —
+and those calls are **accepted** (markers survive), not rejected. So `max_len - head_max_len` is wrong
+in **both** directions, and for a high-cardinality question wrong in the **unsafe** one: a state sized
+to it is **truncated**, not merely conservative. `MAX_CHOICE_OPTIONS = 100` puts that in reach over HTTP.
+
+**Fixed** (`b19118b`): the false bound sentence replaced with the measured both-directions table; the
+correct 463/978 figures kept.
+
+**Test fixes, all from the same review:**
+- `test_readme_quotes_the_measured_figures` now **parses `README.md`** and checks its figures against a
+  live measurement. Verified it **fails** with main's README under the test (`1 failed, 4 passed`) —
+  previously it passed with the stale wording, so the docstring's claim did not hold. Now it does.
+- Skips are **visible in both runners** (`pytest.skip` → `-rs`; printed `SKIP` as a script), verified
+  with `LAYA_LAB_MODELS=/nonexistent`. No vacuous pass remains.
+- `test_dropping_the_minus_one_is_caught` — closes the gap where dropping the `-1` slipped through.
+- `test_cap_based_figure_overstates_a_high_cardinality_question` — pins the new claim.
+- **Wired into `ci.yml` and `release.yml`**; both YAML parse.
+
+`8 passed` as a script, `5 passed` under pytest, ruff + compileall clean. Pre-existing, **not** ours:
+`python tests/test_truncation_direction.py` fails as a plain script on clean `main` too — it is
+pytest-only and CI runs it via pytest, where it passes 5/5.
+
+### #697 — no comments, no reviews yet
+
+### ⚠ The blocker on BOTH: CI has never run
+`mergeStateStatus = BLOCKED` on both, and the reason is **not** a failure:
+
+```
+CI | sha=b19118ba | completed/action_required     (#696, latest commit)
+Docker | ... action_required
+Security | ... action_required
+CI | sha=52328d0b | completed/action_required     (#697)
+```
+
+**`action_required`** is GitHub's first-time-contributor gate: the workflows **triggered but are
+waiting for a maintainer to approve running them**. `commits/<sha>/status` is `pending` with
+`total_count: 0` — nothing has executed. So there is no CI signal either way, and there is nothing to
+fix in the branches. Both are `MERGEABLE` (no conflicts).
+
+This needs the maintainer to click *Approve and run workflows*. Deliberately **not** commented on the
+PR — it is a UI action they can see, and a nudge comment would be noise. The reviewer has already
+engaged on #696, which is the signal that matters.
